@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../../constants/app_colors.dart';
+import '../../widgets/appbar_widget/appbar_widget.dart';
+import '../../widgets/space_widget/space_widget.dart';
+import '../../widgets/text_widget/text_widgets.dart';
+
+class TermsAndConditionsScreen extends StatelessWidget {
+  const TermsAndConditionsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const AnnotatedRegion(
+      value: SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.blueDark,
+        appBar: AppbarWidget(title: "Terms & Conditions", centerTitle: true),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextWidget(
+                text:
+                    "We envision to create enchanting retail experiences that delight visitors of all ages. Through our unique handcrafted collectibles, we aim to:",
+                fontColor: AppColors.white,
+                fontWeight: FontWeight.w400,
+                fontSize: 15,
+              ),
+              SpaceWidget(spaceHeight: 16),
+              TextWidget(
+                text:
+                    "Celebrate Creativity: Inspire smiles with designs that tell stories.",
+                fontColor: AppColors.white,
+                fontWeight: FontWeight.w400,
+                fontSize: 15,
+              ),
+              SpaceWidget(spaceHeight: 16),
+              TextWidget(
+                text:
+                    "Foster Memories: Offer products that become cherished keepsakes.",
+                fontColor: AppColors.white,
+                fontWeight: FontWeight.w400,
+                fontSize: 15,
+              ),
+              SpaceWidget(spaceHeight: 16),
+              TextWidget(
+                text:
+                    "Enhance Experiences: Add a touch of wonder to every shopping journey.",
+                fontColor: AppColors.white,
+                fontWeight: FontWeight.w400,
+                fontSize: 15,
+              ),
+              SpaceWidget(spaceHeight: 16),
+              TextWidget(
+                text:
+                    "At Duckie Wonderland, we are more than a brand – we are The Happy Family, spreading joy, creativity, and wonder to everyone who walks through our doors",
+                fontColor: AppColors.white,
+                fontWeight: FontWeight.w400,
+                fontSize: 15,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

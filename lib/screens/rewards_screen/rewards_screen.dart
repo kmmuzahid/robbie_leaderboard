@@ -1,0 +1,371 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:the_leaderboard/screens/rewards_screen/widgets/ticket_gauge_painter.dart';
+import 'package:the_leaderboard/utils/app_size.dart';
+import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
+import 'package:wheel_chooser/wheel_chooser.dart';
+
+import '../../constants/app_colors.dart';
+import '../../constants/app_icon_path.dart';
+import '../../constants/app_image_path.dart';
+import '../../constants/app_strings.dart';
+import '../../routes/app_routes.dart';
+import '../../widgets/appbar_widget/appbar_widget.dart';
+import '../../widgets/gradient_text_widget/gradient_text_widget.dart';
+import '../../widgets/icon_widget/icon_widget.dart';
+import '../../widgets/image_widget/image_widget.dart';
+import '../../widgets/space_widget/space_widget.dart';
+import '../../widgets/text_widget/text_widgets.dart';
+
+class RewardsScreen extends StatefulWidget {
+  const RewardsScreen({super.key});
+
+  @override
+  State<RewardsScreen> createState() => _RewardsScreenState();
+}
+
+class _RewardsScreenState extends State<RewardsScreen> {
+  final List<String> randomValues = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final random = Random();
+    for (int i = 0; i < 20; i++) {
+      final randomPoints = random.nextInt(991) + 10;
+      // Add spaces around the value to simulate padding
+      randomValues.add('  $randomPoints  ');
+    }
+  }
+
+  int currentTickets = 35;
+  final int targetTickets = 41; // 32 + 9 more needed for rewards
+
+  void addTicket() {
+    setState(() {
+      if (currentTickets < targetTickets) {
+        currentTickets++;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnnotatedRegion(
+      value: const SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.blueDark,
+        appBar: AppbarWidget(
+          title: AppStrings.theLeaderboard,
+          leading: const Padding(
+            padding: EdgeInsets.only(left: 16, bottom: 8),
+            child: ImageWidget(
+              height: 20,
+              width: 20,
+              imagePath: AppImagePath.crownImage,
+              fit: BoxFit.contain,
+            ),
+          ),
+          action: IconButton(
+            tooltip: "Notifications",
+            onPressed: () {
+              Get.toNamed(AppRoutes.notificationsScreen);
+            },
+            icon: const Badge(
+              isLabelVisible: true,
+              label: Text('3'),
+              backgroundColor: AppColors.red,
+              child: IconWidget(
+                icon: AppIconPath.notificationIcon,
+                width: 24,
+                height: 24,
+                color: AppColors.white,
+              ),
+            ),
+          ),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.blue,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextWidget(
+                          text: "Raffles",
+                          fontColor: AppColors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                        TextWidget(
+                          text: "Drawing on April 30, 2023",
+                          fontColor: AppColors.greyDarker,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
+                      ],
+                    ),
+                    const SpaceWidget(spaceHeight: 12),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            AppColors.gradientColorStart,
+                            AppColors.gradientColorEnd,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Column(
+                        children: [
+                          TextWidget(
+                            text: "Prize Pool",
+                            fontColor: AppColors.greyBlue,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                          SpaceWidget(spaceHeight: 4),
+                          TextWidget(
+                            text: "\$500 to be won!",
+                            fontColor: AppColors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SpaceWidget(spaceHeight: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.blue,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  // Changed from start to center
+                  children: [
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextWidget(
+                          text: 'Current Tickets',
+                          fontColor: AppColors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                        SpaceWidget(spaceHeight: 6),
+                        GradientText(
+                          text: "23 Days Remaining",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          textAlign: TextAlign.start,
+                          maxLines: 2,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      width: 120, // Reduced width
+                      height: 50, // Reduced height
+                      margin: const EdgeInsets.only(top: 24),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          CustomPaint(
+                            size: const Size(120, 50),
+                            // Reduced size of custom paint
+                            painter: TicketGaugePainter(
+                              currentTickets: currentTickets,
+                            ),
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            // Added this to constrain column
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextWidget(
+                                text: '$currentTickets',
+                                fontColor: AppColors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                              const TextWidget(
+                                text: 'Tickets',
+                                fontColor: AppColors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SpaceWidget(spaceHeight: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.blue,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const TextWidget(
+                      text: 'Current Tickets',
+                      fontColor: AppColors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                    const SpaceWidget(spaceHeight: 12),
+                    Container(
+                      height: 100,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      child: WheelChooser(
+                        listWidth: MediaQuery.of(context).size.width * 1.5,
+                        itemSize: 70,
+                        squeeze: 1.0,
+                        perspective: 0.01,
+                        datas: randomValues,
+                        isInfinite: true,
+                        magnification: 1,
+                        listHeight: 100,
+                        onValueChanged: (s) => print(s.toString().trim()),
+                        // Trim spaces for logging
+                        selectTextStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        unSelectTextStyle: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                          backgroundColor: Colors.transparent,
+                        ),
+                        horizontal: true,
+                      ),
+                    ),
+                    const SpaceWidget(spaceHeight: 8),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: TextWidget(
+                        text:
+                            'You can spin once per day. Come back tomorrow for another spin !',
+                        fontColor: AppColors.silver,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SpaceWidget(spaceHeight: 10),
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconWidget(
+                              height: 16,
+                              width: 16,
+                              icon: AppIconPath.powerIcon,
+                            ),
+                            SpaceWidget(spaceWidth: 2),
+                            GradientText(
+                              text: "4 Days Streak",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SpaceWidget(spaceHeight: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ...List.generate(7, (index) {
+                          return Container(
+                            width: ResponsiveUtils.width(40),
+                            height: ResponsiveUtils.height(10),
+                            margin: const EdgeInsets.only(right: 4),
+                            decoration: BoxDecoration(
+                              gradient: index < 4
+                                  ? const LinearGradient(
+                                      colors: [
+                                        AppColors.gradientColorStart,
+                                        AppColors.gradientColorEnd,
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    )
+                                  : null,
+                              color: index < 4 ? null : AppColors.greyBlue,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                    const SpaceWidget(spaceHeight: 10),
+                    const TextWidget(
+                      text:
+                          "6 out of 7 days. You can get an extra Spin after 7 days",
+                      fontColor: AppColors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                    ),
+                    const SpaceWidget(spaceHeight: 18),
+                    ButtonWidget(
+                      onPressed: () {},
+                      label: "Spin to Win Tickets",
+                      buttonWidth: double.infinity,
+                      fontSize: 14,
+                      buttonHeight: 42,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
