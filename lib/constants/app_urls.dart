@@ -6,4 +6,5 @@ class AppUrls {
   static const createUser = "$_baseUrl/auth/register";
   static const resentOtp = "$_baseUrl/auth/otp-resend";
   static const forgetPassword = "$_baseUrl/auth/forget-password";
+  static const setNewPassword = "$_baseUrl/auth/reset-password";
 }

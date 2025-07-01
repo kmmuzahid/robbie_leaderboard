@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/models/password_reset_model.dart';
+import 'package:the_leaderboard/services/api/api_post_service.dart';
 
 import '../../../../routes/app_routes.dart';
 
@@ -14,7 +16,7 @@ class CreateNewPasswordScreenController extends GetxController {
   // Function to toggle checkbox
 
   // Function to handle registration
-  void createNewPassword() {
+  void createNewPassword() async {
     // Add your registration logic here
     // Example: Validate form fields and proceed
 
@@ -38,9 +40,16 @@ class CreateNewPasswordScreenController extends GetxController {
       );
       return;
     }
-
-    // Proceed with registration (e.g., API call, navigation, etc.)
-    Get.offNamed(AppRoutes.loginScreen);
+    final passwordReset =
+        PasswordResetModel(id: authController.getUserId, newPassword: password);
+    try {
+      final response = await ApiPostService.setNewPassword(passwordReset);
+      Get.snackbar("Success", response);
+      // Proceed with registration (e.g., API call, navigation, etc.)
+      Get.offNamed(AppRoutes.loginScreen);
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong");
+    }
   }
 
   @override

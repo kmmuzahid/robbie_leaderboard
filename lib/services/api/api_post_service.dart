@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/otp_model.dart';
+import 'package:the_leaderboard/models/password_reset_model.dart';
 import 'package:the_leaderboard/models/register_model.dart';
 import 'package:the_leaderboard/models/user_model.dart';
 import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
@@ -26,8 +27,6 @@ class ApiPostService {
   }
 
   static Future<http.Response> verifyOTP(OtpModel otp) async {
-    final authController = Get.find<AuthController>();
-
     final response = await http.post(Uri.parse(AppUrls.otp),
         headers: {
           'Content-Type': 'application/json',
@@ -46,13 +45,22 @@ class ApiPostService {
   }
 
   static Future<String> forgetPassword(String email) async {
-    final authController = Get.find<AuthController>();
-
     final response = await http.post(Uri.parse(AppUrls.forgetPassword),
         headers: {
-          'Content-Type': 'application/json',         
+          'Content-Type': 'application/json',
         },
         body: jsonEncode(email));
+    final data = jsonDecode(response.body);
+    return data["message"];
+  }
+
+  static Future<String> setNewPassword(
+      PasswordResetModel password_reset_model) async {
+    final response = await http.post(Uri.parse(AppUrls.forgetPassword),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(password_reset_model));
     final data = jsonDecode(response.body);
     return data["message"];
   }
