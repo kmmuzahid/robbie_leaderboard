@@ -67,7 +67,7 @@ class RegisterScreenController extends GetxController {
     );
 
     try {
-      final response = await ApiPostService.createUser(profile);
+      final response = await ApiPostService.registerUser(profile);
       final data = jsonDecode(response.body);     
       Get.snackbar("Successful", data["message"]);
       final authController = Get.find<AuthController>();

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/otp_model.dart';
+import 'package:the_leaderboard/models/verify_otp_model.dart';
 import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
 import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
@@ -14,7 +15,7 @@ class VerifyOtpController extends GetxController {
   late TextEditingController otpTextEditingController2;
   late TextEditingController otpTextEditingController3;
   late TextEditingController otpTextEditingController4;
-
+  final _authController = Get.find<AuthController>();
   // Timer variables
   final RxInt timerSeconds = 120.obs;
   final RxBool isTimerRunning = true.obs;
@@ -59,10 +60,9 @@ class VerifyOtpController extends GetxController {
   void resendOtp() async {
     // Here you would add your API call to request a new OTP code
     // For now we'll just show a snackbar and restart the timer
-    final authController = Get.find<AuthController>();
     try {
       final response = await ApiPostService.resentOtp(
-          "${AppUrls.resentOtp}/${authController.getEmail}");
+          "${AppUrls.resentOtp}/${_authController.getEmail}");
       Get.snackbar('Success', response);
     } catch (e) {
       Get.snackbar("Error", "Something went wrong");
@@ -87,15 +87,16 @@ class VerifyOtpController extends GetxController {
       // TODO: Implement actual OTP verification logic (e.g., API call)
       final otpCode = OtpModel(otp: otp);
       try {
-        final response = await ApiPostService.verifyOTP(otpCode);
+        final response = await ApiPostService.createUser(otpCode);
+        print(response.body);
         final data = jsonDecode(response.body);
         Get.snackbar(
           'Success',
           data["message"],
           snackPosition: SnackPosition.BOTTOM,
         );
-        final authController = Get.find<AuthController>();
-        authController.setAccessToken(data["data"]["accessToken"]);
+
+        _authController.setAccessToken(data["data"]["accessToken"]);
         Get.offAll(BottomNav());
       } catch (e) {
         Get.snackbar("Error", "Something went wrong");

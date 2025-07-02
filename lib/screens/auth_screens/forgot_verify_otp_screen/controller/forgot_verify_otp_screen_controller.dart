@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/otp_model.dart';
+import 'package:the_leaderboard/models/verify_otp_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
+import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 
 class ForgotVerifyOtpController extends GetxController {
@@ -14,7 +16,7 @@ class ForgotVerifyOtpController extends GetxController {
   late TextEditingController otpTextEditingController2;
   late TextEditingController otpTextEditingController3;
   late TextEditingController otpTextEditingController4;
-
+final _authController = Get.find<AuthController>();
   // Timer variables
   final RxInt timerSeconds = 120.obs;
   final RxBool isTimerRunning = true.obs;
@@ -58,11 +60,10 @@ class ForgotVerifyOtpController extends GetxController {
   // Function to resend the OTP code
   void resendOtp() async {
     // Here you would add your API call to request a new OTP code
-    // For now we'll just show a snackbar and restart the timer
-    final authController = Get.find<AuthController>();
+    // For now we'll just show a snackbar and restart the timer 
     try {
       final response = await ApiPostService.resentOtp(
-          "${AppUrls.resentOtp}/${authController.getEmail}");
+          "${AppUrls.resentOtp}/${_authController.getEmail}");
       Get.snackbar('Success', response);
     } catch (e) {
       Get.snackbar("Error", "Something went wrong");
@@ -86,7 +87,7 @@ class ForgotVerifyOtpController extends GetxController {
 
     if (otp.length == 4 && RegExp(r'^\d{4}$').hasMatch(otp)) {
       // TODO: Implement actual OTP verification logic (e.g., API call)
-      final otpCode = OtpModel(otp: otp);
+      final otpCode = VerifyOtpModel(otp: otp, email: _authController.getEmail);
       try {
         final response = await ApiPostService.verifyOTP(otpCode);
         final data = jsonDecode(response.body);
@@ -96,7 +97,7 @@ class ForgotVerifyOtpController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
         );
         final authController = Get.find<AuthController>();
-        authController.setAccessToken(data["data"]["accessToken"]);
+        authController.setAccessToken(data["data"]);
         Get.toNamed(AppRoutes.createNewPasswordScreen);
       } catch (e) {
         Get.snackbar("Error", "Something went wrong");

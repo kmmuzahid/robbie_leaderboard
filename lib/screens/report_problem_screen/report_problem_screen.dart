@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:the_leaderboard/services/api/api_get_service.dart';
+import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
 
 import '../../constants/app_colors.dart';
@@ -17,13 +19,24 @@ class ReportProblemsScreen extends StatefulWidget {
 class _ReportProblemsScreenState extends State<ReportProblemsScreen> {
   final TextEditingController _controller = TextEditingController();
 
-  void _sendMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Message sent successfully!"),
-        duration: Duration(seconds: 2),
-      ),
-    );
+  void _sendMessage() async{
+    try {
+  final response = await ApiPostService.sentReport(_controller.text);
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(response),
+      duration: const Duration(seconds: 2),
+    ),    
+  );
+  _controller.clear();
+}  catch (e) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text("Error, Something went wrong"),
+      duration: Duration(seconds: 2),
+    ),
+  );
+}
   }
 
   @override

@@ -8,6 +8,7 @@ import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
 import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 
 class LoginScreenController extends GetxController {
   // TextEditingControllers for form fields
@@ -16,6 +17,7 @@ class LoginScreenController extends GetxController {
   final ApiPostService _postService = ApiPostService();
   // Observable for remember me checkbox
   var rememberMe = false.obs;
+  final authController = Get.find<AuthController>();
 
   // Function to handle registration
   void login() async {
@@ -33,11 +35,14 @@ class LoginScreenController extends GetxController {
 
     try {
       final response = await ApiPostService.loginUser(user);
-      print(response.body);
       final data = jsonDecode(response.body);
-      print(data["data"]["accessToken"]);
-      final authController = Get.find<AuthController>();
+      print("data --->>>> $data");
       authController.setAccessToken(data["data"]["accessToken"]);
+      String token = data["data"]["accessToken"];
+      print("token --->>>> $token");
+      LocalStorage.token = token;
+      print("LocalStorage.token --->>>> ${LocalStorage.token}");
+      authController.setEmail(email);
       // You can use rememberMe.value here for your logic
       // For example, print the state for now
       print('Remember Me: ${rememberMe.value}');
