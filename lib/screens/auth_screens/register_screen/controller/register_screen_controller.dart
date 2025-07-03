@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/models/register_model.dart';
-import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
-
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 import '../../../../routes/app_routes.dart';
 
 class RegisterScreenController extends GetxController {
@@ -68,11 +66,10 @@ class RegisterScreenController extends GetxController {
 
     try {
       final response = await ApiPostService.registerUser(profile);
-      final data = jsonDecode(response.body);     
+      final data = jsonDecode(response.body);
       Get.snackbar("Successful", data["message"]);
-      final authController = Get.find<AuthController>();
-      authController.setAccessToken(data["data"]["token"]);
-      authController.setEmail(email);
+      LocalStorage.token = data["data"]["token"];
+      LocalStorage.myEmail = email;
       // Proceed with registration (e.g., API call, navigation, etc.)
       Get.offNamed(AppRoutes.verifyOtpScreen);
     } catch (e) {

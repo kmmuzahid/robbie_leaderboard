@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/screens/settings_screen/widgets/settings_item_widget.dart';
+import 'package:the_leaderboard/services/api/api_delete_service.dart';
 
 import '../../constants/app_colors.dart';
 import '../../routes/app_routes.dart';
@@ -11,6 +12,17 @@ import '../../widgets/space_widget/space_widget.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
+
+  void _deleteUser(BuildContext context) async {
+    try {
+      final response = await ApiDeleteService.deleteUser();
+      Get.snackbar("Success", response);
+      Navigator.of(context).pop();
+      Get.toNamed(AppRoutes.registerScreen);
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,14 +84,36 @@ class SettingsScreen extends StatelessWidget {
               SettingsItemWidget(
                 title: "Change password",
                 icon: AppIconPath.changePWIcon,
-                onTap: () {},
+                onTap: () {
+                  Get.toNamed(AppRoutes.changePasswordScreen);
+                },
               ),
               const SpaceWidget(spaceHeight: 8),
               // Delete Account
               SettingsItemWidget(
                 title: "Delete account",
                 icon: AppIconPath.deleteIcon,
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog.adaptive(
+                      icon: const Icon(Icons.warning),
+                      iconColor: AppColors.red,
+                      content: const Text(
+                          "Do you really want to delete your account?"),
+                      actions: [
+                        TextButton(
+                            onPressed: () => _deleteUser(context),
+                            child: const Text("Yes")),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("No")),
+                      ],
+                    ),
+                  );
+                },
               ),
             ],
           ),

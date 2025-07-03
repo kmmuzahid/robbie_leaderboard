@@ -1,21 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/otp_model.dart';
-import 'package:the_leaderboard/models/verify_otp_model.dart';
-import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
 import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 
 class VerifyOtpController extends GetxController {
   late TextEditingController otpTextEditingController1;
   late TextEditingController otpTextEditingController2;
   late TextEditingController otpTextEditingController3;
   late TextEditingController otpTextEditingController4;
-  final _authController = Get.find<AuthController>();
+
   // Timer variables
   final RxInt timerSeconds = 120.obs;
   final RxBool isTimerRunning = true.obs;
@@ -62,7 +60,7 @@ class VerifyOtpController extends GetxController {
     // For now we'll just show a snackbar and restart the timer
     try {
       final response = await ApiPostService.resentOtp(
-          "${AppUrls.resentOtp}/${_authController.getEmail}");
+          "${AppUrls.resentOtp}/${LocalStorage.myEmail}");
       Get.snackbar('Success', response);
     } catch (e) {
       Get.snackbar("Error", "Something went wrong");
@@ -95,8 +93,8 @@ class VerifyOtpController extends GetxController {
           data["message"],
           snackPosition: SnackPosition.BOTTOM,
         );
-
-        _authController.setAccessToken(data["data"]["accessToken"]);
+        final token = data["data"]["accessToken"];
+        LocalStorage.token = token;
         Get.offAll(BottomNav());
       } catch (e) {
         Get.snackbar("Error", "Something went wrong");

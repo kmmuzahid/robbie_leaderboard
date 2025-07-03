@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 
 import '../../../../routes/app_routes.dart';
 
 class CreateNewPasswordScreenController extends GetxController {
   // Observable for checkbox state
-  final authController = Get.find<AuthController>();
   // TextEditingControllers for form fields
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
@@ -54,7 +52,6 @@ class CreateNewPasswordScreenController extends GetxController {
   @override
   void onClose() {
     // Dispose of controllers
-
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.onClose();

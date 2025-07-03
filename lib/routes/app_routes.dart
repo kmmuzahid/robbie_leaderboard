@@ -18,5 +18,6 @@ class AppRoutes {
   static const termsAndConditionsScreen = '/termsAndConditionsScreen';
   static const reportProblemsScreen = '/reportProblemsScreen';
   static const verifyOtpScreen = '/verify_otp_screen';
-
+  static const changePasswordScreen = '/change_password_screen';
+  static const profileScreen = '/profile_screen';
 }

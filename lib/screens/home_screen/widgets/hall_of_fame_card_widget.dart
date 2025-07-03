@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_leaderboard/constants/app_image_path.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../utils/app_size.dart';
@@ -16,9 +17,9 @@ class HallOfFameCardWidget extends StatelessWidget {
 
   const HallOfFameCardWidget({
     super.key,
-    required this.imageUrl,
-    required this.name,
-    required this.status,
+    this.imageUrl = '',
+    this.name = '',
+    this.status = '',
     this.title = '',
     this.type = '',
   });
@@ -61,10 +62,13 @@ class HallOfFameCardWidget extends StatelessWidget {
                     height: 120,
                     width: 120,
                     child: ImageWidget(
-                      imagePath: imageUrl,
+                      imagePath: imageUrl.isNotEmpty
+                          ? imageUrl
+                          : AppImagePath.consistentlyTopImage,
                       height: 100,
                       width: 100,
                       fit: BoxFit.cover,
+                      fromNetwork: true,
                     ),
                   ),
                   Positioned(

@@ -1,23 +1,21 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/user_model.dart';
-import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
 import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
-import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 
 class LoginScreenController extends GetxController {
   // TextEditingControllers for form fields
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final ApiPostService _postService = ApiPostService();
+  TextEditingController emailController =
+      TextEditingController(text: LocalStorage.myEmail);
+  TextEditingController passwordController =
+      TextEditingController(text: LocalStorage.myPassword);
   // Observable for remember me checkbox
   var rememberMe = false.obs;
-  final authController = Get.find<AuthController>();
+
+  final RxBool isLoading = false.obs;
 
   // Function to handle registration
   void login() async {
@@ -34,15 +32,19 @@ class LoginScreenController extends GetxController {
     }
 
     try {
+      isLoading.value = true;
       final response = await ApiPostService.loginUser(user);
       final data = jsonDecode(response.body);
-      print("data --->>>> $data");
-      authController.setAccessToken(data["data"]["accessToken"]);
       String token = data["data"]["accessToken"];
-      print("token --->>>> $token");
       LocalStorage.token = token;
-      print("LocalStorage.token --->>>> ${LocalStorage.token}");
-      authController.setEmail(email);
+      LocalStorage.myEmail = email;
+      isLoading.value = false;
+      if (rememberMe.value) {
+        LocalStorage.myPassword = password;
+      }
+      LocalStorage.rememberMe = rememberMe.value;
+      print(
+          "After pressing login: {${LocalStorage.myEmail} : ${LocalStorage.myPassword}}");
       // You can use rememberMe.value here for your logic
       // For example, print the state for now
       print('Remember Me: ${rememberMe.value}');

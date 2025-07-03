@@ -12,4 +12,10 @@ class AppUrls {
   static const termAndCondition = "$_baseUrl/about/tac";
   static const reportProblem = "$_baseUrl/about/report";
   static const updateUser = "$_baseUrl/users/";
+  static const changePassword = "$_baseUrl/auth/change-password";
+  static const deleteUser = "$_baseUrl/users";
+  static const notification = "$_baseUrl/notifications";
+  static const mostViewed = "$_baseUrl /fame/most-viewed";
+  static const highestInvestor = "$_baseUrl/fame/highest-investor";
+  static const consecutiveToper = "$_baseUrl/fame/consecutively-toper";
 }

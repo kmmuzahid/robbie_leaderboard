@@ -1,14 +1,10 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:the_leaderboard/constants/app_urls.dart';
-import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 
 class ApiPatchService {
-  static final authController = Get.find<AuthController>();
-
   static Future<void> updateProfile(
       String? name,
       String? contact,
@@ -17,13 +13,13 @@ class ApiPatchService {
       String? gender,
       String? age,
       String? role) async {
-    final url = "${AppUrls.updateUser}/${authController.getUserId}";
+    final url = "${AppUrls.updateUser}/${LocalStorage.userId}";
     try {
       if (name != null) {
         await http.patch(Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
-              'authorization': authController.token
+              'authorization': LocalStorage.token
             },
             body: jsonEncode({"name": name}));
       }

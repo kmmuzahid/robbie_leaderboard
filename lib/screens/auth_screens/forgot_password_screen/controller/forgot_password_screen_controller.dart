@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
-import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
-
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 import '../../../../routes/app_routes.dart';
 
 class ForgotPasswordScreenController extends GetxController {
   // TextEditingControllers for form fields
   final TextEditingController emailController = TextEditingController();
-final _authController = Get.find<AuthController>();
+
   // Function to handle forgot password
   void forgotPassword() async {
     String email = emailController.text.trim();
@@ -24,7 +22,8 @@ final _authController = Get.find<AuthController>();
     }
     try {
       final message = await ApiPostService.forgetPassword(email);
-      _authController.setEmail(email);
+      LocalStorage.myEmail = email;
+
       Get.snackbar("Success", message);
       // You can use rememberMe.value here for your logic
       // For example, print the state for now

@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:the_leaderboard/models/term_and_condition_model.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 
 class TermAndConditionController extends GetxController {

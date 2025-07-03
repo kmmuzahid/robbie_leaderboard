@@ -11,6 +11,8 @@ class LocalStorage {
   static String myImage = "";
   static String myName = "";
   static String myEmail = "";
+  static String myPassword = "";
+  static bool rememberMe = false;
 
   // Create Local Storage Instance
   static SharedPreferences? preferences;
@@ -33,6 +35,8 @@ class LocalStorage {
     myImage = localStorage.getString(LocalStorageKeys.myImage) ?? "";
     myName = localStorage.getString(LocalStorageKeys.myName) ?? "";
     myEmail = localStorage.getString(LocalStorageKeys.myEmail) ?? "";
+    myPassword = localStorage.getString(LocalStorageKeys.myPassword) ?? "";
+    rememberMe = localStorage.getBool(LocalStorageKeys.rememberMe) ?? false;
 
     //appLog(userId, source: "Local Storage");
   }
@@ -55,7 +59,6 @@ class LocalStorage {
     localStorage.setString(LocalStorageKeys.userId, "");
     localStorage.setString(LocalStorageKeys.myImage, "");
     localStorage.setString(LocalStorageKeys.myName, "");
-    localStorage.setString(LocalStorageKeys.myEmail, "");
     localStorage.setBool(LocalStorageKeys.isLogIn, false);
   }
 

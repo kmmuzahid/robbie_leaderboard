@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 
 class ProfileScreenController extends GetxController {
   final RxString name = ''.obs;
@@ -11,9 +11,8 @@ class ProfileScreenController extends GetxController {
   final RxString creatorCode = ''.obs;
   final RxString rank = ''.obs;
   final RxBool isLoading = true.obs;
-  final _authController = Get.find<AuthController>();
+
   void fetchProfile() async {
-    print(_authController.token);   
     isLoading.value = true;
     final profile = await ApiGetService.fetchProfile();
     isLoading.value = false;
@@ -25,7 +24,9 @@ class ProfileScreenController extends GetxController {
       totalViews.value = profile.views.toString();
       creatorCode.value = profile.userCode;
       rank.value = profile.rank.toString();
-      _authController.setUserId(profile.id);      
+      LocalStorage.userId = profile.id;
+      print("user id: ${profile.id}");
+      print("token: ${LocalStorage.token}");
     } else {
       Get.snackbar("Error", "Something went wrong");
     }

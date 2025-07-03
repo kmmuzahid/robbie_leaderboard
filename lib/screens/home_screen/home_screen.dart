@@ -130,105 +130,99 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         body: Obx(
-          () => _controller.isLoading.value
-              ? const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                )
-              : SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SpaceWidget(spaceHeight: 16),
-                      ProfileCardWidget(
+          () => SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SpaceWidget(spaceHeight: 16),
+                _controller.ismydataLoading.value
+                    ? const CircularProgressIndicator.adaptive()
+                    : ProfileCardWidget(
                         profileImagePath: AppImagePath.profileImage,
                         name: _controller.name.value,
                         rankNumber: _controller.rank.value,
                         totalRaisedAmount: "\$${_controller.totalRaised.value}",
                         totalSpentAmount: "\$${_controller.totalSpent.value}",
-                        onViewProfilePressed: () {},
+                        onViewProfilePressed: () {
+                          Get.toNamed(AppRoutes.profileScreen);
+                        },
                         onJoinLeaderboardPressed: () {},
                         onSharePressed: () {},
                       ),
-                      const SpaceWidget(spaceHeight: 16),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: TextWidget(
-                          text: AppStrings.hallOfFame,
-                          fontColor: AppColors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SpaceWidget(spaceHeight: 8),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: List.generate(
-                            title.length,
-                            (index) {
-                              // Use LayoutBuilder to ensure we have valid constraints
-                              return HallOfFameCardWidget(
-                                imageUrl: imageUrl[index],
-                                type: type[index],
-                                name: name[index],
-                                status: status[index],
-                                title: title[index],
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      const SpaceWidget(spaceHeight: 16),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: TextWidget(
-                          text: AppStrings.recentActivity,
-                          fontColor: AppColors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SpaceWidget(spaceHeight: 8),
-                      LayoutBuilder(
-                        builder:
-                            (BuildContext context, BoxConstraints constraints) {
-                          // Get screen height safely
-                          final screenHeight =
-                              MediaQuery.of(context).size.height;
-                          // Calculate a safe height value (190 or 25% of screen height)
-                          final containerHeight = screenHeight * 0.25;
-
-                          return Container(
-                            width: double.infinity,
-                            height: containerHeight,
-                            // Use safe height value
-                            padding: const EdgeInsets.all(12),
-                            margin: const EdgeInsets.symmetric(horizontal: 20),
-                            decoration: BoxDecoration(
-                              color: AppColors.blue,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children:
-                                    List.generate(actions.length, (index) {
-                                  return RecentActivityCardWidget(
-                                    action: actions[index],
-                                    value: values[index],
-                                    time: times[index],
-                                  );
-                                }),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      const SpaceWidget(spaceHeight: 16),
-                    ],
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: TextWidget(
+                    text: AppStrings.hallOfFame,
+                    fontColor: AppColors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
                   ),
                 ),
+                const SpaceWidget(spaceHeight: 8),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(children: [
+                    _controller.ishallofframeLoading.value
+                        ? const CircularProgressIndicator.adaptive()
+                        : HallOfFameCardWidget(
+                            imageUrl:
+                                "https://res.cloudinary.com/dozenwhei/image/upload/v1747792976/682c3cc69eed9e382c6a6a66_474592994_1662953857987523_6145049004943155301_n-removebg-preview.png",
+                            name: "Aurnab",
+                            status: "Not funny",
+                            title: title[0],
+                            type: type[0],
+                          )
+                  ]),
+                ),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: TextWidget(
+                    text: AppStrings.recentActivity,
+                    fontColor: AppColors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
+                LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    // Get screen height safely
+                    final screenHeight = MediaQuery.of(context).size.height;
+                    // Calculate a safe height value (190 or 25% of screen height)
+                    final containerHeight = screenHeight * 0.25;
+
+                    return Container(
+                      width: double.infinity,
+                      height: containerHeight,
+                      // Use safe height value
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: AppColors.blue,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: List.generate(actions.length, (index) {
+                            return RecentActivityCardWidget(
+                              action: actions[index],
+                              value: values[index],
+                              time: times[index],
+                            );
+                          }),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SpaceWidget(spaceHeight: 16),
+              ],
+            ),
+          ),
         ),
       ),
     );

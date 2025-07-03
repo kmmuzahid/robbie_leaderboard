@@ -1,22 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
-import 'package:the_leaderboard/models/otp_model.dart';
 import 'package:the_leaderboard/models/verify_otp_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
-import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
-import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 
 class ForgotVerifyOtpController extends GetxController {
   late TextEditingController otpTextEditingController1;
   late TextEditingController otpTextEditingController2;
   late TextEditingController otpTextEditingController3;
   late TextEditingController otpTextEditingController4;
-final _authController = Get.find<AuthController>();
+
   // Timer variables
   final RxInt timerSeconds = 120.obs;
   final RxBool isTimerRunning = true.obs;
@@ -60,10 +57,10 @@ final _authController = Get.find<AuthController>();
   // Function to resend the OTP code
   void resendOtp() async {
     // Here you would add your API call to request a new OTP code
-    // For now we'll just show a snackbar and restart the timer 
+    // For now we'll just show a snackbar and restart the timer
     try {
       final response = await ApiPostService.resentOtp(
-          "${AppUrls.resentOtp}/${_authController.getEmail}");
+          "${AppUrls.resentOtp}/${LocalStorage.myEmail}");
       Get.snackbar('Success', response);
     } catch (e) {
       Get.snackbar("Error", "Something went wrong");
@@ -87,7 +84,7 @@ final _authController = Get.find<AuthController>();
 
     if (otp.length == 4 && RegExp(r'^\d{4}$').hasMatch(otp)) {
       // TODO: Implement actual OTP verification logic (e.g., API call)
-      final otpCode = VerifyOtpModel(otp: otp, email: _authController.getEmail);
+      final otpCode = VerifyOtpModel(otp: otp, email: LocalStorage.myEmail);
       try {
         final response = await ApiPostService.verifyOTP(otpCode);
         final data = jsonDecode(response.body);
@@ -96,8 +93,7 @@ final _authController = Get.find<AuthController>();
           data["message"],
           snackPosition: SnackPosition.BOTTOM,
         );
-        final authController = Get.find<AuthController>();
-        authController.setAccessToken(data["data"]);
+        LocalStorage.token = data["data"];
         Get.toNamed(AppRoutes.createNewPasswordScreen);
       } catch (e) {
         Get.snackbar("Error", "Something went wrong");

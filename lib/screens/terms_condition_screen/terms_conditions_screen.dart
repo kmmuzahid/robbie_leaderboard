@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:the_leaderboard/screens/terms_condition_screen/controller/term_and_condition_controller.dart';
-
 import '../../constants/app_colors.dart';
 import '../../widgets/appbar_widget/appbar_widget.dart';
-import '../../widgets/space_widget/space_widget.dart';
 import '../../widgets/text_widget/text_widgets.dart';
 
 class TermsAndConditionsScreen extends StatefulWidget {

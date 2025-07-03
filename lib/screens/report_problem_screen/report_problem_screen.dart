@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
-
 import '../../constants/app_colors.dart';
 import '../../widgets/appbar_widget/appbar_widget.dart';
 import '../../widgets/space_widget/space_widget.dart';

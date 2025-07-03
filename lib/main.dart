@@ -1,13 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:the_leaderboard/screens/auth_screens/auth_controller.dart';
-
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'main_app_entry.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(
@@ -23,8 +21,15 @@ void main() async {
   //   ),
   // );
   HttpOverrides.global = MyHttpOverrides();
-  Get.put(AuthController());
+  await init();
+  // LocalStorage.getAllPrefData();
   runApp(const MainApp());
+}
+
+init() async {
+  await Future.wait([
+    LocalStorage.getAllPrefData(),
+  ]);
 }
 
 class MyHttpOverrides extends HttpOverrides {
