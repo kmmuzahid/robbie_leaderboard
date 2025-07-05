@@ -1,28 +1,28 @@
-class HallOfFameSinglePaymentModel {
+class HallOfFrameMostEngagedModel {
   final String id;
   final String name;
   final String country;
   final String gender;
+  final String profileImg;
   final int views;
-  final int totalInvested;
 
-  HallOfFameSinglePaymentModel({
+  HallOfFrameMostEngagedModel({
     required this.id,
     required this.name,
     required this.country,
     required this.gender,
+    required this.profileImg,
     required this.views,
-    required this.totalInvested,
   });
 
-  factory HallOfFameSinglePaymentModel.fromJson(Map<String, dynamic> json) {
-    return HallOfFameSinglePaymentModel(
+  factory HallOfFrameMostEngagedModel.fromJson(Map<String, dynamic> json) {
+    return HallOfFrameMostEngagedModel(
       id: json['_id'] ?? '',
       name: json['name'] ?? '',
       country: json['country'] ?? '',
       gender: json['gender'] ?? '',
+      profileImg: json['profileImg'] ?? '',
       views: json['views'] ?? 0,
-      totalInvested: json['totalInvested'] ?? 0,
     );
   }
 
@@ -32,8 +32,8 @@ class HallOfFameSinglePaymentModel {
       'name': name,
       'country': country,
       'gender': gender,
+      'profileImg': profileImg,
       'views': views,
-      'totalInvested': totalInvested,
     };
   }
 }

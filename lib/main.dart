@@ -21,15 +21,9 @@ Future<void> main() async {
   //   ),
   // );
   HttpOverrides.global = MyHttpOverrides();
-  await init();
+  await LocalStorage.getAllPrefData();
   // LocalStorage.getAllPrefData();
   runApp(const MainApp());
-}
-
-init() async {
-  await Future.wait([
-    LocalStorage.getAllPrefData(),
-  ]);
 }
 
 class MyHttpOverrides extends HttpOverrides {

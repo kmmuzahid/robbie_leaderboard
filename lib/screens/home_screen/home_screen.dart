@@ -136,16 +136,16 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const SpaceWidget(spaceHeight: 16),
                 _controller.ismydataLoading.value
-                    ? const CircularProgressIndicator.adaptive()
+                    ? const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      )
                     : ProfileCardWidget(
                         profileImagePath: AppImagePath.profileImage,
                         name: _controller.name.value,
                         rankNumber: _controller.rank.value,
                         totalRaisedAmount: "\$${_controller.totalRaised.value}",
                         totalSpentAmount: "\$${_controller.totalSpent.value}",
-                        onViewProfilePressed: () {
-                          Get.toNamed(AppRoutes.profileScreen);
-                        },
+                        onViewProfilePressed: _controller.viewMyProfile,
                         onJoinLeaderboardPressed: () {},
                         onSharePressed: () {},
                       ),
@@ -164,18 +164,48 @@ class _HomeScreenState extends State<HomeScreen> {
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(children: [
-                    _controller.ishallofframeLoading.value
-                        ? const CircularProgressIndicator.adaptive()
-                        : HallOfFameCardWidget(
-                            imageUrl:
-                                "https://res.cloudinary.com/dozenwhei/image/upload/v1747792976/682c3cc69eed9e382c6a6a66_474592994_1662953857987523_6145049004943155301_n-removebg-preview.png",
-                            name: "Aurnab",
-                            status: "Not funny",
-                            title: title[0],
-                            type: type[0],
-                          )
-                  ]),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _controller.ishallofframeSinglePaymentLoading.value
+                            ? const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              )
+                            : HallOfFameCardWidget(
+                                name: _controller
+                                    .recoredSinglePayment.value!.name,
+                                status:
+                                    "\$${_controller.recoredSinglePayment.value!.totalInvested}",
+                                imageUrl: '',
+                                type: AppStrings.highestPayment,
+                                title: AppStrings.recordSingle,
+                              ),
+                        _controller.ishallofframeConsisntantTopLoading.value
+                            ? const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              )
+                            : HallOfFameCardWidget(
+                                name: _controller.consistantlyTop.value!.name,
+                                status:
+                                    "Last ${_controller.consistantlyTop.value!.timesRankedTop} Days",
+                                imageUrl: '',
+                                type: AppStrings.consecutively1st,
+                                title: AppStrings.consistentlyTop,
+                              ),
+                        _controller.ishallofframeMostEngagedLoading.value
+                            ? const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              )
+                            : HallOfFameCardWidget(
+                                imageUrl:
+                                    _controller.mostEngaged.value!.profileImg,
+                                name: _controller.mostEngaged.value!.name,
+                                status:
+                                    "${_controller.mostEngaged.value!.views} Views",
+                                type: AppStrings.mostViewedProfile,
+                                title: AppStrings.mostEngage,
+                              )
+                      ]),
                 ),
                 const SpaceWidget(spaceHeight: 16),
                 const Padding(

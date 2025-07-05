@@ -58,13 +58,10 @@ class VerifyOtpController extends GetxController {
   void resendOtp() async {
     // Here you would add your API call to request a new OTP code
     // For now we'll just show a snackbar and restart the timer
-    try {
-      final response = await ApiPostService.resentOtp(
-          "${AppUrls.resentOtp}/${LocalStorage.myEmail}");
-      Get.snackbar('Success', response);
-    } catch (e) {
-      Get.snackbar("Error", "Something went wrong");
-    }
+
+    await ApiPostService.resentOtp(
+        "${AppUrls.resentOtp}/${LocalStorage.myEmail}");
+
     // Clear all fields
     otpTextEditingController1.clear();
     otpTextEditingController2.clear();
@@ -84,21 +81,14 @@ class VerifyOtpController extends GetxController {
     if (otp.length == 4 && RegExp(r'^\d{4}$').hasMatch(otp)) {
       // TODO: Implement actual OTP verification logic (e.g., API call)
       final otpCode = OtpModel(otp: otp);
-      try {
-        final response = await ApiPostService.createUser(otpCode);
-        print(response.body);
-        final data = jsonDecode(response.body);
-        Get.snackbar(
-          'Success',
-          data["message"],
-          snackPosition: SnackPosition.BOTTOM,
-        );
+
+      final data = await ApiPostService.createUser(otpCode);
+      if (data != null) {
         final token = data["data"]["accessToken"];
         LocalStorage.token = token;
         Get.offAll(BottomNav());
-      } catch (e) {
-        Get.snackbar("Error", "Something went wrong");
       }
+
       // Navigate to next screen or perform action
     } else {
       Get.snackbar(

@@ -58,13 +58,9 @@ class ForgotVerifyOtpController extends GetxController {
   void resendOtp() async {
     // Here you would add your API call to request a new OTP code
     // For now we'll just show a snackbar and restart the timer
-    try {
-      final response = await ApiPostService.resentOtp(
-          "${AppUrls.resentOtp}/${LocalStorage.myEmail}");
-      Get.snackbar('Success', response);
-    } catch (e) {
-      Get.snackbar("Error", "Something went wrong");
-    }
+
+    await ApiPostService.resentOtp(
+        "${AppUrls.resentOtp}/${LocalStorage.myEmail}");
 
     // Clear all fields
     otpTextEditingController1.clear();
@@ -85,18 +81,11 @@ class ForgotVerifyOtpController extends GetxController {
     if (otp.length == 4 && RegExp(r'^\d{4}$').hasMatch(otp)) {
       // TODO: Implement actual OTP verification logic (e.g., API call)
       final otpCode = VerifyOtpModel(otp: otp, email: LocalStorage.myEmail);
-      try {
-        final response = await ApiPostService.verifyOTP(otpCode);
-        final data = jsonDecode(response.body);
-        Get.snackbar(
-          'Success',
-          data["message"],
-          snackPosition: SnackPosition.BOTTOM,
-        );
+
+      final data = await ApiPostService.verifyOTP(otpCode);
+      if (data != null) {
         LocalStorage.token = data["data"];
         Get.toNamed(AppRoutes.createNewPasswordScreen);
-      } catch (e) {
-        Get.snackbar("Error", "Something went wrong");
       }
 
       // Navigate to next screen or perform action

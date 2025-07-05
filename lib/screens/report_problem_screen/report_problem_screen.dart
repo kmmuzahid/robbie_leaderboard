@@ -17,24 +17,9 @@ class ReportProblemsScreen extends StatefulWidget {
 class _ReportProblemsScreenState extends State<ReportProblemsScreen> {
   final TextEditingController _controller = TextEditingController();
 
-  void _sendMessage() async{
-    try {
-  final response = await ApiPostService.sentReport(_controller.text);
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(response),
-      duration: const Duration(seconds: 2),
-    ),    
-  );
-  _controller.clear();
-}  catch (e) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text("Error, Something went wrong"),
-      duration: Duration(seconds: 2),
-    ),
-  );
-}
+  void _sendMessage() async {
+    await ApiPostService.sentReport(_controller.text);
+    _controller.clear();
   }
 
   @override

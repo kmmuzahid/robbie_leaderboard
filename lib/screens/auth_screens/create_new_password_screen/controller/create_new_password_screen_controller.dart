@@ -38,15 +38,11 @@ class CreateNewPasswordScreenController extends GetxController {
       );
       return;
     }
-   
-    try {
-      final response = await ApiPostService.setNewPassword(password);     
-      Get.snackbar("Success", response);
-      // Proceed with registration (e.g., API call, navigation, etc.)
-      Get.offNamed(AppRoutes.loginScreen);
-    } catch (e) {
-      Get.snackbar("Error", "Something went wrong");
-    }
+
+    await ApiPostService.setNewPassword(password);
+
+    // Proceed with registration (e.g., API call, navigation, etc.)
+    Get.offNamed(AppRoutes.loginScreen);
   }
 
   @override

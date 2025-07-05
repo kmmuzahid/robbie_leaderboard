@@ -23,6 +23,6 @@ class EditProfileController extends GetxController {
         cityController.text,
         genderController.text,
         ageController.text,
-        roleController.text);    
-  }  
+        roleController.text);
+  }
 }

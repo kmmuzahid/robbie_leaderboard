@@ -64,16 +64,12 @@ class RegisterScreenController extends GetxController {
       age: age,
     );
 
-    try {
-      final response = await ApiPostService.registerUser(profile);
-      final data = jsonDecode(response.body);
-      Get.snackbar("Successful", data["message"]);
+    final data = await ApiPostService.registerUser(profile);
+    if (data != null) {
       LocalStorage.token = data["data"]["token"];
       LocalStorage.myEmail = email;
       // Proceed with registration (e.g., API call, navigation, etc.)
       Get.offNamed(AppRoutes.verifyOtpScreen);
-    } catch (e) {
-      Get.snackbar("Error", "Something went wrong");
     }
   }
 

@@ -22,17 +22,12 @@ class ChangePasswordController extends GetxController {
       Get.snackbar("Error", "Old and new password are same");
     }
 
-    try {
-      final response = await ApiPostService.changePassword(
-          oldPasswordController.text, newPasswordController.text);
-      Get.snackbar("Success", response);
-      oldPasswordController.clear();
-      newPasswordController.clear();
-      confirmNewPasswordController.clear();
-      return;
-    } catch (e) {
-      Get.snackbar("Error", e.toString());
-    }
+    await ApiPostService.changePassword(
+        oldPasswordController.text, newPasswordController.text);
+
+    oldPasswordController.clear();
+    newPasswordController.clear();
+    confirmNewPasswordController.clear();
     return;
   }
 

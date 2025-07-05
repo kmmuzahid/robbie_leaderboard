@@ -68,7 +68,7 @@ class HallOfFameCardWidget extends StatelessWidget {
                       height: 100,
                       width: 100,
                       fit: BoxFit.cover,
-                      fromNetwork: true,
+                      fromNetwork: imageUrl.isNotEmpty,
                     ),
                   ),
                   Positioned(

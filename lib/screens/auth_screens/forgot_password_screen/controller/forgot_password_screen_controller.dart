@@ -21,10 +21,9 @@ class ForgotPasswordScreenController extends GetxController {
       return;
     }
     try {
-      final message = await ApiPostService.forgetPassword(email);
+      await ApiPostService.forgetPassword(email);
       LocalStorage.myEmail = email;
 
-      Get.snackbar("Success", message);
       // You can use rememberMe.value here for your logic
       // For example, print the state for now
 

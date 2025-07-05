@@ -15,7 +15,9 @@ class AppUrls {
   static const changePassword = "$_baseUrl/auth/change-password";
   static const deleteUser = "$_baseUrl/users";
   static const notification = "$_baseUrl/notifications";
-  static const mostViewed = "$_baseUrl /fame/most-viewed";
+  static const mostViewed = "$_baseUrl/fame/most-viewed";
   static const highestInvestor = "$_baseUrl/fame/highest-investor";
   static const consecutiveToper = "$_baseUrl/fame/consecutively-toper";
+  static const currentRuffle = "$_baseUrl/ruffles/current";
+  static const myTicket = "$_baseUrl/ruffles/my-tickets";
 }
