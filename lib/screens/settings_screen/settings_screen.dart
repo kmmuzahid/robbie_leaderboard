@@ -14,14 +14,9 @@ class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   void _deleteUser(BuildContext context) async {
-    try {
-      final response = await ApiDeleteService.deleteUser();
-      Get.snackbar("Success", response);
-      Navigator.of(context).pop();
-      Get.toNamed(AppRoutes.registerScreen);
-    } catch (e) {
-      Get.snackbar("Error", "Something went wrong");
-    }
+    await ApiDeleteService.deleteUser();
+    Navigator.of(context).pop();
+    Get.toNamed(AppRoutes.registerScreen);
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 
@@ -27,8 +28,10 @@ class ProfileScreenController extends GetxController {
       LocalStorage.userId = profile.id;
       print("user id: ${profile.id}");
       print("token: ${LocalStorage.token}");
-    } else {
-      Get.snackbar("Error", "Something went wrong");
     }
+  }
+
+  void withdrawAmount() {
+    Get.toNamed(AppRoutes.withdrawAmountScreen);
   }
 }

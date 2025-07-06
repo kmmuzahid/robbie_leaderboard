@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:the_leaderboard/screens/auth_screens/verify_otp_screen/verify_otp_screen.dart';
 import 'package:the_leaderboard/screens/change_password_screen/change_password_screen.dart';
 import 'package:the_leaderboard/screens/profile_screen/profile_screen.dart';
+import 'package:the_leaderboard/screens/withdraw_amount_screen/withdraw_amount_screen.dart';
 
 import '../screens/auth_screens/create_new_password_screen/create_new_password_screen.dart';
 import '../screens/auth_screens/forgot_password_screen/forgot_password_screen.dart';
@@ -133,6 +134,12 @@ class RouteManager {
       GetPage(
         name: AppRoutes.profileScreen,
         page: () => ProfileScreen(),
+        transition: Transition.fadeIn,
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.withdrawAmountScreen,
+        page: () => const WithdrawAmountScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),

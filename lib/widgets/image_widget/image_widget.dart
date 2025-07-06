@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_leaderboard/constants/app_image_path.dart';
 
 import '../../utils/app_size.dart';
 

@@ -1,5 +1,5 @@
 class AppUrls {
-  static const _baseUrl = "https://sakib_5000.binarybards.online/api/v1";
+  static const _baseUrl = "http://10.10.7.29:5000/api/v1";
   static const profile = "$_baseUrl/users/me";
   static const login = "$_baseUrl/auth/login";
   static const createUser = "$_baseUrl/users/create-user";
@@ -20,4 +20,8 @@ class AppUrls {
   static const consecutiveToper = "$_baseUrl/fame/consecutively-toper";
   static const currentRuffle = "$_baseUrl/ruffles/current";
   static const myTicket = "$_baseUrl/ruffles/my-tickets";
+  static const createTicket = "$_baseUrl/ruffles/ticket";
+  static const updateImage = "$_baseUrl/users/update-profileImg";
+  static const leaderBoardData = "$_baseUrl/rank";
+  static const withdrawAmount = "$_baseUrl/payments/withdraw";
 }

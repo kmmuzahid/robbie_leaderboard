@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:the_leaderboard/models/current_ruffle_model.dart';
 import 'package:the_leaderboard/models/user_ticket_model.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
+import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 
@@ -22,7 +23,6 @@ class RewardsScreenController extends GetxController {
   final RxInt tototalTicket = 0.obs;
 
   void fetchData() async {
-    setspinButton();
     isRuffleLoading.value = true;
     final responseRuffle = await ApiGetService.fetchCurrentRuffleData();
     if (responseRuffle != null) {
@@ -36,6 +36,8 @@ class RewardsScreenController extends GetxController {
       userTicket.value = responseTicket;
     }
     isTicketLoading.value = false;
+    tototalTicket.value = LocalStorage.totalTicket;
+    setspinButton();
   }
 
   String getRemainingDays() {
@@ -49,33 +51,47 @@ class RewardsScreenController extends GetxController {
     }
   }
 
-  void spinWheel() {
+  void spinWheel() async {
     final random =
         math.Random().nextInt(currentRuffle.value!.ticketButtons.length);
     currentWheelIndex.value = random;
     wheelController.animateToItem(random,
-        duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+        duration: const Duration(seconds: 3), curve: Curves.fastOutSlowIn);
     dayIndex.value++;
     today.value = DateFormat("yyyy-MM-dd").format(DateTime.now());
     LocalStorage.setString(LocalStorageKeys.today, today.value);
     LocalStorage.setInt(LocalStorageKeys.dayIndex, dayIndex.value);
     isSpinButtonActivate.value = false;
     tototalTicket.value += currentRuffle.value!.ticketButtons[random];
+    LocalStorage.setInt(LocalStorageKeys.totalTicket, tototalTicket.value);
+    await ApiPostService.createTicket(
+        currentRuffle.value!.ticketButtons[random]);
   }
 
   void setspinButton() {
     // LocalStorage.setString(LocalStorageKeys.today,
-    //     DateFormat("yyyy-MM-dd").format(DateTime(2025, 5, 6)));
+    //     DateFormat("yyyy-MM-dd").format(DateTime(2025, 7, 5)));
+//     LocalStorage.setInt(LocalStorageKeys.totalTicket, 0);
+// LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
     final now = DateFormat("yyyy-MM-dd").format(DateTime.now());
     dayIndex.value = LocalStorage.dayIndex;
     today.value = LocalStorage.today;
     if (now == today.value && dayIndex.value < 7) {
       isSpinButtonActivate.value = false;
+      Get.snackbar(
+          "Error", "You have reached the today's limit. Try again tommorrow");
     } else if (now == today.value && dayIndex.value == 7) {
       isSpinButtonActivate.value = true;
       LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
     } else {
       isSpinButtonActivate.value = true;
     }
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    wheelController.dispose();
   }
 }

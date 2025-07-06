@@ -39,15 +39,15 @@ class _RewardsScreenState extends State<RewardsScreen> {
   }
 
   int currentTickets = 35;
-  final int targetTickets = 41; // 32 + 9 more needed for rewards
+  // final int targetTickets = 41; // 32 + 9 more needed for rewards
 
-  void addTicket() {
-    setState(() {
-      if (currentTickets < targetTickets) {
-        currentTickets++;
-      }
-    });
-  }
+  // void addTicket() {
+  //   setState(() {
+  //     if (currentTickets < targetTickets) {
+  //       currentTickets++;
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -110,13 +110,13 @@ class _RewardsScreenState extends State<RewardsScreen> {
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
                           ),
-                          _controller.isTicketLoading.value
+                          _controller.isRuffleLoading.value
                               ? const Center(
                                   child: CircularProgressIndicator.adaptive(),
                                 )
                               : TextWidget(
                                   text:
-                                      "Drawing on ${DateFormat("MMMM d, y").format(_controller.userTicket.value!.tickets.last.createdAt)}",
+                                      "Drawing on ${DateFormat("MMMM d, y").format(_controller.currentRuffle.value!.deadline)}",
                                   fontColor: AppColors.greyDarker,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 12,

@@ -1,6 +1,10 @@
 import 'dart:convert';
-import 'package:get/get.dart';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide MultipartFile, FormData;
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 
@@ -35,53 +39,54 @@ class ApiPatchService {
       final response = await http.patch(
         Uri.parse(url),
         headers: {
-          'Content-Type': 'application/json',
           'authorization': LocalStorage.token,
         },
         body: jsonEncode(updateData),
       );
-
-      if (response.statusCode == 200 || response.statusCode == 204) {
-        Get.snackbar("Success", "Profile updated successfully");
+      final jsonbody = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 204) {       
+        Get.snackbar("Success", jsonbody["message"]);
       } else {
-        errorMessageForPatch(response.statusCode);
-        Get.snackbar("Error",
-            "Failed to update profile. Status code: ${response.statusCode}");
+        Get.snackbar("Error", jsonbody["message"]);
       }
     } catch (e) {
       Get.snackbar("Error", "Something went wrong: $e");
     }
   }
 
-  static void errorMessageForPatch(int statusCode) {
-    switch (statusCode) {
-      case 400:
-        Get.snackbar("Bad Request", "The update data was invalid.");
-        break;
+  static Future<void> updateProfileImage(File image) async {
+    try {
+      final dio = Dio();
 
-      case 401:
-        Get.snackbar("Unauthorized", "You are not authorized to update this.");
-        break;
+      String fileName = basename(image.path);
 
-      case 403:
-        Get.snackbar("Forbidden", "You don't have permission to update.");
-        break;
+      FormData formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          image.path,
+          filename: fileName,
+          contentType: MediaType('image', 'png'),
+        ),
+      });
 
-      case 404:
-        Get.snackbar("Not Found", "The item you want to update was not found.");
-        break;
+      final response = await dio.patch(
+        AppUrls.updateImage,
+        data: formData,
+        options: Options(
+          headers: {
+            'authorization': LocalStorage.token,
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
+      );
 
-      case 409:
-        Get.snackbar("Conflict", "Update conflict occurred. Try again.");
-        break;
-
-      case 500:
-        Get.snackbar(
-            "Server Error", "Failed to update. Server error occurred.");
-        break;
-
-      default:
-        Get.snackbar("Error", "Unexpected error (Status Code: $statusCode)");
+      final jsonbody = response.data;
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        Get.snackbar("Success", jsonbody["message"]);
+      } else {
+        Get.snackbar("Error", jsonbody["message"]);
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Upload failed: $e");
     }
   }
 }

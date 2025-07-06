@@ -1,6 +1,4 @@
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'storage_keys.dart';
 
 class LocalStorage {
@@ -16,6 +14,7 @@ class LocalStorage {
   static bool rememberMe = false;
   static String today = "";
   static int dayIndex = 0;
+  static int totalTicket = 0;
 
   // Create Local Storage Instance
   static SharedPreferences? preferences;
@@ -42,6 +41,7 @@ class LocalStorage {
     rememberMe = localStorage.getBool(LocalStorageKeys.rememberMe) ?? false;
     today = localStorage.getString(LocalStorageKeys.today) ?? "";
     dayIndex = localStorage.getInt(LocalStorageKeys.dayIndex) ?? 0;
+    totalTicket = localStorage.getInt(LocalStorageKeys.totalTicket) ?? 0;
     //appLog(userId, source: "Local Storage");
   }
 

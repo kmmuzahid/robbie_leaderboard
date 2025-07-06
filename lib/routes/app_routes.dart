@@ -20,4 +20,5 @@ class AppRoutes {
   static const verifyOtpScreen = '/verify_otp_screen';
   static const changePasswordScreen = '/change_password_screen';
   static const profileScreen = '/profile_screen';
+  static const withdrawAmountScreen = '/withdraw_amount_screen';
 }

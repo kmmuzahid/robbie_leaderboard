@@ -88,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           name: _controller.name.value,
                           email: _controller.email.value,
                           balance: "\$${_controller.totalBalance.value}",
-                          withdrawButtonOnPressed: () {},
+                          withdrawButtonOnPressed: _controller.withdrawAmount,
                           tweeterButtonOnPressed: () {},
                           instagramButtonOnPressed: () {},
                         ),

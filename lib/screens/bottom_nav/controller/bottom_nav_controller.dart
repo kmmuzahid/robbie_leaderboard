@@ -17,9 +17,6 @@ class BottomNavController extends GetxController {
   ];
 
   void changeIndex(int index) {
-    selectedIndex.value = index;
-    if(index == 3){
-      
-    }
+    selectedIndex.value = index;    
   }
 }

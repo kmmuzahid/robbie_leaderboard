@@ -164,37 +164,40 @@ class ApiPostService {
     }
   }
 
-  static void errorMessageForPost(int statusCode) {
-    switch (statusCode) {
-      case 400:
-        Get.snackbar("Bad Request", "The posted data was invalid.");
-        break;
-
-      case 401:
-        Get.snackbar(
-            "Unauthorized", "You are not authorized to perform this action.");
-        break;
-
-      case 403:
-        Get.snackbar(
-            "Forbidden", "You don't have permission to post this data.");
-        break;
-
-      case 404:
-        Get.snackbar("Not Found", "The endpoint was not found.");
-        break;
-
-      case 409:
-        Get.snackbar(
-            "Conflict", "Duplicate or conflicting data. Please check again.");
-        break;
-
-      case 500:
-        Get.snackbar("Server Error", "Server failed to process the request.");
-        break;
-
-      default:
-        Get.snackbar("Error", "Unexpected error (Status Code: $statusCode)");
+  static Future<void> createTicket(
+      int quantity) async {
+    final response = await http.post(Uri.parse(AppUrls.createTicket),
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': LocalStorage.token
+        },
+        body: jsonEncode(
+            {"qty": quantity}));
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Get.snackbar("Success", data["message"],
+          snackPosition: SnackPosition.BOTTOM);
+    } else {
+      Get.snackbar("Error", data["message"] ?? "Something went wrong",
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+  static Future<void> withdrawAmount(
+      int amount) async {
+    final response = await http.post(Uri.parse(AppUrls.withdrawAmount),
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': LocalStorage.token
+        },
+        body: jsonEncode(
+            {"amount": amount}));
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Get.snackbar("Success", data["message"],
+          snackPosition: SnackPosition.BOTTOM);
+    } else {
+      Get.snackbar("Error", data["message"] ?? "Something went wrong",
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 }

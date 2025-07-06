@@ -64,7 +64,7 @@ class HallOfFameCardWidget extends StatelessWidget {
                     child: ImageWidget(
                       imagePath: imageUrl.isNotEmpty
                           ? imageUrl
-                          : AppImagePath.consistentlyTopImage,
+                          : AppImagePath.profileImage,
                       height: 100,
                       width: 100,
                       fit: BoxFit.cover,

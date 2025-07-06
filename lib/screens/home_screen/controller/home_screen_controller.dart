@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:the_leaderboard/models/hall_of_fame_single_payment_model.dart';
 import 'package:the_leaderboard/models/hall_of_frame_consisntantly_top_model.dart';
 import 'package:the_leaderboard/models/hall_of_frame_most_engaged_model.dart';
+import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/bottom_nav/controller/bottom_nav_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 
@@ -24,48 +25,44 @@ class HomeScreenController extends RxController {
   final RxBool ishallofframeMostEngagedLoading = true.obs;
 
   void fetchData() async {
-    try {
-      ismydataLoading.value = true;
-      final data = await ApiGetService.fetchHomeData();
+    ismydataLoading.value = true;
+    final data = await ApiGetService.fetchHomeData();
 
-      if (data != null) {
-        final userData = data.user;
-        name.value = userData.name;
-        totalRaised.value = userData.totalRaised.toString();
-        totalSpent.value = userData.totalInvest.toString();
-        rank.value = userData.rank;
-      }
-      ismydataLoading.value = false;
-
-      ishallofframeSinglePaymentLoading.value = true;
-      final recordSingledata =
-          await ApiGetService.fetchHallofFrameSinglePayment();
-      if (recordSingledata != null) {
-        recoredSinglePayment.value = recordSingledata;
-      }
-      ishallofframeSinglePaymentLoading.value = false;
-
-      ishallofframeConsisntantTopLoading.value = true;
-      final consistantlyTopdata =
-          await ApiGetService.fetchHallofFrameConsistentlyTop();
-      if (consistantlyTopdata != null) {
-        consistantlyTop.value = consistantlyTopdata;
-      }
-      ishallofframeConsisntantTopLoading.value = false;
-
-      ishallofframeMostEngagedLoading.value = true;
-      final mostEngageddata =
-          await ApiGetService.fetchHallofFrameEngagedProfile();
-      if (mostEngageddata != null) {
-        mostEngaged.value = mostEngageddata;
-      }
-      ishallofframeMostEngagedLoading.value = false;
-    } catch (e) {
-      Get.snackbar("Error", "Something went wrong");
+    if (data != null) {
+      final userData = data.user;
+      name.value = userData.name;
+      totalRaised.value = userData.totalRaised.toString();
+      totalSpent.value = userData.totalInvest.toString();
+      rank.value = userData.rank;
     }
+    ismydataLoading.value = false;
+
+    ishallofframeSinglePaymentLoading.value = true;
+    final recordSingledata =
+        await ApiGetService.fetchHallofFrameSinglePayment();
+    if (recordSingledata != null) {
+      recoredSinglePayment.value = recordSingledata;
+    }
+    ishallofframeSinglePaymentLoading.value = false;
+
+    ishallofframeConsisntantTopLoading.value = true;
+    final consistantlyTopdata =
+        await ApiGetService.fetchHallofFrameConsistentlyTop();
+    if (consistantlyTopdata != null) {
+      consistantlyTop.value = consistantlyTopdata;
+    }
+    ishallofframeConsisntantTopLoading.value = false;
+
+    ishallofframeMostEngagedLoading.value = true;
+    final mostEngageddata =
+        await ApiGetService.fetchHallofFrameEngagedProfile();
+    if (mostEngageddata != null) {
+      mostEngaged.value = mostEngageddata;
+    }
+    ishallofframeMostEngagedLoading.value = false;
   }
 
   void viewMyProfile() {
-    Get.put(BottomNavController()).changeIndex(3);
+    Get.toNamed(AppRoutes.profileScreen);
   }
 }

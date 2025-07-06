@@ -7,6 +7,7 @@ import 'package:the_leaderboard/models/faq_model.dart';
 import 'package:the_leaderboard/models/hall_of_fame_single_payment_model.dart';
 import 'package:the_leaderboard/models/hall_of_frame_consisntantly_top_model.dart';
 import 'package:the_leaderboard/models/hall_of_frame_most_engaged_model.dart';
+import 'package:the_leaderboard/models/leader_board_model.dart';
 import 'package:the_leaderboard/models/notification_model.dart';
 import 'package:the_leaderboard/models/profile_model.dart';
 import 'package:the_leaderboard/models/term_and_condition_model.dart';
@@ -19,12 +20,12 @@ class ApiGetService {
       'Content-Type': 'application/json',
       'authorization': LocalStorage.token
     });
-
+    final jsonbody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final jsonbody = jsonDecode(response.body);
+      // Get.snackbar("Success", jsonbody["message"]);
       return ProfileUserModel.fromJson(jsonbody["data"]["user"]);
     } else {
-      errorMessage(response.statusCode);
+      Get.snackbar("Error", jsonbody["message"]);
       return null;
     }
   }
@@ -34,11 +35,12 @@ class ApiGetService {
       'Content-Type': 'application/json',
       'authorization': LocalStorage.token
     });
+    final jsonbody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final jsonbody = jsonDecode(response.body);
+      // Get.snackbar("Success", jsonbody["message"]);
       return ProfileResponseModel.fromJson(jsonbody["data"]);
     } else {
-      errorMessage(response.statusCode);
+      Get.snackbar("Error", jsonbody["message"]);
       return null;
     }
   }
@@ -48,13 +50,13 @@ class ApiGetService {
       'Content-Type': 'application/json',
       'authorization': LocalStorage.token
     });
+    final jsonbody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final jsonbody = jsonDecode(response.body);
+      // Get.snackbar("Success", jsonbody["message"]);
       final List data = jsonbody["data"];
-
       return data.map((e) => FaqModel.fromJson(e)).toList();
     } else {
-      errorMessage(response.statusCode);
+      Get.snackbar("Error", jsonbody["message"]);
       return [];
     }
   }
@@ -65,12 +67,13 @@ class ApiGetService {
           'Content-Type': 'application/json',
           'authorization': LocalStorage.token
         });
+    final jsonbody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final jsonbody = jsonDecode(response.body);
+      // Get.snackbar("Success", jsonbody["message"]);
       final List data = jsonbody["data"];
       return data.map((e) => TermAndConditionModel.fromJson(e)).toList();
     } else {
-      errorMessage(response.statusCode);
+      Get.snackbar("Error", jsonbody["message"]);
       return [];
     }
   }
@@ -81,12 +84,13 @@ class ApiGetService {
       'authorization': LocalStorage.token
     });
     print(response.body);
+    final jsonbody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final jsonbody = jsonDecode(response.body);
+      // Get.snackbar("Success", jsonbody["message"]);
       final List data = jsonbody["data"];
       return data.map((e) => NotificationModel.fromJson(e)).toList();
     } else {
-      errorMessage(response.statusCode);
+      Get.snackbar("Error", jsonbody["message"]);
       return [];
     }
   }
@@ -98,11 +102,12 @@ class ApiGetService {
           'Content-Type': 'application/json',
           'authorization': LocalStorage.token
         });
+    final jsonbody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final jsonbody = jsonDecode(response.body);
+      // Get.snackbar("Success", jsonbody["message"]);
       return HallOfFameSinglePaymentModel.fromJson(jsonbody["data"]);
     } else {
-      errorMessage(response.statusCode);
+      Get.snackbar("Error", jsonbody["message"]);
       return null;
     }
   }
@@ -114,11 +119,12 @@ class ApiGetService {
           'Content-Type': 'application/json',
           'authorization': LocalStorage.token
         });
+    final jsonbody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final jsonbody = jsonDecode(response.body);
+      // Get.snackbar("Success", jsonbody["message"]);
       return HallOfFrameConsisntantlyTopModel.fromJson(jsonbody["data"]);
     } else {
-      errorMessage(response.statusCode);
+      Get.snackbar("Error", jsonbody["message"]);
       return null;
     }
   }
@@ -129,11 +135,12 @@ class ApiGetService {
       'Content-Type': 'application/json',
       'authorization': LocalStorage.token
     });
+    final jsonbody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final jsonbody = jsonDecode(response.body);
+      // Get.snackbar("Success", jsonbody["message"]);
       return HallOfFrameMostEngagedModel.fromJson(jsonbody["data"]);
     } else {
-      errorMessage(response.statusCode);
+      Get.snackbar("Error", jsonbody["message"]);
       return null;
     }
   }
@@ -145,7 +152,7 @@ class ApiGetService {
     });
     final jsonbody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Get.snackbar("Success", jsonbody["message"]);
+      // Get.snackbar("Success", jsonbody["message"]);
       return CurrentRuffleModel.fromJson(jsonbody["data"]);
     } else {
       Get.snackbar("Error", jsonbody["message"]);
@@ -160,7 +167,7 @@ class ApiGetService {
     });
     final jsonbody = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      Get.snackbar("Success", jsonbody["message"]);
+      // Get.snackbar("Success", jsonbody["message"]);
       return UserTicketsModel.fromJson(jsonbody["data"]);
     } else {
       Get.snackbar("Error", jsonbody["message"]);
@@ -168,30 +175,20 @@ class ApiGetService {
     }
   }
 
-  static void errorMessage(int statusCode) {
-    switch (statusCode) {
-      case 400:
-        Get.snackbar("Bad Request", "The request was invalid.");
-        break;
-
-      case 401:
-        Get.snackbar("Unauthorized", "Invalid or expired token.");
-        break;
-
-      case 403:
-        Get.snackbar("Forbidden", "You do not have permission.");
-        break;
-
-      case 404:
-        Get.snackbar("Not Found", "Data not found.");
-        break;
-
-      case 500:
-        Get.snackbar("Server Error", "Something went wrong on the server.");
-        break;
-
-      default:
-        Get.snackbar("Error", "Unexpected error (Status Code: $statusCode)");
+  static Future<List<LeaderBoardModel?>> fetchLeaderboardData() async {
+    final response = await http.get(Uri.parse(AppUrls.leaderBoardData), headers: {
+      'Content-Type': 'application/json',
+      'authorization': LocalStorage.token
+    });
+   
+    final jsonbody = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // Get.snackbar("Success", jsonbody["message"]);
+      final List data = jsonbody["data"];
+      return data.map((e) => LeaderBoardModel.fromJson(e)).toList();
+    } else {
+      Get.snackbar("Error", jsonbody["message"]);
+      return [];
     }
   }
 }

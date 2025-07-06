@@ -8,7 +8,7 @@ class AppImagePath {
   static const String instagramImage = 'assets/images/instagram.png';
 
   // Dev Images
-  static const String profileImage = 'assets/dev_images/profile_image.png';
+  static const String profileImage = 'assets/images/profile.png';
   static const String highestPaymentImage =
       'assets/dev_images/heighest_payment_image.png';
   static const String consistentlyTopImage =

@@ -45,6 +45,11 @@ class LoginScreenController extends GetxController {
         LocalStorage.setString(LocalStorageKeys.myEmail, email);
         LocalStorage.setString(LocalStorageKeys.myPassword, password);
       }
+      if (!rememberMe.value) {
+        LocalStorage.setBool(LocalStorageKeys.rememberMe, rememberMe.value);
+        LocalStorage.setString(LocalStorageKeys.myEmail, "");
+        LocalStorage.setString(LocalStorageKeys.myPassword, "");
+      }
 
       // Proceed with registration (e.g., API call, navigation, etc.)
       Get.offAll(BottomNav());

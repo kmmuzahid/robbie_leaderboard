@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
+import 'package:the_leaderboard/screens/leaderboard_screen/controller/leaderboard_controller.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_dropdown.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_item.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_tabbar.dart';
@@ -24,11 +25,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     with SingleTickerProviderStateMixin {
   String selectedLeaderboard = 'Leaderboard';
   late TabController _tabController;
+  // final _controller = Get.put(LeaderboardController());
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    // _controller.fetchData();
   }
 
   @override

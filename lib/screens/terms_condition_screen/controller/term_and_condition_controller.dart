@@ -5,13 +5,9 @@ class TermAndConditionController extends GetxController {
   final RxString termAndCondition = ''.obs;
 
   void fetchData() async {
-    try {
-      final response = await ApiGetService.fetchTermAndCondition();     
-      if (response.isNotEmpty) {
-        termAndCondition.value = response.first!.text;        
-      }
-    } catch (e) {
-      Get.snackbar("Error", "Something went wrong");
+    final response = await ApiGetService.fetchTermAndCondition();
+    if (response.isNotEmpty) {
+      termAndCondition.value = response.first!.text;
     }
   }
 }

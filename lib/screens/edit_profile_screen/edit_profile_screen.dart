@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/instance_manager.dart';
-import 'package:get/state_manager.dart';
-import 'package:get/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/screens/edit_profile_screen/controller/edit_profile_controller.dart';
+import 'package:the_leaderboard/services/api/api_patch_service.dart';
 import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 
@@ -28,7 +27,6 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _controller = Get.put(EditProfileController());
   // Controllers for text fields
- 
 
   // Variable to store the selected image
   File? _selectedImage;
@@ -40,7 +38,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _pickImage() async {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      
       if (image != null) {
+        final File file = File(image.path);
+        await ApiPatchService.updateProfileImage(file);
         setState(() {
           _selectedImage = File(image.path);
         });
@@ -51,8 +52,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       );
     }
   }
-
-  
 
   // Helper method to build a text field
   Widget _buildTextField({
@@ -96,105 +95,104 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         backgroundColor: AppColors.blueDark,
         appBar: const AppbarWidget(title: ""),
         body: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Profile Picture
-                Stack(
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: _selectedImage != null
-                            ? Image.file(
-                                _selectedImage!,
-                                fit: BoxFit.cover,
-                                width: 80,
-                                height: 80,
-                              )
-                            : const ImageWidget(
-                                height: 80,
-                                width: 80,
-                                imagePath: AppImagePath.profileImage,
-                              ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Profile Picture
+              Stack(
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: _selectedImage != null
+                          ? Image.file(
+                              _selectedImage!,
+                              fit: BoxFit.cover,
+                              width: 80,
+                              height: 80,
+                            )
+                          : const ImageWidget(
+                              height: 80,
+                              width: 80,
+                              imagePath: AppImagePath.profileImage,
+                            ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: -2,
+                    right: -2,
+                    child: GestureDetector(
+                      onTap: _pickImage, // Call the image picker
+                      child: const IconWidget(
+                        height: 30,
+                        width: 30,
+                        icon: AppIconPath.editImageButtonIcon,
                       ),
                     ),
-                    Positioned(
-                      bottom: -2,
-                      right: -2,
-                      child: GestureDetector(
-                        onTap: _pickImage, // Call the image picker
-                        child: const IconWidget(
-                          height: 30,
-                          width: 30,
-                          icon: AppIconPath.editImageButtonIcon,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SpaceWidget(spaceHeight: 24),
-                             
-                // Username
-                _buildTextField(
-                  label: "Username",
-                  controller: _controller.usernameController,
-                ),
-                const SpaceWidget(spaceHeight: 12),
-                  _buildTextField(
-                  label: "Contact",
-                  controller: _controller.contactController,
-                ),
-                const SpaceWidget(spaceHeight: 12),
-                  _buildTextField(
-                  label: "City",
-                  controller: _controller.cityController,
-                ),
-                const SpaceWidget(spaceHeight: 12),
-                  _buildTextField(
-                  label: "Gender",
-                  controller: _controller.genderController,
-                ),
-                const SpaceWidget(spaceHeight: 12),
-                  _buildTextField(
-                  label: "Age",
-                  controller: _controller.ageController,
-                ),
-                const SpaceWidget(spaceHeight: 12),
-                  _buildTextField(
-                  label: "Role",
-                  controller: _controller.roleController,
-                ),
-                const SpaceWidget(spaceHeight: 12),
-                // Instagram Link
-                _buildTextField(
-                  label: "Instagram Link",
-                  controller: _controller.instagramController,
-                ),
-                const SpaceWidget(spaceHeight: 12),
-                // Twitter Link
-                _buildTextField(
-                  label: "Twitter Link",
-                  controller: _controller.twitterController,
-                ),
-                const SpaceWidget(spaceHeight: 12),
-                // Country
-                _buildTextField(
-                  label: "Country",
-                  controller: _controller.countryController,
-                ),
-                const SpaceWidget(spaceHeight: 24),
-                // Save Changes Button
-              ],
-            ),
-          
+                  ),
+                ],
+              ),
+              const SpaceWidget(spaceHeight: 24),
+
+              // Username
+              _buildTextField(
+                label: "Username",
+                controller: _controller.usernameController,
+              ),
+              const SpaceWidget(spaceHeight: 12),
+              _buildTextField(
+                label: "Contact",
+                controller: _controller.contactController,
+              ),
+              const SpaceWidget(spaceHeight: 12),
+              _buildTextField(
+                label: "City",
+                controller: _controller.cityController,
+              ),
+              const SpaceWidget(spaceHeight: 12),
+              _buildTextField(
+                label: "Gender",
+                controller: _controller.genderController,
+              ),
+              const SpaceWidget(spaceHeight: 12),
+              _buildTextField(
+                label: "Age",
+                controller: _controller.ageController,
+              ),
+              const SpaceWidget(spaceHeight: 12),
+              _buildTextField(
+                label: "Role",
+                controller: _controller.roleController,
+              ),
+              const SpaceWidget(spaceHeight: 12),
+              // Instagram Link
+              _buildTextField(
+                label: "Instagram Link",
+                controller: _controller.instagramController,
+              ),
+              const SpaceWidget(spaceHeight: 12),
+              // Twitter Link
+              _buildTextField(
+                label: "Twitter Link",
+                controller: _controller.twitterController,
+              ),
+              const SpaceWidget(spaceHeight: 12),
+              // Country
+              _buildTextField(
+                label: "Country",
+                controller: _controller.countryController,
+              ),
+              const SpaceWidget(spaceHeight: 24),
+              // Save Changes Button
+            ],
+          ),
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
