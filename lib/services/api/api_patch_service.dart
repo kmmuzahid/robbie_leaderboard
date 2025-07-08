@@ -5,6 +5,7 @@ import 'package:get/get.dart' hide MultipartFile, FormData;
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 
@@ -45,12 +46,12 @@ class ApiPatchService {
       );
       final jsonbody = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 204) {       
-        Get.snackbar("Success", jsonbody["message"]);
+        Get.snackbar("Success", jsonbody["message"], colorText: AppColors.white);
       } else {
-        Get.snackbar("Error", jsonbody["message"]);
+        Get.snackbar("Error", jsonbody["message"], colorText: AppColors.white);
       }
     } catch (e) {
-      Get.snackbar("Error", "Something went wrong: $e");
+      Get.snackbar("Error", "Something went wrong: $e", colorText: AppColors.white);
     }
   }
 
@@ -81,9 +82,9 @@ class ApiPatchService {
 
       final jsonbody = response.data;
       if (response.statusCode == 200 || response.statusCode == 204) {
-        Get.snackbar("Success", jsonbody["message"]);
+        Get.snackbar("Success", jsonbody["message"], colorText: AppColors.white);
       } else {
-        Get.snackbar("Error", jsonbody["message"]);
+        Get.snackbar("Error", jsonbody["message"], colorText: AppColors.white);
       }
     } catch (e) {
       Get.snackbar("Error", "Upload failed: $e");

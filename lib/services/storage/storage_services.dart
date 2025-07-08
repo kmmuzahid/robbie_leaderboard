@@ -15,6 +15,7 @@ class LocalStorage {
   static String today = "";
   static int dayIndex = 0;
   static int totalTicket = 0;
+  static String otherUserId = "";
 
   // Create Local Storage Instance
   static SharedPreferences? preferences;
@@ -42,6 +43,7 @@ class LocalStorage {
     today = localStorage.getString(LocalStorageKeys.today) ?? "";
     dayIndex = localStorage.getInt(LocalStorageKeys.dayIndex) ?? 0;
     totalTicket = localStorage.getInt(LocalStorageKeys.totalTicket) ?? 0;
+    otherUserId = localStorage.getString(LocalStorageKeys.otherUserId) ?? "";
     //appLog(userId, source: "Local Storage");
   }
 
@@ -64,6 +66,7 @@ class LocalStorage {
     localStorage.setString(LocalStorageKeys.myImage, "");
     localStorage.setString(LocalStorageKeys.myName, "");
     localStorage.setBool(LocalStorageKeys.isLogIn, false);
+    localStorage.setString(LocalStorageKeys.otherUserId, "");
   }
 
   // Save Data To SharedPreferences

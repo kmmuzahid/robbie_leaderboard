@@ -40,6 +40,7 @@ class SearchScreen extends StatelessWidget {
                 const TitleTextWidget(text: AppStrings.search),
                 const SpaceWidget(spaceHeight: 8),
                 TextField(
+                  style: const TextStyle(color: AppColors.white),
                   decoration: InputDecoration(
                     hintText: 'Type here...',
                     hintStyle: const TextStyle(

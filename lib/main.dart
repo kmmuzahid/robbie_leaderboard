@@ -13,7 +13,7 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await GetStorage.init();
-
+  
   // runApp(
   //   DevicePreview(
   //     enabled: !kReleaseMode,

@@ -37,7 +37,11 @@ class RewardsScreenController extends GetxController {
     }
     isTicketLoading.value = false;
     tototalTicket.value = LocalStorage.totalTicket;
+    dayIndex.value = LocalStorage.dayIndex;
+    today.value = LocalStorage.today;
     setspinButton();
+    // LocalStorage.setString(LocalStorageKeys.today,
+    //     DateFormat("yyyy-MM-dd").format(DateTime(2025, 7, 5)));
   }
 
   String getRemainingDays() {
@@ -66,11 +70,13 @@ class RewardsScreenController extends GetxController {
     LocalStorage.setInt(LocalStorageKeys.totalTicket, tototalTicket.value);
     await ApiPostService.createTicket(
         currentRuffle.value!.ticketButtons[random]);
+
+    print("today is: ${LocalStorage.today}");
   }
 
   void setspinButton() {
-    // LocalStorage.setString(LocalStorageKeys.today,
-    //     DateFormat("yyyy-MM-dd").format(DateTime(2025, 7, 5)));
+//     LocalStorage.setString(LocalStorageKeys.today,
+//         DateFormat("yyyy-MM-dd").format(DateTime(2025, 7, 6)));
 //     LocalStorage.setInt(LocalStorageKeys.totalTicket, 0);
 // LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
     final now = DateFormat("yyyy-MM-dd").format(DateTime.now());
@@ -85,6 +91,27 @@ class RewardsScreenController extends GetxController {
       LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
     } else {
       isSpinButtonActivate.value = true;
+    }
+  }
+
+  void spinWheelButton() {
+    final today = DateFormat("yyyy-MM-dd").format(DateTime.now());
+    final lastday = LocalStorage.today;
+    print("$today, $lastday, ${dayIndex.value}");
+    if (lastday.isEmpty) {
+      spinWheel();
+      LocalStorage.setString(LocalStorageKeys.today, today);
+    } else if (today == lastday && dayIndex.value < 7) {
+      Get.snackbar(
+          "Error", "You have reached the today's limit. Try again tommorrow");
+    } else if (today == lastday && dayIndex.value == 7) {
+      spinWheel();
+      LocalStorage.setString(LocalStorageKeys.today, today);
+      LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
+    }
+    else{
+       Get.snackbar(
+          "Error", "You have reached the today's limit. Try again tommorrow");
     }
   }
 

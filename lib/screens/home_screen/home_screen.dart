@@ -235,7 +235,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: AppColors.blue,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: SingleChildScrollView(
+                      child: 
+                      SingleChildScrollView(
                         child: Column(
                           children: List.generate(actions.length, (index) {
                             return RecentActivityCardWidget(
@@ -246,6 +247,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           }),
                         ),
                       ),
+                      // StreamBuilder(stream: _controller.streamSocket.getResponse, builder: (context, snapshot) {
+                      //   if(snapshot.hasData){
+                      //     return ListView.builder(itemBuilder: (context, index) => RecentActivityCardWidget(action: snapshot.data[index], value: value, time: time),)
+                      //   }
+                      // },)
                     );
                   },
                 ),

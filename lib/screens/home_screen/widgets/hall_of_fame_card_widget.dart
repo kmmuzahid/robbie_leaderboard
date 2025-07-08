@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../utils/app_size.dart';
@@ -63,7 +64,7 @@ class HallOfFameCardWidget extends StatelessWidget {
                     width: 120,
                     child: ImageWidget(
                       imagePath: imageUrl.isNotEmpty
-                          ? imageUrl
+                          ? "${AppUrls.mainUrl}$imageUrl"
                           : AppImagePath.profileImage,
                       height: 100,
                       width: 100,

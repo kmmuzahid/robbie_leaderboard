@@ -7,6 +7,9 @@ import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_d
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_item.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_tabbar.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/top_rank_item.dart';
+import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
+import 'package:the_leaderboard/services/storage/storage_keys.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
 
 import '../../constants/app_colors.dart';
@@ -25,13 +28,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     with SingleTickerProviderStateMixin {
   String selectedLeaderboard = 'Leaderboard';
   late TabController _tabController;
-  // final _controller = Get.put(LeaderboardController());
+  final _controller = Get.put(LeaderboardController());
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    // _controller.fetchData();
+    _controller.fetchData();
   }
 
   @override
@@ -192,6 +195,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     required List<Map<String, dynamic>> top3Data,
     required List<Map<String, dynamic>> leaderboardData,
   }) {
+    final filteredList =
+        _controller.leaderBoardList.where((e) => e!.currentRank > 4).toList();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -199,37 +204,89 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: top3Data.map((data) {
-                return Transform.translate(
-                  offset: data['rankLabel'] == '1st Ranked'
-                      ? const Offset(0, -10)
-                      : Offset.zero,
-                  child: TopRankedItem(
-                    rankLabel: data['rankLabel'],
-                    name: data['name'],
-                    amount: data['amount'],
-                    rankColor: data['rankColor'],
-                    avatarSize: data['avatarSize'],
-                    image: data['image'],
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      final userid = _controller.rankedSecond()!.userId;
+                      Get.to(OtherProfileScreen(userId: userid));
+                    },
+                    child: Transform.translate(
+                      offset: Offset.zero,
+                      child: TopRankedItem(
+                          rankLabel: _controller
+                              .rankedSecond()!
+                              .currentRank
+                              .toString(),
+                          name: _controller.rankedSecond()!.name,
+                          amount:
+                              "\$${_controller.rankedSecond()!.totalInvest}",
+                          image: _controller.rankedSecond()!.profileImg !=
+                                  "Unknown"
+                              ? _controller.rankedSecond()!.profileImg
+                              : AppImagePath.profileImage,
+                          rankColor: AppColors.greyDark,
+                          avatarSize: 40),
+                    ),
                   ),
-                );
-              }).toList(),
-            ),
+                  InkWell(
+                    onTap: () {
+                      final userId = _controller.rankedFirst()!.userId;
+                       Get.to(OtherProfileScreen(userId: userId));
+                    },
+                    child: Transform.translate(
+                      offset: const Offset(0, -10),
+                      child: TopRankedItem(
+                          rankLabel:
+                              _controller.rankedFirst()!.currentRank.toString(),
+                          name: _controller.rankedFirst()!.name,
+                          amount: "\$${_controller.rankedFirst()!.totalInvest}",
+                          image:
+                              _controller.rankedFirst()!.profileImg != "Unknown"
+                                  ? _controller.rankedFirst()!.profileImg
+                                  : AppImagePath.profileImage,
+                          rankColor: AppColors.yellow,
+                          avatarSize: 55),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      final userId = _controller.rankedThird()!.userId;
+                      Get.to(OtherProfileScreen(userId: userId));
+                    },
+                    child: Transform.translate(
+                      offset: Offset.zero,
+                      child: TopRankedItem(
+                          rankLabel:
+                              _controller.rankedThird()!.currentRank.toString(),
+                          name: _controller.rankedThird()!.name,
+                          amount: "\$${_controller.rankedThird()!.totalInvest}",
+                          image:
+                              _controller.rankedThird()!.profileImg != "Unknown"
+                                  ? _controller.rankedThird()!.profileImg
+                                  : AppImagePath.profileImage,
+                          rankColor: AppColors.orange,
+                          avatarSize: 40),
+                    ),
+                  ),
+                ]),
           ),
           ...List.generate(
-            leaderboardData.length,
+            filteredList.length,
             (index) {
-              print('Building LeaderboardItem at index: $index');
-              final data = leaderboardData[index];
+              final data = filteredList[index];
               return LeaderboardItem(
-                key: ValueKey('${data['name']}${data['rank']}$index'),
-                rank: data['rank'],
-                name: data['name'],
-                amount: data['amount'],
-                isUp: data['isUp'],
-                image: data['image'],
-                onPressed: () {},
+                key: ValueKey('${data!.name}${data.currentRank}$index'),
+                rank: data.currentRank,
+                name: data.name,
+                amount: "\$${data.totalInvest.toString()}",
+                isUp: (data.previousRank - data.currentRank) > 0 ? true : false,
+                image: data.profileImg != "Unknown"
+                    ? data.profileImg
+                    : AppImagePath.profileImage,
+                onPressed: () {
+                  Get.to(OtherProfileScreen(userId: data.userId));
+                },
               );
             },
           ),
@@ -246,104 +303,114 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
       ),
       child: Scaffold(
         backgroundColor: AppColors.blueDark,
-        body: SafeArea(
-          child: Column(
-            children: [
-              const SpaceWidget(spaceHeight: 16),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Dropdown Button
-                    LeaderboardDropdown(
-                      value: selectedLeaderboard,
-                      text: const [
-                        'Leaderboard',
-                        'Event Leaderboard',
-                        'Creator Leaderboard',
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          selectedLeaderboard = value!;
-                          _tabController.index = 0;
-                        });
-                      },
-                    ),
-                    // Search Icon
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.searchScreen);
-                      },
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      child: CircleAvatar(
-                        radius: 25,
-                        backgroundColor: AppColors.white.withOpacity(0.15),
-                        child: const IconWidget(
-                          height: 22,
-                          width: 22,
-                          icon: AppIconPath.searchIcon,
+        body: Obx(
+          () => SafeArea(
+            child: _controller.isLoading.value
+                ? const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+                : Column(
+                    children: [
+                      const SpaceWidget(spaceHeight: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Dropdown Button
+                            LeaderboardDropdown(
+                              value: selectedLeaderboard,
+                              text: const [
+                                'Leaderboard',
+                                'Event Leaderboard',
+                                'Creator Leaderboard',
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedLeaderboard = value!;
+                                  _tabController.index = 0;
+                                });
+                              },
+                            ),
+                            // Search Icon
+                            InkWell(
+                              onTap: () {
+                                Get.toNamed(AppRoutes.searchScreen);
+                              },
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              child: CircleAvatar(
+                                radius: 25,
+                                backgroundColor:
+                                    AppColors.white.withOpacity(0.15),
+                                child: const IconWidget(
+                                  height: 22,
+                                  width: 22,
+                                  icon: AppIconPath.searchIcon,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
 
-              // Replaced TabBar with LeaderboardTabBar
-              LeaderboardTabBar(
-                tabTexts: const ['All Time', 'Daily', 'Monthly'],
-                tabController: _tabController,
-              ),
+                      // Replaced TabBar with LeaderboardTabBar
+                      LeaderboardTabBar(
+                        tabTexts: const ['All Time', 'Daily', 'Monthly'],
+                        tabController: _tabController,
+                      ),
 
-              // TabBarView
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    // All Time Tab
-                    if (selectedLeaderboard == 'Leaderboard')
-                      buildLeaderboardTabView(
-                          top3Data: allTimeTop3, leaderboardData: allTimeData)
-                    else if (selectedLeaderboard == 'Event Leaderboard')
-                      buildLeaderboardTabView(
-                          top3Data: eventAllTimeTop3,
-                          leaderboardData: eventAllTimeData)
-                    else
-                      buildLeaderboardTabView(
-                          top3Data: creatorAllTimeTop3,
-                          leaderboardData: creatorAllTimeData),
-                    // Daily Tab
-                    if (selectedLeaderboard == 'Leaderboard')
-                      buildLeaderboardTabView(
-                          top3Data: allTimeTop3, leaderboardData: allTimeData)
-                    else if (selectedLeaderboard == 'Event Leaderboard')
-                      buildLeaderboardTabView(
-                          top3Data: eventAllTimeTop3,
-                          leaderboardData: eventAllTimeData)
-                    else
-                      buildLeaderboardTabView(
-                          top3Data: creatorAllTimeTop3,
-                          leaderboardData: creatorAllTimeData),
-                    // Monthly Tab
-                    if (selectedLeaderboard == 'Leaderboard')
-                      buildLeaderboardTabView(
-                          top3Data: allTimeTop3, leaderboardData: allTimeData)
-                    else if (selectedLeaderboard == 'Event Leaderboard')
-                      buildLeaderboardTabView(
-                          top3Data: eventAllTimeTop3,
-                          leaderboardData: eventAllTimeData)
-                    else
-                      buildLeaderboardTabView(
-                          top3Data: creatorAllTimeTop3,
-                          leaderboardData: creatorAllTimeData),
-                  ],
-                ),
-              ),
-            ],
+                      // TabBarView
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            // All Time Tab
+                            if (selectedLeaderboard == 'Leaderboard')
+                              buildLeaderboardTabView(
+                                  top3Data: allTimeTop3,
+                                  leaderboardData: allTimeData)
+                            else if (selectedLeaderboard == 'Event Leaderboard')
+                              buildLeaderboardTabView(
+                                  top3Data: eventAllTimeTop3,
+                                  leaderboardData: eventAllTimeData)
+                            else
+                              buildLeaderboardTabView(
+                                  top3Data: creatorAllTimeTop3,
+                                  leaderboardData: creatorAllTimeData),
+                            // Daily Tab
+                            if (selectedLeaderboard == 'Leaderboard')
+                              buildLeaderboardTabView(
+                                  top3Data: allTimeTop3,
+                                  leaderboardData: allTimeData)
+                            else if (selectedLeaderboard == 'Event Leaderboard')
+                              buildLeaderboardTabView(
+                                  top3Data: eventAllTimeTop3,
+                                  leaderboardData: eventAllTimeData)
+                            else
+                              buildLeaderboardTabView(
+                                  top3Data: creatorAllTimeTop3,
+                                  leaderboardData: creatorAllTimeData),
+                            // Monthly Tab
+                            if (selectedLeaderboard == 'Leaderboard')
+                              buildLeaderboardTabView(
+                                  top3Data: allTimeTop3,
+                                  leaderboardData: allTimeData)
+                            else if (selectedLeaderboard == 'Event Leaderboard')
+                              buildLeaderboardTabView(
+                                  top3Data: eventAllTimeTop3,
+                                  leaderboardData: eventAllTimeData)
+                            else
+                              buildLeaderboardTabView(
+                                  top3Data: creatorAllTimeTop3,
+                                  leaderboardData: creatorAllTimeData),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         ),
       ),

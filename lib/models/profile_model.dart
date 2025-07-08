@@ -1,5 +1,5 @@
 class ProfileResponseModel {
-  final ProfileUserModel user;
+  final ProfileUserModel? user;
   final List<dynamic> investments;
   final int totalInvest;
   final List<dynamic> raisedBonuses;
@@ -17,8 +17,8 @@ class ProfileResponseModel {
 
   factory ProfileResponseModel.fromJson(Map<String, dynamic> json) {
     return ProfileResponseModel(
-      user: ProfileUserModel.fromJson(json['user']),
-      investments: json['investments'] ?? [],
+      user:json['user'] != null && json['user'] is Map ? ProfileUserModel.fromJson(json['user']) : null,
+      investments:json['investments'] != null && json['investments'] is List ? json['investments'] : [],
       totalInvest: json['totalInvest'] ?? 0,
       raisedBonuses: json['raisedBonuses'] ?? [],
       totalRaised: json['totalRaised'] ?? 0,
@@ -28,7 +28,7 @@ class ProfileResponseModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'user': user.toJson(),
+      'user': user?.toJson(),
       'investments': investments,
       'totalInvest': totalInvest,
       'raisedBonuses': raisedBonuses,

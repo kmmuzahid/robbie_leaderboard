@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
+import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/otp_model.dart';
 import 'package:the_leaderboard/models/register_model.dart';
@@ -17,7 +18,7 @@ class ApiPostService {
 
     final data = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Get.snackbar("Success", data["message"]);
+      Get.snackbar("Success", data["message"], colorText: AppColors.white);
       return data;
     } else {
       Get.snackbar("Error", data["message"] ?? "Login Failed");
@@ -33,10 +34,10 @@ class ApiPostService {
 
     final data = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Get.snackbar("Success", data["message"]);
+      Get.snackbar("Success", data["message"], colorText: AppColors.white);
       return data;
     } else {
-      Get.snackbar("Error", data["message"] ?? "Registration Failed");
+      Get.snackbar("Error", data["message"] ?? "Registration Failed", colorText: AppColors.white);
       return null;
     }
   }
@@ -51,11 +52,11 @@ class ApiPostService {
     final data = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.snackbar("Success", data["message"],
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
       return data;
     } else {
       Get.snackbar("Error", data["message"] ?? "Login Failed",
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
       return null;
     }
   }
@@ -70,11 +71,11 @@ class ApiPostService {
     final data = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.snackbar("Success", data["message"],
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
       return data;
     } else {
       Get.snackbar("Error", data["message"] ?? "Something went wrong",
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
       return null;
     }
   }
@@ -86,10 +87,10 @@ class ApiPostService {
     final data = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.snackbar("Success", data["message"],
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     } else {
       Get.snackbar("Error", data["message"] ?? "Something went wrong",
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     }
   }
 
@@ -102,10 +103,10 @@ class ApiPostService {
     final data = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.snackbar("Success", data["message"],
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     } else {
       Get.snackbar("Error", data["message"] ?? "Something went wrong",
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     }
   }
 
@@ -121,10 +122,10 @@ class ApiPostService {
     LocalStorage.token = token;
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.snackbar("Success", data["message"],
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     } else {
       Get.snackbar("Error", data["message"] ?? "Something went wrong",
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     }
   }
 
@@ -138,10 +139,10 @@ class ApiPostService {
     final data = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.snackbar("Success", data["message"],
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     } else {
       Get.snackbar("Error", data["message"] ?? "Something went wrong",
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     }
   }
 
@@ -157,10 +158,10 @@ class ApiPostService {
     final data = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.snackbar("Success", data["message"],
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     } else {
       Get.snackbar("Error", data["message"] ?? "Something went wrong",
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     }
   }
 
@@ -176,10 +177,10 @@ class ApiPostService {
     final data = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.snackbar("Success", data["message"],
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     } else {
       Get.snackbar("Error", data["message"] ?? "Something went wrong",
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     }
   }
   static Future<void> withdrawAmount(
@@ -194,10 +195,10 @@ class ApiPostService {
     final data = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.snackbar("Success", data["message"],
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     } else {
       Get.snackbar("Error", data["message"] ?? "Something went wrong",
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     }
   }
 }
