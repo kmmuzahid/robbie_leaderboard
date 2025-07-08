@@ -1,0 +1,251 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
+import 'package:the_leaderboard/constants/app_icon_path.dart';
+import 'package:the_leaderboard/constants/app_image_path.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
+import 'package:the_leaderboard/models/leader_board_model.dart';
+import 'package:the_leaderboard/routes/app_routes.dart';
+import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_dropdown.dart';
+import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_item.dart';
+import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_tabbar.dart';
+import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/top_rank_filtered_item.dart';
+import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
+import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
+import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
+
+class LeaderboardFilteredScreen extends StatefulWidget {
+  const LeaderboardFilteredScreen(
+      {super.key, required this.leaderBoardList, required this.isLoading});
+  final List<LeaderBoardModel?> leaderBoardList;
+  final bool isLoading;
+  @override
+  _LeaderboardFilteredScreenState createState() =>
+      _LeaderboardFilteredScreenState();
+}
+
+class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
+    with SingleTickerProviderStateMixin {
+  String selectedLeaderboard = 'Leaderboard';
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Widget buildLeaderboardTabView() {
+    final filteredList =
+        widget.leaderBoardList.where((e) => e!.currentRank > 4).toList();
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const SpaceWidget(spaceHeight: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  if (widget.leaderBoardList.length > 1)
+                    InkWell(
+                      onTap: () {
+                        final userid = widget.leaderBoardList[1]!.userId;
+                        Get.to(OtherProfileScreen(userId: userid));
+                      },
+                      child: Transform.translate(
+                        offset: Offset.zero,
+                        child: TopRankedItem(
+                          fromNetwork: widget.leaderBoardList[1]!.profileImg != "Unknown",
+                            rankLabel: widget.leaderBoardList[1]!.currentRank
+                                .toString(),
+                            name: widget.leaderBoardList[1]!.name,
+                            amount:
+                                "\$${widget.leaderBoardList[1]!.totalInvest}",
+                            image: widget.leaderBoardList[1]!.profileImg !=
+                                    "Unknown"
+                                ? "${AppUrls.mainUrl}${widget.leaderBoardList[1]!.profileImg}"
+                                : AppImagePath.profileImage,
+                            rankColor: AppColors.greyDark,
+                            avatarSize: 40),
+                      ),
+                    ),
+                  InkWell(
+                    onTap: () {
+                      final userId = widget.leaderBoardList[0]!.userId;
+                      Get.to(OtherProfileScreen(userId: userId));
+                    },
+                    child: Transform.translate(
+                      offset: const Offset(0, -10),
+                      child: TopRankedItem(
+                        fromNetwork: widget.leaderBoardList[0]!.profileImg != "Unknown",
+                          rankLabel:
+                              widget.leaderBoardList[0]!.currentRank.toString(),
+                          name: widget.leaderBoardList[0]!.name,
+                          amount: "\$${widget.leaderBoardList[0]!.totalInvest}",
+                          image:
+                              widget.leaderBoardList[0]!.profileImg != "Unknown"
+                                  ? "${AppUrls.mainUrl}${widget.leaderBoardList[0]!.profileImg}"
+                                  : AppImagePath.profileImage,
+                          rankColor: AppColors.yellow,
+                          avatarSize: 55),
+                    ),
+                  ),
+                  if (widget.leaderBoardList.length > 2)
+                    InkWell(
+                      onTap: () {
+                        final userId = widget.leaderBoardList[2]!.userId;
+                        Get.to(OtherProfileScreen(userId: userId));
+                      },
+                      child: Transform.translate(
+                        offset: Offset.zero,
+                        child: TopRankedItem(
+                          fromNetwork: widget.leaderBoardList[2]!.profileImg != "Unknown",
+                            rankLabel: widget.leaderBoardList[2]!.currentRank
+                                .toString(),
+                            name: widget.leaderBoardList[2]!.name,
+                            amount:
+                                "\$${widget.leaderBoardList[2]!.totalInvest}",
+                            image: widget.leaderBoardList[2]!.profileImg !=
+                                    "Unknown"
+                                ? "${AppUrls.mainUrl}${widget.leaderBoardList[2]!.profileImg}"
+                                : AppImagePath.profileImage,
+                            rankColor: AppColors.orange,
+                            avatarSize: 40),
+                      ),
+                    ),
+                ]),
+          ),
+          ...List.generate(
+            filteredList.length,
+            (index) {
+              final data = filteredList[index];
+              return LeaderboardItem(
+                key: ValueKey('${data!.name}${data.currentRank}$index'),
+                rank: data.currentRank,
+                name: data.name,
+                amount: "\$${data.totalInvest.toString()}",
+                isUp: (data.previousRank - data.currentRank) > 0 ? true : false,
+                image: data.profileImg != "Unknown"
+                    ? "${AppUrls.mainUrl}${data.profileImg}"
+                    : AppImagePath.profileImage,
+                onPressed: () {
+                  Get.to(OtherProfileScreen(userId: data.userId));
+                },
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnnotatedRegion(
+      value: const SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.blueDark,
+        body: SafeArea(
+          child: widget.isLoading
+              ? const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                )
+              : Column(
+                  children: [
+                    const SpaceWidget(spaceHeight: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Dropdown Button
+                          LeaderboardDropdown(
+                            value: selectedLeaderboard,
+                            text: const [
+                              'Leaderboard',
+                              'Event Leaderboard',
+                              'Creator Leaderboard',
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                selectedLeaderboard = value!;
+                                _tabController.index = 0;
+                              });
+                            },
+                          ),
+                          // Search Icon
+                          InkWell(
+                            onTap: () {
+                              Get.toNamed(AppRoutes.searchScreen);
+                            },
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            child: CircleAvatar(
+                              radius: 25,
+                              backgroundColor:
+                                  AppColors.white.withOpacity(0.15),
+                              child: const IconWidget(
+                                height: 22,
+                                width: 22,
+                                icon: AppIconPath.searchIcon,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Replaced TabBar with LeaderboardTabBar
+                    LeaderboardTabBar(
+                      tabTexts: const ['All Time', 'Daily', 'Monthly'],
+                      tabController: _tabController,
+                    ),
+
+                    // TabBarView
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        physics: const BouncingScrollPhysics(),
+                        children: [
+                          // All Time Tab
+                          if (selectedLeaderboard == 'Leaderboard')
+                            buildLeaderboardTabView()
+                          else if (selectedLeaderboard == 'Event Leaderboard')
+                            buildLeaderboardTabView()
+                          else
+                            buildLeaderboardTabView(),
+                          // Daily Tab
+                          if (selectedLeaderboard == 'Leaderboard')
+                            buildLeaderboardTabView()
+                          else if (selectedLeaderboard == 'Event Leaderboard')
+                            buildLeaderboardTabView()
+                          else
+                            buildLeaderboardTabView(),
+                          // Monthly Tab
+                          if (selectedLeaderboard == 'Leaderboard')
+                            buildLeaderboardTabView()
+                          else if (selectedLeaderboard == 'Event Leaderboard')
+                            buildLeaderboardTabView()
+                          else
+                            buildLeaderboardTabView(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
+}

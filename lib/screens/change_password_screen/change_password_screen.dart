@@ -1,17 +1,8 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/instance_manager.dart';
-import 'package:get/state_manager.dart';
-import 'package:get/utils.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:the_leaderboard/constants/app_icon_path.dart';
-import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/screens/change_password_screen/controller/change_password_controller.dart';
-import 'package:the_leaderboard/screens/edit_profile_screen/controller/edit_profile_controller.dart';
-import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
-import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 
 import '../../constants/app_colors.dart';
 import '../../widgets/appbar_widget/appbar_widget.dart';

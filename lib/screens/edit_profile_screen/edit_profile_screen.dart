@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/instance_manager.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/screens/edit_profile_screen/controller/edit_profile_controller.dart';
-import 'package:the_leaderboard/services/api/api_patch_service.dart';
 import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 
@@ -29,29 +25,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   // Controllers for text fields
 
   // Variable to store the selected image
-  File? _selectedImage;
-
-  // Image picker instance
-  final ImagePicker _picker = ImagePicker();
-
-  // Method to pick an image from the gallery
-  Future<void> _pickImage() async {
-    try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-      
-      if (image != null) {
-        final File file = File(image.path);
-        await ApiPatchService.updateProfileImage(file);
-        setState(() {
-          _selectedImage = File(image.path);
-        });
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error picking image: $e")),
-      );
-    }
-  }
+  
 
   // Helper method to build a text field
   Widget _buildTextField({
@@ -109,27 +83,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 2),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: _selectedImage != null
-                          ? Image.file(
-                              _selectedImage!,
-                              fit: BoxFit.cover,
-                              width: 80,
-                              height: 80,
-                            )
-                          : const ImageWidget(
-                              height: 80,
-                              width: 80,
-                              imagePath: AppImagePath.profileImage,
-                            ),
+                    child: Obx(
+                      () =>  ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: _controller.selectedImage.value != null
+                            ? Image.file(
+                                _controller.selectedImage.value!,
+                                fit: BoxFit.cover,
+                                width: 80,
+                                height: 80,
+                              )
+                            : const ImageWidget(
+                                height: 80,
+                                width: 80,
+                                imagePath: AppImagePath.profileImage,
+                              ),
+                      ),
                     ),
                   ),
                   Positioned(
                     bottom: -2,
                     right: -2,
                     child: GestureDetector(
-                      onTap: _pickImage, // Call the image picker
+                      onTap: _controller.pickImage, // Call the image picker
                       child: const IconWidget(
                         height: 30,
                         width: 30,

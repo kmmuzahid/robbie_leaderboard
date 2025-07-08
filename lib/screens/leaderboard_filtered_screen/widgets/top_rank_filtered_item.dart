@@ -12,7 +12,7 @@ class TopRankedItem extends StatelessWidget {
   final String image;
   final Color rankColor;
   final double avatarSize;
-  final bool fromOnline;
+  final bool fromNetwork;
 
   const TopRankedItem({
     super.key,
@@ -22,7 +22,7 @@ class TopRankedItem extends StatelessWidget {
     required this.image,
     required this.rankColor,
     required this.avatarSize,
-    required this.fromOnline
+    required this.fromNetwork
   });
 
   @override
@@ -40,7 +40,7 @@ class TopRankedItem extends StatelessWidget {
               ),
               child: CircleAvatar(
                 radius: avatarSize,
-                child: fromOnline? Image.network(image): Image.asset(image),
+                child: fromNetwork?Image.network(image): Image.asset(image),
               ),
             ),
             Positioned(

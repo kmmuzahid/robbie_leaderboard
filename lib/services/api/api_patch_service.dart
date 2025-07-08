@@ -55,11 +55,11 @@ class ApiPatchService {
     }
   }
 
-  static Future<void> updateProfileImage(File image) async {
+  static Future<void> updateProfileImage(File? image) async {
     try {
       final dio = Dio();
 
-      String fileName = basename(image.path);
+      String fileName = basename(image!.path);
 
       FormData formData = FormData.fromMap({
         'file': await MultipartFile.fromFile(

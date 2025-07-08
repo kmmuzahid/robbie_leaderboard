@@ -261,4 +261,40 @@ class ApiGetService {
       return null;
     }
   }
+
+  static Future<List<LeaderBoardModel?>> fetchFilteredLeaderboardData(
+      {required String name,
+      required String country,
+      required String city,    
+      required String gender}) async {
+    try {
+      final response = await http.get(
+        Uri.parse(AppUrls.leaderBoardData).replace(queryParameters: {
+          "name": name,
+          "country": country,
+          "city": city,
+          "gender": gender,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': LocalStorage.token
+        },
+      );
+      final jsonbody = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final List data = jsonbody["data"];
+        return data
+            .map(
+              (e) => LeaderBoardModel.fromJson(e),
+            )
+            .toList();
+      } else {
+        Get.snackbar("Error", jsonbody["message"]);
+        return [];
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+      return [];
+    }
+  }
 }

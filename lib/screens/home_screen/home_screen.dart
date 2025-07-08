@@ -8,6 +8,7 @@ import 'package:the_leaderboard/screens/home_screen/widgets/hall_of_fame_card_wi
 import 'package:the_leaderboard/screens/home_screen/widgets/home_appbar_widget.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_widget.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/recent_activity_card_widget.dart';
+import 'package:the_leaderboard/screens/join_leaderboard_screen/join_leaderboard_screen.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 
 import '../../constants/app_colors.dart';
@@ -28,8 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _controller = Get.put(HomeScreenController());
 
   @override
-  void initState() {
-    // TODO: implement initState
+  void initState() {   
     super.initState();
     _controller.fetchData();
   }
@@ -146,7 +146,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         totalRaisedAmount: "\$${_controller.totalRaised.value}",
                         totalSpentAmount: "\$${_controller.totalSpent.value}",
                         onViewProfilePressed: _controller.viewMyProfile,
-                        onJoinLeaderboardPressed: () {},
+                        onJoinLeaderboardPressed: () {
+                          Get.to(const JoinLeaderboardScreen());
+                        },
                         onSharePressed: () {},
                       ),
                 const SpaceWidget(spaceHeight: 16),
@@ -235,8 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: AppColors.blue,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: 
-                      SingleChildScrollView(
+                      child: SingleChildScrollView(
                         child: Column(
                           children: List.generate(actions.length, (index) {
                             return RecentActivityCardWidget(

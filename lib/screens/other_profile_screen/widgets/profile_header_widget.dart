@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/app_colors.dart';
-import '../../../constants/app_image_path.dart';
-import '../../../widgets/button_widget/button_widget.dart';
-import '../../../widgets/gradient_text_widget/gradient_text_widget.dart';
 import '../../../widgets/image_widget/image_widget.dart';
 import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';

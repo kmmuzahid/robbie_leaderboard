@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 
 class ChangePasswordController extends GetxController {
@@ -20,6 +21,7 @@ class ChangePasswordController extends GetxController {
     }
     if (oldPasswordController.text == newPasswordController.text) {
       Get.snackbar("Error", "Old and new password are same");
+      return;
     }
 
     await ApiPostService.changePassword(
@@ -28,7 +30,7 @@ class ChangePasswordController extends GetxController {
     oldPasswordController.clear();
     newPasswordController.clear();
     confirmNewPasswordController.clear();
-    return;
+    Get.toNamed(AppRoutes.loginScreen);
   }
 
   @override

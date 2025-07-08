@@ -26,5 +26,6 @@ class AppUrls {
   static const leaderBoardData = "$_baseUrl/rank";
   static const withdrawAmount = "$_baseUrl/payments/withdraw";
   static const socketUrl = mainUrl;
-  static const otherUserProfile = "$_baseUrl//users/detailes";
+  static const otherUserProfile = "$_baseUrl/users/detailes";
+  static const joinLeaderboard = "$_baseUrl/payments/chekout";
 }

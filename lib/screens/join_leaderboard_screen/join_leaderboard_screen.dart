@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
-import 'package:the_leaderboard/screens/withdraw_amount_screen/controller/withdraw_amount_controller.dart';
+import 'package:the_leaderboard/screens/join_leaderboard_screen/controller/join_leaderboard_controller.dart';
 import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
 import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
 import 'package:the_leaderboard/widgets/text_widget/text_widgets.dart';
 
-class WithdrawAmountScreen extends StatefulWidget {
-  const WithdrawAmountScreen({super.key});
+class JoinLeaderboardScreen extends StatefulWidget {
+  const JoinLeaderboardScreen({super.key});
 
   @override
-  State<WithdrawAmountScreen> createState() => _WithdrawAmountScreenState();
+  State<JoinLeaderboardScreen> createState() => _JoinLeaderboardScreenState();
 }
 
-class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
-  final _controller = Get.put(WithdrawAmountController());
+class _JoinLeaderboardScreenState extends State<JoinLeaderboardScreen> {
+  final _controller = Get.put(JoinLeaderboardController());
   Widget _buildTextField({
     required String label,
     required TextEditingController controller,
@@ -59,16 +59,16 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
         appBar: const AppbarWidget(title: ""),
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: _buildTextField(
-            label: "Enter amount",
-            controller: _controller.amountController,
+          child:  _buildTextField(
+              label: "Enter amount",
+              controller: _controller.amountController,         
           ),
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: ButtonWidget(
             onPressed: _controller.submit,
-            label: "Withdraw",
+            label: "Invest",
             buttonWidth: double.infinity,
           ),
         ),

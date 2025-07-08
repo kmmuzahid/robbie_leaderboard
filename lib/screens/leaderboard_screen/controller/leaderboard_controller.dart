@@ -7,26 +7,14 @@ class LeaderboardController extends GetxController {
   final RxBool isLoading = true.obs;
   void fetchData() async {
     isLoading.value = true;
-    final response = await ApiGetService.fetchLeaderboardData();
+    List<LeaderBoardModel?> response = [];
+   
+      response = await ApiGetService.fetchLeaderboardData();
+   
     isLoading.value = false;
+    response.sort(
+      (a, b) => a!.currentRank.compareTo(b!.currentRank),
+    );
     leaderBoardList.value = response;
-  }
-
-  LeaderBoardModel? rankedFirst() {
-    return leaderBoardList.firstWhere(
-      (element) => element!.currentRank == 1,
-    );
-  }
-
-  LeaderBoardModel? rankedSecond() {
-    return leaderBoardList.firstWhere(
-      (element) => element!.currentRank == 2,
-    );
-  }
-
-  LeaderBoardModel? rankedThird() {
-    return leaderBoardList.firstWhere(
-      (element) => element!.currentRank == 3,
-    );
   }
 }

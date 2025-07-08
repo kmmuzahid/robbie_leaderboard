@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
-import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/widgets/text_button_widget/text_button_widget.dart';
 
 import '../../../constants/app_colors.dart';

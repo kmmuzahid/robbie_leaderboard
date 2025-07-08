@@ -1,5 +1,3 @@
-import 'package:get/get.dart';
-import 'package:get/utils.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:the_leaderboard/constants/app_urls.dart';
 

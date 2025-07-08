@@ -37,8 +37,14 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
             body: Obx(
               () {
                 final data = _controller.termAndCondition.value;
+                if (data.isEmpty) {
+                  return const Center(
+                    child: Text("There is no term and condition"),
+                  );
+                }
                 return SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 16),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

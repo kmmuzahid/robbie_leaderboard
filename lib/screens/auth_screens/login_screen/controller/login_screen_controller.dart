@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/models/user_model.dart';
@@ -53,6 +52,8 @@ class LoginScreenController extends GetxController {
 
       // Proceed with registration (e.g., API call, navigation, etc.)
       Get.offAll(BottomNav());
+    } else {
+      return;
     }
   }
 
