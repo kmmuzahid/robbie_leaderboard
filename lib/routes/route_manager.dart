@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:the_leaderboard/screens/auth_screens/verify_otp_screen/verify_otp_screen.dart';
+import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
 import 'package:the_leaderboard/screens/change_password_screen/change_password_screen.dart';
-import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
 import 'package:the_leaderboard/screens/profile_screen/profile_screen.dart';
 import 'package:the_leaderboard/screens/withdraw_amount_screen/withdraw_amount_screen.dart';
 
@@ -92,7 +92,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.settingsScreen,
-        page: () => const SettingsScreen(),
+        page: () => SettingsScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),
@@ -144,7 +144,13 @@ class RouteManager {
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),
-      
+
+      GetPage(
+        name: AppRoutes.appNavigation,
+        page: () => const BottomNav(),
+        transition: Transition.fadeIn,
+        // binding: GeneralBindings(),
+      ),
     ];
   }
 }

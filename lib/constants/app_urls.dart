@@ -28,4 +28,10 @@ class AppUrls {
   static const socketUrl = mainUrl;
   static const otherUserProfile = "$_baseUrl/users/detailes";
   static const joinLeaderboard = "$_baseUrl/payments/chekout";
+  static const instagramUrl = "https://www.instagram.com/accounts/login/?hl=en";
+  static const facebookUrl = "https://www.facebook.com/";
+  static const twitterUrl = "https://x.com/i/flow/login";
+  static const discordUrl =
+      "https://discord.com/login?redirect_to=%2Fchannels%2F%40me";
+  static const youtubeUrl = "https://www.youtube.com/";
 }

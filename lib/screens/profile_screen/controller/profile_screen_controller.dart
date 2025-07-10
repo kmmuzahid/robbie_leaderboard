@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
+import 'package:the_leaderboard/models/profile_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
+import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 
 class ProfileScreenController extends GetxController {
@@ -15,20 +21,37 @@ class ProfileScreenController extends GetxController {
 
   void fetchProfile() async {
     isLoading.value = true;
-    final profile = await ApiGetService.fetchProfile();
+    final response = await ApiGetService.apiGetService(AppUrls.profile);
     isLoading.value = false;
-    if (profile != null) {
-      name.value = profile.name;
-      email.value = profile.email;
-      totalBalance.value = profile.totalAdminAmount.toString();
-      totalSpent.value = profile.totalInvest.toString();
-      totalViews.value = profile.views.toString();
-      creatorCode.value = profile.userCode;
-      rank.value = profile.rank.toString();
-      LocalStorage.userId = profile.id;
-      print("user id: ${profile.id}");
-      print("token: ${LocalStorage.token}");
+    if (response != null) {
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final profile = ProfileUserModel.fromJson(data["data"]["user"]);
+        name.value = profile.name;
+        email.value = profile.email;
+        totalBalance.value = profile.totalAdminAmount.toString();
+        totalSpent.value = profile.totalInvest.toString();
+        totalViews.value = profile.views.toString();
+        creatorCode.value = profile.userCode;
+        rank.value = profile.rank.toString();
+        LocalStorage.userId = profile.id;
+        print("user id: ${profile.id}");
+        print("token: ${LocalStorage.token}");
+      } else {
+        Get.snackbar("Error", data["message"], colorText: AppColors.white);
+      }
     }
+    // final profile = await ApiGetService.fetchProfile();
+  }
+
+  void logout() {
+    LocalStorage.myEmail = "";
+    LocalStorage.myPassword = "";
+    LocalStorage.rememberMe = false;
+    LocalStorage.setString(LocalStorageKeys.myEmail, "");
+    LocalStorage.setString(LocalStorageKeys.myPassword, "");
+    LocalStorage.setBool(LocalStorageKeys.rememberMe, false);
+    Get.offAllNamed(AppRoutes.loginScreen);
   }
 
   void withdrawAmount() {

@@ -14,16 +14,15 @@ class TopRankedItem extends StatelessWidget {
   final double avatarSize;
   final bool fromOnline;
 
-  const TopRankedItem({
-    super.key,
-    required this.rankLabel,
-    required this.name,
-    required this.amount,
-    required this.image,
-    required this.rankColor,
-    required this.avatarSize,
-    required this.fromOnline
-  });
+  const TopRankedItem(
+      {super.key,
+      required this.rankLabel,
+      required this.name,
+      required this.amount,
+      required this.image,
+      required this.rankColor,
+      required this.avatarSize,
+      required this.fromOnline});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,8 @@ class TopRankedItem extends StatelessWidget {
               ),
               child: CircleAvatar(
                 radius: avatarSize,
-                child: fromOnline? Image.network(image): Image.asset(image),
+                backgroundImage:
+                    fromOnline ? NetworkImage(image) : AssetImage(image),
               ),
             ),
             Positioned(

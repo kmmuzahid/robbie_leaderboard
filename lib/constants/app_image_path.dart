@@ -6,6 +6,8 @@ class AppImagePath {
   static const String crownImage = 'assets/images/crown_image.png';
   static const String tweeterImage = 'assets/images/tweeter.png';
   static const String instagramImage = 'assets/images/instagram.png';
+  static const String youtubeImage = "assets/images/youtube.png";
+  static const String discordImage = "assets/images/discord.png";
 
   // Dev Images
   static const String profileImage = 'assets/images/profile.png';

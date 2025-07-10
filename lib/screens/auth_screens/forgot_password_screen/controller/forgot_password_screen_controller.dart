@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import '../../../../routes/app_routes.dart';
@@ -20,17 +24,17 @@ class ForgotPasswordScreenController extends GetxController {
       );
       return;
     }
-    try {
-      await ApiPostService.forgetPassword(email);
-      LocalStorage.myEmail = email;
-
-      // You can use rememberMe.value here for your logic
-      // For example, print the state for now
-
-      // Proceed with registration (e.g., API call, navigation, etc.)
-      Get.toNamed(AppRoutes.forgotVerifyOtpScreen);
-    } catch (e) {
-      Get.snackbar("Error", "Something went wrong");
+    final url = "${AppUrls.forgetPassword}/$email";
+    final response = await ApiPostService.apiPostService(url, {"email": email});
+    if (response != null) {
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Get.snackbar("Success", data["message"], colorText: AppColors.white);
+        LocalStorage.myEmail = email;
+        Get.toNamed(AppRoutes.forgotVerifyOtpScreen);
+      } else {
+        Get.snackbar("Error", data["message"], colorText: AppColors.white);
+      }
     }
   }
 

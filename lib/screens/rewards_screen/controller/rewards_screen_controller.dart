@@ -1,13 +1,17 @@
+import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/current_ruffle_model.dart';
 import 'package:the_leaderboard/models/user_ticket_model.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 
 class RewardsScreenController extends GetxController {
   final Rxn<CurrentRuffleModel> currentRuffle = Rxn<CurrentRuffleModel>();
@@ -20,28 +24,75 @@ class RewardsScreenController extends GetxController {
   final RxInt dayIndex = 0.obs;
   final RxBool isSpinButtonActivate = true.obs;
   final RxString today = ''.obs;
-  final RxInt tototalTicket = 0.obs;
+  final RxInt totalTicket = 0.obs;
+
+  void fetchRuffle() async {
+    isRuffleLoading.value = true;
+    final response = await ApiGetService.apiGetService(AppUrls.currentRuffle);
+    isRuffleLoading.value = false;
+    if (response != null) {
+      final jsonbody = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        currentRuffle.value = CurrentRuffleModel.fromJson(jsonbody["data"]);
+        return;
+      } else {
+        Get.snackbar("Error", jsonbody["message"],
+            colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+      }
+    }
+    final temp = CurrentRuffleModel(
+        id: "0",
+        deadline: DateTime(2000),
+        prizeMoney: 0,
+        ticketButtons: [],
+        createdAt: DateTime(2000),
+        updatedAt: DateTime(2000),
+        v: 1);
+    currentRuffle.value = temp;
+    return;
+  }
+
+  void fetchUserTicket() async {
+    try {
+      isTicketLoading.value = true;
+      final response = await ApiGetService.apiGetService(AppUrls.myTicket);
+      isTicketLoading.value = false;
+      if (response != null) {
+        final jsonbody = jsonDecode(response.body);
+        if (response.statusCode == 200) {
+          userTicket.value = UserTicketsModel.fromJson(jsonbody["data"]);
+          return;
+        } else {
+          Get.snackbar("Error", jsonbody["message"],
+              colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+        }
+      }
+    } catch (e) {
+      errorLog("fetchUserTicket", e);
+    }
+    userTicket.value = UserTicketsModel(
+        totalTickets: 0, userId: "Unknown", name: "Unknown", tickets: []);
+    return;
+  }
 
   void fetchData() async {
-    isRuffleLoading.value = true;
-    final responseRuffle = await ApiGetService.fetchCurrentRuffleData();
-    if (responseRuffle != null) {
-      currentRuffle.value = responseRuffle;
-    }
-    isRuffleLoading.value = false;
-
-    isTicketLoading.value = true;
-    final responseTicket = await ApiGetService.fetchUserTicket();
-    if (responseTicket != null) {
-      userTicket.value = responseTicket;
-    }
-    isTicketLoading.value = false;
-    tototalTicket.value = LocalStorage.totalTicket;
+    fetchRuffle();
+    fetchUserTicket();
+    totalTicket.value = LocalStorage.totalTicket;
     dayIndex.value = LocalStorage.dayIndex;
-    today.value = LocalStorage.today;
-    setspinButton();
-    // LocalStorage.setString(LocalStorageKeys.today,
-    //     DateFormat("yyyy-MM-dd").format(DateTime(2025, 7, 5)));
+    if (dayIndex.value == 7) {
+      dayIndex.value = 0;
+    }
+    //temp
+    // LocalStorage.totalTicket = 0;
+    // LocalStorage.dayIndex = 0;
+    // LocalStorage.lastWheelday =
+    //     DateFormat("yyyy-MM-dd").format(DateTime(2025, 7, 9));
+    // LocalStorage.setInt(LocalStorageKeys.totalTicket, 0);
+    // LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
+    // LocalStorage.setString(LocalStorageKeys.lastWheelday,
+    //     DateFormat("yyyy-MM-dd").format(DateTime(2025, 7, 9)));
+    //---end
   }
 
   String getRemainingDays() {
@@ -55,65 +106,117 @@ class RewardsScreenController extends GetxController {
     }
   }
 
-  void spinWheel() async {
-    final random =
-        math.Random().nextInt(currentRuffle.value!.ticketButtons.length);
-    currentWheelIndex.value = random;
-    wheelController.animateToItem(random,
-        duration: const Duration(seconds: 3), curve: Curves.fastOutSlowIn);
-    dayIndex.value++;
-    today.value = DateFormat("yyyy-MM-dd").format(DateTime.now());
-    LocalStorage.setString(LocalStorageKeys.today, today.value);
-    LocalStorage.setInt(LocalStorageKeys.dayIndex, dayIndex.value);
-    isSpinButtonActivate.value = false;
-    tototalTicket.value += currentRuffle.value!.ticketButtons[random];
-    LocalStorage.setInt(LocalStorageKeys.totalTicket, tototalTicket.value);
-    await ApiPostService.createTicket(
-        currentRuffle.value!.ticketButtons[random]);
+  void createTicket(int random) async {
+    final response = await ApiPostService.apiPostService(AppUrls.createTicket,
+        {"qty": currentRuffle.value!.ticketButtons[random]});
 
-    print("today is: ${LocalStorage.today}");
-  }
-
-  void setspinButton() {
-//     LocalStorage.setString(LocalStorageKeys.today,
-//         DateFormat("yyyy-MM-dd").format(DateTime(2025, 7, 6)));
-//     LocalStorage.setInt(LocalStorageKeys.totalTicket, 0);
-// LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
-    final now = DateFormat("yyyy-MM-dd").format(DateTime.now());
-    dayIndex.value = LocalStorage.dayIndex;
-    today.value = LocalStorage.today;
-    if (now == today.value && dayIndex.value < 7) {
-      isSpinButtonActivate.value = false;
-      Get.snackbar(
-          "Error", "You have reached the today's limit. Try again tommorrow");
-    } else if (now == today.value && dayIndex.value == 7) {
-      isSpinButtonActivate.value = true;
-      LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
-    } else {
-      isSpinButtonActivate.value = true;
+    if (response != null) {
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Get.snackbar("Success", data["message"], colorText: AppColors.white);
+      } else {
+        Get.snackbar("Success", data["message"], colorText: AppColors.white);
+      }
     }
   }
 
-  void spinWheelButton() {
+  void spinWheel() {
     final today = DateFormat("yyyy-MM-dd").format(DateTime.now());
-    final lastday = LocalStorage.today;
-    print("$today, $lastday, ${dayIndex.value}");
-    if (lastday.isEmpty) {
-      spinWheel();
-      LocalStorage.setString(LocalStorageKeys.today, today);
-    } else if (today == lastday && dayIndex.value < 7) {
+    print(today);
+    final lastwheelday = LocalStorage.lastWheelday;
+    print(lastwheelday);
+    if (lastwheelday.isEmpty || today != lastwheelday) {
+      final random =
+          math.Random().nextInt(currentRuffle.value!.ticketButtons.length);
+      currentWheelIndex.value = random;
+      wheelController.animateToItem(random,
+          duration: const Duration(seconds: 3), curve: Curves.fastOutSlowIn);
+      dayIndex.value++;
+      LocalStorage.setString(LocalStorageKeys.lastWheelday, today);
+      LocalStorage.lastWheelday = today;
+      LocalStorage.dayIndex = dayIndex.value;
+      LocalStorage.setInt(LocalStorageKeys.dayIndex, dayIndex.value);
+      totalTicket.value += currentRuffle.value!.ticketButtons[random];
+      LocalStorage.setInt(LocalStorageKeys.totalTicket, totalTicket.value);
+      LocalStorage.totalTicket = totalTicket.value;
+      createTicket(random);
+    } else {
       Get.snackbar(
-          "Error", "You have reached the today's limit. Try again tommorrow");
-    } else if (today == lastday && dayIndex.value == 7) {
-      spinWheel();
-      LocalStorage.setString(LocalStorageKeys.today, today);
-      LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
-    }
-    else{
-       Get.snackbar(
-          "Error", "You have reached the today's limit. Try again tommorrow");
+          "You have reached the today's limit!", "Please try again tomorrow.",
+          colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
     }
   }
+
+  // void spinWheel() async {
+  //   final random =
+  //       math.Random().nextInt(currentRuffle.value!.ticketButtons.length);
+  //   currentWheelIndex.value = random;
+  //   wheelController.animateToItem(random,
+  //       duration: const Duration(seconds: 3), curve: Curves.fastOutSlowIn);
+  //   dayIndex.value++;
+  //   today.value = DateFormat("yyyy-MM-dd").format(DateTime.now());
+  //   LocalStorage.setString(LocalStorageKeys.today, today.value);
+  //   LocalStorage.setInt(LocalStorageKeys.dayIndex, dayIndex.value);
+  //   isSpinButtonActivate.value = false;
+  //   totalTicket.value += currentRuffle.value!.ticketButtons[random];
+  //   LocalStorage.setInt(LocalStorageKeys.totalTicket, totalTicket.value);
+  //   final response = await ApiPostService.apiPostService(AppUrls.createTicket,
+  //       {"qty": currentRuffle.value!.ticketButtons[random]});
+
+  //   if (response != null) {
+  //     final data = jsonDecode(response.body);
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       Get.snackbar("Success", data["message"], colorText: AppColors.white);
+  //     } else {
+  //       Get.snackbar("Success", data["message"], colorText: AppColors.white);
+  //     }
+  //   }
+
+  //   // await ApiPostService.createTicket(
+  //   //     currentRuffle.value!.ticketButtons[random]);
+
+  //   print("today is: ${LocalStorage.today}");
+  // }
+
+//   void setspinButton() {
+// //     LocalStorage.setString(LocalStorageKeys.today,
+// //         DateFormat("yyyy-MM-dd").format(DateTime(2025, 7, 6)));
+// //     LocalStorage.setInt(LocalStorageKeys.totalTicket, 0);
+// // LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
+//     final now = DateFormat("yyyy-MM-dd").format(DateTime.now());
+//     dayIndex.value = LocalStorage.dayIndex;
+//     today.value = LocalStorage.today;
+//     if (now == today.value && dayIndex.value < 7) {
+//       isSpinButtonActivate.value = false;
+//       Get.snackbar(
+//           "Error", "You have reached the today's limit. Try again tommorrow");
+//     } else if (now == today.value && dayIndex.value == 7) {
+//       isSpinButtonActivate.value = true;
+//       LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
+//     } else {
+//       isSpinButtonActivate.value = true;
+//     }
+//   }
+
+//   void spinWheelButton() {
+//     final today = DateFormat("yyyy-MM-dd").format(DateTime.now());
+//     final lastday = LocalStorage.today;
+//     print("$today, $lastday, ${dayIndex.value}");
+//     if (lastday.isEmpty) {
+//       spinWheel();
+//       LocalStorage.setString(LocalStorageKeys.today, today);
+//     } else if (today == lastday && dayIndex.value < 7) {
+//       Get.snackbar(
+//           "Error", "You have reached the today's limit. Try again tommorrow");
+//     } else if (today == lastday && dayIndex.value == 7) {
+//       spinWheel();
+//       LocalStorage.setString(LocalStorageKeys.today, today);
+//       LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
+//     } else {
+//       Get.snackbar(
+//           "Error", "You have reached the today's limit. Try again tommorrow");
+//     }
+//   }
 
   @override
   void onClose() {

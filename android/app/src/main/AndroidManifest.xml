@@ -3,7 +3,10 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="The Leaderboard">
+        android:label="The Leaderboard"
+        android:enableOnBackInvokedCallback="true"
+        android:hardwareAccelerated="true"
+        >
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

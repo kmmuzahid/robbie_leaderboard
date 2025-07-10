@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 import 'storage_keys.dart';
 
 class LocalStorage {
@@ -16,6 +17,7 @@ class LocalStorage {
   static int dayIndex = 0;
   static int totalTicket = 0;
   static String otherUserId = "";
+  static String lastWheelday = "";
 
   // Create Local Storage Instance
   static SharedPreferences? preferences;
@@ -44,6 +46,7 @@ class LocalStorage {
     dayIndex = localStorage.getInt(LocalStorageKeys.dayIndex) ?? 0;
     totalTicket = localStorage.getInt(LocalStorageKeys.totalTicket) ?? 0;
     otherUserId = localStorage.getString(LocalStorageKeys.otherUserId) ?? "";
+    lastWheelday = localStorage.getString(LocalStorageKeys.lastWheelday) ?? "";
     //appLog(userId, source: "Local Storage");
   }
 
@@ -57,16 +60,32 @@ class LocalStorage {
   }
 
   // Reset LocalStorage Data
-  static void _resetLocalStorageData() {
-    final localStorage = preferences!;
-    localStorage.setString(LocalStorageKeys.token, "");
-    localStorage.setString(LocalStorageKeys.cookie, "");
-    localStorage.setString(LocalStorageKeys.refreshToken, "");
-    localStorage.setString(LocalStorageKeys.userId, "");
-    localStorage.setString(LocalStorageKeys.myImage, "");
-    localStorage.setString(LocalStorageKeys.myName, "");
-    localStorage.setBool(LocalStorageKeys.isLogIn, false);
-    localStorage.setString(LocalStorageKeys.otherUserId, "");
+  static Future<void> _resetLocalStorageData() async {
+    try {
+      final localStorage = preferences!;
+      //  await localStorage.clear();
+      await Future.wait([
+        // localStorage.setString(LocalStorageKeys.token, ""),
+        localStorage.setString(LocalStorageKeys.cookie, ""),
+        localStorage.setString(LocalStorageKeys.refreshToken, ""),
+        localStorage.setString(LocalStorageKeys.userId, ""),
+        localStorage.setString(LocalStorageKeys.myImage, ""),
+        localStorage.setString(LocalStorageKeys.myName, ""),
+        localStorage.setBool(LocalStorageKeys.isLogIn, false),
+        localStorage.setString(LocalStorageKeys.otherUserId, ""),
+      ]);
+    } catch (e) {
+      errorLog("_resetLocalStorageData", e);
+    }
+
+    // localStorage.setString(LocalStorageKeys.token, "");
+    // localStorage.setString(LocalStorageKeys.cookie, "");
+    // localStorage.setString(LocalStorageKeys.refreshToken, "");
+    // localStorage.setString(LocalStorageKeys.userId, "");
+    // localStorage.setString(LocalStorageKeys.myImage, "");
+    // localStorage.setString(LocalStorageKeys.myName, "");
+    // localStorage.setBool(LocalStorageKeys.isLogIn, false);
+    // localStorage.setString(LocalStorageKeys.otherUserId, "");
   }
 
   // Save Data To SharedPreferences

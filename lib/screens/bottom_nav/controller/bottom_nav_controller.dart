@@ -13,10 +13,17 @@ class BottomNavController extends GetxController {
     HomeScreen(),
     const LeaderboardScreen(),
     const RewardsScreen(),
-    ProfileScreen(),
+    const ProfileScreen(),
   ];
 
   void changeIndex(int index) {
-    selectedIndex.value = index;    
+    try {
+      print("object");
+      print(index);
+      selectedIndex.value = index;
+      update();
+    } catch (e) {
+      debugPrint("error form $e");
+    }
   }
 }

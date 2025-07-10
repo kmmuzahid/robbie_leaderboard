@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 
@@ -7,14 +10,21 @@ class LeaderboardController extends GetxController {
   final RxBool isLoading = true.obs;
   void fetchData() async {
     isLoading.value = true;
-    List<LeaderBoardModel?> response = [];
-   
-      response = await ApiGetService.fetchLeaderboardData();
-   
+    final response = await ApiGetService.apiGetService(AppUrls.leaderBoardData);
     isLoading.value = false;
-    response.sort(
-      (a, b) => a!.currentRank.compareTo(b!.currentRank),
-    );
-    leaderBoardList.value = response;
+    if (response != null) {
+      final jsonbody = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final List data = jsonbody["data"];
+        leaderBoardList.value =
+            data.map((e) => LeaderBoardModel.fromJson(e)).toList();
+        leaderBoardList.sort(
+          (a, b) => a!.currentRank.compareTo(b!.currentRank),
+        );
+      } else {
+        Get.snackbar("Error", jsonbody["message"]);
+      }
+    }
+    return;
   }
 }

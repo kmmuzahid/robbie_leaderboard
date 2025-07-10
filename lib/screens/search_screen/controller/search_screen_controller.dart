@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/leaderboard_filtered_screen.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 
@@ -11,9 +12,8 @@ class SearchScreenController extends GetxController {
   final RxInt minAge = 22.obs;
   final RxInt maxAge = 26.obs;
 
-  // Lists for dropdown options
-  final List<String> countries = ['Australia', 'USA', 'Canada', 'Bangladesh'];
-  List<String> cities = ['Washington DC', 'Sydney', 'Melbourne'];
+  // Lists for dropdown options 
+  List<String> cities = [];
   final List<String> genders = ['Male', 'Female', 'Other'];
   // final List<String> cities = ;
 
@@ -23,7 +23,7 @@ class SearchScreenController extends GetxController {
   void updateCountry(String value) {
     selectedCountry.value = value;
     cities = findCity(value);
-    selectedCity.value = "Dhaka";
+    selectedCity.value = cities.first;
   }
 
   void updateCity(String value) {
@@ -66,22 +66,7 @@ class SearchScreenController extends GetxController {
   }
 
   List<String> findCity(String country) {
-    print(country);
-    switch (country) {
-      case "Bangladesh":
-        {
-          return [
-            "Dhaka",
-            "Chattogram",
-            "Khulna",
-            "Barishal",
-            "Rangpur",
-            "Dinajpur"
-          ];
-        }
-      default:
-        return ['Washington DC', 'Sydney', 'Melbourne'];
-    }
+    return AppCountryCity.countryCityMap[country]!;
   }
 
   @override

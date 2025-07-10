@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/screens/search_screen/controller/search_screen_controller.dart';
 import 'package:the_leaderboard/screens/search_screen/widgets/dropdown_button_widget.dart';
 import 'package:the_leaderboard/screens/search_screen/widgets/title_text_widget.dart';
@@ -61,10 +62,9 @@ class SearchScreen extends StatelessWidget {
                 const SpaceWidget(spaceHeight: 8),
                 Obx(() => DropdownButtonWidget(
                       value: _controller.selectedCountry.value,
-                      items: _controller.countries,
+                      items: AppCountryCity.countryCityMap.keys.toList(),
                       onChanged: (value) {
                         _controller.updateCountry(value!);
-                        
                       },
                     )),
 

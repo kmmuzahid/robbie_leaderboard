@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/screens/edit_profile_screen/controller/edit_profile_controller.dart';
+import 'package:the_leaderboard/screens/edit_profile_screen/widgets/dropdown_button_widget.dart';
 import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 
@@ -25,7 +27,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   // Controllers for text fields
 
   // Variable to store the selected image
-  
 
   // Helper method to build a text field
   Widget _buildTextField({
@@ -59,6 +60,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
+  Widget _buildDropdownField(
+      {required String label,
+      required String value,
+      required List<String> items,
+      required void Function(String?) onChanged}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextWidget(
+          text: label,
+          fontColor: AppColors.greyLight,
+          fontWeight: FontWeight.w400,
+          fontSize: 14,
+        ),
+        const SpaceWidget(spaceHeight: 8),
+        DropdownButtonWidget(value: value, items: items, onChanged: onChanged)
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion(
@@ -84,7 +105,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       border: Border.all(color: Colors.white, width: 2),
                     ),
                     child: Obx(
-                      () =>  ClipRRect(
+                      () => ClipRRect(
                         borderRadius: BorderRadius.circular(100),
                         child: _controller.selectedImage.value != null
                             ? Image.file(
@@ -128,14 +149,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 controller: _controller.contactController,
               ),
               const SpaceWidget(spaceHeight: 12),
-              _buildTextField(
-                label: "City",
-                controller: _controller.cityController,
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              _buildTextField(
-                label: "Gender",
-                controller: _controller.genderController,
+              Obx(
+                () => _buildDropdownField(
+                  label: "Gender",
+                  value: _controller.selectedGender.value,
+                  items: _controller.genders,
+                  onChanged: (p0) => _controller.updateGender(p0!),
+                ),
               ),
               const SpaceWidget(spaceHeight: 12),
               _buildTextField(
@@ -143,29 +163,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 controller: _controller.ageController,
               ),
               const SpaceWidget(spaceHeight: 12),
+              Obx(
+                () => _buildDropdownField(
+                  label: "Country",
+                  value: _controller.selectedCountry.value,
+                  items: AppCountryCity.countryCityMap.keys.toList(),
+                  onChanged: (p0) => _controller.updateCountry(p0!),
+                ),
+              ),
+              const SpaceWidget(spaceHeight: 12),
+              Obx(
+                () => _buildDropdownField(
+                  label: "City",
+                  value: _controller.selectedCity.value,
+                  items: _controller.cities,
+                  onChanged: (p0) => _controller.updateCity(p0!),
+                ),
+              ),
+              const SpaceWidget(spaceHeight: 24),
               _buildTextField(
                 label: "Role",
                 controller: _controller.roleController,
               ),
               const SpaceWidget(spaceHeight: 12),
-              // Instagram Link
-              _buildTextField(
-                label: "Instagram Link",
-                controller: _controller.instagramController,
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              // Twitter Link
-              _buildTextField(
-                label: "Twitter Link",
-                controller: _controller.twitterController,
-              ),
-              const SpaceWidget(spaceHeight: 12),
               // Country
-              _buildTextField(
-                label: "Country",
-                controller: _controller.countryController,
-              ),
-              const SpaceWidget(spaceHeight: 24),
+
               // Save Changes Button
             ],
           ),

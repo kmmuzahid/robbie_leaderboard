@@ -16,6 +16,8 @@ class ProfileHeaderWidget extends StatelessWidget {
   final VoidCallback withdrawButtonOnPressed;
   final VoidCallback tweeterButtonOnPressed;
   final VoidCallback instagramButtonOnPressed;
+  final VoidCallback discordButtonOnPressed;
+  final VoidCallback youtubeButtonOnPressed;
 
   const ProfileHeaderWidget({
     super.key,
@@ -26,6 +28,8 @@ class ProfileHeaderWidget extends StatelessWidget {
     required this.withdrawButtonOnPressed,
     required this.tweeterButtonOnPressed,
     required this.instagramButtonOnPressed,
+    required this.discordButtonOnPressed,
+    required this.youtubeButtonOnPressed
   });
 
   @override
@@ -123,6 +127,24 @@ class ProfileHeaderWidget extends StatelessWidget {
                   height: 45,
                   width: 45,
                   imagePath: AppImagePath.instagramImage,
+                ),
+              ),
+              const SpaceWidget(spaceWidth: 16),
+              InkWell(
+                onTap: discordButtonOnPressed,
+                child: const ImageWidget(
+                  height: 45,
+                  width: 45,
+                  imagePath: AppImagePath.discordImage,
+                ),
+              ),
+              const SpaceWidget(spaceWidth: 16),
+              InkWell(
+                onTap: youtubeButtonOnPressed,
+                child: const ImageWidget(
+                  height: 45,
+                  width: 45,
+                  imagePath: AppImagePath.youtubeImage,
                 ),
               ),
             ],

@@ -9,6 +9,7 @@ import 'package:the_leaderboard/screens/home_screen/widgets/home_appbar_widget.d
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_widget.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/recent_activity_card_widget.dart';
 import 'package:the_leaderboard/screens/join_leaderboard_screen/join_leaderboard_screen.dart';
+import 'package:the_leaderboard/services/socket/socket_service.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 
 import '../../constants/app_colors.dart';
@@ -27,12 +28,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = Get.put(HomeScreenController());
-
-  @override
-  void initState() {   
-    super.initState();
-    _controller.fetchData();
-  }
 
   final List<String> title = [
     AppStrings.recordSingle,
@@ -149,7 +144,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onJoinLeaderboardPressed: () {
                           Get.to(const JoinLeaderboardScreen());
                         },
-                        onSharePressed: () {},
+                        onSharePressed: () {
+                          // SocketService.instance.sendInvest("Aurnab 420", 200);
+                        },
                       ),
                 const SpaceWidget(spaceHeight: 16),
                 const Padding(
@@ -227,32 +224,41 @@ class _HomeScreenState extends State<HomeScreen> {
                     // Calculate a safe height value (190 or 25% of screen height)
                     final containerHeight = screenHeight * 0.25;
 
-                    return Container(
-                      width: double.infinity,
-                      height: containerHeight,
-                      // Use safe height value
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: AppColors.blue,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: List.generate(actions.length, (index) {
-                            return RecentActivityCardWidget(
-                              action: actions[index],
-                              value: values[index],
-                              time: times[index],
-                            );
-                          }),
-                        ),
-                      ),
-                      // StreamBuilder(stream: _controller.streamSocket.getResponse, builder: (context, snapshot) {
-                      //   if(snapshot.hasData){
-                      //     return ListView.builder(itemBuilder: (context, index) => RecentActivityCardWidget(action: snapshot.data[index], value: value, time: time),)
-                      //   }
-                      // },)
+                    return Obx(
+                      () => Container(
+                          width: double.infinity,
+                          height: containerHeight,
+                          // Use safe height value
+                          padding: const EdgeInsets.all(12),
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: AppColors.blue,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: _controller.recentActivity.isEmpty
+                              ? const Center(
+                                  child: TextWidget(
+                                    text: "There is no recent activity",
+                                    fontColor: AppColors.white,
+                                  ),
+                                )
+                              : ListView.builder(
+                                  itemCount: _controller.recentActivity.length,
+                                  itemBuilder: (context, index) {
+                                    return RecentActivityCardWidget(
+                                        action: _controller
+                                            .recentActivity[index].title,
+                                        value: _controller
+                                            .recentActivity[index].subTitle,
+                                        time: _controller
+                                            .recentActivity[index].type);
+                                  })
+                          // StreamBuilder(stream: _controller.streamSocket.getResponse, builder: (context, snapshot) {
+                          //   if(snapshot.hasData){
+                          //     return ListView.builder(itemBuilder: (context, index) => RecentActivityCardWidget(action: snapshot.data[index], value: value, time: time),)
+                          //   }
+                          // },)
+                          ),
                     );
                   },
                 ),

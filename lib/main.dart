@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'main_app_entry.dart';
 
@@ -12,7 +11,7 @@ Future<void> main() async {
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  await GetStorage.init();
+  // await GetStorage.init();
   
   // runApp(
   //   DevicePreview(

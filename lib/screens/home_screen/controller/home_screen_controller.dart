@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/hall_of_fame_single_payment_model.dart';
 import 'package:the_leaderboard/models/hall_of_frame_consisntantly_top_model.dart';
 import 'package:the_leaderboard/models/hall_of_frame_most_engaged_model.dart';
-import 'package:the_leaderboard/models/recent_activity_model.dart';
+import 'package:the_leaderboard/models/profile_model.dart';
+import 'package:the_leaderboard/models/recent_activity_receive_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
-import 'package:the_leaderboard/services/socket/app_socket_all_operation.dart';
-
+import 'package:the_leaderboard/services/socket/socket_service.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 
 class HomeScreenController extends RxController {
   final RxString name = ''.obs;
@@ -26,70 +31,124 @@ class HomeScreenController extends RxController {
   final RxBool ishallofframeConsisntantTopLoading = true.obs;
   final RxBool ishallofframeMostEngagedLoading = true.obs;
 
-  final RxList<RecentActivityModel> recentActivity =
-      <RecentActivityModel>[].obs;
-  var socket = AppSocketAllOperation.instance;
+  final RxList<RecentActivityReceiveModel> recentActivity =
+      <RecentActivityReceiveModel>[].obs;
+
+  void sendData() {
+    SocketService.instance.sendInvest("Aurnab 420", 200);
+  }
+
+  void receiveData() {
+    SocketService.instance.onNewInvestMessageReceived((p0) {
+      recentActivity.insert(0, p0);
+    });
+  }
 
   void fetchData() async {
-    ismydataLoading.value = true;
-    final data = await ApiGetService.fetchHomeData();
-
-    if (data != null) {
-      final userData = data.user;
-      name.value = userData?.name ?? "";
-      totalRaised.value = userData?.totalRaised.toString() ?? "";
-      totalSpent.value = userData?.totalInvest.toString() ?? "";
-      rank.value = userData?.rank ?? 0;
-    }
-    ismydataLoading.value = false;
-
-    ishallofframeSinglePaymentLoading.value = true;
-    final recordSingledata =
-        await ApiGetService.fetchHallofFrameSinglePayment();
-    if (recordSingledata != null) {
-      recoredSinglePayment.value = recordSingledata;
-    }
-    ishallofframeSinglePaymentLoading.value = false;
-
-    ishallofframeConsisntantTopLoading.value = true;
-    final consistantlyTopdata =
-        await ApiGetService.fetchHallofFrameConsistentlyTop();
-    if (consistantlyTopdata != null) {
-      consistantlyTop.value = consistantlyTopdata;
-    }
-    ishallofframeConsisntantTopLoading.value = false;
-
-    ishallofframeMostEngagedLoading.value = true;
-    final mostEngageddata =
-        await ApiGetService.fetchHallofFrameEngagedProfile();
-    if (mostEngageddata != null) {
-      mostEngaged.value = mostEngageddata;
-    }
-    ishallofframeMostEngagedLoading.value = false;
-    // fetchActivity();
-    // print(recentActivity.value!.first.name);
+    fetchHomeData();
+    fetchHallofFrameSinglePayment();
+    fetchHallofFrameConsistantlyTop();
+    fetchHallofFrameMostEngaged();
   }
 
   void viewMyProfile() {
     Get.toNamed(AppRoutes.profileScreen);
   }
 
-  void fetchActivity() {
+  void fetchHomeData() async {
     try {
-      socket.readEvent(
-        event: "invest",
-        handler: (p0) {
-          final data = RecentActivityModel.fromJson(p0);
-          print(data);
-          recentActivity.add(data);
-          recentActivity.refresh();
-        },
-      );
-      print("hello world");
-      //invest (spent), Won ticket
+      ismydataLoading.value = true;
+      final responseHomeData =
+          await ApiGetService.apiGetService(AppUrls.profile);
+      ismydataLoading.value = false;
+      if (responseHomeData != null) {
+        final data = jsonDecode(responseHomeData.body);
+        if (responseHomeData.statusCode == 200) {
+          final userData = ProfileResponseModel.fromJson(data["data"]).user;
+          name.value = userData?.name ?? "";
+          totalRaised.value = userData?.totalRaised.toString() ?? "";
+          totalSpent.value = userData?.totalInvest.toString() ?? "";
+          rank.value = userData?.rank ?? 0;
+          return;
+        } else {
+          Get.snackbar("Error", data["message"], colorText: AppColors.white);
+        }
+      }
     } catch (e) {
-      Get.snackbar("Error", e.toString());
-    }
+      errorLog("fetchHomeData", e);
+    }    
   }
-  
+
+  void fetchHallofFrameSinglePayment() async {
+    ishallofframeSinglePaymentLoading.value = true;
+    final response = await ApiGetService.apiGetService(AppUrls.highestInvestor);
+    ishallofframeSinglePaymentLoading.value = false;
+    if (response != null) {
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        recoredSinglePayment.value =
+            HallOfFameSinglePaymentModel.fromJson(data["data"]);
+        return;
+      } else {
+        Get.snackbar("Error", data["message"], colorText: AppColors.white);
+      }
+    }
+    recoredSinglePayment.value = HallOfFameSinglePaymentModel(
+        id: "0",
+        name: "Unknown",
+        country: "Unknown",
+        gender: "Unknown",
+        views: 0,
+        totalInvested: 0);
+  }
+
+  void fetchHallofFrameConsistantlyTop() async {
+    ishallofframeConsisntantTopLoading.value = true;
+    final response =
+        await ApiGetService.apiGetService(AppUrls.consecutiveToper);
+    ishallofframeConsisntantTopLoading.value = false;
+    if (response != null) {
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        consistantlyTop.value =
+            HallOfFrameConsisntantlyTopModel.fromJson(data["data"]);
+        return;
+      } else {
+        Get.snackbar("Error", data["message"], colorText: AppColors.white);
+      }
+    }
+    consistantlyTop.value = HallOfFrameConsisntantlyTopModel(
+        id: "0", name: "Unknown", timesRankedTop: 0);
+  }
+
+  void fetchHallofFrameMostEngaged() async {
+    ishallofframeMostEngagedLoading.value = true;
+    final response = await ApiGetService.apiGetService(AppUrls.mostViewed);
+    ishallofframeMostEngagedLoading.value = false;
+    if (response != null) {
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        mostEngaged.value = HallOfFrameMostEngagedModel.fromJson(data["data"]);
+        return;
+      } else {
+        Get.snackbar("Error", data["message"], colorText: AppColors.white);
+      }
+    }
+    mostEngaged.value = HallOfFrameMostEngagedModel(
+        id: "0",
+        name: "Unnknown",
+        country: "Unknown",
+        gender: "Unknown",
+        profileImg: '',
+        views: 0);
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    fetchData();
+    SocketService.instance.connect();
+    receiveData();
+  }
 }

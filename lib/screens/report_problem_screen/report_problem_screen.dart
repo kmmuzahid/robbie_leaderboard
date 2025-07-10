@@ -1,6 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:the_leaderboard/services/api/api_post_service.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
+import 'package:the_leaderboard/screens/report_problem_screen/controller/report_problem_controller.dart';
 import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
 import '../../constants/app_colors.dart';
 import '../../widgets/appbar_widget/appbar_widget.dart';
@@ -15,18 +18,7 @@ class ReportProblemsScreen extends StatefulWidget {
 }
 
 class _ReportProblemsScreenState extends State<ReportProblemsScreen> {
-  final TextEditingController _controller = TextEditingController();
-
-  void _sendMessage() async {
-    await ApiPostService.sentReport(_controller.text);
-    _controller.clear();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  final _controller = Get.put(ReportProblemController());
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +42,7 @@ class _ReportProblemsScreenState extends State<ReportProblemsScreen> {
               ),
               const SpaceWidget(spaceHeight: 16),
               TextFormField(
-                controller: _controller,
+                controller: _controller.textController,
                 maxLines: 15,
                 textAlignVertical: TextAlignVertical.top,
                 decoration: InputDecoration(
@@ -65,7 +57,7 @@ class _ReportProblemsScreenState extends State<ReportProblemsScreen> {
               ),
               const SpaceWidget(spaceHeight: 24),
               ButtonWidget(
-                onPressed: _sendMessage,
+                onPressed: _controller.sendMessage,
                 label: "Send Message",
                 buttonWidth: double.infinity,
               ),

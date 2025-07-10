@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_country_city.dart';
+import 'package:the_leaderboard/screens/auth_screens/register_screen/widgets/dropdown_button_widget.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_icon_path.dart';
@@ -14,7 +16,7 @@ import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/register_screen_controller.dart';
 
 class RegisterScreen extends StatelessWidget {
-  final controller = Get.put(RegisterScreenController());
+  final _controller = Get.put(RegisterScreenController());
 
   RegisterScreen({super.key});
 
@@ -33,7 +35,7 @@ class RegisterScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 const SpaceWidget(spaceHeight: 48),
+                const SpaceWidget(spaceHeight: 48),
                 const Center(
                   child: TextWidget(
                     text: AppStrings.createAccount,
@@ -63,7 +65,7 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 const SpaceWidget(spaceHeight: 8),
                 TextFieldWidget(
-                  controller: controller.emailController,
+                  controller: _controller.emailController,
                   hintText: 'Enter email',
                   maxLines: 1,
                 ),
@@ -79,7 +81,7 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 const SpaceWidget(spaceHeight: 8),
                 TextFieldWidget(
-                  controller: controller.passwordController,
+                  controller: _controller.passwordController,
                   hintText: 'Enter password',
                   maxLines: 1,
                   suffixIcon: AppIconPath.visibilityOnIcon,
@@ -96,7 +98,7 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 const SpaceWidget(spaceHeight: 8),
                 TextFieldWidget(
-                  controller: controller.confirmPasswordController,
+                  controller: _controller.confirmPasswordController,
                   hintText: 'Enter password',
                   maxLines: 1,
                   suffixIcon: AppIconPath.visibilityOnIcon,
@@ -113,22 +115,8 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 const SpaceWidget(spaceHeight: 8),
                 TextFieldWidget(
-                    controller: controller.nameController,
+                    controller: _controller.nameController,
                     hintText: "Enter name"),
-                 const SpaceWidget(spaceHeight: 16),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: TextWidget(
-                    text: AppStrings.country,
-                    fontColor: AppColors.greyDark,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                  ),
-                ),
-                const SpaceWidget(spaceHeight: 8),
-                TextFieldWidget(
-                    controller: controller.countryController,
-                    hintText: "Enter country"),
                 const SpaceWidget(spaceHeight: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
@@ -140,10 +128,32 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
                 const SpaceWidget(spaceHeight: 8),
-                TextFieldWidget(
-                    controller: controller.cityController,
-                    hintText: "Enter city"),
-                 const SpaceWidget(spaceHeight: 16),
+                Obx(
+                  () => DropdownButtonWidget(
+                    value: _controller.selectedCountry.value,
+                    items: AppCountryCity.countryCityMap.keys.toList(),
+                    onChanged: (value) => _controller.updateCountry(value!),
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.city,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
+                Obx(
+                  () => DropdownButtonWidget(
+                    value: _controller.selectedCity.value,
+                    items: _controller.cities,
+                    onChanged: (value) => _controller.updateCity(value!),
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextWidget(
@@ -154,10 +164,14 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
                 const SpaceWidget(spaceHeight: 8),
-                TextFieldWidget(
-                    controller: controller.genderController,
-                    hintText: "Enter gender"),
-                 const SpaceWidget(spaceHeight: 16),
+                Obx(
+                  () => DropdownButtonWidget(
+                    value: _controller.selectedGender.value,
+                    items: _controller.genders,
+                    onChanged: (value) => _controller.updateGender(value!),
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextWidget(
@@ -169,9 +183,9 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 const SpaceWidget(spaceHeight: 8),
                 TextFieldWidget(
-                    controller: controller.ageController,
+                    controller: _controller.ageController,
                     hintText: "Enter age"),
-                 const SpaceWidget(spaceHeight: 16),
+                const SpaceWidget(spaceHeight: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextWidget(
@@ -183,11 +197,11 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 const SpaceWidget(spaceHeight: 8),
                 TextFieldWidget(
-                    controller: controller.contactController,
+                    controller: _controller.contactController,
                     hintText: "Enter contact"),
                 const SpaceWidget(spaceHeight: 24),
                 ButtonWidget(
-                  onPressed: controller.register,
+                  onPressed: _controller.register,
                   label: AppStrings.register,
                   buttonWidth: double.infinity,
                 ),

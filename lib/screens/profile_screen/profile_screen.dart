@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/profile_screen/controller/profile_screen_controller.dart';
 import 'package:the_leaderboard/screens/profile_screen/widgets/affiliate_status_widget.dart';
 import 'package:the_leaderboard/screens/profile_screen/widgets/profile_header_widget.dart';
 import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_icon_path.dart';
@@ -17,7 +19,7 @@ import '../../widgets/image_widget/image_widget.dart';
 import '../../widgets/space_widget/space_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({super.key});
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -89,8 +91,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           email: _controller.email.value,
                           balance: "\$${_controller.totalBalance.value}",
                           withdrawButtonOnPressed: _controller.withdrawAmount,
-                          tweeterButtonOnPressed: () {},
-                          instagramButtonOnPressed: () {},
+                          tweeterButtonOnPressed: () {
+                            launchUrl(Uri.parse(AppUrls.twitterUrl),
+                                mode: LaunchMode.externalApplication);
+                          },
+                          instagramButtonOnPressed: () {
+                            launchUrl(Uri.parse(AppUrls.instagramUrl),
+                                mode: LaunchMode.externalApplication);
+                          },
+                          discordButtonOnPressed: () {
+                            launchUrl(Uri.parse(AppUrls.discordUrl),
+                                mode: LaunchMode.externalApplication);
+                          },
+                          youtubeButtonOnPressed: () {
+                            launchUrl(Uri.parse(AppUrls.youtubeUrl),
+                                mode: LaunchMode.externalApplication);
+                          },
                         ),
 
                         const SpaceWidget(spaceHeight: 16),
@@ -124,9 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                         // Logout Button
                         ButtonWidget(
-                          onPressed: () {
-                            Get.offAllNamed(AppRoutes.loginScreen);
-                          },
+                          onPressed: _controller.logout,
                           label: "Logout",
                           buttonWidth: double.infinity,
                           backgroundColor: AppColors.blueDark,

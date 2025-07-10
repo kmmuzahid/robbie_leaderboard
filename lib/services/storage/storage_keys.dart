@@ -13,4 +13,5 @@ class LocalStorageKeys {
   static const String dayIndex = "dayIndex";
   static const String totalTicket = "totalTicket";
   static const String otherUserId = "otherUserId";
+  static const String lastWheelday = "lastWheelday";
 }

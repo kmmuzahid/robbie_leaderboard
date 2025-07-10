@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/otp_model.dart';
 import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
@@ -58,8 +60,17 @@ class VerifyOtpController extends GetxController {
     // Here you would add your API call to request a new OTP code
     // For now we'll just show a snackbar and restart the timer
 
-    await ApiPostService.resentOtp(
-        "${AppUrls.resentOtp}/${LocalStorage.myEmail}");
+    final url = "${AppUrls.resentOtp}/${LocalStorage.myEmail}";
+    final response = await ApiPostService.apiPostService(url, null);
+    if (response != null) {
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Get.snackbar("Success", data["message"], colorText: AppColors.white);
+        startTimer();
+      } else {
+        Get.snackbar("Error", data["message"], colorText: AppColors.white);
+      }
+    }
 
     // Clear all fields
     otpTextEditingController1.clear();
@@ -68,7 +79,6 @@ class VerifyOtpController extends GetxController {
     otpTextEditingController4.clear();
 
     // Restart the timer
-    startTimer();
   }
 
   void verifyOtp() async {
@@ -80,13 +90,26 @@ class VerifyOtpController extends GetxController {
     if (otp.length == 4 && RegExp(r'^\d{4}$').hasMatch(otp)) {
       // TODO: Implement actual OTP verification logic (e.g., API call)
       final otpCode = OtpModel(otp: otp);
-
-      final data = await ApiPostService.createUser(otpCode);
-      if (data != null) {
-        final token = data["data"]["accessToken"];
-        LocalStorage.token = token;
-        Get.offAll(BottomNav());
+      final response = await ApiPostService.apiPostService(
+          AppUrls.createUser, otpCode.toJson());
+      if (response != null) {
+        final data = jsonDecode(response.body);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          final token = data["data"]["accessToken"];
+          LocalStorage.token = token;
+          Get.snackbar("Success", data["message"], colorText: AppColors.white);
+          Get.offAll(BottomNav());
+        } else {
+          Get.snackbar("Error", data["message"], colorText: AppColors.white);
+        }
       }
+
+      // final data = await ApiPostService.createUser(otpCode);
+      // if (data != null) {
+      //   final token = data["data"]["accessToken"];
+      //   LocalStorage.token = token;
+      //   Get.offAll(BottomNav());
+      // }
 
       // Navigate to next screen or perform action
     } else {
@@ -96,6 +119,7 @@ class VerifyOtpController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
+    return;
   }
 
   @override
