@@ -21,15 +21,6 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
-  final _controller = Get.put(NotificationController());
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _controller.fetchNotification();
-  }
-
   // // Separate lists for descriptions and timestamps
   // final List<String> notificationDescriptions = const [
   //   "Dennis Nedry commented on Isla Nublar SOC2 compliance report",
@@ -47,70 +38,73 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: const SystemUiOverlayStyle(
-        statusBarIconBrightness: Brightness.light,
-      ),
-      child: Scaffold(
-        backgroundColor: AppColors.blueDark,
-        appBar: const AppbarWidget(
-            title: AppStrings.notifications, centerTitle: true),
-        body: Obx(
-          () => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: ListView.separated(
-              itemCount: _controller.notificationList.length,
-              // Use length of one list (they should be equal)
-              separatorBuilder: (context, index) =>
-                  const SpaceWidget(spaceHeight: 12),
-              itemBuilder: (context, index) {
-                final day = DateFormat("EEE");
-                final time = DateFormat("h:mm a");
+    return GetBuilder(
+      init: NotificationController(),
+      builder: (controller) => AnnotatedRegion(
+        value: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.light,
+        ),
+        child: Scaffold(
+          backgroundColor: AppColors.blueDark,
+          appBar: const AppbarWidget(
+              title: AppStrings.notifications, centerTitle: true),
+          body: Obx(
+            () => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: ListView.separated(
+                itemCount: controller.notificationList.length,
+                // Use length of one list (they should be equal)
+                separatorBuilder: (context, index) =>
+                    const SpaceWidget(spaceHeight: 12),
+                itemBuilder: (context, index) {
+                  final day = DateFormat("EEE");
+                  final time = DateFormat("h:mm a");
 
-                return Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.blue,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const IconWidget(
-                        icon: AppIconPath.bellIcon,
-                        height: 24,
-                        width: 24,
-                      ),
-                      const SpaceWidget(spaceWidth: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextWidget(
-                              text: _controller.notificationList[index]!.text,
-                              // Fetch description
-                              fontColor: AppColors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                              textAlignment: TextAlign.start,
-                            ),
-                            const SpaceWidget(spaceHeight: 8),
-                            TextWidget(
-                              text:
-                                  "Last ${day.format(_controller.notificationList[index]!.createdAt)} at ${time.format(_controller.notificationList[index]!.createdAt)}",
-                              // Fetch timestamp
-                              fontColor: AppColors.white,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              textAlignment: TextAlign.start,
-                            ),
-                          ],
+                  return Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.blue,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const IconWidget(
+                          icon: AppIconPath.bellIcon,
+                          height: 24,
+                          width: 24,
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                        const SpaceWidget(spaceWidth: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextWidget(
+                                text: controller.notificationList[index]!.text,
+                                // Fetch description
+                                fontColor: AppColors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                textAlignment: TextAlign.start,
+                              ),
+                              const SpaceWidget(spaceHeight: 8),
+                              TextWidget(
+                                text:
+                                    "Last ${day.format(controller.notificationList[index]!.createdAt)} at ${time.format(controller.notificationList[index]!.createdAt)}",
+                                // Fetch timestamp
+                                fontColor: AppColors.white,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                                textAlignment: TextAlign.start,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),

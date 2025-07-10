@@ -13,7 +13,7 @@ import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/socket/socket_service.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
-class HomeScreenController extends RxController {
+class HomeScreenController extends GetxController {
   final RxString name = ''.obs;
   final RxString totalRaised = ''.obs;
   final RxString totalSpent = ''.obs;

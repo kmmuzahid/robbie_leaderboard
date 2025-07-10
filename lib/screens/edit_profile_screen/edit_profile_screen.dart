@@ -23,12 +23,6 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final _controller = Get.put(EditProfileController());
-  // Controllers for text fields
-
-  // Variable to store the selected image
-
-  // Helper method to build a text field
   Widget _buildTextField({
     required String label,
     required TextEditingController controller,
@@ -82,34 +76,35 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: const SystemUiOverlayStyle(
-        statusBarIconBrightness: Brightness.light,
-      ),
-      child: Scaffold(
-        backgroundColor: AppColors.blueDark,
-        appBar: const AppbarWidget(title: ""),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Profile Picture
-              Stack(
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                    child: Obx(
-                      () => ClipRRect(
+    return GetBuilder(
+      init: EditProfileController(),
+      builder: (controller) => AnnotatedRegion(
+        value: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.light,
+        ),
+        child: Scaffold(
+          backgroundColor: AppColors.blueDark,
+          appBar: const AppbarWidget(title: ""),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Profile Picture
+                Stack(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: _controller.selectedImage.value != null
+                        child: controller.selectedImage.value != null
                             ? Image.file(
-                                _controller.selectedImage.value!,
+                                controller.selectedImage.value!,
                                 fit: BoxFit.cover,
                                 width: 80,
                                 height: 80,
@@ -121,83 +116,83 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: -2,
-                    right: -2,
-                    child: GestureDetector(
-                      onTap: _controller.pickImage, // Call the image picker
-                      child: const IconWidget(
-                        height: 30,
-                        width: 30,
-                        icon: AppIconPath.editImageButtonIcon,
+                    Positioned(
+                      bottom: -2,
+                      right: -2,
+                      child: GestureDetector(
+                        onTap: controller.pickImage, // Call the image picker
+                        child: const IconWidget(
+                          height: 30,
+                          width: 30,
+                          icon: AppIconPath.editImageButtonIcon,
+                        ),
                       ),
                     ),
+                  ],
+                ),
+                const SpaceWidget(spaceHeight: 24),
+
+                // Username
+                _buildTextField(
+                  label: "Username",
+                  controller: controller.usernameController,
+                ),
+                const SpaceWidget(spaceHeight: 12),
+                _buildTextField(
+                  label: "Contact",
+                  controller: controller.contactController,
+                ),
+                const SpaceWidget(spaceHeight: 12),
+                Obx(
+                  () => _buildDropdownField(
+                    label: "Gender",
+                    value: controller.selectedGender.value,
+                    items: controller.genders,
+                    onChanged: (p0) => controller.updateGender(p0!),
                   ),
-                ],
-              ),
-              const SpaceWidget(spaceHeight: 24),
+                ),
+                const SpaceWidget(spaceHeight: 12),
+                _buildTextField(
+                  label: "Age",
+                  controller: controller.ageController,
+                ),
+                const SpaceWidget(spaceHeight: 12),
+                Obx(
+                  () => _buildDropdownField(
+                    label: "Country",
+                    value: controller.selectedCountry.value,
+                    items: AppCountryCity.countryCityMap.keys.toList(),
+                    onChanged: (p0) => controller.updateCountry(p0!),
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 12),
+                Obx(
+                  () => _buildDropdownField(
+                    label: "City",
+                    value: controller.selectedCity.value,
+                    items: controller.cities,
+                    onChanged: (p0) => controller.updateCity(p0!),
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 24),
+                _buildTextField(
+                  label: "Role",
+                  controller: controller.roleController,
+                ),
+                const SpaceWidget(spaceHeight: 12),
+                // Country
 
-              // Username
-              _buildTextField(
-                label: "Username",
-                controller: _controller.usernameController,
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              _buildTextField(
-                label: "Contact",
-                controller: _controller.contactController,
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              Obx(
-                () => _buildDropdownField(
-                  label: "Gender",
-                  value: _controller.selectedGender.value,
-                  items: _controller.genders,
-                  onChanged: (p0) => _controller.updateGender(p0!),
-                ),
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              _buildTextField(
-                label: "Age",
-                controller: _controller.ageController,
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              Obx(
-                () => _buildDropdownField(
-                  label: "Country",
-                  value: _controller.selectedCountry.value,
-                  items: AppCountryCity.countryCityMap.keys.toList(),
-                  onChanged: (p0) => _controller.updateCountry(p0!),
-                ),
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              Obx(
-                () => _buildDropdownField(
-                  label: "City",
-                  value: _controller.selectedCity.value,
-                  items: _controller.cities,
-                  onChanged: (p0) => _controller.updateCity(p0!),
-                ),
-              ),
-              const SpaceWidget(spaceHeight: 24),
-              _buildTextField(
-                label: "Role",
-                controller: _controller.roleController,
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              // Country
-
-              // Save Changes Button
-            ],
+                // Save Changes Button
+              ],
+            ),
           ),
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: ButtonWidget(
-            onPressed: _controller.saveChange,
-            label: "Save Changes",
-            buttonWidth: double.infinity,
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: ButtonWidget(
+              onPressed: controller.saveChange,
+              label: "Save Changes",
+              buttonWidth: double.infinity,
+            ),
           ),
         ),
       ),

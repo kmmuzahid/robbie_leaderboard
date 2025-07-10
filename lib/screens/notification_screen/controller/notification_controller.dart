@@ -9,6 +9,13 @@ import 'package:the_leaderboard/services/api/api_get_service.dart';
 class NotificationController extends GetxController {
   final RxList<NotificationModel?> notificationList = <NotificationModel>[].obs;
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    fetchNotification();
+  }
+
   void fetchNotification() async {
     final response = await ApiGetService.apiGetService(AppUrls.notification);
     if (response != null) {
@@ -22,6 +29,6 @@ class NotificationController extends GetxController {
             colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
       }
     }
-    return;   
+    return;
   }
 }

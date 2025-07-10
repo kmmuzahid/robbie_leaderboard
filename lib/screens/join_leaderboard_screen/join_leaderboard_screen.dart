@@ -50,26 +50,29 @@ class _JoinLeaderboardScreenState extends State<JoinLeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: const SystemUiOverlayStyle(
-        statusBarIconBrightness: Brightness.light,
-      ),
-      child: Scaffold(
-        backgroundColor: AppColors.blueDark,
-        appBar: const AppbarWidget(title: ""),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child:  _buildTextField(
-              label: "Enter amount",
-              controller: _controller.amountController,         
-          ),
+    return GetBuilder(
+      init: JoinLeaderboardController(),
+      builder: (controller) =>  AnnotatedRegion(
+        value: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.light,
         ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: ButtonWidget(
-            onPressed: _controller.submit,
-            label: "Invest",
-            buttonWidth: double.infinity,
+        child: Scaffold(
+          backgroundColor: AppColors.blueDark,
+          appBar: const AppbarWidget(title: ""),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child:  _buildTextField(
+                label: "Enter amount",
+                controller: _controller.amountController,         
+            ),
+          ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: ButtonWidget(
+              onPressed: _controller.submit,
+              label: "Invest",
+              buttonWidth: double.infinity,
+            ),
           ),
         ),
       ),

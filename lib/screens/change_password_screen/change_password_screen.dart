@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 import 'package:the_leaderboard/screens/change_password_screen/controller/change_password_controller.dart';
 
@@ -18,7 +18,6 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  final _controller = Get.put(ChangePasswordController());
   // Controllers for text fields
 
   // Helper method to build a text field
@@ -55,44 +54,47 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: const SystemUiOverlayStyle(
-        statusBarIconBrightness: Brightness.light,
-      ),
-      child: Scaffold(
-        backgroundColor: AppColors.blueDark,
-        appBar: const AppbarWidget(title: ""),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Old Password
-              _buildTextField(
-                label: " Old Password",
-                controller: _controller.oldPasswordController,
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              _buildTextField(
-                label: "New Password",
-                controller: _controller.newPasswordController,
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              _buildTextField(
-                label: "Confirm new password",
-                controller: _controller.confirmNewPasswordController,
-              ),
-              const SpaceWidget(spaceHeight: 24),
-              // Save Changes Button
-            ],
-          ),
+    return GetBuilder(
+      init: ChangePasswordController(),
+      builder: (controller) => AnnotatedRegion(
+        value: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.light,
         ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: ButtonWidget(
-            onPressed: _controller.saveChange,
-            label: "Save Changes",
-            buttonWidth: double.infinity,
+        child: Scaffold(
+          backgroundColor: AppColors.blueDark,
+          appBar: const AppbarWidget(title: ""),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Old Password
+                _buildTextField(
+                  label: " Old Password",
+                  controller: controller.oldPasswordController,
+                ),
+                const SpaceWidget(spaceHeight: 12),
+                _buildTextField(
+                  label: "New Password",
+                  controller: controller.newPasswordController,
+                ),
+                const SpaceWidget(spaceHeight: 12),
+                _buildTextField(
+                  label: "Confirm new password",
+                  controller: controller.confirmNewPasswordController,
+                ),
+                const SpaceWidget(spaceHeight: 24),
+                // Save Changes Button
+              ],
+            ),
+          ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: ButtonWidget(
+              onPressed: controller.saveChange,
+              label: "Save Changes",
+              buttonWidth: double.infinity,
+            ),
           ),
         ),
       ),

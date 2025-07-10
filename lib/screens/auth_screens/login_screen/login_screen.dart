@@ -14,26 +14,25 @@ import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/login_screen_controller.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _controller = Get.put(LoginScreenController());
-
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: const SystemUiOverlayStyle(
-        statusBarIconBrightness: Brightness.light,
-      ),
-      child: Scaffold(
-        backgroundColor: AppColors.blueDark,
-        body: Obx(
-          () => Center(
-            child: _controller.isLoading.value
+    return GetBuilder(
+      init: LoginScreenController(),
+      builder: (controller) => AnnotatedRegion(
+        value: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.light,
+        ),
+        child: Scaffold(
+          backgroundColor: AppColors.blueDark,
+          body: Center(
+            child: controller.isLoading.value
                 ? const CircularProgressIndicator.adaptive()
                 : SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -70,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SpaceWidget(spaceHeight: 8),
                         TextFieldWidget(
-                          controller: _controller.emailController,
+                          controller: controller.emailController,
                           hintText: 'Enter email',
                           maxLines: 1,
                         ),
@@ -86,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SpaceWidget(spaceHeight: 8),
                         TextFieldWidget(
-                          controller: _controller.passwordController,
+                          controller: controller.passwordController,
                           hintText: 'Enter password',
                           maxLines: 1,
                           suffixIcon: AppIconPath.visibilityOnIcon,
@@ -104,9 +103,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: Transform.scale(
                                     scale: 0.9,
                                     child: Checkbox(
-                                      value: _controller.rememberMe.value,
+                                      value: controller.rememberMe.value,
                                       onChanged: (value) {
-                                        _controller.rememberMe.value =
+                                        controller.rememberMe.value =
                                             value ?? false;
                                       },
                                       activeColor: AppColors.blueLighter,
@@ -138,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SpaceWidget(spaceHeight: 24),
                         ButtonWidget(
-                          onPressed: _controller.login,
+                          onPressed: controller.login,
                           label: AppStrings.login,
                           buttonWidth: double.infinity,
                         ),
