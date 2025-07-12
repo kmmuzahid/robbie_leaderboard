@@ -18,8 +18,7 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Initialize the controller using Get.put()
-    final SearchScreenController _controller =
-        Get.put(SearchScreenController());
+    final SearchScreenController controller = Get.put(SearchScreenController());
 
     return AnnotatedRegion(
       value: const SystemUiOverlayStyle(
@@ -39,7 +38,7 @@ class SearchScreen extends StatelessWidget {
                 const TitleTextWidget(text: AppStrings.search),
                 const SpaceWidget(spaceHeight: 8),
                 TextField(
-                  controller: _controller.nameController,
+                  controller: controller.nameController,
                   style: const TextStyle(color: AppColors.white),
                   decoration: InputDecoration(
                     hintText: 'Type here...',
@@ -61,10 +60,10 @@ class SearchScreen extends StatelessWidget {
                 const TitleTextWidget(text: AppStrings.country),
                 const SpaceWidget(spaceHeight: 8),
                 Obx(() => DropdownButtonWidget(
-                      value: _controller.selectedCountry.value,
+                      value: controller.selectedCountry.value,
                       items: AppCountryCity.countryCityMap.keys.toList(),
                       onChanged: (value) {
-                        _controller.updateCountry(value!);
+                        controller.updateCountry(value!);
                       },
                     )),
 
@@ -73,15 +72,13 @@ class SearchScreen extends StatelessWidget {
                 // City
                 const TitleTextWidget(text: AppStrings.city),
                 const SpaceWidget(spaceHeight: 8),
-                Obx(() {
-                  return DropdownButtonWidget(
-                    value: _controller.selectedCity.value,
-                    items: _controller.cities,
-                    onChanged: (value) {
-                      _controller.updateCity(value!);
-                    },
-                  );
-                }),
+                Obx(() => DropdownButtonWidget(
+                      value: controller.selectedCity.value,
+                      items: controller.cities,
+                      onChanged: (value) {
+                        controller.updateCity(value!);
+                      },
+                    )),
 
                 const SpaceWidget(spaceHeight: 14),
 
@@ -121,10 +118,10 @@ class SearchScreen extends StatelessWidget {
                 const TitleTextWidget(text: AppStrings.gender),
                 const SpaceWidget(spaceHeight: 8),
                 Obx(() => DropdownButtonWidget(
-                      value: _controller.selectedGender.value,
-                      items: _controller.genders,
+                      value: controller.selectedGender.value,
+                      items: controller.genders,
                       onChanged: (value) {
-                        _controller.updateGender(value!);
+                        controller.updateGender(value!);
                       },
                     )),
 
@@ -132,7 +129,7 @@ class SearchScreen extends StatelessWidget {
 
                 // Search Button
                 ButtonWidget(
-                  onPressed: _controller.search,
+                  onPressed: controller.search,
                   label: AppStrings.searchNow,
                   buttonWidth: double.infinity,
                 ),

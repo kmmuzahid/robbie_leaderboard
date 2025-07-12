@@ -93,29 +93,30 @@ class VerifyOtpScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                controller.isTimerRunning.value
+                Obx(() => controller.isTimerRunning.value
                     ? const SpaceWidget(spaceHeight: 12)
-                    : const SizedBox.shrink(),
-                controller.isTimerRunning.value
-                    ? Row(
-                        children: [
-                          const TextWidget(
-                            text: AppStrings.codeWillExpire,
-                            fontColor: AppColors.greyDarker,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                          ),
-                          const SpaceWidget(spaceWidth: 4),
-                          TextWidget(
-                            text: controller.formattedTime,
-                            fontColor: AppColors.orange,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                          ),
-                        ],
-                      )
-                    : const SizedBox.shrink(),
-
+                    : const SizedBox.shrink()),
+                Obx(
+                  () => controller.isTimerRunning.value
+                      ? Row(
+                          children: [
+                            const TextWidget(
+                              text: AppStrings.codeWillExpire,
+                              fontColor: AppColors.greyDarker,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                            ),
+                            const SpaceWidget(spaceWidth: 4),
+                            TextWidget(
+                              text: controller.formattedTime,
+                              fontColor: AppColors.orange,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                            ),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
+                ),
                 const SpaceWidget(spaceHeight: 24),
                 ButtonWidget(
                   onPressed: controller.verifyOtp,
@@ -123,29 +124,31 @@ class VerifyOtpScreen extends StatelessWidget {
                   buttonWidth: double.infinity,
                 ),
                 const SpaceWidget(spaceHeight: 32),
-                controller.isTimerRunning.value
-                    ? const SizedBox.shrink() // Hide when timer is running
-                    : Center(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const TextWidget(
-                              text: AppStrings.didntGetCode,
-                              fontColor: AppColors.greyDark,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                            ),
-                            const SpaceWidget(spaceWidth: 4),
-                            TextButtonWidget(
-                              onPressed: controller.resendOtp,
-                              text: AppStrings.sendAgain,
-                              textColor: AppColors.skyBlue,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                            ),
-                          ],
+                Obx(
+                  () => controller.isTimerRunning.value
+                      ? const SizedBox.shrink() // Hide when timer is running
+                      : Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const TextWidget(
+                                text: AppStrings.didntGetCode,
+                                fontColor: AppColors.greyDark,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                              ),
+                              const SpaceWidget(spaceWidth: 4),
+                              TextButtonWidget(
+                                onPressed: controller.resendOtp,
+                                text: AppStrings.sendAgain,
+                                textColor: AppColors.skyBlue,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                ),
               ],
             ),
           ),

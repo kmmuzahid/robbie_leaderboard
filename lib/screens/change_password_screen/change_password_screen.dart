@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
 import 'package:the_leaderboard/screens/change_password_screen/controller/change_password_controller.dart';
 
 import '../../constants/app_colors.dart';

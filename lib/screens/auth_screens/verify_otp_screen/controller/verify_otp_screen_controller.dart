@@ -8,6 +8,7 @@ import 'package:the_leaderboard/models/otp_model.dart';
 import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 
 class VerifyOtpController extends GetxController {
   late TextEditingController otpTextEditingController1;
@@ -90,34 +91,31 @@ class VerifyOtpController extends GetxController {
     if (otp.length == 4 && RegExp(r'^\d{4}$').hasMatch(otp)) {
       // TODO: Implement actual OTP verification logic (e.g., API call)
       final otpCode = OtpModel(otp: otp);
-      final response = await ApiPostService.apiPostService(
-          AppUrls.createUser, otpCode.toJson());
-      if (response != null) {
-        final data = jsonDecode(response.body);
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          final token = data["data"]["accessToken"];
-          LocalStorage.token = token;
-          Get.snackbar("Success", data["message"], colorText: AppColors.white);
-          Get.offAll(BottomNav());
-        } else {
-          Get.snackbar("Error", data["message"], colorText: AppColors.white);
+      try {
+        appLog("Otp is varifying");
+        final response = await ApiPostService.apiPostService(
+            AppUrls.createUser, otpCode.toJson());
+        if (response != null) {
+          final data = jsonDecode(response.body);
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            final token = data["data"]["accessToken"];
+            LocalStorage.token = token;
+            Get.snackbar("Success", data["message"],
+                colorText: AppColors.white);
+            Get.offAll(const BottomNav());
+          } else {
+            Get.snackbar("Error", data["message"], colorText: AppColors.white);
+          }
         }
+        appLog("Succeed");
+      } catch (e) {
+        errorLog("Failed", e);
       }
-
-      // final data = await ApiPostService.createUser(otpCode);
-      // if (data != null) {
-      //   final token = data["data"]["accessToken"];
-      //   LocalStorage.token = token;
-      //   Get.offAll(BottomNav());
-      // }
 
       // Navigate to next screen or perform action
     } else {
-      Get.snackbar(
-        'Error',
-        'Please enter a valid 4-digit OTP',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.snackbar('Error', 'Please enter a valid 4-digit OTP',
+          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
     }
     return;
   }

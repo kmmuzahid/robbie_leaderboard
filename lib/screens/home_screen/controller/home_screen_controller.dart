@@ -56,6 +56,7 @@ class HomeScreenController extends GetxController {
   }
 
   void fetchHomeData() async {
+    appLog("fetching home data");
     try {
       ismydataLoading.value = true;
       final responseHomeData =
@@ -76,22 +77,29 @@ class HomeScreenController extends GetxController {
       }
     } catch (e) {
       errorLog("fetchHomeData", e);
-    }    
+    }
   }
 
   void fetchHallofFrameSinglePayment() async {
+    appLog("fetching single payment data");
     ishallofframeSinglePaymentLoading.value = true;
-    final response = await ApiGetService.apiGetService(AppUrls.highestInvestor);
-    ishallofframeSinglePaymentLoading.value = false;
-    if (response != null) {
-      final data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        recoredSinglePayment.value =
-            HallOfFameSinglePaymentModel.fromJson(data["data"]);
-        return;
-      } else {
-        Get.snackbar("Error", data["message"], colorText: AppColors.white);
+    try {
+      final response =
+          await ApiGetService.apiGetService(AppUrls.highestInvestor);
+      ishallofframeSinglePaymentLoading.value = false;
+      if (response != null) {
+        final data = jsonDecode(response.body);
+        if (response.statusCode == 200) {
+          recoredSinglePayment.value =
+              HallOfFameSinglePaymentModel.fromJson(data["data"]);
+          return;
+        } else {
+          Get.snackbar("Error", data["message"], colorText: AppColors.white);
+        }
       }
+      appLog("Succeed");
+    } catch (e) {
+      errorLog("Failed", e);
     }
     recoredSinglePayment.value = HallOfFameSinglePaymentModel(
         id: "0",
@@ -103,36 +111,49 @@ class HomeScreenController extends GetxController {
   }
 
   void fetchHallofFrameConsistantlyTop() async {
-    ishallofframeConsisntantTopLoading.value = true;
-    final response =
-        await ApiGetService.apiGetService(AppUrls.consecutiveToper);
-    ishallofframeConsisntantTopLoading.value = false;
-    if (response != null) {
-      final data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        consistantlyTop.value =
-            HallOfFrameConsisntantlyTopModel.fromJson(data["data"]);
-        return;
-      } else {
-        Get.snackbar("Error", data["message"], colorText: AppColors.white);
+    appLog("fetching consistantly top ");
+    try {
+      ishallofframeConsisntantTopLoading.value = true;
+      final response =
+          await ApiGetService.apiGetService(AppUrls.consecutiveToper);
+      ishallofframeConsisntantTopLoading.value = false;
+      if (response != null) {
+        final data = jsonDecode(response.body);
+        if (response.statusCode == 200) {
+          consistantlyTop.value =
+              HallOfFrameConsisntantlyTopModel.fromJson(data["data"]);
+          return;
+        } else {
+          Get.snackbar("Error", data["message"], colorText: AppColors.white);
+        }
       }
+      appLog("Succeed");
+    } catch (e) {
+      errorLog("Failed", e);
     }
     consistantlyTop.value = HallOfFrameConsisntantlyTopModel(
         id: "0", name: "Unknown", timesRankedTop: 0);
   }
 
   void fetchHallofFrameMostEngaged() async {
-    ishallofframeMostEngagedLoading.value = true;
-    final response = await ApiGetService.apiGetService(AppUrls.mostViewed);
-    ishallofframeMostEngagedLoading.value = false;
-    if (response != null) {
-      final data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        mostEngaged.value = HallOfFrameMostEngagedModel.fromJson(data["data"]);
-        return;
-      } else {
-        Get.snackbar("Error", data["message"], colorText: AppColors.white);
+    appLog("fetching most engaged");
+    try {
+      ishallofframeMostEngagedLoading.value = true;
+      final response = await ApiGetService.apiGetService(AppUrls.mostViewed);
+      ishallofframeMostEngagedLoading.value = false;
+      if (response != null) {
+        final data = jsonDecode(response.body);
+        if (response.statusCode == 200) {
+          mostEngaged.value =
+              HallOfFrameMostEngagedModel.fromJson(data["data"]);
+          return;
+        } else {
+          Get.snackbar("Error", data["message"], colorText: AppColors.white);
+        }
       }
+      appLog("Succeed");
+    } catch (e) {
+      errorLog("Failed", e);
     }
     mostEngaged.value = HallOfFrameMostEngagedModel(
         id: "0",

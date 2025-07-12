@@ -22,4 +22,5 @@ class AppRoutes {
   static const profileScreen = '/profile_screen';
   static const withdrawAmountScreen = '/withdraw_amount_screen';
   static const appNavigation = "/app-naviagation";
+  static const joinLeaderboard = "/joinLeaderboard";
 }

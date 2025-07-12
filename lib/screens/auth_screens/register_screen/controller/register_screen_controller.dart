@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/register_model.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 import '../../../../routes/app_routes.dart';
 
 class RegisterScreenController extends GetxController {
@@ -22,9 +24,9 @@ class RegisterScreenController extends GetxController {
   final TextEditingController contactController = TextEditingController();
 
   final RxString selectedCountry = 'Australia'.obs;
-  final RxString selectedCity = 'Washington DC'.obs;
+  final RxString selectedCity = 'Sydney DC'.obs;
   final RxString selectedGender = 'Male'.obs;
-  List<String> cities = [];
+  List<String> cities = ["Sydney", "Melbourne", "Brisbane"];
   final List<String> genders = ['Male', 'Female', 'Other'];
 
   void updateCountry(String value) {
@@ -61,7 +63,12 @@ class RegisterScreenController extends GetxController {
     String gender = selectedGender.value;
     String age = ageController.text;
     String contact = contactController.text;
-    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+    if (email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty ||
+        name.isEmpty ||
+        age.isEmpty ||
+        contact.isEmpty) {
       Get.snackbar(
         'Form Incomplete',
         'Please fill in all fields.',
@@ -78,6 +85,14 @@ class RegisterScreenController extends GetxController {
       );
       return;
     }
+    if (password.length < 6) {
+      Get.snackbar("Password is too short",
+          "Please write a password with atleast 6 characters",
+          colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
+    appLog(
+        "User is registering with $email, $password, $name, $country, $city, $gender, $age and $contact");
     final profile = RegisterModel(
       name: name,
       email: email,
@@ -88,28 +103,26 @@ class RegisterScreenController extends GetxController {
       gender: gender,
       age: age,
     );
-    final response = await ApiPostService.apiPostService(
-        AppUrls.registerUser, profile.toJson());
-    if (response != null) {
-      final data = jsonDecode(response.body);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        LocalStorage.token = data["data"]["token"];
-        LocalStorage.myEmail = email;
-        Get.snackbar("Success", data["message"]);
-        // Proceed with registration (e.g., API call, navigation, etc.)
-        Get.offNamed(AppRoutes.verifyOtpScreen);
-      } else {
-        Get.snackbar("Error", data["message"]);
+    try {
+      final response = await ApiPostService.apiPostService(
+          AppUrls.registerUser, profile.toJson());
+      if (response != null) {
+        final data = jsonDecode(response.body);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          LocalStorage.token = data["data"]["token"];
+          LocalStorage.myEmail = email;
+          Get.snackbar("Success", data["message"], colorText: AppColors.white);
+          // Proceed with registration (e.g., API call, navigation, etc.)
+          Get.offNamed(AppRoutes.verifyOtpScreen);
+        } else {
+          Get.snackbar("Error", data["message"], colorText: AppColors.white);
+        }
       }
+      appLog("Succeed");
+    } catch (e) {
+      errorLog("Failed", e);
     }
     return;
-    // final data = await ApiPostService.registerUser(profile);
-    // if (data != null) {
-    //   LocalStorage.token = data["data"]["token"];
-    //   LocalStorage.myEmail = email;
-    //   // Proceed with registration (e.g., API call, navigation, etc.)
-    //   Get.offNamed(AppRoutes.verifyOtpScreen);
-    // }
   }
 
   @override

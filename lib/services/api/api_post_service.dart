@@ -16,7 +16,7 @@ class ApiPostService {
 
       return response;
     } catch (e) {
-      Get.snackbar("Error", "Something went wrong", colorText: AppColors.white);
+      Get.snackbar("Error", "Something went wrong", colorText: AppColors.red);
     }
     return null;
   }

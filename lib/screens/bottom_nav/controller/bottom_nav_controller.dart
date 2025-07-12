@@ -10,7 +10,7 @@ class BottomNavController extends GetxController {
   var selectedIndex = 0.obs;
 
   final List<Widget> widgetOptions = [
-    HomeScreen(),
+    const HomeScreen(),
     const LeaderboardScreen(),
     const RewardsScreen(),
     const ProfileScreen(),

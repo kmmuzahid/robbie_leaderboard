@@ -144,12 +144,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 const SpaceWidget(spaceHeight: 12),
                 Obx(
-                  () => _buildDropdownField(
-                    label: "Gender",
-                    value: controller.selectedGender.value,
-                    items: controller.genders,
-                    onChanged: (p0) => controller.updateGender(p0!),
-                  ),
+                  () {
+                    return _buildDropdownField(
+                      label: "Gender",
+                      value: controller.selectedGender!.value,
+                      items: controller.genders,
+                      onChanged: (p0) => controller.updateGender(p0!),
+                    );
+                  },
                 ),
                 const SpaceWidget(spaceHeight: 12),
                 _buildTextField(

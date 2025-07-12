@@ -12,8 +12,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
-      AppSize.size =
-          MediaQueryData.fromView(WidgetsBinding.instance.window).size;
+      AppSize.size = MediaQuery.of(context).size;
+      ResponsiveUtils.initialize(context);
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: AppStrings.appName,

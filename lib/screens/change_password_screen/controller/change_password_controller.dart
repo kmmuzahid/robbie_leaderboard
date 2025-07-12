@@ -6,6 +6,7 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 
 class ChangePasswordController extends GetxController {
   final oldPasswordController = TextEditingController();
@@ -27,19 +28,26 @@ class ChangePasswordController extends GetxController {
       Get.snackbar("Error", "Old and new password are same");
       return;
     }
-    final response =
-        await ApiPostService.apiPostService(AppUrls.changePassword, {
-      "oldPassword": oldPasswordController.text,
-      "newPassword": newPasswordController.text
-    });
-    if (response != null) {
-      final data = jsonDecode(response.body);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.snackbar("Success", data["message"], colorText: AppColors.white);
-        Get.toNamed(AppRoutes.loginScreen);
-      } else {
-        Get.snackbar("Error", data["message"], colorText: AppColors.white);
+    appLog(
+        "Password is changing....old: ${oldPasswordController.text} and new: ${newPasswordController.text}");
+    try {
+      final response =
+          await ApiPostService.apiPostService(AppUrls.changePassword, {
+        "oldPassword": oldPasswordController.text,
+        "newPassword": newPasswordController.text
+      });
+      if (response != null) {
+        final data = jsonDecode(response.body);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Get.snackbar("Success", data["message"], colorText: AppColors.white);
+          Get.toNamed(AppRoutes.loginScreen);
+        } else {
+          Get.snackbar("Error", data["message"], colorText: AppColors.white);
+        }
       }
+      appLog("Succeed");
+    } catch (e) {
+      errorLog("Failed", e);
     }
 
     oldPasswordController.clear();

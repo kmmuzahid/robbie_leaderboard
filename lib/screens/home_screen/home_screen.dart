@@ -3,13 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_strings.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/home_screen/controller/home_screen_controller.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/hall_of_fame_card_widget.dart';
+import 'package:the_leaderboard/screens/home_screen/widgets/hall_of_frame_loading.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/home_appbar_widget.dart';
+import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_loading.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_widget.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/recent_activity_card_widget.dart';
-import 'package:the_leaderboard/screens/join_leaderboard_screen/join_leaderboard_screen.dart';
-import 'package:the_leaderboard/services/socket/socket_service.dart';
+import 'package:the_leaderboard/services/storage/storage_keys.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
+
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 
 import '../../constants/app_colors.dart';
@@ -51,13 +55,19 @@ class _HomeScreenState extends State<HomeScreen> {
             action: IconButton(
               tooltip: "Notifications",
               onPressed: () {
+                LocalStorage.numberOfNotification = 0;
+                LocalStorage.setInt(LocalStorageKeys.numberOfNotification, 0);
                 Get.toNamed(AppRoutes.notificationsScreen);
               },
-              icon: const Badge(
+              icon: Badge(
                 isLabelVisible: true,
-                label: Text('3'),
-                backgroundColor: AppColors.red,
-                child: IconWidget(
+                label: Text(LocalStorage.numberOfNotification == 0
+                    ? ""
+                    : LocalStorage.numberOfNotification.toString()),
+                backgroundColor: LocalStorage.numberOfNotification == 0
+                    ? AppColors.transparent
+                    : AppColors.red,
+                child: const IconWidget(
                   icon: AppIconPath.notificationIcon,
                   width: 24,
                   height: 24,
@@ -73,9 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const SpaceWidget(spaceHeight: 16),
                   controller.ismydataLoading.value
-                      ? const Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        )
+                      ? const ProfileCardLoading()
                       : ProfileCardWidget(
                           profileImagePath: AppImagePath.profileImage,
                           name: controller.name.value,
@@ -85,11 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           totalSpentAmount: "\$${controller.totalSpent.value}",
                           onViewProfilePressed: controller.viewMyProfile,
                           onJoinLeaderboardPressed: () {
-                            Get.to(const JoinLeaderboardScreen());
+                            Get.to(AppRoutes.joinLeaderboard);
                           },
                           onSharePressed: () {
-                            SocketService.instance
-                                .sendInvest("Aurnab 420", 200);
+                            // controller.sendData();
                           },
                         ),
                   const SpaceWidget(spaceHeight: 16),
@@ -111,9 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           controller.ishallofframeSinglePaymentLoading.value
-                              ? const Center(
-                                  child: CircularProgressIndicator.adaptive(),
-                                )
+                              ? const HallOfFrameLoading()
                               : HallOfFameCardWidget(
                                   name: controller
                                       .recoredSinglePayment.value!.name,
@@ -124,9 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   title: AppStrings.recordSingle,
                                 ),
                           controller.ishallofframeConsisntantTopLoading.value
-                              ? const Center(
-                                  child: CircularProgressIndicator.adaptive(),
-                                )
+                              ? const HallOfFrameLoading()
                               : HallOfFameCardWidget(
                                   name: controller.consistantlyTop.value!.name,
                                   status:
@@ -136,9 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   title: AppStrings.consistentlyTop,
                                 ),
                           controller.ishallofframeMostEngagedLoading.value
-                              ? const Center(
-                                  child: CircularProgressIndicator.adaptive(),
-                                )
+                              ? const HallOfFrameLoading()
                               : HallOfFameCardWidget(
                                   imageUrl:
                                       controller.mostEngaged.value!.profileImg,

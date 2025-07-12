@@ -18,6 +18,7 @@ class LocalStorage {
   static int totalTicket = 0;
   static String otherUserId = "";
   static String lastWheelday = "";
+  static int numberOfNotification = 0;
 
   // Create Local Storage Instance
   static SharedPreferences? preferences;
@@ -47,6 +48,8 @@ class LocalStorage {
     totalTicket = localStorage.getInt(LocalStorageKeys.totalTicket) ?? 0;
     otherUserId = localStorage.getString(LocalStorageKeys.otherUserId) ?? "";
     lastWheelday = localStorage.getString(LocalStorageKeys.lastWheelday) ?? "";
+    numberOfNotification =
+        localStorage.getInt(LocalStorageKeys.numberOfNotification) ?? 0;
     //appLog(userId, source: "Local Storage");
   }
 
@@ -65,7 +68,6 @@ class LocalStorage {
       final localStorage = preferences!;
       //  await localStorage.clear();
       await Future.wait([
-        // localStorage.setString(LocalStorageKeys.token, ""),
         localStorage.setString(LocalStorageKeys.cookie, ""),
         localStorage.setString(LocalStorageKeys.refreshToken, ""),
         localStorage.setString(LocalStorageKeys.userId, ""),

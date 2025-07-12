@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/verify_otp_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 
 class ForgotVerifyOtpController extends GetxController {
   late TextEditingController otpTextEditingController1;
@@ -58,17 +60,22 @@ class ForgotVerifyOtpController extends GetxController {
   void resendOtp() async {
     // Here you would add your API call to request a new OTP code
     // For now we'll just show a snackbar and restart the timer
+    appLog("otp request is sending");
     final url = "${AppUrls.resentOtp}/${LocalStorage.myEmail}";
-    final response = await ApiPostService.apiPostService(url, null);
-    if (response != null) {
-      final data = jsonDecode(response.body);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.snackbar("Success", data["message"]);
-      } else {
-        Get.snackbar("Error", data["message"]);
+    try {
+      final response = await ApiPostService.apiPostService(url, null);
+      if (response != null) {
+        final data = jsonDecode(response.body);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Get.snackbar("Success", data["message"], colorText: AppColors.white);
+        } else {
+          Get.snackbar("Error", data["message"], colorText: AppColors.white);
+        }
       }
+      appLog("Succeed");
+    } catch (e) {
+      errorLog("Failed", e);
     }
-    
 
     // Clear all fields
     otpTextEditingController1.clear();
@@ -85,27 +92,27 @@ class ForgotVerifyOtpController extends GetxController {
         otpTextEditingController2.text +
         otpTextEditingController3.text +
         otpTextEditingController4.text;
-
+    appLog("Otp is varifying");
     if (otp.length == 4 && RegExp(r'^\d{4}$').hasMatch(otp)) {
       // TODO: Implement actual OTP verification logic (e.g., API call)
       final otpCode = VerifyOtpModel(otp: otp, email: LocalStorage.myEmail);
-      final response = await ApiPostService.apiPostService(
-          AppUrls.verifyOtp, otpCode.toJson());
-      if (response != null) {
-        final data = jsonDecode(response.body);
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          LocalStorage.token = data["data"];
-          Get.snackbar("Success", data["message"]);
-          Get.toNamed(AppRoutes.createNewPasswordScreen);
-        } else {
-          Get.snackbar("Error", data["message"]);
+      try {
+        final response = await ApiPostService.apiPostService(
+            AppUrls.verifyOtp, otpCode.toJson());
+        if (response != null) {
+          final data = jsonDecode(response.body);
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            LocalStorage.token = data["data"];
+            Get.snackbar("Success", data["message"]);
+            Get.toNamed(AppRoutes.createNewPasswordScreen);
+          } else {
+            Get.snackbar("Error", data["message"]);
+          }
         }
+        appLog("Succeed");
+      } catch (e) {
+        errorLog("Failed", e);
       }
-      // final data = await ApiPostService.verifyOTP(otpCode);
-      // if (data != null) {
-      //   LocalStorage.token = data["data"];
-      //   Get.toNamed(AppRoutes.createNewPasswordScreen);
-      // }
 
       // Navigate to next screen or perform action
     } else {

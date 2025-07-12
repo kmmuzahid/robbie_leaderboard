@@ -15,7 +15,7 @@ class JoinLeaderboardController extends GetxController {
 
   void submit() async {
     try {
-      appLog("submit is calling");
+      appLog("submit is calling from join leaderboard");
       int amount = int.parse(amountController.text);
       final response = await ApiPostService.apiPostService(
           AppUrls.joinLeaderboard, {"amount": amount});
@@ -25,12 +25,13 @@ class JoinLeaderboardController extends GetxController {
           Get.snackbar("Success", data["message"], colorText: AppColors.white);
           generatedUrl.value = data["data"];
           final url = Uri.parse(generatedUrl.value);
-          await launchUrl(url, mode: LaunchMode.inAppWebView);
-          Get.offAll(BottomNav());
+          await launchUrl(url, mode: LaunchMode.inAppBrowserView);
+          Get.offAll(const BottomNav());
         } else {
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }
       }
+      appLog("Succeed");
     } catch (e) {
       errorLog("submit", e);
     }

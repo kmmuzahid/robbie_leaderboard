@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../widgets/gradient_text_widget/gradient_text_widget.dart';
@@ -39,8 +40,9 @@ class TopRankedItem extends StatelessWidget {
               ),
               child: CircleAvatar(
                 radius: avatarSize,
-                backgroundImage:
-                    fromOnline ? NetworkImage(image) : AssetImage(image),
+                backgroundImage: fromOnline
+                    ? NetworkImage("${AppUrls.mainUrl}$image")
+                    : AssetImage(image),
               ),
             ),
             Positioned(

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:the_leaderboard/screens/auth_screens/verify_otp_screen/verify_otp_screen.dart';
 import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
 import 'package:the_leaderboard/screens/change_password_screen/change_password_screen.dart';
+import 'package:the_leaderboard/screens/join_leaderboard_screen/join_leaderboard_screen.dart';
 import 'package:the_leaderboard/screens/profile_screen/profile_screen.dart';
 import 'package:the_leaderboard/screens/withdraw_amount_screen/withdraw_amount_screen.dart';
 
@@ -32,7 +33,7 @@ class RouteManager {
       // General Screens
       GetPage(
         name: AppRoutes.splashScreen,
-        page: () => SplashScreen(),
+        page: () => const SplashScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),
@@ -44,19 +45,19 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.registerScreen,
-        page: () => RegisterScreen(),
+        page: () => const RegisterScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),
       GetPage(
         name: AppRoutes.loginScreen,
-        page: () => LoginScreen(),
+        page: () => const LoginScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),
       GetPage(
         name: AppRoutes.forgotPasswordScreen,
-        page: () => ForgotPasswordScreen(),
+        page: () => const ForgotPasswordScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),
@@ -68,13 +69,13 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.createNewPasswordScreen,
-        page: () => CreateNewPasswordScreen(),
+        page: () => const CreateNewPasswordScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),
       GetPage(
         name: AppRoutes.homeScreen,
-        page: () => HomeScreen(),
+        page: () => const HomeScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),
@@ -134,7 +135,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.profileScreen,
-        page: () => ProfileScreen(),
+        page: () => const ProfileScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),
@@ -148,6 +149,12 @@ class RouteManager {
       GetPage(
         name: AppRoutes.appNavigation,
         page: () => const BottomNav(),
+        transition: Transition.fadeIn,
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.joinLeaderboard,
+        page: () => const JoinLeaderboardScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),

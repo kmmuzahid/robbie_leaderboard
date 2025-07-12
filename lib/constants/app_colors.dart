@@ -32,4 +32,5 @@ class AppColors {
 
   static const Color gradientColorStart = Color(0xFFFFFFE9);
   static const Color gradientColorEnd = Color(0xFFD1AD72);
+  static const Color transparent = Color.fromARGB(0, 0, 0, 0);
 }

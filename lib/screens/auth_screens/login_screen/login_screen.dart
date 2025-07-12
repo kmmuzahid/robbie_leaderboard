@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextFieldWidget(
                             controller: controller.emailController,
                             hintText: 'Enter email',
-                            maxLines: 1,
+                            maxLines: 1,                            
                           ),
                           const SpaceWidget(spaceHeight: 16),
                           const Padding(
@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: controller.passwordController,
                             hintText: 'Enter password',
                             maxLines: 1,
-                            suffixIcon: AppIconPath.visibilityOnIcon,
+                            suffixIcon: AppIconPath.visibilityOnIcon,                            
                           ),
                           const SpaceWidget(spaceHeight: 24),
                           // Add Remember Me Checkbox

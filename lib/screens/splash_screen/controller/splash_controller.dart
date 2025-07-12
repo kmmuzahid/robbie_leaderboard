@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
@@ -9,10 +8,10 @@ import '../../../routes/app_routes.dart';
 class SplashController extends GetxController {
   Future<void> onInitialDataLoadFunction() async {
     try {
-      await Future.delayed(Duration(seconds: 2));
-
+      await Future.delayed(const Duration(seconds: 2));
+      appLog(LocalStorage.token);
       if (LocalStorage.token.isEmpty) {
-        Get.offAllNamed(AppRoutes.onboardingScreen);
+      Get.offAllNamed(AppRoutes.onboardingScreen);
       } else {
         Get.offAllNamed(AppRoutes.appNavigation);
       }

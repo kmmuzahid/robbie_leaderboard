@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 
 import '../../../../routes/app_routes.dart';
 
@@ -24,7 +25,8 @@ class CreateNewPasswordScreenController extends GetxController {
 
     String password = passwordController.text.trim();
     String confirmPassword = confirmPasswordController.text.trim();
-
+    appLog(
+        "createNewPassword button pressed with password: $password and confirm password: $confirmPassword");
     if (password.isEmpty || confirmPassword.isEmpty) {
       Get.snackbar(
         'Form Incomplete',
@@ -48,8 +50,10 @@ class CreateNewPasswordScreenController extends GetxController {
       final data = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         Get.snackbar("Success", data["message"], colorText: AppColors.white);
+        appLog("Success");
         Get.offNamed(AppRoutes.loginScreen);
       } else {
+        errorLog("Failed", null);
         Get.snackbar("Error", data["message"], colorText: AppColors.white);
       }
     }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
@@ -49,63 +48,72 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           appBar: const AppbarWidget(
               title: AppStrings.notifications, centerTitle: true),
           body: Obx(
-            () => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: ListView.separated(
-                itemCount: controller.notificationList.length,
-                // Use length of one list (they should be equal)
-                separatorBuilder: (context, index) =>
-                    const SpaceWidget(spaceHeight: 12),
-                itemBuilder: (context, index) {
-                  final day = DateFormat("EEE");
-                  final time = DateFormat("h:mm a");
-
-                  return Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.blue,
-                      borderRadius: BorderRadius.circular(8),
+            () => controller.notificationList.isEmpty
+                ? const Center(
+                    child: TextWidget(
+                      text: "There is no notification",
+                      fontColor: AppColors.white,
                     ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const IconWidget(
-                          icon: AppIconPath.bellIcon,
-                          height: 24,
-                          width: 24,
-                        ),
-                        const SpaceWidget(spaceWidth: 12),
-                        Expanded(
-                          child: Column(
+                  )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 16),
+                    child: ListView.separated(
+                      itemCount: controller.notificationList.length,
+                      // Use length of one list (they should be equal)
+                      separatorBuilder: (context, index) =>
+                          const SpaceWidget(spaceHeight: 12),
+                      itemBuilder: (context, index) {
+                        final day = DateFormat("EEE");
+                        final time = DateFormat("h:mm a");
+
+                        return Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: AppColors.blue,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextWidget(
-                                text: controller.notificationList[index]!.text,
-                                // Fetch description
-                                fontColor: AppColors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                textAlignment: TextAlign.start,
+                              const IconWidget(
+                                icon: AppIconPath.bellIcon,
+                                height: 24,
+                                width: 24,
                               ),
-                              const SpaceWidget(spaceHeight: 8),
-                              TextWidget(
-                                text:
-                                    "Last ${day.format(controller.notificationList[index]!.createdAt)} at ${time.format(controller.notificationList[index]!.createdAt)}",
-                                // Fetch timestamp
-                                fontColor: AppColors.white,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12,
-                                textAlignment: TextAlign.start,
+                              const SpaceWidget(spaceWidth: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWidget(
+                                      text: controller
+                                          .notificationList[index]!.text,
+                                      // Fetch description
+                                      fontColor: AppColors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                      textAlignment: TextAlign.start,
+                                    ),
+                                    const SpaceWidget(spaceHeight: 8),
+                                    TextWidget(
+                                      text:
+                                          "Last ${day.format(controller.notificationList[index]!.createdAt)} at ${time.format(controller.notificationList[index]!.createdAt)}",
+                                      // Fetch timestamp
+                                      fontColor: AppColors.white,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      textAlignment: TextAlign.start,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
           ),
         ),
       ),
