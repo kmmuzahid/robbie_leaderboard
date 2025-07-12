@@ -13,6 +13,7 @@ import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_widget.
 import 'package:the_leaderboard/screens/home_screen/widgets/recent_activity_card_widget.dart';
 import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 
@@ -55,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
             action: IconButton(
               tooltip: "Notifications",
               onPressed: () {
+                appLog(LocalStorage.numberOfNotification);
                 LocalStorage.numberOfNotification = 0;
                 LocalStorage.setInt(LocalStorageKeys.numberOfNotification, 0);
                 Get.toNamed(AppRoutes.notificationsScreen);
@@ -93,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           totalSpentAmount: "\$${controller.totalSpent.value}",
                           onViewProfilePressed: controller.viewMyProfile,
                           onJoinLeaderboardPressed: () {
-                            Get.to(AppRoutes.joinLeaderboard);
+                            Get.toNamed(AppRoutes.joinLeaderboard);
                           },
                           onSharePressed: () {
                             // controller.sendData();

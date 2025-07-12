@@ -11,6 +11,8 @@ import 'package:the_leaderboard/models/recent_activity_receive_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/socket/socket_service.dart';
+import 'package:the_leaderboard/services/storage/storage_keys.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
 class HomeScreenController extends GetxController {
@@ -33,7 +35,7 @@ class HomeScreenController extends GetxController {
 
   final RxList<RecentActivityReceiveModel> recentActivity =
       <RecentActivityReceiveModel>[].obs;
-
+  final RxInt notificationNumber = 0.obs;
   void sendData() {
     SocketService.instance.sendInvest("Aurnab 420", 200);
   }
@@ -41,10 +43,17 @@ class HomeScreenController extends GetxController {
   void receiveData() {
     SocketService.instance.onNewInvestMessageReceived((p0) {
       recentActivity.insert(0, p0);
+      //all for notification
+      notificationNumber.value = recentActivity.length;
+      LocalStorage.numberOfNotification = recentActivity.length;
+      LocalStorage.setInt(
+          LocalStorageKeys.numberOfNotification, recentActivity.length);
+      appLog("recentActivity.length --> ${recentActivity.length}");
     });
   }
 
   void fetchData() async {
+    notificationNumber.value = LocalStorage.numberOfNotification;
     fetchHomeData();
     fetchHallofFrameSinglePayment();
     fetchHallofFrameConsistantlyTop();
