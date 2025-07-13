@@ -95,7 +95,7 @@ class RouteManager {
       ),
       GetPage(
         name: AppRoutes.settingsScreen,
-        page: () => SettingsScreen(),
+        page: () => const SettingsScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -56,25 +54,20 @@ class _RewardsScreenState extends State<RewardsScreen> {
                 fit: BoxFit.contain,
               ),
             ),
-            action: Obx(
-              () => IconButton(
-                tooltip: "Notifications",
-                onPressed: () {
-                  controller.notificationNumber.value = 0;
-                  LocalStorage.numberOfNotification = 0;
-                  LocalStorage.setInt(LocalStorageKeys.numberOfNotification, 0);
-                  Get.toNamed(AppRoutes.notificationsScreen);
-                },
-                icon: Badge(
-                  isLabelVisible: controller.notificationNumber.value != 0,
-                  label: Text(controller.notificationNumber.value.toString()),
-                  backgroundColor: AppColors.red,
-                  child: const IconWidget(
-                    icon: AppIconPath.notificationIcon,
-                    width: 24,
-                    height: 24,
-                    color: AppColors.white,
-                  ),
+            action: IconButton(
+              tooltip: "Notifications",
+              onPressed: () {
+                Get.toNamed(AppRoutes.notificationsScreen);
+              },
+              icon: const Badge(
+                isLabelVisible: false,
+                label: Text(""),
+                backgroundColor: AppColors.red,
+                child: const IconWidget(
+                  icon: AppIconPath.notificationIcon,
+                  width: 24,
+                  height: 24,
+                  color: AppColors.white,
                 ),
               ),
             ),

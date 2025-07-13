@@ -19,7 +19,7 @@ class ProfileScreenController extends GetxController {
   final RxString creatorCode = ''.obs;
   final RxString rank = ''.obs;
   final RxBool isLoading = true.obs;
-  final RxInt notificationNumber = LocalStorage.numberOfNotification.obs;
+ 
   void fetchProfile() async {
     try {
       appLog("Profile data is fetching");

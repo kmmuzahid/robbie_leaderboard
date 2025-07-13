@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_strings.dart';
-import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/home_screen/controller/home_screen_controller.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/hall_of_fame_card_widget.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/hall_of_frame_loading.dart';
@@ -53,26 +52,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 fit: BoxFit.contain,
               ),
             ),
-            action: Obx(
-              () => IconButton(
-                tooltip: "Notifications",
-                onPressed: () {
-                  appLog(LocalStorage.numberOfNotification);
-                  controller.notificationNumber.value = 0;
-                  LocalStorage.numberOfNotification = 0;
-                  LocalStorage.setInt(LocalStorageKeys.numberOfNotification, 0);
-                  Get.toNamed(AppRoutes.notificationsScreen);
-                },
-                icon: Badge(
-                  isLabelVisible: controller.notificationNumber.value != 0,
-                  label: Text(controller.notificationNumber.value.toString()),
-                  backgroundColor: AppColors.red,
-                  child: const IconWidget(
-                    icon: AppIconPath.notificationIcon,
-                    width: 24,
-                    height: 24,
-                    color: AppColors.white,
-                  ),
+            action: IconButton(
+              tooltip: "Notifications",
+              onPressed: () {
+                Get.toNamed(AppRoutes.notificationsScreen);
+              },
+              icon: const Badge(
+                isLabelVisible: false,
+                label: Text(""),
+                backgroundColor: AppColors.red,
+                child: IconWidget(
+                  icon: AppIconPath.notificationIcon,
+                  width: 24,
+                  height: 24,
+                  color: AppColors.white,
                 ),
               ),
             ),

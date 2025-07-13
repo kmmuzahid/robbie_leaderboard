@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
-import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 import 'package:url_launcher/url_launcher.dart';

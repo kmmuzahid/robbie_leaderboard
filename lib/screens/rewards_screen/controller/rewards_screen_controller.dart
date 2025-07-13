@@ -26,7 +26,6 @@ class RewardsScreenController extends GetxController {
   final RxString today = ''.obs;
   final RxInt totalTicket = 0.obs;
 
-  final RxInt notificationNumber = LocalStorage.numberOfNotification.obs;
   void fetchRuffle() async {
     try {
       appLog("fetching ruffle");

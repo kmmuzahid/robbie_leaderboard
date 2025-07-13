@@ -155,7 +155,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   const SpaceWidget(spaceHeight: 12),
                   _buildDropdownField(
                     label: "Gender",
-                    value: controller.selectedGender!.value,
+                    value: controller.selectedGender.value,
                     items: controller.genders,
                     onChanged: (p0) => controller.updateGender(p0!), profileController: controller
                   ),
