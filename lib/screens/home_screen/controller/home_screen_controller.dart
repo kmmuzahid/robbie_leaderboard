@@ -49,7 +49,7 @@ class HomeScreenController extends GetxController {
     });
   }
 
-  void fetchData() async {   
+  Future fetchData() async {   
     fetchHomeData();
     fetchHallofFrameSinglePayment();
     fetchHallofFrameConsistantlyTop();

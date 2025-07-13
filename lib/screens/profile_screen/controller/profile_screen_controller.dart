@@ -20,7 +20,7 @@ class ProfileScreenController extends GetxController {
   final RxString rank = ''.obs;
   final RxBool isLoading = true.obs;
  
-  void fetchProfile() async {
+  Future fetchProfile() async {
     try {
       appLog("Profile data is fetching");
       isLoading.value = true;

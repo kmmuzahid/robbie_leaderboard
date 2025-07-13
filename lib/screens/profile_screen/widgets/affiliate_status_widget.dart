@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:the_leaderboard/widgets/shimmer_loading_widget/shimmer_loading.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../widgets/gradient_text_widget/gradient_text_widget.dart';
@@ -12,15 +13,16 @@ class AffiliateStatusWidget extends StatelessWidget {
   final String profileViewValue;
   final VoidCallback iconButtonOnTap;
   final String codeNumber;
+  final bool isLoading;
 
-  const AffiliateStatusWidget({
-    super.key,
-    required this.totalRaisedValue,
-    required this.positionValue,
-    required this.profileViewValue,
-    required this.iconButtonOnTap,
-    required this.codeNumber,
-  });
+  const AffiliateStatusWidget(
+      {super.key,
+      required this.totalRaisedValue,
+      required this.positionValue,
+      required this.profileViewValue,
+      required this.iconButtonOnTap,
+      required this.codeNumber,
+      required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +64,13 @@ class AffiliateStatusWidget extends StatelessWidget {
                         fontSize: 12,
                       ),
                       const SpaceWidget(spaceHeight: 4),
-                      GradientText(
-                        text: totalRaisedValue,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+                      isLoading
+                          ? const ShimmerLoading(width: 100, height: 20)
+                          : GradientText(
+                              text: totalRaisedValue,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
                     ],
                   ),
                 ),
@@ -90,11 +94,13 @@ class AffiliateStatusWidget extends StatelessWidget {
                         fontSize: 12,
                       ),
                       const SpaceWidget(spaceHeight: 4),
-                      GradientText(
-                        text: positionValue,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+                      isLoading
+                          ? const ShimmerLoading(width: 100, height: 20)
+                          : GradientText(
+                              text: positionValue,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
                     ],
                   ),
                 ),
@@ -118,11 +124,13 @@ class AffiliateStatusWidget extends StatelessWidget {
                         fontSize: 12,
                       ),
                       const SpaceWidget(spaceHeight: 4),
-                      GradientText(
-                        text: profileViewValue,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+                      isLoading
+                          ? const ShimmerLoading(width: 100, height: 20)
+                          : GradientText(
+                              text: profileViewValue,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
                     ],
                   ),
                 ),
@@ -159,11 +167,13 @@ class AffiliateStatusWidget extends StatelessWidget {
                         iconButtonOnTap();
                       },
                     ),
-                    GradientText(
-                      text: codeNumber,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
+                    isLoading
+                        ? const ShimmerLoading(width: 100, height: 25)
+                        : GradientText(
+                            text: codeNumber,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
                   ],
                 ),
               ],

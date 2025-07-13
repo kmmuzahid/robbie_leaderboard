@@ -9,12 +9,15 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 
 class TermAndConditionController extends GetxController {
   final RxString termAndCondition = ''.obs;
+  final RxBool isLoading = true.obs;
 
   void fetchData() async {
     try {
       appLog("term and condition data is fetching");
+      isLoading.value = true;
       final response =
           await ApiGetService.apiGetService(AppUrls.termAndCondition);
+      isLoading.value = false;
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
         if (response.statusCode == 200) {
@@ -29,7 +32,7 @@ class TermAndConditionController extends GetxController {
         }
       }
     } catch (e) {
-       errorLog("Failed", e);
+      errorLog("Failed", e);
     }
   }
 }

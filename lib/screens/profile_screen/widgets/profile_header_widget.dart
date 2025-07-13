@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_leaderboard/widgets/shimmer_loading_widget/shimmer_loading.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_image_path.dart';
@@ -18,19 +19,20 @@ class ProfileHeaderWidget extends StatelessWidget {
   final VoidCallback instagramButtonOnPressed;
   final VoidCallback discordButtonOnPressed;
   final VoidCallback youtubeButtonOnPressed;
+  final bool isLoading;
 
-  const ProfileHeaderWidget({
-    super.key,
-    required this.image,
-    required this.name,
-    required this.email,
-    required this.balance,
-    required this.withdrawButtonOnPressed,
-    required this.tweeterButtonOnPressed,
-    required this.instagramButtonOnPressed,
-    required this.discordButtonOnPressed,
-    required this.youtubeButtonOnPressed
-  });
+  const ProfileHeaderWidget(
+      {super.key,
+      required this.image,
+      required this.name,
+      required this.email,
+      required this.balance,
+      required this.withdrawButtonOnPressed,
+      required this.tweeterButtonOnPressed,
+      required this.instagramButtonOnPressed,
+      required this.discordButtonOnPressed,
+      required this.youtubeButtonOnPressed,
+      required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -51,20 +53,24 @@ class ProfileHeaderWidget extends StatelessWidget {
           ),
           const SpaceWidget(spaceHeight: 8),
           // Name
-          TextWidget(
-            text: name,
-            fontColor: AppColors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-          ),
+          isLoading
+              ? const ShimmerLoading(width: 200, height: 30)
+              : TextWidget(
+                  text: name,
+                  fontColor: AppColors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
+                ),
           const SpaceWidget(spaceHeight: 2),
           // Email
-          TextWidget(
-            text: email,
-            fontColor: AppColors.greyDarker,
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
-          ),
+          isLoading
+              ? const ShimmerLoading(width: 250, height: 20)
+              : TextWidget(
+                  text: email,
+                  fontColor: AppColors.greyDarker,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
           const SpaceWidget(spaceHeight: 16),
           // Balance and Withdraw Button
           Container(
@@ -87,11 +93,13 @@ class ProfileHeaderWidget extends StatelessWidget {
                       fontSize: 12,
                     ),
                     const SpaceWidget(spaceHeight: 2),
-                    GradientText(
-                      text: balance,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                    ),
+                    isLoading
+                        ? const ShimmerLoading(width: 100, height: 20)
+                        : GradientText(
+                            text: balance,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
                   ],
                 ),
                 ButtonWidget(

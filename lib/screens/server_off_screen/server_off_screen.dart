@@ -7,11 +7,15 @@ import 'package:the_leaderboard/widgets/text_widget/text_widgets.dart';
 class ServerOffScreen extends StatelessWidget {
   const ServerOffScreen({super.key});
 
+  Future refresh() async {
+    Get.back();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: () async => Get.back(),
+        onRefresh: refresh,
         child: const Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             TextWidget(

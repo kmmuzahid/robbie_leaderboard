@@ -71,139 +71,150 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           body: Obx(
-            () => SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SpaceWidget(spaceHeight: 16),
-                  controller.ismydataLoading.value
-                      ? const ProfileCardLoading()
-                      : ProfileCardWidget(
-                          profileImagePath: AppImagePath.profileImage,
-                          name: controller.name.value,
-                          rankNumber: controller.rank.value,
-                          totalRaisedAmount:
-                              "\$${controller.totalRaised.value}",
-                          totalSpentAmount: "\$${controller.totalSpent.value}",
-                          onViewProfilePressed: controller.viewMyProfile,
-                          onJoinLeaderboardPressed: () {
-                            Get.toNamed(AppRoutes.joinLeaderboard);
-                          },
-                          onSharePressed: () {
-                            // controller.sendData();
-                          },
-                        ),
-                  const SpaceWidget(spaceHeight: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: TextWidget(
-                      text: AppStrings.hallOfFame,
-                      fontColor: AppColors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
+            () => RefreshIndicator(
+              onRefresh: controller.fetchData,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SpaceWidget(spaceHeight: 16),
+                    controller.ismydataLoading.value
+                        ? const ProfileCardLoading()
+                        : ProfileCardWidget(
+                            profileImagePath: AppImagePath.profileImage,
+                            name: controller.name.value,
+                            rankNumber: controller.rank.value,
+                            totalRaisedAmount:
+                                "\$${controller.totalRaised.value}",
+                            totalSpentAmount:
+                                "\$${controller.totalSpent.value}",
+                            onViewProfilePressed: controller.viewMyProfile,
+                            onJoinLeaderboardPressed: () {
+                              Get.toNamed(AppRoutes.joinLeaderboard);
+                            },
+                            onSharePressed: () {
+                              // controller.sendData();
+                              Get.snackbar(
+                                  "This feature is not implemented yet",
+                                  "Please wait for the future update",
+                                  colorText: AppColors.white);
+                            },
+                          ),
+                    const SpaceWidget(spaceHeight: 16),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: TextWidget(
+                        text: AppStrings.hallOfFame,
+                        fontColor: AppColors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          controller.ishallofframeSinglePaymentLoading.value
-                              ? const HallOfFrameLoading()
-                              : HallOfFameCardWidget(
-                                  name: controller
-                                      .recoredSinglePayment.value!.name,
-                                  status:
-                                      "\$${controller.recoredSinglePayment.value!.totalInvested}",
-                                  imageUrl: '',
-                                  type: AppStrings.highestPayment,
-                                  title: AppStrings.recordSingle,
-                                ),
-                          controller.ishallofframeConsisntantTopLoading.value
-                              ? const HallOfFrameLoading()
-                              : HallOfFameCardWidget(
-                                  name: controller.consistantlyTop.value!.name,
-                                  status:
-                                      "Last ${controller.consistantlyTop.value!.timesRankedTop} Days",
-                                  imageUrl: '',
-                                  type: AppStrings.consecutively1st,
-                                  title: AppStrings.consistentlyTop,
-                                ),
-                          controller.ishallofframeMostEngagedLoading.value
-                              ? const HallOfFrameLoading()
-                              : HallOfFameCardWidget(
-                                  imageUrl:
-                                      controller.mostEngaged.value!.profileImg,
-                                  name: controller.mostEngaged.value!.name,
-                                  status:
-                                      "${controller.mostEngaged.value!.views} Views",
-                                  type: AppStrings.mostViewedProfile,
-                                  title: AppStrings.mostEngage,
-                                )
-                        ]),
-                  ),
-                  const SpaceWidget(spaceHeight: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: TextWidget(
-                      text: AppStrings.recentActivity,
-                      fontColor: AppColors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-                  LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      // Get screen height safely
-                      final screenHeight = MediaQuery.of(context).size.height;
-                      // Calculate a safe height value (190 or 25% of screen height)
-                      final containerHeight = screenHeight * 0.25;
-
-                      return Obx(
-                        () => Container(
-                            width: double.infinity,
-                            height: containerHeight,
-                            // Use safe height value
-                            padding: const EdgeInsets.all(12),
-                            margin: const EdgeInsets.symmetric(horizontal: 20),
-                            decoration: BoxDecoration(
-                              color: AppColors.blue,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: controller.recentActivity.isEmpty
-                                ? const Center(
-                                    child: TextWidget(
-                                      text: "There is no recent activity",
-                                      fontColor: AppColors.white,
-                                    ),
+                    const SpaceWidget(spaceHeight: 8),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            controller.ishallofframeSinglePaymentLoading.value
+                                ? const HallOfFrameLoading()
+                                : HallOfFameCardWidget(
+                                    name: controller
+                                        .recoredSinglePayment.value!.name,
+                                    status:
+                                        "\$${controller.recoredSinglePayment.value!.totalInvested}",
+                                    imageUrl: '',
+                                    type: AppStrings.highestPayment,
+                                    title: AppStrings.recordSingle,
+                                  ),
+                            controller.ishallofframeConsisntantTopLoading.value
+                                ? const HallOfFrameLoading()
+                                : HallOfFameCardWidget(
+                                    name:
+                                        controller.consistantlyTop.value!.name,
+                                    status:
+                                        "Last ${controller.consistantlyTop.value!.timesRankedTop} Days",
+                                    imageUrl: '',
+                                    type: AppStrings.consecutively1st,
+                                    title: AppStrings.consistentlyTop,
+                                  ),
+                            controller.ishallofframeMostEngagedLoading.value
+                                ? const HallOfFrameLoading()
+                                : HallOfFameCardWidget(
+                                    imageUrl: controller
+                                        .mostEngaged.value!.profileImg,
+                                    name: controller.mostEngaged.value!.name,
+                                    status:
+                                        "${controller.mostEngaged.value!.views} Views",
+                                    type: AppStrings.mostViewedProfile,
+                                    title: AppStrings.mostEngage,
                                   )
-                                : ListView.builder(
-                                    itemCount: controller.recentActivity.length,
-                                    itemBuilder: (context, index) {
-                                      return RecentActivityCardWidget(
-                                          action: controller
-                                              .recentActivity[index].title,
-                                          value: controller
-                                              .recentActivity[index].subTitle,
-                                          time: controller
-                                              .recentActivity[index].type);
-                                    })
-                            // StreamBuilder(stream: _controller.streamSocket.getResponse, builder: (context, snapshot) {
-                            //   if(snapshot.hasData){
-                            //     return ListView.builder(itemBuilder: (context, index) => RecentActivityCardWidget(action: snapshot.data[index], value: value, time: time),)
-                            //   }
-                            // },)
-                            ),
-                      );
-                    },
-                  ),
-                  const SpaceWidget(spaceHeight: 16),
-                ],
+                          ]),
+                    ),
+                    const SpaceWidget(spaceHeight: 16),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: TextWidget(
+                        text: AppStrings.recentActivity,
+                        fontColor: AppColors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SpaceWidget(spaceHeight: 8),
+                    LayoutBuilder(
+                      builder:
+                          (BuildContext context, BoxConstraints constraints) {
+                        // Get screen height safely
+                        final screenHeight = MediaQuery.of(context).size.height;
+                        // Calculate a safe height value (190 or 25% of screen height)
+                        final containerHeight = screenHeight * 0.25;
+
+                        return Obx(
+                          () => Container(
+                              width: double.infinity,
+                              height: containerHeight,
+                              // Use safe height value
+                              padding: const EdgeInsets.all(12),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              decoration: BoxDecoration(
+                                color: AppColors.blue,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: controller.recentActivity.isEmpty
+                                  ? const Center(
+                                      child: TextWidget(
+                                        text: "There is no recent activity",
+                                        fontColor: AppColors.white,
+                                      ),
+                                    )
+                                  : ListView.builder(
+                                      itemCount:
+                                          controller.recentActivity.length,
+                                      itemBuilder: (context, index) {
+                                        return RecentActivityCardWidget(
+                                            action: controller
+                                                .recentActivity[index].title,
+                                            value: controller
+                                                .recentActivity[index].subTitle,
+                                            time: controller
+                                                .recentActivity[index].type);
+                                      })
+                              // StreamBuilder(stream: _controller.streamSocket.getResponse, builder: (context, snapshot) {
+                              //   if(snapshot.hasData){
+                              //     return ListView.builder(itemBuilder: (context, index) => RecentActivityCardWidget(action: snapshot.data[index], value: value, time: time),)
+                              //   }
+                              // },)
+                              ),
+                        );
+                      },
+                    ),
+                    const SpaceWidget(spaceHeight: 16),
+                  ],
+                ),
               ),
             ),
           ),

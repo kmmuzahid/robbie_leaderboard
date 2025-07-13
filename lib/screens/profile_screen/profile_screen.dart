@@ -68,86 +68,86 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           body: Obx(
-            () => controller.isLoading.value
-                ? const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  )
-                : SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Profile Header
-                          ProfileHeaderWidget(
-                            image: AppImagePath.profileImage,
-                            name: controller.name.value,
-                            email: controller.email.value,
-                            balance: "\$${controller.totalBalance.value}",
-                            withdrawButtonOnPressed: controller.withdrawAmount,
-                            tweeterButtonOnPressed: () {
-                              launchUrl(Uri.parse(AppUrls.twitterUrl),
-                                  mode: LaunchMode.externalApplication);
-                            },
-                            instagramButtonOnPressed: () {
-                              launchUrl(Uri.parse(AppUrls.instagramUrl),
-                                  mode: LaunchMode.externalApplication);
-                            },
-                            discordButtonOnPressed: () {
-                              launchUrl(Uri.parse(AppUrls.discordUrl),
-                                  mode: LaunchMode.externalApplication);
-                            },
-                            youtubeButtonOnPressed: () {
-                              launchUrl(Uri.parse(AppUrls.youtubeUrl),
-                                  mode: LaunchMode.externalApplication);
-                            },
-                          ),
-
-                          const SpaceWidget(spaceHeight: 16),
-
-                          // Affiliate Status
-                          AffiliateStatusWidget(
-                            totalRaisedValue:
-                                "\$${controller.totalSpent.value}",
-                            positionValue: "Top ${controller.rank.value}%",
-                            profileViewValue: controller.totalViews.value,
-                            iconButtonOnTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Creator Code copied!")),
-                              );
-                            },
-                            codeNumber: controller.creatorCode.value,
-                          ),
-
-                          const SpaceWidget(spaceHeight: 16),
-
-                          // View Settings Button
-                          ButtonWidget(
-                            onPressed: () {
-                              Get.toNamed(AppRoutes.settingsScreen);
-                            },
-                            label: "View Settings",
-                            buttonWidth: double.infinity,
-                          ),
-
-                          const SpaceWidget(spaceHeight: 12),
-
-                          // Logout Button
-                          ButtonWidget(
-                            onPressed: controller.logout,
-                            label: "Logout",
-                            buttonWidth: double.infinity,
-                            backgroundColor: AppColors.blueDark,
-                            borderColor: AppColors.blueLighter,
-                            textColor: AppColors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ],
+            () => RefreshIndicator(
+              onRefresh: controller.fetchProfile,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Profile Header
+                      ProfileHeaderWidget(
+                        isLoading: controller.isLoading.value,
+                        image: AppImagePath.profileImage,
+                        name: controller.name.value,
+                        email: controller.email.value,
+                        balance: "\$${controller.totalBalance.value}",
+                        withdrawButtonOnPressed: controller.withdrawAmount,
+                        tweeterButtonOnPressed: () {
+                          launchUrl(Uri.parse(AppUrls.twitterUrl),
+                              mode: LaunchMode.externalApplication);
+                        },
+                        instagramButtonOnPressed: () {
+                          launchUrl(Uri.parse(AppUrls.instagramUrl),
+                              mode: LaunchMode.externalApplication);
+                        },
+                        discordButtonOnPressed: () {
+                          launchUrl(Uri.parse(AppUrls.discordUrl),
+                              mode: LaunchMode.externalApplication);
+                        },
+                        youtubeButtonOnPressed: () {
+                          launchUrl(Uri.parse(AppUrls.youtubeUrl),
+                              mode: LaunchMode.externalApplication);
+                        },
                       ),
-                    ),
+
+                      const SpaceWidget(spaceHeight: 16),
+
+                      // Affiliate Status
+                      AffiliateStatusWidget(
+                        isLoading: controller.isLoading.value,
+                        totalRaisedValue: "\$${controller.totalSpent.value}",
+                        positionValue: "Top ${controller.rank.value}%",
+                        profileViewValue: controller.totalViews.value,
+                        iconButtonOnTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Creator Code copied!")),
+                          );
+                        },
+                        codeNumber: controller.creatorCode.value,
+                      ),
+
+                      const SpaceWidget(spaceHeight: 16),
+
+                      // View Settings Button
+                      ButtonWidget(
+                        onPressed: () {
+                          Get.toNamed(AppRoutes.settingsScreen);
+                        },
+                        label: "View Settings",
+                        buttonWidth: double.infinity,
+                      ),
+
+                      const SpaceWidget(spaceHeight: 12),
+
+                      // Logout Button
+                      ButtonWidget(
+                        onPressed: controller.logout,
+                        label: "Logout",
+                        buttonWidth: double.infinity,
+                        backgroundColor: AppColors.blueDark,
+                        borderColor: AppColors.blueLighter,
+                        textColor: AppColors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ],
                   ),
+                ),
+              ),
+            ),
           ),
         ),
       ),

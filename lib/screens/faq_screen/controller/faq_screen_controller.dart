@@ -32,4 +32,11 @@ class FaqScreenController extends GetxController {
       errorLog("Failed", e);
     }
   }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    fetchData();
+  }
 }

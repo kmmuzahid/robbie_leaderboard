@@ -82,7 +82,7 @@ class RewardsScreenController extends GetxController {
     return;
   }
 
-  void fetchData() async {
+  Future fetchData() async {
     fetchRuffle();
     fetchUserTicket();
     totalTicket.value = LocalStorage.totalTicket;

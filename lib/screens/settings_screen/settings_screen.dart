@@ -11,7 +11,7 @@ import '../../widgets/space_widget/space_widget.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion(
@@ -65,7 +65,11 @@ class SettingsScreen extends StatelessWidget {
               SettingsItemWidget(
                 title: "Payment Method",
                 icon: AppIconPath.paymentIcon,
-                onTap: () {},
+                onTap: () {
+                  Get.snackbar("Payment method is not set yet",
+                      "Please wait for the future update",
+                      colorText: AppColors.white);
+                },
               ),
               const SpaceWidget(spaceHeight: 8),
               // Change Password

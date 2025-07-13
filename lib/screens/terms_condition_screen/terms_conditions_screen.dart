@@ -36,6 +36,11 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
                 title: "Terms & Conditions", centerTitle: true),
             body: Obx(
               () {
+                if (_controller.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
                 final data = _controller.termAndCondition.value;
                 if (data.isEmpty) {
                   return const Center(
