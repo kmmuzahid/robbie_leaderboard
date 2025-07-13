@@ -8,6 +8,7 @@ import 'package:path/path.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 
 class ApiPatchService {
   static Future<void> updateProfile(
@@ -17,7 +18,6 @@ class ApiPatchService {
     String? city,
     String? gender,
     String? age,
-    String? role,
   ) async {
     final url = "${AppUrls.updateUser}/${LocalStorage.userId}";
 
@@ -30,28 +30,30 @@ class ApiPatchService {
       if (city != null) updateData['city'] = city;
       if (gender != null) updateData['gender'] = gender;
       if (age != null) updateData['age'] = age;
-      if (role != null) updateData['role'] = role;
 
       if (updateData.isEmpty) {
         Get.snackbar("Info", "No data to update");
         return;
       }
-
+      appLog(jsonEncode(updateData));
       final response = await http.patch(
         Uri.parse(url),
         headers: {
+           'Content-Type': 'application/json',
           'authorization': LocalStorage.token,
         },
         body: jsonEncode(updateData),
       );
       final jsonbody = jsonDecode(response.body);
-      if (response.statusCode == 200 || response.statusCode == 204) {       
-        Get.snackbar("Success", jsonbody["message"], colorText: AppColors.white);
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        Get.snackbar("Success", jsonbody["message"],
+            colorText: AppColors.white);
       } else {
         Get.snackbar("Error", jsonbody["message"], colorText: AppColors.white);
       }
     } catch (e) {
-      Get.snackbar("Error", "Something went wrong: $e", colorText: AppColors.white);
+      Get.snackbar("Error", "Something went wrong: $e",
+          colorText: AppColors.white);
     }
   }
 
@@ -82,7 +84,8 @@ class ApiPatchService {
 
       final jsonbody = response.data;
       if (response.statusCode == 200 || response.statusCode == 204) {
-        Get.snackbar("Success", jsonbody["message"], colorText: AppColors.white);
+        Get.snackbar("Success", jsonbody["message"],
+            colorText: AppColors.white);
       } else {
         Get.snackbar("Error", jsonbody["message"], colorText: AppColors.white);
       }

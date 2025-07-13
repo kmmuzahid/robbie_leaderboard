@@ -49,26 +49,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fit: BoxFit.contain,
               ),
             ),
-            action: IconButton(
-              tooltip: "Notifications",
-              onPressed: () {
-                LocalStorage.numberOfNotification = 0;
-                LocalStorage.setInt(LocalStorageKeys.numberOfNotification, 0);
-                Get.toNamed(AppRoutes.notificationsScreen);
-              },
-              icon: Badge(
-                isLabelVisible: true,
-                label: Text(LocalStorage.numberOfNotification == 0
-                    ? ""
-                    : LocalStorage.numberOfNotification.toString()),
-                backgroundColor: LocalStorage.numberOfNotification == 0
-                    ? AppColors.transparent
-                    : AppColors.red,
-                child: const IconWidget(
-                  icon: AppIconPath.notificationIcon,
-                  width: 24,
-                  height: 24,
-                  color: AppColors.white,
+            action: Obx(
+              () => IconButton(
+                tooltip: "Notifications",
+                onPressed: () {                  
+                  controller.notificationNumber.value = 0;
+                  LocalStorage.numberOfNotification = 0;
+                  LocalStorage.setInt(LocalStorageKeys.numberOfNotification, 0);
+                  Get.toNamed(AppRoutes.notificationsScreen);
+                },
+                icon: Badge(
+                  isLabelVisible: controller.notificationNumber.value != 0,
+                  label: Text(controller.notificationNumber.value.toString()),
+                  backgroundColor: AppColors.red,
+                  child: const IconWidget(
+                    icon: AppIconPath.notificationIcon,
+                    width: 24,
+                    height: 24,
+                    color: AppColors.white,
+                  ),
                 ),
               ),
             ),

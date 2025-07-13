@@ -19,8 +19,9 @@ class AppRoutes {
   static const reportProblemsScreen = '/reportProblemsScreen';
   static const verifyOtpScreen = '/verify_otp_screen';
   static const changePasswordScreen = '/change_password_screen';
-  static const profileScreen = '/profile_screen';
   static const withdrawAmountScreen = '/withdraw_amount_screen';
   static const appNavigation = "/app-naviagation";
   static const joinLeaderboard = "/joinLeaderboard";
+  static const serverOff = "/server_off";
+  static const accountDelete = "/account_delete";
 }

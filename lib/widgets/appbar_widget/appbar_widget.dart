@@ -30,7 +30,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     ResponsiveUtils.initialize(context);
     return AppBar(
-      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      systemOverlayStyle: SystemUiOverlayStyle.light,
       flexibleSpace: Container(color: backgroundColor ?? AppColors.blueDark),
       //titleSpacing: showLeading ? 1 : -35,
       leading: (leading ??

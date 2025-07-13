@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
-import 'package:the_leaderboard/screens/settings_screen/controller/setting_controller.dart';
 import 'package:the_leaderboard/screens/settings_screen/widgets/settings_item_widget.dart';
 
 import '../../constants/app_colors.dart';
@@ -12,9 +10,8 @@ import '../../widgets/appbar_widget/appbar_widget.dart';
 import '../../widgets/space_widget/space_widget.dart';
 
 class SettingsScreen extends StatelessWidget {
-  SettingsScreen({super.key});
-  final _controller = Get.put(SettingController());
-
+  const SettingsScreen({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion(
@@ -85,25 +82,7 @@ class SettingsScreen extends StatelessWidget {
                 title: "Delete account",
                 icon: AppIconPath.deleteIcon,
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog.adaptive(
-                      icon: const Icon(Icons.warning),
-                      iconColor: AppColors.red,
-                      content: const Text(
-                          "Do you really want to delete your account?"),
-                      actions: [
-                        TextButton(
-                            onPressed: () => _controller.deleteUser(),
-                            child: const Text("Yes")),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text("No")),
-                      ],
-                    ),
-                  );
+                  Get.toNamed(AppRoutes.accountDelete);
                 },
               ),
             ],

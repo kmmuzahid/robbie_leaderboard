@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,7 +6,10 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
+import 'package:the_leaderboard/models/profile_model.dart';
 import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
+import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_patch_service.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
@@ -13,9 +17,8 @@ class EditProfileController extends GetxController {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
-  final TextEditingController roleController = TextEditingController();
   final Rx<File?> selectedImage = Rx<File?>(null);
-
+  final RxBool isLoading = true.obs;
   // Image picker instance
   final ImagePicker _picker = ImagePicker();
 
@@ -29,17 +32,17 @@ class EditProfileController extends GetxController {
     selectedCountry.value = value;
     cities = findCity(value);
     selectedCity.value = cities.first;
-    appLog("Country updated");
+    appLog("Country updated $value");
   }
 
   void updateCity(String value) {
     selectedCity.value = value;
-    appLog("City updated");
+    appLog("City updated $value");
   }
 
   void updateGender(String value) {
     selectedGender.value = value;
-    appLog("Gender updated");
+    appLog("Gender updated $value");
   }
 
   List<String> findCity(String country) {
@@ -70,9 +73,10 @@ class EditProfileController extends GetxController {
           selectedCountry.value,
           selectedCity.value,
           selectedGender.value,
-          ageController.text,
-          roleController.text);
-      await ApiPatchService.updateProfileImage(selectedImage.value);
+          ageController.text);
+      if (selectedImage.value != null) {
+        await ApiPatchService.updateProfileImage(selectedImage.value);
+      }
       Get.offAll(const BottomNav());
       appLog("Succeed");
     } catch (e) {
@@ -83,6 +87,34 @@ class EditProfileController extends GetxController {
     }
   }
 
+  void fetchProfile() async {
+    isLoading.value = true;
+    final response = await ApiGetService.apiGetService(AppUrls.profile);
+    isLoading.value = false;
+    if (response != null) {
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final userData = ProfileResponseModel.fromJson(data["data"]).user;
+        if (userData != null) {
+          usernameController.text = userData.name;
+          contactController.text = userData.contact;
+          selectedGender.value = userData.gender;
+          ageController.text = userData.age;
+          updateCountry(userData.country);
+          updateCity(userData.city);
+          appLog(userData.city);
+        }
+      }
+    }
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    fetchProfile();
+  }
+
   @override
   void onClose() {
     // TODO: implement onClose
@@ -90,6 +122,5 @@ class EditProfileController extends GetxController {
     usernameController.dispose();
     contactController.dispose();
     ageController.dispose();
-    roleController.dispose();
   }
 }

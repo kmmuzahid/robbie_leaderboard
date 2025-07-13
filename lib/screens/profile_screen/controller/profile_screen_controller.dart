@@ -19,7 +19,7 @@ class ProfileScreenController extends GetxController {
   final RxString creatorCode = ''.obs;
   final RxString rank = ''.obs;
   final RxBool isLoading = true.obs;
-
+  final RxInt notificationNumber = LocalStorage.numberOfNotification.obs;
   void fetchProfile() async {
     try {
       appLog("Profile data is fetching");
@@ -38,7 +38,7 @@ class ProfileScreenController extends GetxController {
           creatorCode.value = profile.userCode;
           rank.value = profile.rank.toString();
           LocalStorage.userId = profile.id;
-          appLog("user id: ${profile.id} and token: ${LocalStorage.token}");          
+          appLog("user id: ${profile.id} and token: ${LocalStorage.token}");
         } else {
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }

@@ -10,8 +10,8 @@ class ShimmerLoading extends StatelessWidget {
       this.margin = const EdgeInsetsGeometry.all(8),
       this.padding = const EdgeInsets.all(8),
       this.decoration = const BoxDecoration(
-        color: AppColors.black,
-      )});
+          color: AppColors.black,
+          borderRadius: BorderRadius.all(Radius.circular(8)))});
   final double width;
   final double height;
   final EdgeInsetsGeometry margin;

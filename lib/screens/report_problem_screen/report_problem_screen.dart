@@ -26,7 +26,7 @@ class _ReportProblemsScreenState extends State<ReportProblemsScreen> {
       ),
       child: Scaffold(
         backgroundColor: AppColors.blueDark,
-        appBar: const AppbarWidget(title: "Report Problems", centerTitle: true),
+        appBar: const AppbarWidget(title: "Report Problem", centerTitle: true),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),

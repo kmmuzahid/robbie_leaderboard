@@ -28,7 +28,7 @@ class HomeAppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      systemOverlayStyle: SystemUiOverlayStyle.light,
       flexibleSpace: Container(color: backgroundColor ?? AppColors.blueDark),
       //titleSpacing: showLeading ? 1 : -35,
       leading: (leading ??

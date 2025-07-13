@@ -91,6 +91,11 @@ class RegisterScreenController extends GetxController {
           colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
       return;
     }
+    if (!(contact.length == 11)) {
+      Get.snackbar(
+          "Invalid phone number", "Phone number should be 11 characters");
+      return;
+    }
     appLog(
         "User is registering with $email, $password, $name, $country, $city, $gender, $age and $contact");
     final profile = RegisterModel(

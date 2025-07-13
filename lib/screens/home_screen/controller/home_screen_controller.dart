@@ -9,6 +9,7 @@ import 'package:the_leaderboard/models/hall_of_frame_most_engaged_model.dart';
 import 'package:the_leaderboard/models/profile_model.dart';
 import 'package:the_leaderboard/models/recent_activity_receive_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
+import 'package:the_leaderboard/screens/bottom_nav/controller/bottom_nav_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/socket/socket_service.dart';
 import 'package:the_leaderboard/services/storage/storage_keys.dart';
@@ -35,7 +36,8 @@ class HomeScreenController extends GetxController {
 
   final RxList<RecentActivityReceiveModel> recentActivity =
       <RecentActivityReceiveModel>[].obs;
-  final RxInt notificationNumber = 0.obs;
+  final RxInt notificationNumber = LocalStorage.numberOfNotification.obs;
+  
   void sendData() {
     SocketService.instance.sendInvest("Aurnab 420", 200);
   }
@@ -44,10 +46,10 @@ class HomeScreenController extends GetxController {
     SocketService.instance.onNewInvestMessageReceived((p0) {
       recentActivity.insert(0, p0);
       //all for notification
-      notificationNumber.value = recentActivity.length;
-      LocalStorage.numberOfNotification = recentActivity.length;
+      notificationNumber.value += recentActivity.length;
+      LocalStorage.numberOfNotification = notificationNumber.value;
       LocalStorage.setInt(
-          LocalStorageKeys.numberOfNotification, recentActivity.length);
+          LocalStorageKeys.numberOfNotification, notificationNumber.value);
       appLog("recentActivity.length --> ${recentActivity.length}");
     });
   }
@@ -61,7 +63,8 @@ class HomeScreenController extends GetxController {
   }
 
   void viewMyProfile() {
-    Get.toNamed(AppRoutes.profileScreen);
+    final profileTab = Get.find<BottomNavController>();
+    profileTab.changeIndex(3);
   }
 
   void fetchHomeData() async {
@@ -83,6 +86,8 @@ class HomeScreenController extends GetxController {
         } else {
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }
+      } else {
+        Get.toNamed(AppRoutes.serverOff);
       }
     } catch (e) {
       errorLog("fetchHomeData", e);

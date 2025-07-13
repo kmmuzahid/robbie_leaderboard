@@ -7,12 +7,16 @@ import 'main_app_entry.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    // statusBarIconBrightness:
+    //     Brightness.light, // dark icons for light background
+    // statusBarBrightness: Brightness.light,
+  ));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // await GetStorage.init();
-  
+
   // runApp(
   //   DevicePreview(
   //     enabled: !kReleaseMode,

@@ -26,6 +26,7 @@ class RewardsScreenController extends GetxController {
   final RxString today = ''.obs;
   final RxInt totalTicket = 0.obs;
 
+  final RxInt notificationNumber = LocalStorage.numberOfNotification.obs;
   void fetchRuffle() async {
     try {
       appLog("fetching ruffle");
@@ -137,7 +138,8 @@ class RewardsScreenController extends GetxController {
       final random =
           math.Random().nextInt(currentRuffle.value!.ticketButtons.length);
       currentWheelIndex.value = random;
-      wheelController.animateToItem(random,
+      final totalItem = random + currentRuffle.value!.ticketButtons.length * 4;
+      wheelController.animateToItem(totalItem,
           duration: const Duration(seconds: 3), curve: Curves.fastOutSlowIn);
       dayIndex.value++;
       LocalStorage.setString(LocalStorageKeys.lastWheelday, today);

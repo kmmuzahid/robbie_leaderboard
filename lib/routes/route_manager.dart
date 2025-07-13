@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
+import 'package:the_leaderboard/screens/account_delete_screen/account_delete_screen.dart';
 import 'package:the_leaderboard/screens/auth_screens/verify_otp_screen/verify_otp_screen.dart';
 import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
 import 'package:the_leaderboard/screens/change_password_screen/change_password_screen.dart';
 import 'package:the_leaderboard/screens/join_leaderboard_screen/join_leaderboard_screen.dart';
 import 'package:the_leaderboard/screens/profile_screen/profile_screen.dart';
+import 'package:the_leaderboard/screens/server_off_screen/server_off_screen.dart';
 import 'package:the_leaderboard/screens/withdraw_amount_screen/withdraw_amount_screen.dart';
 
 import '../screens/auth_screens/create_new_password_screen/create_new_password_screen.dart';
@@ -132,13 +134,7 @@ class RouteManager {
         page: () => const ChangePasswordScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
-      ),
-      GetPage(
-        name: AppRoutes.profileScreen,
-        page: () => const ProfileScreen(),
-        transition: Transition.fadeIn,
-        // binding: GeneralBindings(),
-      ),
+      ),     
       GetPage(
         name: AppRoutes.withdrawAmountScreen,
         page: () => const WithdrawAmountScreen(),
@@ -155,6 +151,18 @@ class RouteManager {
       GetPage(
         name: AppRoutes.joinLeaderboard,
         page: () => const JoinLeaderboardScreen(),
+        transition: Transition.fadeIn,
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.serverOff,
+        page: () => const ServerOffScreen(),
+        transition: Transition.fadeIn,
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.accountDelete,
+        page: () => const AccountDeleteScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),
