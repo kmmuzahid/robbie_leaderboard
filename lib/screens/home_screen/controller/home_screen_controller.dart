@@ -10,11 +10,8 @@ import 'package:the_leaderboard/models/profile_model.dart';
 import 'package:the_leaderboard/models/recent_activity_receive_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/bottom_nav/controller/bottom_nav_controller.dart';
-import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/socket/socket_service.dart';
-import 'package:the_leaderboard/services/storage/storage_keys.dart';
-import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
 class HomeScreenController extends GetxController {
@@ -22,7 +19,7 @@ class HomeScreenController extends GetxController {
   final RxString totalRaised = ''.obs;
   final RxString totalSpent = ''.obs;
   final RxInt rank = 0.obs;
-
+  final RxString image = "".obs;
   final Rxn<HallOfFameSinglePaymentModel> recoredSinglePayment =
       Rxn<HallOfFameSinglePaymentModel>();
   final Rxn<HallOfFrameConsisntantlyTopModel> consistantlyTop =
@@ -38,18 +35,17 @@ class HomeScreenController extends GetxController {
   final RxList<RecentActivityReceiveModel> recentActivity =
       <RecentActivityReceiveModel>[].obs;
 
-
   void sendData() {
     SocketService.instance.sendInvest("Aurnab 420", 200);
   }
 
   void receiveData() {
     SocketService.instance.onNewInvestMessageReceived((p0) {
-      recentActivity.insert(0, p0);     
+      recentActivity.insert(0, p0);
     });
   }
 
-  Future fetchData() async {   
+  Future fetchData() async {
     fetchHomeData();
     fetchHallofFrameSinglePayment();
     fetchHallofFrameConsistantlyTop();
@@ -76,6 +72,7 @@ class HomeScreenController extends GetxController {
           totalRaised.value = userData?.totalRaised.toString() ?? "";
           totalSpent.value = userData?.totalInvest.toString() ?? "";
           rank.value = userData?.rank ?? 0;
+          image.value = userData?.profileImg ?? "";
           return;
         } else {
           Get.snackbar("Error", data["message"], colorText: AppColors.white);

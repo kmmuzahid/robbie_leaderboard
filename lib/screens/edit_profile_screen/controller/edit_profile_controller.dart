@@ -18,6 +18,7 @@ class EditProfileController extends GetxController {
   final TextEditingController contactController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final Rx<File?> selectedImage = Rx<File?>(null);
+  final RxString userImage = "".obs;
   final RxBool isLoading = true.obs;
   // Image picker instance
   final ImagePicker _picker = ImagePicker();
@@ -66,6 +67,13 @@ class EditProfileController extends GetxController {
 
   void saveChange() async {
     appLog("Changes are saving");
+    if (contactController.text.isNotEmpty &&
+        contactController.text.length != 11) {
+      Get.snackbar(
+          "Invalid phone number", "Phone number should be 11 characters",
+          colorText: AppColors.white);
+      return;
+    }
     try {
       await ApiPatchService.updateProfile(
           usernameController.text,
@@ -96,6 +104,7 @@ class EditProfileController extends GetxController {
       if (response.statusCode == 200) {
         final userData = ProfileResponseModel.fromJson(data["data"]).user;
         if (userData != null) {
+          userImage.value = userData.profileImg;
           usernameController.text = userData.name;
           contactController.text = userData.contact;
           selectedGender.value = userData.gender;

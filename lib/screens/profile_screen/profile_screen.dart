@@ -79,8 +79,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       // Profile Header
                       ProfileHeaderWidget(
+                        fromNetwork: controller.image.value.isNotEmpty,
                         isLoading: controller.isLoading.value,
-                        image: AppImagePath.profileImage,
+                        image: controller.image.value.isNotEmpty
+                            ? "${AppUrls.mainUrl}${controller.image.value}"
+                            : AppImagePath.profileImage,
                         name: controller.name.value,
                         email: controller.email.value,
                         balance: "\$${controller.totalBalance.value}",

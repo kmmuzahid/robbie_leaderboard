@@ -13,7 +13,7 @@ class ReportProblemController extends GetxController {
 
   void sendMessage() async {
     if (textController.text.isEmpty) {
-      Get.snackbar("You havn't write anything", "Please tell us your problem",
+      Get.snackbar("You havn't written anything", "Please tell us your problem",
           colorText: AppColors.white);
       return;
     }

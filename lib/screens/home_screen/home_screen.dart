@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_strings.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/home_screen/controller/home_screen_controller.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/hall_of_fame_card_widget.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/hall_of_frame_loading.dart';
@@ -81,7 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     controller.ismydataLoading.value
                         ? const ProfileCardLoading()
                         : ProfileCardWidget(
-                            profileImagePath: AppImagePath.profileImage,
+                            fromNetwork: controller.image.value.isNotEmpty,
+                            profileImagePath: controller.image.value.isEmpty
+                                ? AppImagePath.profileImage
+                                : "${AppUrls.mainUrl}${controller.image.value}",
                             name: controller.name.value,
                             rankNumber: controller.rank.value,
                             totalRaisedAmount:

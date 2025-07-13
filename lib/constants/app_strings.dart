@@ -24,9 +24,9 @@ class AppStrings {
   static const String register = "Register";
   static const String or = "or";
   static const String alreadyHaveAnAccount = "Already have an account? ";
-  static const String name = "Name";   
+  static const String name = "Name";
   static const String contact = "Contact";
-
+  static const String referral = "Inviter Code";
 
   // Login Screen
   static const String welcome = "Welcome Back !";

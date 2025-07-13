@@ -16,18 +16,29 @@ class ServerOffScreen extends StatelessWidget {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: refresh,
-        child: const Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            TextWidget(
-              text: "Opps! Sorry,",
-              fontColor: AppColors.black,
-              fontSize: 30,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Container(
+            color: AppColors.blue,
+            height: MediaQuery.of(context).size.height, 
+            child: const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextWidget(
+                    text: "Oops! Sorry,",
+                    fontColor: AppColors.white,
+                    fontSize: 30,
+                  ),
+                  TextWidget(
+                    text: "Server is now under maintenance",
+                    fontColor: AppColors.white,
+                  ),
+                ],
+              ),
             ),
-            TextWidget(
-              text: "Server is now undermaintanence",
-              fontColor: AppColors.black,
-            ),
-          ]),
+          ),
         ),
       ),
     );

@@ -64,7 +64,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       child: Transform.translate(
                         offset: Offset.zero,
                         child: TopRankedItem(
-                            fromOnline: _controller.leaderBoardList[1]!.profileImg != "Unknown",
+                            fromOnline:
+                                _controller.leaderBoardList[1]!.profileImg !=
+                                    "Unknown",
                             rankLabel: _controller
                                 .leaderBoardList[1]!.currentRank
                                 .toString(),
@@ -73,7 +75,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                                 "\$${_controller.leaderBoardList[1]!.totalInvest}",
                             image: _controller.leaderBoardList[1]!.profileImg !=
                                     "Unknown"
-                                ? "${AppUrls.mainUrl}${_controller.leaderBoardList[1]!.profileImg}"
+                                ? _controller.leaderBoardList[1]!.profileImg
                                 : AppImagePath.profileImage,
                             rankColor: AppColors.greyDark,
                             avatarSize: 40),
@@ -87,7 +89,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                     child: Transform.translate(
                       offset: const Offset(0, -10),
                       child: TopRankedItem(
-                        fromOnline: _controller.leaderBoardList[0]!.profileImg != "Unknown",
+                          fromOnline:
+                              _controller.leaderBoardList[0]!.profileImg !=
+                                  "Unknown",
                           rankLabel: _controller.leaderBoardList[0]!.currentRank
                               .toString(),
                           name: _controller.leaderBoardList[0]!.name,
@@ -109,7 +113,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                     child: Transform.translate(
                       offset: Offset.zero,
                       child: TopRankedItem(
-                        fromOnline: _controller.leaderBoardList[2]!.profileImg != "Unknown",
+                          fromOnline:
+                              _controller.leaderBoardList[2]!.profileImg !=
+                                  "Unknown",
                           rankLabel: _controller.leaderBoardList[2]!.currentRank
                               .toString(),
                           name: _controller.leaderBoardList[2]!.name,

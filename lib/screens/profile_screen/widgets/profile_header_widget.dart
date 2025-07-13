@@ -20,6 +20,7 @@ class ProfileHeaderWidget extends StatelessWidget {
   final VoidCallback discordButtonOnPressed;
   final VoidCallback youtubeButtonOnPressed;
   final bool isLoading;
+  final bool fromNetwork;
 
   const ProfileHeaderWidget(
       {super.key,
@@ -32,7 +33,8 @@ class ProfileHeaderWidget extends StatelessWidget {
       required this.instagramButtonOnPressed,
       required this.discordButtonOnPressed,
       required this.youtubeButtonOnPressed,
-      required this.isLoading});
+      required this.isLoading,
+      required this.fromNetwork});
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +52,7 @@ class ProfileHeaderWidget extends StatelessWidget {
             height: 60,
             width: 60,
             imagePath: image,
+            fromNetwork: fromNetwork,
           ),
           const SpaceWidget(spaceHeight: 8),
           // Name

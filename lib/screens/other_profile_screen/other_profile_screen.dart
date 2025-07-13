@@ -38,34 +38,9 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
       ),
       child: Scaffold(
         backgroundColor: AppColors.blueDark,
-        appBar: AppbarWidget(
-          title: AppStrings.theLeaderboard,
-          leading: const Padding(
-            padding: EdgeInsets.only(left: 16, bottom: 8),
-            child: ImageWidget(
-              height: 20,
-              width: 20,
-              imagePath: AppImagePath.crownImage,
-              fit: BoxFit.contain,
-            ),
-          ),
-          action: IconButton(
-            tooltip: "Notifications",
-            onPressed: () {
-              Get.toNamed(AppRoutes.notificationsScreen);
-            },
-            icon: const Badge(
-              isLabelVisible: true,
-              label: Text('3'),
-              backgroundColor: AppColors.red,
-              child: IconWidget(
-                icon: AppIconPath.notificationIcon,
-                width: 24,
-                height: 24,
-                color: AppColors.white,
-              ),
-            ),
-          ),
+        appBar: const AppbarWidget(
+          title: "Profile",
+          centerTitle: true,
         ),
         body: Obx(
           () => _controller.isLoading.value

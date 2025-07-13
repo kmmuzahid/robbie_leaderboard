@@ -17,8 +17,12 @@ class ProfileResponseModel {
 
   factory ProfileResponseModel.fromJson(Map<String, dynamic> json) {
     return ProfileResponseModel(
-      user:json['user'] != null && json['user'] is Map ? ProfileUserModel.fromJson(json['user']) : null,
-      investments:json['investments'] != null && json['investments'] is List ? json['investments'] : [],
+      user: json['user'] != null && json['user'] is Map
+          ? ProfileUserModel.fromJson(json['user'])
+          : null,
+      investments: json['investments'] != null && json['investments'] is List
+          ? json['investments']
+          : [],
       totalInvest: json['totalInvest'] ?? 0,
       raisedBonuses: json['raisedBonuses'] ?? [],
       totalRaised: json['totalRaised'] ?? 0,
@@ -65,6 +69,7 @@ class ProfileUserModel {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int v;
+  final String profileImg;
 
   ProfileUserModel({
     required this.id,
@@ -93,6 +98,7 @@ class ProfileUserModel {
     required this.createdAt,
     required this.updatedAt,
     required this.v,
+    this.profileImg = ""
   });
 
   factory ProfileUserModel.fromJson(Map<String, dynamic> json) {
@@ -123,6 +129,7 @@ class ProfileUserModel {
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
       v: json['__v'],
+      profileImg: json['profileImg'] ?? ""
     );
   }
 

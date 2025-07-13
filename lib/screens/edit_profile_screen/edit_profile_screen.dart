@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/edit_profile_screen/controller/edit_profile_controller.dart';
 import 'package:the_leaderboard/screens/edit_profile_screen/widgets/dropdown_button_widget.dart';
 import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
@@ -24,11 +25,10 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  Widget _buildTextField({
-    required String label,
-    required TextEditingController controller,
-    required EditProfileController profileController
-  }) {
+  Widget _buildTextField(
+      {required String label,
+      required TextEditingController controller,
+      required EditProfileController profileController}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -39,20 +39,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           fontSize: 14,
         ),
         const SpaceWidget(spaceHeight: 8),
-        profileController.isLoading.value? const ShimmerLoading(width: double.infinity, height: 55):
-        TextField(
-          controller: controller,
-          style: const TextStyle(color: AppColors.white),
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: AppColors.blue,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: const EdgeInsets.all(16),
-          ),
-        ),
+        profileController.isLoading.value
+            ? const ShimmerLoading(width: double.infinity, height: 55)
+            : TextField(
+                controller: controller,
+                style: const TextStyle(color: AppColors.white),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.blue,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.all(16),
+                ),
+              ),
       ],
     );
   }
@@ -61,7 +62,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       {required String label,
       required String value,
       required List<String> items,
-       required EditProfileController profileController,
+      required EditProfileController profileController,
       required void Function(String?) onChanged}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,8 +74,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           fontSize: 14,
         ),
         const SpaceWidget(spaceHeight: 8),
-        profileController.isLoading.value? const ShimmerLoading(width: double.infinity, height: 55):
-        DropdownButtonWidget(value: value, items: items, onChanged: onChanged)
+        profileController.isLoading.value
+            ? const ShimmerLoading(width: double.infinity, height: 55)
+            : DropdownButtonWidget(
+                value: value, items: items, onChanged: onChanged)
       ],
     );
   }
@@ -118,10 +121,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   width: 80,
                                   height: 80,
                                 )
-                              : const ImageWidget(
+                              : ImageWidget(
+                                  fromNetwork:
+                                      controller.userImage.value.isNotEmpty,
                                   height: 80,
                                   width: 80,
-                                  imagePath: AppImagePath.profileImage,
+                                  imagePath: controller
+                                          .userImage.value.isNotEmpty
+                                      ? "${AppUrls.mainUrl}${controller.userImage.value}"
+                                      : AppImagePath.profileImage,
                                 ),
                         ),
                       ),
@@ -143,43 +151,42 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                   // Username
                   _buildTextField(
-                    label: "Username",
-                    controller: controller.usernameController,
-                    profileController: controller
-                  ),
+                      label: "Username",
+                      controller: controller.usernameController,
+                      profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
                   _buildTextField(
-                    label: "Contact",
-                    controller: controller.contactController, profileController: controller
-                  ),
+                      label: "Contact",
+                      controller: controller.contactController,
+                      profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
                   _buildDropdownField(
-                    label: "Gender",
-                    value: controller.selectedGender.value,
-                    items: controller.genders,
-                    onChanged: (p0) => controller.updateGender(p0!), profileController: controller
-                  ),
+                      label: "Gender",
+                      value: controller.selectedGender.value,
+                      items: controller.genders,
+                      onChanged: (p0) => controller.updateGender(p0!),
+                      profileController: controller),
 
                   const SpaceWidget(spaceHeight: 12),
                   _buildTextField(
-                    label: "Age",
-                    controller: controller.ageController, profileController: controller
-                  ),
+                      label: "Age",
+                      controller: controller.ageController,
+                      profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
                   _buildDropdownField(
-                    label: "Country",
-                    value: controller.selectedCountry.value,
-                    items: AppCountryCity.countryCityMap.keys.toList(),
-                    onChanged: (p0) => controller.updateCountry(p0!), profileController: controller
-                  ),
+                      label: "Country",
+                      value: controller.selectedCountry.value,
+                      items: AppCountryCity.countryCityMap.keys.toList(),
+                      onChanged: (p0) => controller.updateCountry(p0!),
+                      profileController: controller),
 
                   const SpaceWidget(spaceHeight: 12),
                   _buildDropdownField(
-                    label: "City",
-                    value: controller.selectedCity.value,
-                    items: controller.cities,
-                    onChanged: (p0) => controller.updateCity(p0!), profileController: controller
-                  ),
+                      label: "City",
+                      value: controller.selectedCity.value,
+                      items: controller.cities,
+                      onChanged: (p0) => controller.updateCity(p0!),
+                      profileController: controller),
 
                   const SpaceWidget(spaceHeight: 12),
                   // Country

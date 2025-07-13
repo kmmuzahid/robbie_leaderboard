@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
+import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
@@ -19,6 +20,7 @@ class ApiGetService {
       errorLog("apiGetService", e);
       Get.snackbar("Error", "Something went wrong",
           colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+      Get.toNamed(AppRoutes.serverOff);
     }
     return null;
   }

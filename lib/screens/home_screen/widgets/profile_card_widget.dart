@@ -19,18 +19,19 @@ class ProfileCardWidget extends StatelessWidget {
   final VoidCallback onViewProfilePressed;
   final VoidCallback onJoinLeaderboardPressed;
   final VoidCallback onSharePressed;
+  final bool fromNetwork;
 
-  const ProfileCardWidget({
-    super.key,
-    required this.profileImagePath,
-    required this.name,
-    required this.rankNumber,
-    required this.totalRaisedAmount,
-    required this.totalSpentAmount,
-    required this.onViewProfilePressed,
-    required this.onJoinLeaderboardPressed,
-    required this.onSharePressed,
-  });
+  const ProfileCardWidget(
+      {super.key,
+      required this.profileImagePath,
+      required this.name,
+      required this.rankNumber,
+      required this.totalRaisedAmount,
+      required this.totalSpentAmount,
+      required this.onViewProfilePressed,
+      required this.onJoinLeaderboardPressed,
+      required this.onSharePressed,
+      required this.fromNetwork});
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +56,7 @@ class ProfileCardWidget extends StatelessWidget {
                     height: 50,
                     width: 50,
                     imagePath: profileImagePath,
+                    fromNetwork: fromNetwork,
                   ),
                   const SpaceWidget(spaceWidth: 12),
                   Column(

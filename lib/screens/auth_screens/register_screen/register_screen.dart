@@ -15,7 +15,7 @@ import '../../../widgets/text_field_widget/text_field_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/register_screen_controller.dart';
 
-class RegisterScreen extends StatelessWidget {  
+class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
   @override
@@ -199,13 +199,27 @@ class RegisterScreen extends StatelessWidget {
                   TextFieldWidget(
                       controller: controller.contactController,
                       hintText: "Enter contact"),
+                  const SpaceWidget(spaceHeight: 16),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: TextWidget(
+                      text: AppStrings.referral,
+                      fontColor: AppColors.greyDark,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SpaceWidget(spaceHeight: 8),
+                  TextFieldWidget(
+                      controller: controller.referralController,
+                      hintText: "Enter Inviter Code (if any)"),
                   const SpaceWidget(spaceHeight: 24),
                   ButtonWidget(
                     onPressed: controller.register,
                     label: AppStrings.register,
                     buttonWidth: double.infinity,
                   ),
-                  const SpaceWidget(spaceHeight: 16),
+                  const SpaceWidget(spaceHeight: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
