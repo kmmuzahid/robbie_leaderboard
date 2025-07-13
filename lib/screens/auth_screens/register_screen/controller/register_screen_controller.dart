@@ -96,6 +96,11 @@ class RegisterScreenController extends GetxController {
           colorText: AppColors.white);
       return;
     }
+    if (int.parse(age) < 0) {
+      Get.snackbar("Age can't be negative", "Please write your correct age",
+          colorText: AppColors.white);
+      return;
+    }
     appLog(
         "User is registering with $email, $password, $name, $country, $city, $gender, $age and $contact");
     final profile = RegisterModel(

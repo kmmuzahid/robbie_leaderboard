@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
-import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
-import 'package:the_leaderboard/constants/app_strings.dart';
-import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/controller/other_profile_controller.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/widgets/affiliate_status_widget.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/widgets/profile_header_widget.dart';
 import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
-import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
-import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
 
 class OtherProfileScreen extends StatefulWidget {

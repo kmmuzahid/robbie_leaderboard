@@ -74,6 +74,11 @@ class EditProfileController extends GetxController {
           colorText: AppColors.white);
       return;
     }
+    if (ageController.text.isNotEmpty && int.parse(ageController.text) < 0) {
+      Get.snackbar("Age can't be negative", "Please write your correct age",
+          colorText: AppColors.white);
+      return;
+    }
     try {
       await ApiPatchService.updateProfile(
           usernameController.text,

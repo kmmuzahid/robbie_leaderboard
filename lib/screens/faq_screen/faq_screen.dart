@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:the_leaderboard/screens/faq_screen/controller/faq_screen_controller.dart';
 import 'package:the_leaderboard/screens/faq_screen/widgets/faq_card.dart';

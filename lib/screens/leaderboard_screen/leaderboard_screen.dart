@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
-import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/controller/leaderboard_controller.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_dropdown.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_item.dart';

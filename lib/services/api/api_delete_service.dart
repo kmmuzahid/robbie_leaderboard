@@ -17,26 +17,4 @@ class ApiDeleteService {
     }
     return null;
   }
-
-  // static Future<void> deleteUser() async {
-  //   final url = "${AppUrls.deleteUser}/${LocalStorage.userId}";
-  //   try {
-  //     final response = await http.delete(Uri.parse(url), headers: {
-  //       'Content-Type': 'application/json',
-  //       'authorization': LocalStorage.token
-  //     });
-  //     final jsonbody = jsonDecode(response.body);
-  //     if (response.statusCode == 200) {
-  //       Get.snackbar("Success", jsonbody["message"],
-  //           colorText: AppColors.white);
-  //       return;
-  //     } else {
-  //       Get.snackbar("Error", jsonbody["message"], colorText: AppColors.white);
-  //       return;
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar("Error", "Something went wrong", colorText: AppColors.white);
-  //     return;
-  //   }
-  // }
 }

@@ -12,6 +12,7 @@ import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/lead
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_tabbar.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/top_rank_filtered_item.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
+import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
 import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
 
@@ -63,7 +64,9 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                       child: Transform.translate(
                         offset: Offset.zero,
                         child: TopRankedItem(
-                          fromNetwork: widget.leaderBoardList[1]!.profileImg != "Unknown",
+                            fromNetwork:
+                                widget.leaderBoardList[1]!.profileImg !=
+                                    "Unknown",
                             rankLabel: widget.leaderBoardList[1]!.currentRank
                                 .toString(),
                             name: widget.leaderBoardList[1]!.name,
@@ -85,15 +88,16 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                     child: Transform.translate(
                       offset: const Offset(0, -10),
                       child: TopRankedItem(
-                        fromNetwork: widget.leaderBoardList[0]!.profileImg != "Unknown",
+                          fromNetwork: widget.leaderBoardList[0]!.profileImg !=
+                              "Unknown",
                           rankLabel:
                               widget.leaderBoardList[0]!.currentRank.toString(),
                           name: widget.leaderBoardList[0]!.name,
                           amount: "\$${widget.leaderBoardList[0]!.totalInvest}",
-                          image:
-                              widget.leaderBoardList[0]!.profileImg != "Unknown"
-                                  ? "${AppUrls.mainUrl}${widget.leaderBoardList[0]!.profileImg}"
-                                  : AppImagePath.profileImage,
+                          image: widget.leaderBoardList[0]!.profileImg !=
+                                  "Unknown"
+                              ? "${AppUrls.mainUrl}${widget.leaderBoardList[0]!.profileImg}"
+                              : AppImagePath.profileImage,
                           rankColor: AppColors.yellow,
                           avatarSize: 55),
                     ),
@@ -107,7 +111,9 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                       child: Transform.translate(
                         offset: Offset.zero,
                         child: TopRankedItem(
-                          fromNetwork: widget.leaderBoardList[2]!.profileImg != "Unknown",
+                            fromNetwork:
+                                widget.leaderBoardList[2]!.profileImg !=
+                                    "Unknown",
                             rankLabel: widget.leaderBoardList[2]!.currentRank
                                 .toString(),
                             name: widget.leaderBoardList[2]!.name,
@@ -149,101 +155,82 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: const SystemUiOverlayStyle(
-        statusBarIconBrightness: Brightness.light,
+    return Scaffold(
+      appBar: const AppbarWidget(
+        title: "",
       ),
-      child: Scaffold(
-        backgroundColor: AppColors.blueDark,
-        body: SafeArea(
-          child: widget.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                )
-              : Column(
-                  children: [
-                    const SpaceWidget(spaceHeight: 16),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Dropdown Button
-                          LeaderboardDropdown(
-                            value: selectedLeaderboard,
-                            text: const [
-                              'Leaderboard',
-                              'Event Leaderboard',
-                              'Creator Leaderboard',
-                            ],
-                            onChanged: (value) {
-                              setState(() {
-                                selectedLeaderboard = value!;
-                                _tabController.index = 0;
-                              });
-                            },
-                          ),
-                          // Search Icon
-                          InkWell(
-                            onTap: () {
-                              Get.toNamed(AppRoutes.searchScreen);
-                            },
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundColor:
-                                  AppColors.white.withOpacity(0.15),
-                              child: const IconWidget(
-                                height: 22,
-                                width: 22,
-                                icon: AppIconPath.searchIcon,
-                              ),
-                            ),
-                          ),
-                        ],
+      body: AnnotatedRegion(
+        value: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.light,
+        ),
+        child: Scaffold(
+          backgroundColor: AppColors.blueDark,
+          body: SafeArea(
+            child: widget.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+                : Column(
+                    children: [
+                      const SpaceWidget(spaceHeight: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        child: LeaderboardDropdown(
+                          value: selectedLeaderboard,
+                          text: const [
+                            'Leaderboard',
+                            'Event Leaderboard',
+                            'Creator Leaderboard',
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              selectedLeaderboard = value!;
+                              _tabController.index = 0;
+                            });
+                          },
+                        ),
                       ),
-                    ),
 
-                    // Replaced TabBar with LeaderboardTabBar
-                    LeaderboardTabBar(
-                      tabTexts: const ['All Time', 'Daily', 'Monthly'],
-                      tabController: _tabController,
-                    ),
-
-                    // TabBarView
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        physics: const BouncingScrollPhysics(),
-                        children: [
-                          // All Time Tab
-                          if (selectedLeaderboard == 'Leaderboard')
-                            buildLeaderboardTabView()
-                          else if (selectedLeaderboard == 'Event Leaderboard')
-                            buildLeaderboardTabView()
-                          else
-                            buildLeaderboardTabView(),
-                          // Daily Tab
-                          if (selectedLeaderboard == 'Leaderboard')
-                            buildLeaderboardTabView()
-                          else if (selectedLeaderboard == 'Event Leaderboard')
-                            buildLeaderboardTabView()
-                          else
-                            buildLeaderboardTabView(),
-                          // Monthly Tab
-                          if (selectedLeaderboard == 'Leaderboard')
-                            buildLeaderboardTabView()
-                          else if (selectedLeaderboard == 'Event Leaderboard')
-                            buildLeaderboardTabView()
-                          else
-                            buildLeaderboardTabView(),
-                        ],
+                      // Replaced TabBar with LeaderboardTabBar
+                      LeaderboardTabBar(
+                        tabTexts: const ['All Time', 'Daily', 'Monthly'],
+                        tabController: _tabController,
                       ),
-                    ),
-                  ],
-                ),
+
+                      // TabBarView
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            // All Time Tab
+                            if (selectedLeaderboard == 'Leaderboard')
+                              buildLeaderboardTabView()
+                            else if (selectedLeaderboard == 'Event Leaderboard')
+                              buildLeaderboardTabView()
+                            else
+                              buildLeaderboardTabView(),
+                            // Daily Tab
+                            if (selectedLeaderboard == 'Leaderboard')
+                              buildLeaderboardTabView()
+                            else if (selectedLeaderboard == 'Event Leaderboard')
+                              buildLeaderboardTabView()
+                            else
+                              buildLeaderboardTabView(),
+                            // Monthly Tab
+                            if (selectedLeaderboard == 'Leaderboard')
+                              buildLeaderboardTabView()
+                            else if (selectedLeaderboard == 'Event Leaderboard')
+                              buildLeaderboardTabView()
+                            else
+                              buildLeaderboardTabView(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
         ),
       ),
     );

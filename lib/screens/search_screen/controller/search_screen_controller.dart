@@ -71,10 +71,10 @@ class SearchScreenController extends GetxController {
         Get.to(LeaderboardFilteredScreen(
             leaderBoardList: response, isLoading: isloading));
       } else {
-        Get.snackbar("oops!", "No user found");
+        Get.snackbar("Error", "No user found", colorText: AppColors.white);
       }
     } catch (e) {
-       errorLog("Failed", e);
+      errorLog("Failed", e);
     }
   }
 

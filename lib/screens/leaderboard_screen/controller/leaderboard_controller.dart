@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
@@ -27,7 +28,8 @@ class LeaderboardController extends GetxController {
             (a, b) => a!.currentRank.compareTo(b!.currentRank),
           );
         } else {
-          Get.snackbar("Error", jsonbody["message"]);
+          Get.snackbar("Error", jsonbody["message"],
+              colorText: AppColors.white);
         }
       }
       appLog("Succeed");

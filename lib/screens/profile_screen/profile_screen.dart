@@ -5,8 +5,6 @@ import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/profile_screen/controller/profile_screen_controller.dart';
 import 'package:the_leaderboard/screens/profile_screen/widgets/affiliate_status_widget.dart';
 import 'package:the_leaderboard/screens/profile_screen/widgets/profile_header_widget.dart';
-import 'package:the_leaderboard/services/storage/storage_keys.dart';
-import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 

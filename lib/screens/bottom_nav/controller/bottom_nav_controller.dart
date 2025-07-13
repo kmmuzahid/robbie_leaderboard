@@ -18,8 +18,6 @@ class BottomNavController extends GetxController {
 
   void changeIndex(int index) {
     try {
-      print("object");
-      print(index);
       selectedIndex.value = index;
       update();
     } catch (e) {
