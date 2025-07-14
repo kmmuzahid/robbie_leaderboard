@@ -90,7 +90,7 @@ class RegisterScreenController extends GetxController {
       );
       return;
     }
-    if (!(contact.length == 11)) {
+    if (!(contact.length == 11)) { 
       Get.snackbar(
           "Invalid phone number", "Phone number should be 11 characters",
           colorText: AppColors.white);

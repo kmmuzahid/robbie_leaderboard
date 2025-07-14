@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/controller/leaderboard_controller.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_dropdown.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_item.dart';
@@ -44,7 +45,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
   Widget buildLeaderboardTabView() {
     final filteredList =
-        _controller.leaderBoardList.where((e) => e!.currentRank > 4).toList();
+        _controller.leaderBoardList.skip(3).where((e) => e != null).toList();
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -80,75 +82,78 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                             avatarSize: 40),
                       ),
                     ),
-                  InkWell(
-                    onTap: () {
-                      final userId = _controller.leaderBoardList[0]!.userId;
-                      Get.to(OtherProfileScreen(userId: userId));
-                    },
-                    child: Transform.translate(
-                      offset: const Offset(0, -10),
-                      child: TopRankedItem(
-                          fromOnline:
-                              _controller.leaderBoardList[0]!.profileImg !=
-                                  "Unknown",
-                          rankLabel: _controller.leaderBoardList[0]!.currentRank
-                              .toString(),
-                          name: _controller.leaderBoardList[0]!.name,
-                          amount:
-                              "\$${_controller.leaderBoardList[0]!.totalInvest}",
-                          image: _controller.leaderBoardList[0]!.profileImg !=
-                                  "Unknown"
-                              ? _controller.leaderBoardList[0]!.profileImg
-                              : AppImagePath.profileImage,
-                          rankColor: AppColors.yellow,
-                          avatarSize: 55),
+                  if (_controller.leaderBoardList.isNotEmpty)
+                    InkWell(
+                      onTap: () {
+                        final userId = _controller.leaderBoardList[0]!.userId;
+                        Get.to(OtherProfileScreen(userId: userId));
+                      },
+                      child: Transform.translate(
+                        offset: const Offset(0, -10),
+                        child: TopRankedItem(
+                            fromOnline:
+                                _controller.leaderBoardList[0]!.profileImg !=
+                                    "Unknown",
+                            rankLabel: _controller
+                                .leaderBoardList[0]!.currentRank
+                                .toString(),
+                            name: _controller.leaderBoardList[0]!.name,
+                            amount:
+                                "\$${_controller.leaderBoardList[0]!.totalInvest}",
+                            image: _controller.leaderBoardList[0]!.profileImg !=
+                                    "Unknown"
+                                ? _controller.leaderBoardList[0]!.profileImg
+                                : AppImagePath.profileImage,
+                            rankColor: AppColors.yellow,
+                            avatarSize: 55),
+                      ),
                     ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      final userId = _controller.leaderBoardList[2]!.userId;
-                      Get.to(OtherProfileScreen(userId: userId));
-                    },
-                    child: Transform.translate(
-                      offset: Offset.zero,
-                      child: TopRankedItem(
-                          fromOnline:
-                              _controller.leaderBoardList[2]!.profileImg !=
-                                  "Unknown",
-                          rankLabel: _controller.leaderBoardList[2]!.currentRank
-                              .toString(),
-                          name: _controller.leaderBoardList[2]!.name,
-                          amount:
-                              "\$${_controller.leaderBoardList[2]!.totalInvest}",
-                          image: _controller.leaderBoardList[2]!.profileImg !=
-                                  "Unknown"
-                              ? _controller.leaderBoardList[2]!.profileImg
-                              : AppImagePath.profileImage,
-                          rankColor: AppColors.orange,
-                          avatarSize: 40),
+                  if (_controller.leaderBoardList.length > 2)
+                    InkWell(
+                      onTap: () {
+                        final userId = _controller.leaderBoardList[2]!.userId;
+                        Get.to(OtherProfileScreen(userId: userId));
+                      },
+                      child: Transform.translate(
+                        offset: Offset.zero,
+                        child: TopRankedItem(
+                            fromOnline:
+                                _controller.leaderBoardList[2]!.profileImg !=
+                                    "Unknown",
+                            rankLabel: _controller
+                                .leaderBoardList[2]!.currentRank
+                                .toString(),
+                            name: _controller.leaderBoardList[2]!.name,
+                            amount:
+                                "\$${_controller.leaderBoardList[2]!.totalInvest}",
+                            image: _controller.leaderBoardList[2]!.profileImg !=
+                                    "Unknown"
+                                ? _controller.leaderBoardList[2]!.profileImg
+                                : AppImagePath.profileImage,
+                            rankColor: AppColors.orange,
+                            avatarSize: 40),
+                      ),
                     ),
-                  ),
                 ]),
           ),
-          ...List.generate(
-            filteredList.length,
-            (index) {
-              final data = filteredList[index];
-              return LeaderboardItem(
-                key: ValueKey('${data!.name}${data.currentRank}$index'),
-                rank: data.currentRank,
-                name: data.name,
-                amount: "\$${data.totalInvest.toString()}",
-                isUp: (data.previousRank - data.currentRank) > 0 ? true : false,
-                image: data.profileImg != "Unknown"
-                    ? data.profileImg
-                    : AppImagePath.profileImage,
-                onPressed: () {
-                  Get.to(OtherProfileScreen(userId: data.userId));
-                },
-              );
-            },
-          ),
+          ...List.generate(filteredList.length, (index) {
+            final data = filteredList[index]!;
+            final fromNetwork = data.profileImg != "Unknown";
+            return LeaderboardItem(
+              key: ValueKey('${data.name}${data.currentRank}$index'),
+              rank: data.currentRank,
+              name: data.name,
+              amount: "\$${data.totalInvest}",
+              isUp: (data.previousRank - data.currentRank) > 0,
+              fromNetwork: fromNetwork,
+              image: fromNetwork
+                  ? "${AppUrls.mainUrl}${data.profileImg}"
+                  : AppImagePath.profileImage,
+              onPressed: () {
+                Get.to(OtherProfileScreen(userId: data.userId));
+              },
+            );
+          }),
         ],
       ),
     );

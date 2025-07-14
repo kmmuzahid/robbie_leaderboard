@@ -24,6 +24,9 @@ class LeaderboardController extends GetxController {
           final List data = jsonbody["data"];
           leaderBoardList.value =
               data.map((e) => LeaderBoardModel.fromJson(e)).toList();
+          appLog(leaderBoardList.map(
+            (element) => element!.profileImg,
+          ));
           leaderBoardList.sort(
             (a, b) => a!.currentRank.compareTo(b!.currentRank),
           );

@@ -14,6 +14,7 @@ class OtherProfileController extends GetxController {
   final RxString totalViews = ''.obs;
   final RxString rank = ''.obs;
   final RxBool isLoading = true.obs;
+  final RxString profileImage = "".obs;
 
   void fetchProfile(String userId) async {
     try {
@@ -31,6 +32,9 @@ class OtherProfileController extends GetxController {
           totalSpent.value = profile.totalInvest.toString();
           totalViews.value = profile.views.toString();
           rank.value = profile.rank.toString();
+          profileImage.value = profile.profileImg;
+          appLog("Profile image of other users");
+          appLog(profileImage.value);
         } else {
           Get.snackbar("Error", jsonbody["message"],
               colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);

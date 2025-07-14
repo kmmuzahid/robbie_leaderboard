@@ -16,6 +16,7 @@ class LeaderboardItem extends StatelessWidget {
   final String image;
   final bool isUp;
   final VoidCallback onPressed;
+  final bool fromNetwork;
 
   const LeaderboardItem({
     super.key,
@@ -25,6 +26,7 @@ class LeaderboardItem extends StatelessWidget {
     required this.image,
     required this.isUp,
     required this.onPressed,
+    required this.fromNetwork
   });
 
   @override
@@ -59,6 +61,7 @@ class LeaderboardItem extends StatelessWidget {
                 width: 44,
                 imagePath: image,
                 fit: BoxFit.cover,
+                fromNetwork: fromNetwork,
               ),
               const SpaceWidget(spaceWidth: 16),
               Column(

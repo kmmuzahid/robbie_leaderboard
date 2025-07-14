@@ -9,12 +9,14 @@ class ProfileHeaderWidget extends StatelessWidget {
   final String image;
   final String name;
   final String email;
+  final bool fromNetwork;
 
   const ProfileHeaderWidget({
     super.key,
     required this.image,
     required this.name,
     required this.email,
+    required this.fromNetwork
   });
 
   @override
@@ -32,6 +34,7 @@ class ProfileHeaderWidget extends StatelessWidget {
             height: 60,
             width: 60,
             imagePath: image,
+            fromNetwork: fromNetwork,
           ),
           const SpaceWidget(spaceHeight: 8),
           // Name

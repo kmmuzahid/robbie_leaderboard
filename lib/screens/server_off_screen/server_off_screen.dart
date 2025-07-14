@@ -26,26 +26,22 @@ class ServerOffScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
               const TextWidget(
-                text: "Something went wrong!",
+                text: "Something went wrong.",
                 fontColor: AppColors.white,
                 fontSize: 20,
               ),
-              const SpaceWidget(
-                spaceHeight: 20,
-              ),
+              const SpaceWidget(spaceHeight: 20),
               const TextWidget(
-                text: "Maybe there is no internet connection",
+                text: "It could be a connection issue,",
                 fontColor: AppColors.white,
                 fontSize: 15,
               ),
               const TextWidget(
-                text: "Or, Server is now under maintenance",
+                text: "or the server might be under maintenance.",
                 fontColor: AppColors.white,
                 fontSize: 15,
               ),
-              const SpaceWidget(
-                spaceHeight: 30,
-              ),
+              const SpaceWidget(spaceHeight: 30),
               ButtonWidget(
                 label: "Try Again",
                 onPressed: () => Get.back(),

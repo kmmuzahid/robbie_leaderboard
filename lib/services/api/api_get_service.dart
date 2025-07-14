@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:the_leaderboard/constants/app_colors.dart';
@@ -14,12 +16,45 @@ class ApiGetService {
       final response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
         'authorization': LocalStorage.token
-      });
-      return response;
+      }).timeout(const Duration(seconds: 10));
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return response;
+      } else {
+        errorLog("apiGetService - HTTP Error", response.body);
+        Get.snackbar(
+          "Server Error",
+          "Received status code: ${response.statusCode}",
+          colorText: AppColors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        Get.toNamed(AppRoutes.serverOff);
+      }
+    } on SocketException catch (e) {
+      errorLog("apiGetService - No Internet", e);
+      Get.snackbar(
+        "Connection Error",
+        "Please check your internet connection.",
+        colorText: AppColors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      Get.toNamed(AppRoutes.serverOff);
+    } on TimeoutException catch (e) {
+      errorLog("apiGetService - Timeout", e);
+      Get.snackbar(
+        "Timeout",
+        "Request timed out. Try again later.",
+        colorText: AppColors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      Get.toNamed(AppRoutes.serverOff);
     } catch (e) {
-      errorLog("apiGetService", e);
-      Get.snackbar("Error", "Something went wrong",
-          colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+      errorLog("apiGetService - Unknown Error", e);
+      Get.snackbar(
+        "Error",
+        "Something went wrong. Please try again.",
+        colorText: AppColors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
       Get.toNamed(AppRoutes.serverOff);
     }
     return null;

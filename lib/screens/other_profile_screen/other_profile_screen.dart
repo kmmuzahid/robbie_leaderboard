@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
+import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/controller/other_profile_controller.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/widgets/affiliate_status_widget.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/widgets/profile_header_widget.dart';
@@ -51,7 +52,10 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                       children: [
                         // Profile Header
                         ProfileHeaderWidget(
-                          image: AppImagePath.profileImage,
+                          fromNetwork: _controller.profileImage.value != "",
+                          image: _controller.profileImage.value != ""
+                              ? "${AppUrls.mainUrl}${_controller.profileImage.value}"
+                              : AppImagePath.profileImage,
                           name: _controller.name.value,
                           email: _controller.email.value,
                         ),
