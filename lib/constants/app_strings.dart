@@ -94,4 +94,10 @@ class AppStrings {
 
   // Notification Screen
   static const String notifications = "Notifications";
+
+  // Error
+  static const String somethingWentWrong =
+      "Something went wrong. Please try again.";
+  static const String noInternet = "Please check your internet connection.";
+  static const String requestTimeOut = "Request timed out. Try again later.";
 }

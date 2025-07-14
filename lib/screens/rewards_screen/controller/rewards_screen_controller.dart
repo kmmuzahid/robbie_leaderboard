@@ -150,6 +150,7 @@ class RewardsScreenController extends GetxController {
       LocalStorage.totalTicket = totalTicket.value;
       createTicket(random);
     } else {
+      
       Get.snackbar(
           "You have reached the today's limit!", "Please try again tomorrow.",
           colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);

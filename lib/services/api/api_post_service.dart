@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:the_leaderboard/constants/app_colors.dart';
+import 'package:the_leaderboard/constants/app_strings.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
@@ -36,7 +37,7 @@ class ApiPostService {
       errorLog("apiPostService - No Internet", e);
       Get.snackbar(
         "Connection Error",
-        "Please check your internet connection.",
+        AppStrings.noInternet,
         colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -45,7 +46,7 @@ class ApiPostService {
       errorLog("apiPostService - Timeout", e);
       Get.snackbar(
         "Timeout",
-        "Request timed out. Try again later.",
+        AppStrings.requestTimeOut,
         colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -54,7 +55,7 @@ class ApiPostService {
       errorLog("apiPostService - Unknown Error", e);
       Get.snackbar(
         "Error",
-        "Something went wrong. Please try again.",
+        AppStrings.somethingWentWrong,
         colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
       );

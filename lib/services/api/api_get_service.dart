@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:the_leaderboard/constants/app_colors.dart';
+import 'package:the_leaderboard/constants/app_strings.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
@@ -33,7 +34,7 @@ class ApiGetService {
       errorLog("apiGetService - No Internet", e);
       Get.snackbar(
         "Connection Error",
-        "Please check your internet connection.",
+        AppStrings.noInternet,
         colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -42,7 +43,7 @@ class ApiGetService {
       errorLog("apiGetService - Timeout", e);
       Get.snackbar(
         "Timeout",
-        "Request timed out. Try again later.",
+        AppStrings.requestTimeOut,
         colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -51,7 +52,7 @@ class ApiGetService {
       errorLog("apiGetService - Unknown Error", e);
       Get.snackbar(
         "Error",
-        "Something went wrong. Please try again.",
+        AppStrings.somethingWentWrong,
         colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -87,7 +88,7 @@ class ApiGetService {
             )
             .toList();
       } else {
-        Get.snackbar("Error", jsonbody["message"]);
+        Get.snackbar("Error", jsonbody["message"], colorText: AppColors.white);
         return [];
       }
     } catch (e) {

@@ -274,7 +274,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                     magnification: 1,
                                     listHeight: 100,
                                     onValueChanged: (s) =>
-                                        print(s.toString().trim()),
+                                        controller.spinWheel(),
                                     // Trim spaces for logging
                                     selectTextStyle: const TextStyle(
                                       fontSize: 18,
@@ -367,10 +367,8 @@ class _RewardsScreenState extends State<RewardsScreen> {
                             fontSize: 12,
                           ),
                           const SpaceWidget(spaceHeight: 18),
-                          ButtonWidget(
-                            onPressed: controller.isSpinButtonActivate.value
-                                ? controller.spinWheel
-                                : null,
+                          const ButtonWidget(
+                            onPressed: null,
                             label: "Spin to Win Tickets",
                             buttonWidth: double.infinity,
                             fontSize: 14,
