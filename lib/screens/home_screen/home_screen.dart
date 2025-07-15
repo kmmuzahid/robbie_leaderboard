@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_strings.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
@@ -94,10 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             onSharePressed: () {
                               // controller.sendData();
-                              Get.snackbar(
-                                  "This feature is not implemented yet",
-                                  "Please wait for the future update",
-                                  colorText: AppColors.white);
+                              // Get.snackbar(
+                              //     "This feature is not implemented yet",
+                              //     "Please wait for the future update",
+                              //     colorText: AppColors.white);
+                              SharePlus.instance.share(ShareParams(
+                                  subject: "User Code",
+                                  text: controller.userCode.value));
                             },
                           ),
                     const SpaceWidget(spaceHeight: 16),
@@ -193,15 +197,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     )
                                   : ListView.builder(
                                       itemCount:
-                                          controller.recentActivity.length,
+                                          controller.recentActivity[0].length,
                                       itemBuilder: (context, index) {
                                         return RecentActivityCardWidget(
                                             action: controller
-                                                .recentActivity[index].title,
+                                                .recentActivity[index][0],
                                             value: controller
-                                                .recentActivity[index].subTitle,
+                                                .recentActivity[index][1],
                                             time: controller
-                                                .recentActivity[index].type);
+                                                .recentActivity[index][2]);
                                       })
                               // StreamBuilder(stream: _controller.streamSocket.getResponse, builder: (context, snapshot) {
                               //   if(snapshot.hasData){

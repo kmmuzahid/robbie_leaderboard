@@ -40,6 +40,7 @@ class ProfileScreenController extends GetxController {
           rank.value = profile.rank.toString();
           image.value = profile.profileImg;
           LocalStorage.userId = profile.id;
+          LocalStorage.myName = profile.name;
           appLog("user id: ${profile.id} and token: ${LocalStorage.token}");
         } else {
           Get.snackbar("Error", data["message"], colorText: AppColors.white);

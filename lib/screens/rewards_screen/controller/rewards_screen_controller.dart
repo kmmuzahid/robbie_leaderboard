@@ -9,6 +9,7 @@ import 'package:the_leaderboard/models/current_ruffle_model.dart';
 import 'package:the_leaderboard/models/user_ticket_model.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
+import 'package:the_leaderboard/services/socket/socket_service.dart';
 import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
@@ -121,6 +122,7 @@ class RewardsScreenController extends GetxController {
     if (response != null) {
       final data = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
+        SocketService.instance.createTicket(LocalStorage.myName, data["data"]);
         Get.snackbar("Success", data["message"], colorText: AppColors.white);
       } else {
         Get.snackbar("Success", data["message"], colorText: AppColors.white);
@@ -133,28 +135,28 @@ class RewardsScreenController extends GetxController {
     appLog(today);
     final lastwheelday = LocalStorage.lastWheelday;
     appLog(lastwheelday);
-    if (lastwheelday.isEmpty || today != lastwheelday) {
-      final random =
-          math.Random().nextInt(currentRuffle.value!.ticketButtons.length);
-      currentWheelIndex.value = random;
-      final totalItem = random + currentRuffle.value!.ticketButtons.length * 4;
-      wheelController.animateToItem(totalItem,
-          duration: const Duration(seconds: 3), curve: Curves.fastOutSlowIn);
-      dayIndex.value++;
-      LocalStorage.setString(LocalStorageKeys.lastWheelday, today);
-      LocalStorage.lastWheelday = today;
-      LocalStorage.dayIndex = dayIndex.value;
-      LocalStorage.setInt(LocalStorageKeys.dayIndex, dayIndex.value);
-      totalTicket.value += currentRuffle.value!.ticketButtons[random];
-      LocalStorage.setInt(LocalStorageKeys.totalTicket, totalTicket.value);
-      LocalStorage.totalTicket = totalTicket.value;
-      createTicket(random);
-    } else {
-      
-      Get.snackbar(
-          "You have reached the today's limit!", "Please try again tomorrow.",
-          colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
-    }
+    // if (lastwheelday.isEmpty || today != lastwheelday) {
+    final random =
+        math.Random().nextInt(currentRuffle.value!.ticketButtons.length);
+    currentWheelIndex.value = random;
+    final totalItem = random + currentRuffle.value!.ticketButtons.length * 4;
+    wheelController.animateToItem(totalItem,
+        duration: const Duration(seconds: 3), curve: Curves.fastOutSlowIn);
+    dayIndex.value++;
+    LocalStorage.setString(LocalStorageKeys.lastWheelday, today);
+    LocalStorage.lastWheelday = today;
+    LocalStorage.dayIndex = dayIndex.value;
+    LocalStorage.setInt(LocalStorageKeys.dayIndex, dayIndex.value);
+    totalTicket.value += currentRuffle.value!.ticketButtons[random];
+    LocalStorage.setInt(LocalStorageKeys.totalTicket, totalTicket.value);
+    LocalStorage.totalTicket = totalTicket.value;
+    createTicket(random);
+    // } else {
+
+    //   Get.snackbar(
+    //       "You have reached the today's limit!", "Please try again tomorrow.",
+    //       colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+    // }
   }
 
   @override

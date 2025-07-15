@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/recent_activity_receive_model.dart';
+import 'package:the_leaderboard/models/ticket_won_socket_model.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 
 class SocketService {
   // Singleton pattern
@@ -41,6 +45,21 @@ class SocketService {
     print('Sent invest data: $data');
   }
 
+  void createTicket(String userName, Map<String, dynamic> result) {
+    if (!_socket.connected) {
+      appLog("Socket is not connected. Connecting...");
+      connect();
+    }
+    appLog(result);
+    final data = {
+      "result": jsonEncode(result),
+      "userName": userName,
+    };
+
+    _socket.emit('new tickets', data);
+    appLog('Sent invest data: $data');
+  }
+
   //with ack
 //   Future<RecentActivityReceiveModel> sendInvest(String userName, int amount) async {
 //   if (!_socket.connected) {
@@ -64,13 +83,20 @@ class SocketService {
 //   return RecentActivityReceiveModel.fromJson(response);
 // }
 
-
   // Method to listen for 'new invest message received' event
   void onNewInvestMessageReceived(
       void Function(RecentActivityReceiveModel) callback) {
     _socket.on('new invest message received', (data) {
-      print('Received invest message: $data');
+      appLog('Received invest message: $data');
       callback(RecentActivityReceiveModel.fromJson(data));
+    });
+  }
+
+  void onCreatingTicketResponse(
+      void Function(TicketWonSocketModel) callback) {
+    _socket.on('ticket message received', (data) {
+      appLog('Received invest message: $data');
+      callback(TicketWonSocketModel.fromJson(data));
     });
   }
 

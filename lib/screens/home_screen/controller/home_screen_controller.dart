@@ -8,6 +8,7 @@ import 'package:the_leaderboard/models/hall_of_frame_consisntantly_top_model.dar
 import 'package:the_leaderboard/models/hall_of_frame_most_engaged_model.dart';
 import 'package:the_leaderboard/models/profile_model.dart';
 import 'package:the_leaderboard/models/recent_activity_receive_model.dart';
+import 'package:the_leaderboard/models/ticket_won_socket_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/bottom_nav/controller/bottom_nav_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
@@ -20,6 +21,7 @@ class HomeScreenController extends GetxController {
   final RxString totalSpent = ''.obs;
   final RxInt rank = 0.obs;
   final RxString image = "".obs;
+  final RxString userCode = "".obs;
   final Rxn<HallOfFameSinglePaymentModel> recoredSinglePayment =
       Rxn<HallOfFameSinglePaymentModel>();
   final Rxn<HallOfFrameConsisntantlyTopModel> consistantlyTop =
@@ -32,8 +34,7 @@ class HomeScreenController extends GetxController {
   final RxBool ishallofframeConsisntantTopLoading = true.obs;
   final RxBool ishallofframeMostEngagedLoading = true.obs;
 
-  final RxList<RecentActivityReceiveModel> recentActivity =
-      <RecentActivityReceiveModel>[].obs;
+  final RxList<List<dynamic>> recentActivity = <List<dynamic>>[].obs;
 
   void sendData() {
     SocketService.instance.sendInvest("Aurnab 420", 200);
@@ -41,8 +42,13 @@ class HomeScreenController extends GetxController {
 
   void receiveData() {
     SocketService.instance.onNewInvestMessageReceived((p0) {
-      recentActivity.insert(0, p0);
+      recentActivity.insert(0, [p0.title, p0.subTitle, p0.type]);
     });
+    SocketService.instance.onCreatingTicketResponse(
+      (p0) {
+        recentActivity.insert(0, [p0.title, p0.text, p0.type]);
+      },
+    );
   }
 
   Future fetchData() async {
@@ -73,6 +79,7 @@ class HomeScreenController extends GetxController {
           totalSpent.value = userData?.totalInvest.toString() ?? "";
           rank.value = userData?.rank ?? 0;
           image.value = userData?.profileImg ?? "";
+          userCode.value = userData?.userCode ?? "";
           return;
         } else {
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
