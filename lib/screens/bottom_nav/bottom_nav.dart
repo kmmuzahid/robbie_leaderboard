@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:the_leaderboard/screens/bottom_nav/widgets/custom_gbutton_widget.dart';
+import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../constants/app_icon_path.dart';
@@ -16,6 +17,7 @@ class BottomNav extends StatelessWidget {
     return GetBuilder(
         init: BottomNavController(),
         builder: (controller) {
+          Get.put(NotificationController());
           return Scaffold(
             backgroundColor: AppColors.blueDark,
             body: IndexedStack(

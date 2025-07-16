@@ -10,12 +10,18 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 
 class NotificationController extends GetxController {
   final RxList<NotificationModel?> notificationList = <NotificationModel>[].obs;
-  final RxInt notificationCounter = LocalStorage.numberOfNotification.obs;
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    fetchNotification();
+  final RxInt notificationCounter = 0.obs;
+
+  void setUnread(int value) {
+    notificationCounter.value = value;
+  }
+
+  void increment() {
+    notificationCounter.value++;
+  }
+
+  void clear() {
+    notificationCounter.value = 0;
   }
 
   void fetchNotification() async {
@@ -24,6 +30,7 @@ class NotificationController extends GetxController {
       final response = await ApiGetService.apiGetService(AppUrls.notification);
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
+        appLog(jsonbody);
         if (response.statusCode == 200) {
           final List data = jsonbody["data"];
           notificationList.value =

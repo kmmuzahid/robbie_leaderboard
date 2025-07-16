@@ -6,6 +6,8 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
+import 'package:the_leaderboard/services/socket/socket_service.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
 class ReportProblemController extends GetxController {
@@ -24,6 +26,9 @@ class ReportProblemController extends GetxController {
       if (response != null) {
         final data = jsonDecode(response.body);
         if (response.statusCode == 200 || response.statusCode == 201) {
+          appLog(data);
+          SocketService.instance.sendReportData(
+              LocalStorage.myName, LocalStorage.myEmail, data["data"]);
           Get.snackbar("Success", data["message"], colorText: AppColors.white);
           Get.toNamed(AppRoutes.settingsScreen);
         } else {

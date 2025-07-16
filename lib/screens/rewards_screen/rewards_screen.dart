@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/screens/rewards_screen/controller/rewards_screen_controller.dart';
 import 'package:the_leaderboard/screens/rewards_screen/widgets/ticket_gauge_painter.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 import 'package:the_leaderboard/utils/app_size.dart';
 import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
 import 'package:the_leaderboard/widgets/shimmer_loading_widget/shimmer_loading.dart';
@@ -52,20 +54,28 @@ class _RewardsScreenState extends State<RewardsScreen> {
                 fit: BoxFit.contain,
               ),
             ),
-            action: IconButton(
-              tooltip: "Notifications",
-              onPressed: () {
-                Get.toNamed(AppRoutes.notificationsScreen);
-              },
-              icon: const Badge(
-                isLabelVisible: false,
-                label: Text(""),
-                backgroundColor: AppColors.red,
-                child: IconWidget(
-                  icon: AppIconPath.notificationIcon,
-                  width: 24,
-                  height: 24,
-                  color: AppColors.white,
+            action: Obx(
+              () => IconButton(
+                tooltip: "Notifications",
+                onPressed: () {
+                  controller.notificationController.clear();
+                  Get.toNamed(AppRoutes.notificationsScreen);
+                  // Get.toNamed(AppRoutes.serverOff);
+                },
+                icon: Badge(
+                  isLabelVisible: controller
+                          .notificationController.notificationCounter.value !=
+                      0,
+                  label: Text(controller
+                      .notificationController.notificationCounter.value
+                      .toString()),
+                  backgroundColor: AppColors.red,
+                  child: const IconWidget(
+                    icon: AppIconPath.notificationIcon,
+                    width: 24,
+                    height: 24,
+                    color: AppColors.white,
+                  ),
                 ),
               ),
             ),
@@ -273,8 +283,14 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                     isInfinite: true,
                                     magnification: 1,
                                     listHeight: 100,
-                                    onValueChanged: (s) =>
-                                        controller.spinWheel(),
+                                    onValueChanged: (s) {
+                                      appLog(s);
+                                      controller.handleWheelValueChanged2(s.toString());
+                                      // final selectedIndex = controller
+                                      //     .wheelController.selectedItem;
+                                      // controller.spinWheelByHand(selectedIndex);
+                                    },
+                                    // controller.spinWheel(),
                                     // Trim spaces for logging
                                     selectTextStyle: const TextStyle(
                                       fontSize: 18,
@@ -335,7 +351,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                             children: [
                               ...List.generate(7, (index) {
                                 return Container(
-                                  width: ResponsiveUtils.width(40),
+                                  width: AppSize.width(value: 30),
                                   height: ResponsiveUtils.height(10),
                                   margin: const EdgeInsets.only(right: 4),
                                   decoration: BoxDecoration(

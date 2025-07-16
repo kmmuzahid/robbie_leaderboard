@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'main_app_entry.dart';
 
@@ -23,6 +25,7 @@ Future<void> main() async {
   //     builder: (context) => const MainApp(), // Wrap your app
   //   ),
   // );
+  Get.put(NotificationController());
   HttpOverrides.global = MyHttpOverrides();
   await LocalStorage.getAllPrefData();
   // LocalStorage.getAllPrefData();

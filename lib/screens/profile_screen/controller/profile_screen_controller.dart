@@ -5,6 +5,7 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/profile_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
+import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
@@ -20,7 +21,7 @@ class ProfileScreenController extends GetxController {
   final RxString rank = ''.obs;
   final RxBool isLoading = true.obs;
   final RxString image = "".obs;
-
+  final notificationController = Get.find<NotificationController>();
   Future fetchProfile() async {
     try {
       appLog("Profile data is fetching");

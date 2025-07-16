@@ -12,6 +12,7 @@ import 'package:the_leaderboard/screens/home_screen/widgets/home_appbar_widget.d
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_loading.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_widget.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/recent_activity_card_widget.dart';
+import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_icon_path.dart';
@@ -49,21 +50,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 fit: BoxFit.contain,
               ),
             ),
-            action: IconButton(
-              tooltip: "Notifications",
-              onPressed: () {
-                Get.toNamed(AppRoutes.notificationsScreen);
-                // Get.toNamed(AppRoutes.serverOff);
-              },
-              icon: const Badge(
-                isLabelVisible: false,
-                label: Text(""),
-                backgroundColor: AppColors.red,
-                child: IconWidget(
-                  icon: AppIconPath.notificationIcon,
-                  width: 24,
-                  height: 24,
-                  color: AppColors.white,
+            action: Obx(
+              () => IconButton(
+                tooltip: "Notifications",
+                onPressed: () {
+                  controller.notificationController.clear();
+                  Get.toNamed(AppRoutes.notificationsScreen);
+                  // Get.toNamed(AppRoutes.serverOff);
+                },
+                icon: Badge(
+                  isLabelVisible: controller
+                      .notificationController.notificationCounter.value != 0,
+                  label: Text(controller
+                      .notificationController.notificationCounter.value
+                      .toString()),
+                  backgroundColor: AppColors.red,
+                  child: const IconWidget(
+                    icon: AppIconPath.notificationIcon,
+                    width: 24,
+                    height: 24,
+                    color: AppColors.white,
+                  ),
                 ),
               ),
             ),
@@ -197,15 +204,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     )
                                   : ListView.builder(
                                       itemCount:
-                                          controller.recentActivity[0].length,
+                                          controller.recentActivity.length,
                                       itemBuilder: (context, index) {
                                         return RecentActivityCardWidget(
                                             action: controller
                                                 .recentActivity[index][0],
                                             value: controller
                                                 .recentActivity[index][1],
-                                            time: controller
-                                                .recentActivity[index][2]);
+                                            time:
+                                                "${controller.recentActivity[index][2]} min ago");
                                       })
                               // StreamBuilder(stream: _controller.streamSocket.getResponse, builder: (context, snapshot) {
                               //   if(snapshot.hasData){

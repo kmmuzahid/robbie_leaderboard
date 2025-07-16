@@ -47,20 +47,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fit: BoxFit.contain,
               ),
             ),
-            action: IconButton(
-              tooltip: "Notifications",
-              onPressed: () {
-                Get.toNamed(AppRoutes.notificationsScreen);
-              },
-              icon: const Badge(
-                isLabelVisible: false,
-                label: Text(""),
-                backgroundColor: AppColors.red,
-                child: IconWidget(
-                  icon: AppIconPath.notificationIcon,
-                  width: 24,
-                  height: 24,
-                  color: AppColors.white,
+            action: Obx(
+              () => IconButton(
+                tooltip: "Notifications",
+                onPressed: () {
+                  controller.notificationController.clear();
+                  Get.toNamed(AppRoutes.notificationsScreen);
+                  // Get.toNamed(AppRoutes.serverOff);
+                },
+                icon: Badge(
+                  isLabelVisible: controller
+                          .notificationController.notificationCounter.value !=
+                      0,
+                  label: Text(controller
+                      .notificationController.notificationCounter.value
+                      .toString()),
+                  backgroundColor: AppColors.red,
+                  child: const IconWidget(
+                    icon: AppIconPath.notificationIcon,
+                    width: 24,
+                    height: 24,
+                    color: AppColors.white,
+                  ),
                 ),
               ),
             ),

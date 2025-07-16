@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/hall_of_fame_single_payment_model.dart';
@@ -11,6 +12,7 @@ import 'package:the_leaderboard/models/recent_activity_receive_model.dart';
 import 'package:the_leaderboard/models/ticket_won_socket_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/bottom_nav/controller/bottom_nav_controller.dart';
+import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/socket/socket_service.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
@@ -35,18 +37,20 @@ class HomeScreenController extends GetxController {
   final RxBool ishallofframeMostEngagedLoading = true.obs;
 
   final RxList<List<dynamic>> recentActivity = <List<dynamic>>[].obs;
-
+  final notificationController = Get.find<NotificationController>();
   void sendData() {
     SocketService.instance.sendInvest("Aurnab 420", 200);
   }
 
   void receiveData() {
     SocketService.instance.onNewInvestMessageReceived((p0) {
-      recentActivity.insert(0, [p0.title, p0.subTitle, p0.type]);
+      final time = DateFormat('mm').format(DateTime.parse(p0.createdAt));
+      recentActivity.insert(0, [p0.title, p0.subTitle, time]);
     });
     SocketService.instance.onCreatingTicketResponse(
       (p0) {
-        recentActivity.insert(0, [p0.title, p0.text, p0.type]);
+        final time = DateFormat('mm').format(DateTime.parse(p0.createdAt));
+        recentActivity.insert(0, [p0.title, p0.text, time]);
       },
     );
   }

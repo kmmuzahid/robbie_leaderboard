@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +9,7 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/current_ruffle_model.dart';
 import 'package:the_leaderboard/models/user_ticket_model.dart';
+import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/services/socket/socket_service.dart';
@@ -26,7 +29,7 @@ class RewardsScreenController extends GetxController {
   final RxBool isSpinButtonActivate = true.obs;
   final RxString today = ''.obs;
   final RxInt totalTicket = 0.obs;
-
+  final notificationController = Get.find<NotificationController>();
   void fetchRuffle() async {
     try {
       appLog("fetching ruffle");
@@ -123,6 +126,7 @@ class RewardsScreenController extends GetxController {
       final data = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         SocketService.instance.createTicket(LocalStorage.myName, data["data"]);
+
         Get.snackbar("Success", data["message"], colorText: AppColors.white);
       } else {
         Get.snackbar("Success", data["message"], colorText: AppColors.white);
@@ -159,6 +163,60 @@ class RewardsScreenController extends GetxController {
     // }
   }
 
+  void spin2() {
+    final today = DateFormat("yyyy-MM-dd").format(DateTime.now());
+    final lastWheelDay = LocalStorage.lastWheelday;
+
+    appLog("📅 Today: $today");
+    appLog("🗓️ Last spin: $lastWheelDay");
+
+    if (lastWheelDay.isNotEmpty && today == lastWheelDay) {
+      Get.snackbar(
+        "You have reached today's limit!",
+        "Please try again tomorrow.",
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: AppColors.white,
+      );
+      return;
+    }
+
+    final itemCount = currentRuffle.value!.ticketButtons.length;
+    final randomIndex = math.Random().nextInt(itemCount);
+    currentWheelIndex.value = randomIndex;
+
+    // Spin fast at first, then slow it down
+    final totalItem = randomIndex + itemCount * 6; // Add loops for effect
+
+    wheelController.animateToItem(
+      totalItem,
+      duration: const Duration(seconds: 3), // Slow spin duration
+      curve: Curves.decelerate, // Fast → slow
+    );
+
+    // Save result after spin ends
+    Future.delayed(const Duration(seconds: 3), () {
+      final selectedIndex = randomIndex;
+      final ticketEarned = currentRuffle.value!.ticketButtons[selectedIndex];
+
+      // Store in totalTicket and local storage
+      totalTicket.value += ticketEarned;
+      LocalStorage.totalTicket = totalTicket.value;
+      LocalStorage.setInt(LocalStorageKeys.totalTicket, totalTicket.value);
+
+      // Store last spin info
+      LocalStorage.lastWheelday = today;
+      LocalStorage.setString(LocalStorageKeys.lastWheelday, today);
+
+      dayIndex.value++;
+      LocalStorage.dayIndex = dayIndex.value;
+      LocalStorage.setInt(LocalStorageKeys.dayIndex, dayIndex.value);
+
+      // Store last index or do anything you want with result
+      createTicket(selectedIndex); // 🎫 Optional logic
+      appLog("✅ Final selected ticket: $ticketEarned");
+    });
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -171,5 +229,58 @@ class RewardsScreenController extends GetxController {
     // TODO: implement onClose
     super.onClose();
     wheelController.dispose();
+  }
+
+  RxBool hasSpunOnGesture = false.obs;
+  RxString selectedTicket = ''.obs;
+
+  void spinOnceOnUserStart() {
+    if (hasSpunOnGesture.value) return;
+
+    hasSpunOnGesture.value = true;
+
+    final itemCount = currentRuffle.value!.ticketButtons.length;
+    final random = math.Random().nextInt(itemCount);
+    currentWheelIndex.value = random;
+
+    final totalItem = random + itemCount * 6;
+
+    wheelController.animateToItem(
+      totalItem,
+      duration: const Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
+
+    // Wait for animation to complete before resetting and getting result
+    Future.delayed(const Duration(milliseconds: 1100), () {
+      hasSpunOnGesture.value = false;
+
+      final selectedIndex = wheelController.selectedItem % itemCount;
+      final result = currentRuffle.value!.ticketButtons[selectedIndex];
+
+      selectedTicket.value = result.toString();
+      print("✅ Final selected ticket: $result");
+
+      // TODO: Show a dialog, update UI, or call a success handler here
+    });
+  }
+
+  RxString lastSelectedValue = ''.obs;
+  Timer? _debounceTimer;
+  void handleWheelValueChanged2(String value) {
+    // Cancel previous debounce timer if still active
+    _debounceTimer?.cancel();
+
+    // Start new timer: if no change within 500ms, assume final value
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      lastSelectedValue.value = value;
+      appLog("✅ Final selected value: $value");
+      // Now you can store it, update UI, etc.
+    });
+  }
+
+  void finalSpin(int value) {
+    List values = [];
+    values.add(value);
   }
 }
