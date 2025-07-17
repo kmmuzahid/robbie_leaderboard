@@ -60,7 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 icon: Badge(
                   isLabelVisible: controller
-                      .notificationController.notificationCounter.value != 0,
+                          .notificationController.notificationCounter.value !=
+                      0,
                   label: Text(controller
                       .notificationController.notificationCounter.value
                       .toString()),
@@ -108,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               //     colorText: AppColors.white);
                               SharePlus.instance.share(ShareParams(
                                   subject: "User Code",
+                                  title: "User Code",
                                   text: controller.userCode.value));
                             },
                           ),

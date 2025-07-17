@@ -8,6 +8,8 @@ class AppImagePath {
   static const String instagramImage = 'assets/images/instagram.png';
   static const String youtubeImage = "assets/images/youtube.png";
   static const String discordImage = "assets/images/discord.png";
+  static const String facebookImage = "assets/images/facebook.png";
+  static const String linkedinImage = "assets/images/linkedin.png";
 
   // Dev Images
   static const String profileImage = 'assets/images/profile.png';

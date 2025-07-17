@@ -52,74 +52,78 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         backgroundColor: AppColors.blueDark,
         appBar: const AppbarWidget(
             title: AppStrings.notifications, centerTitle: true),
-        body: Obx(
-          () => controller.notificationList.isEmpty
-              ? const Center(
-                  child: TextWidget(
-                    text: "There is no notification",
-                    fontColor: AppColors.white,
-                  ),
-                )
-              : Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  child: ListView.separated(
-                    itemCount: controller.notificationList.length,
-                    // Use length of one list (they should be equal)
-                    separatorBuilder: (context, index) =>
-                        const SpaceWidget(spaceHeight: 12),
-                    itemBuilder: (context, index) {
-                      final day = DateFormat("EEE");
-                      final time = DateFormat("h:mm a");
+        body: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (controller.notificationList.isEmpty) {
+            const Center(
+              child: TextWidget(
+                text: "There is no notification",
+                fontColor: AppColors.white,
+              ),
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: ListView.separated(
+              itemCount: controller.notificationList.length,
+              // Use length of one list (they should be equal)
+              separatorBuilder: (context, index) =>
+                  const SpaceWidget(spaceHeight: 12),
+              itemBuilder: (context, index) {
+                final day = DateFormat("EEE");
+                final time = DateFormat("h:mm a");
 
-                      return Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: AppColors.blue,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
+                return Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.blue,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const IconWidget(
+                        icon: AppIconPath.bellIcon,
+                        height: 24,
+                        width: 24,
+                      ),
+                      const SpaceWidget(spaceWidth: 12),
+                      Expanded(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const IconWidget(
-                              icon: AppIconPath.bellIcon,
-                              height: 24,
-                              width: 24,
+                            TextWidget(
+                              text: controller.notificationList[index]!.text,
+                              // Fetch description
+                              fontColor: AppColors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              textAlignment: TextAlign.start,
                             ),
-                            const SpaceWidget(spaceWidth: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextWidget(
-                                    text: controller
-                                        .notificationList[index]!.text,
-                                    // Fetch description
-                                    fontColor: AppColors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14,
-                                    textAlignment: TextAlign.start,
-                                  ),
-                                  const SpaceWidget(spaceHeight: 8),
-                                  TextWidget(
-                                    text:
-                                        "Last ${day.format(controller.notificationList[index]!.createdAt)} at ${time.format(controller.notificationList[index]!.createdAt)}",
-                                    // Fetch timestamp
-                                    fontColor: AppColors.white,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12,
-                                    textAlignment: TextAlign.start,
-                                  ),
-                                ],
-                              ),
+                            const SpaceWidget(spaceHeight: 8),
+                            TextWidget(
+                              text:
+                                  "Last ${day.format(controller.notificationList[index]!.createdAt)} at ${time.format(controller.notificationList[index]!.createdAt)}",
+                              // Fetch timestamp
+                              fontColor: AppColors.white,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                              textAlignment: TextAlign.start,
                             ),
                           ],
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
-                ),
-        ),
+                );
+              },
+            ),
+          );
+        }),
       ),
     );
   }

@@ -18,6 +18,10 @@ class ApiPatchService {
     String? city,
     String? gender,
     String? age,
+    String? facebook,
+    String? instagram,
+    String? twitter,
+    String? linkedin
   ) async {
     final url = "${AppUrls.updateUser}/${LocalStorage.userId}";
 
@@ -30,6 +34,10 @@ class ApiPatchService {
       if (city != null) updateData['city'] = city;
       if (gender != null) updateData['gender'] = gender;
       if (age != null) updateData['age'] = age;
+      if (facebook != null) updateData['facebook'] = facebook;
+      if (instagram != null) updateData['instagram'] = instagram;
+      if (twitter != null) updateData['twitter'] = twitter;
+      if (linkedin != null) updateData['linkedin'] = linkedin;
 
       if (updateData.isEmpty) {
         Get.snackbar("Info", "No data to update");

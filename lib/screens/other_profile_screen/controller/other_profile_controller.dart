@@ -15,6 +15,11 @@ class OtherProfileController extends GetxController {
   final RxString rank = ''.obs;
   final RxBool isLoading = true.obs;
   final RxString profileImage = "".obs;
+  final RxString facebookUrl = "".obs;
+  final RxString instagramUrl = "".obs;
+  final RxString twitterUrl = "".obs;
+  final RxString linkedinUrl = "".obs;
+  final RxString discordUrl = "".obs;
 
   void fetchProfile(String userId) async {
     try {
@@ -25,6 +30,7 @@ class OtherProfileController extends GetxController {
       isLoading.value = false;
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
+        appLog(jsonbody);
         if (response.statusCode == 200) {
           final profile = ProfileUserModel.fromJson(jsonbody["data"]["user"]);
           name.value = profile.name;
@@ -33,8 +39,13 @@ class OtherProfileController extends GetxController {
           totalViews.value = profile.views.toString();
           rank.value = profile.rank.toString();
           profileImage.value = profile.profileImg;
+          facebookUrl.value = profile.facebook;
+          instagramUrl.value = profile.instagram;
+          twitterUrl.value = profile.twitter;
+          linkedinUrl.value = profile.linkedin;
           appLog("Profile image of other users");
           appLog(profileImage.value);
+          appLog(facebookUrl.value);
         } else {
           Get.snackbar("Error", jsonbody["message"],
               colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);

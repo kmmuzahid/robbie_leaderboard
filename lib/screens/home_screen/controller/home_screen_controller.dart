@@ -15,6 +15,8 @@ import 'package:the_leaderboard/screens/bottom_nav/controller/bottom_nav_control
 import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/socket/socket_service.dart';
+import 'package:the_leaderboard/services/storage/storage_keys.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
 class HomeScreenController extends GetxController {
@@ -84,6 +86,8 @@ class HomeScreenController extends GetxController {
           rank.value = userData?.rank ?? 0;
           image.value = userData?.profileImg ?? "";
           userCode.value = userData?.userCode ?? "";
+          LocalStorage.userId = userData!.id;
+          LocalStorage.setString(LocalStorageKeys.userId, userData.id);
           return;
         } else {
           Get.snackbar("Error", data["message"], colorText: AppColors.white);

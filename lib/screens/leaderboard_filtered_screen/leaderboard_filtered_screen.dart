@@ -15,11 +15,19 @@ import 'package:the_leaderboard/screens/other_profile_screen/other_profile_scree
 import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
 import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
+import 'package:the_leaderboard/widgets/text_widget/text_widgets.dart';
 
 class LeaderboardFilteredScreen extends StatefulWidget {
   const LeaderboardFilteredScreen(
-      {super.key, required this.leaderBoardList, required this.isLoading});
+      {super.key,
+      required this.leaderBoardList,
+      required this.countryList,
+      required this.creatorList,
+      required this.isLoading});
   final List<LeaderBoardModel?> leaderBoardList;
+  final List<LeaderBoardModel?> countryList;
+  final List<LeaderBoardModel?> creatorList;
+
   final bool isLoading;
   @override
   _LeaderboardFilteredScreenState createState() =>
@@ -43,9 +51,30 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
     super.dispose();
   }
 
-  Widget buildLeaderboardTabView() {
-    final filteredList =
-        widget.leaderBoardList.where((e) => e!.currentRank > 4).toList();
+  Widget buildLeaderboardTabView(List<LeaderBoardModel?> filterList) {
+    final filteredList = filterList.where((e) => e!.currentRank > 4).toList();
+    if (filterList.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.access_time_outlined,
+              color: AppColors.white,
+              size: 100,
+            ),
+            SpaceWidget(
+              spaceHeight: 20,
+            ),
+            TextWidget(
+              text: "Coming Soon",
+              fontColor: AppColors.white,
+            ),
+            // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
+          ],
+        ),
+      );
+    }
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -58,22 +87,18 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                   if (widget.leaderBoardList.length > 1)
                     InkWell(
                       onTap: () {
-                        final userid = widget.leaderBoardList[1]!.userId;
+                        final userid = filterList[1]!.userId;
                         Get.to(OtherProfileScreen(userId: userid));
                       },
                       child: Transform.translate(
                         offset: Offset.zero,
                         child: TopRankedItem(
-                            fromNetwork:
-                                widget.leaderBoardList[1]!.profileImg !=
-                                    "Unknown",
-                            rankLabel: widget.leaderBoardList[1]!.currentRank
-                                .toString(),
-                            name: widget.leaderBoardList[1]!.name,
+                            fromNetwork: filterList[1]!.profileImg != "Unknown",
+                            rankLabel: filterList[1]!.currentRank.toString(),
+                            name: filterList[1]!.name,
                             amount:
                                 "\$${widget.leaderBoardList[1]!.totalInvest}",
-                            image: widget.leaderBoardList[1]!.profileImg !=
-                                    "Unknown"
+                            image: filterList[1]!.profileImg != "Unknown"
                                 ? "${AppUrls.mainUrl}${widget.leaderBoardList[1]!.profileImg}"
                                 : AppImagePath.profileImage,
                             rankColor: AppColors.greyDark,
@@ -82,20 +107,17 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                     ),
                   InkWell(
                     onTap: () {
-                      final userId = widget.leaderBoardList[0]!.userId;
+                      final userId = filterList[0]!.userId;
                       Get.to(OtherProfileScreen(userId: userId));
                     },
                     child: Transform.translate(
                       offset: const Offset(0, -10),
                       child: TopRankedItem(
-                          fromNetwork: widget.leaderBoardList[0]!.profileImg !=
-                              "Unknown",
-                          rankLabel:
-                              widget.leaderBoardList[0]!.currentRank.toString(),
-                          name: widget.leaderBoardList[0]!.name,
+                          fromNetwork: filterList[0]!.profileImg != "Unknown",
+                          rankLabel: filterList[0]!.currentRank.toString(),
+                          name: filterList[0]!.name,
                           amount: "\$${widget.leaderBoardList[0]!.totalInvest}",
-                          image: widget.leaderBoardList[0]!.profileImg !=
-                                  "Unknown"
+                          image: filterList[0]!.profileImg != "Unknown"
                               ? "${AppUrls.mainUrl}${widget.leaderBoardList[0]!.profileImg}"
                               : AppImagePath.profileImage,
                           rankColor: AppColors.yellow,
@@ -105,22 +127,18 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                   if (widget.leaderBoardList.length > 2)
                     InkWell(
                       onTap: () {
-                        final userId = widget.leaderBoardList[2]!.userId;
+                        final userId = filterList[2]!.userId;
                         Get.to(OtherProfileScreen(userId: userId));
                       },
                       child: Transform.translate(
                         offset: Offset.zero,
                         child: TopRankedItem(
-                            fromNetwork:
-                                widget.leaderBoardList[2]!.profileImg !=
-                                    "Unknown",
-                            rankLabel: widget.leaderBoardList[2]!.currentRank
-                                .toString(),
-                            name: widget.leaderBoardList[2]!.name,
+                            fromNetwork: filterList[2]!.profileImg != "Unknown",
+                            rankLabel: filterList[2]!.currentRank.toString(),
+                            name: filterList[2]!.name,
                             amount:
                                 "\$${widget.leaderBoardList[2]!.totalInvest}",
-                            image: widget.leaderBoardList[2]!.profileImg !=
-                                    "Unknown"
+                            image: filterList[2]!.profileImg != "Unknown"
                                 ? "${AppUrls.mainUrl}${widget.leaderBoardList[2]!.profileImg}"
                                 : AppImagePath.profileImage,
                             rankColor: AppColors.orange,
@@ -206,25 +224,25 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                           children: [
                             // All Time Tab
                             if (selectedLeaderboard == 'Leaderboard')
-                              buildLeaderboardTabView()
+                              buildLeaderboardTabView(widget.leaderBoardList)
                             else if (selectedLeaderboard == 'Event Leaderboard')
-                              buildLeaderboardTabView()
+                              buildLeaderboardTabView(widget.countryList)
                             else
-                              buildLeaderboardTabView(),
+                              buildLeaderboardTabView(widget.creatorList),
                             // Daily Tab
                             if (selectedLeaderboard == 'Leaderboard')
-                              buildLeaderboardTabView()
+                              buildLeaderboardTabView(widget.leaderBoardList)
                             else if (selectedLeaderboard == 'Event Leaderboard')
-                              buildLeaderboardTabView()
+                              buildLeaderboardTabView(widget.countryList)
                             else
-                              buildLeaderboardTabView(),
+                              buildLeaderboardTabView(widget.creatorList),
                             // Monthly Tab
                             if (selectedLeaderboard == 'Leaderboard')
-                              buildLeaderboardTabView()
+                              buildLeaderboardTabView(widget.leaderBoardList)
                             else if (selectedLeaderboard == 'Event Leaderboard')
-                              buildLeaderboardTabView()
+                              buildLeaderboardTabView(widget.countryList)
                             else
-                              buildLeaderboardTabView(),
+                              buildLeaderboardTabView(widget.creatorList),
                           ],
                         ),
                       ),

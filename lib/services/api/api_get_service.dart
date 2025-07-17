@@ -18,18 +18,8 @@ class ApiGetService {
         'Content-Type': 'application/json',
         'authorization': LocalStorage.token
       }).timeout(const Duration(seconds: 10));
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        return response;
-      } else {
-        errorLog("apiGetService - HTTP Error", response.body);
-        Get.snackbar(
-          "Server Error",
-          "Received status code: ${response.statusCode}",
-          colorText: AppColors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
-        Get.toNamed(AppRoutes.serverOff);
-      }
+
+      return response;
     } on SocketException catch (e) {
       errorLog("apiGetService - No Internet", e);
       Get.snackbar(
@@ -62,13 +52,14 @@ class ApiGetService {
   }
 
   static Future<List<LeaderBoardModel?>> fetchFilteredLeaderboardData(
-      {required String name,
+      {required String url,
+      required String name,
       required String country,
       required String city,
       required String gender}) async {
     try {
       final response = await http.get(
-        Uri.parse(AppUrls.leaderBoardData).replace(queryParameters: {
+        Uri.parse(url).replace(queryParameters: {
           "name": name,
           "country": country,
           "city": city,
@@ -82,17 +73,35 @@ class ApiGetService {
       final jsonbody = jsonDecode(response.body);
       if (response.statusCode == 200) {
         final List data = jsonbody["data"];
-        return data
-            .map(
-              (e) => LeaderBoardModel.fromJson(e),
-            )
-            .toList();
+        appLog(data);
+        return data.map((e) => LeaderBoardModel.fromJson(e)).toList();
       } else {
         Get.snackbar("Error", jsonbody["message"], colorText: AppColors.white);
         return [];
       }
+    } on SocketException catch (e) {
+      errorLog("apiGetService - No Internet", e);
+      Get.snackbar(
+        "Connection Error",
+        AppStrings.noInternet,
+        colorText: AppColors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      Get.toNamed(AppRoutes.serverOff);
+      return [];
+    } on TimeoutException catch (e) {
+      errorLog("apiGetService - Timeout", e);
+      Get.snackbar(
+        "Timeout",
+        AppStrings.requestTimeOut,
+        colorText: AppColors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      Get.toNamed(AppRoutes.serverOff);
+      return [];
     } catch (e) {
-      Get.snackbar("Error", e.toString());
+      appLog(e);
+      // Get.snackbar("Error", e.toString());
       return [];
     }
   }

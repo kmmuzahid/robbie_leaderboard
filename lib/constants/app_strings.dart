@@ -92,8 +92,19 @@ class AppStrings {
   static const String gender = "Gender";
   static const String searchNow = "Search Now";
 
+  // Reward Screen
+  static const String almostThere = "Almost there!";
+  static const String giveBiggerSpin = "Give it a bigger spin to continue.";
+  static const String spinOncePerDay =
+      "You can spin once per day. Come back tomorrow for another spin !";
+  static const String spinTowinTicket = "Spin to Win Tickets";
+  static const String limitReached = "Limit Reached";
+
   // Notification Screen
   static const String notifications = "Notifications";
+
+  // Other profile
+  static const String linkNotFound = "Link not found";
 
   // Error
   static const String somethingWentWrong =

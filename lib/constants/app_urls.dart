@@ -34,4 +34,6 @@ class AppUrls {
   static const discordUrl =
       "https://discord.com/login?redirect_to=%2Fchannels%2F%40me";
   static const youtubeUrl = "https://www.youtube.com/";
+  static const creatorLeaderboard = "$_baseUrl/rank/raised";
+  static const countryLeaderboard = "$_baseUrl/rank/country";
 }

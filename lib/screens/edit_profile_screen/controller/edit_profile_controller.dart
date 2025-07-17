@@ -17,6 +17,10 @@ class EditProfileController extends GetxController {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
+  final facebookController = TextEditingController();
+  final instagramController = TextEditingController();
+  final twitterController = TextEditingController();
+  final linkedinController = TextEditingController();
   final Rx<File?> selectedImage = Rx<File?>(null);
   final RxString userImage = "".obs;
   final RxBool isLoading = true.obs;
@@ -86,7 +90,11 @@ class EditProfileController extends GetxController {
           selectedCountry.value,
           selectedCity.value,
           selectedGender.value,
-          ageController.text);
+          ageController.text,
+          facebookController.text,
+          instagramController.text,
+          twitterController.text,
+          linkedinController.text);
       if (selectedImage.value != null) {
         await ApiPatchService.updateProfileImage(selectedImage.value);
       }
@@ -114,6 +122,10 @@ class EditProfileController extends GetxController {
           contactController.text = userData.contact;
           selectedGender.value = userData.gender;
           ageController.text = userData.age;
+          facebookController.text = userData.facebook;
+          instagramController.text = userData.instagram;
+          twitterController.text = userData.twitter;
+          linkedinController.text = userData.linkedin;
           updateCountry(userData.country);
           updateCity(userData.city);
           appLog(userData.city);
@@ -136,5 +148,9 @@ class EditProfileController extends GetxController {
     usernameController.dispose();
     contactController.dispose();
     ageController.dispose();
+    facebookController.dispose();
+    instagramController.dispose();
+    twitterController.dispose();
+    linkedinController.dispose();
   }
 }

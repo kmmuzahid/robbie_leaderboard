@@ -4,7 +4,6 @@ class NotificationModel {
   final String text;
   final String type;
   final DateTime createdAt;
-  final DateTime updatedAt;
   final int v;
 
   NotificationModel({
@@ -13,7 +12,6 @@ class NotificationModel {
     required this.text,
     required this.type,
     required this.createdAt,
-    required this.updatedAt,
     required this.v,
   });
 
@@ -24,7 +22,6 @@ class NotificationModel {
       text: json['text'] ?? '',
       type: json['type'] ?? '',
       createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now()),
-      updatedAt: DateTime.parse(json['updatedAt'] ?? DateTime.now()),
       v: json['__v'] ?? '',
     );
   }
@@ -36,7 +33,6 @@ class NotificationModel {
       'text': text,
       'type': type,
       'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
       '__v': v,
     };
   }

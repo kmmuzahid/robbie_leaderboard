@@ -21,6 +21,10 @@ class ProfileScreenController extends GetxController {
   final RxString rank = ''.obs;
   final RxBool isLoading = true.obs;
   final RxString image = "".obs;
+  final RxString facebookUrl = "".obs;
+  final RxString instagramUrl = "".obs;
+  final RxString twitterUrl = "".obs;
+  final RxString linkedinUrl = "".obs;
   final notificationController = Get.find<NotificationController>();
   Future fetchProfile() async {
     try {
@@ -29,6 +33,7 @@ class ProfileScreenController extends GetxController {
       final response = await ApiGetService.apiGetService(AppUrls.profile);
       isLoading.value = false;
       if (response != null) {
+        appLog(response.body);
         final data = jsonDecode(response.body);
         if (response.statusCode == 200) {
           final profile = ProfileUserModel.fromJson(data["data"]["user"]);
@@ -40,6 +45,10 @@ class ProfileScreenController extends GetxController {
           creatorCode.value = profile.userCode;
           rank.value = profile.rank.toString();
           image.value = profile.profileImg;
+          facebookUrl.value = profile.facebook;
+          instagramUrl.value = profile.instagram;
+          twitterUrl.value = profile.twitter;
+          linkedinUrl.value = profile.linkedin;
           LocalStorage.userId = profile.id;
           LocalStorage.myName = profile.name;
           appLog("user id: ${profile.id} and token: ${LocalStorage.token}");

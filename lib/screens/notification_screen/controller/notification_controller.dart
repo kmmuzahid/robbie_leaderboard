@@ -11,7 +11,7 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 class NotificationController extends GetxController {
   final RxList<NotificationModel?> notificationList = <NotificationModel>[].obs;
   final RxInt notificationCounter = 0.obs;
-
+  final RxBool isLoading = false.obs;
   void setUnread(int value) {
     notificationCounter.value = value;
   }
@@ -27,7 +27,9 @@ class NotificationController extends GetxController {
   void fetchNotification() async {
     try {
       appLog("fetching notification");
+      isLoading.value = true;
       final response = await ApiGetService.apiGetService(AppUrls.notification);
+      isLoading.value = false;
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
         appLog(jsonbody);

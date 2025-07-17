@@ -21,18 +21,7 @@ class ApiPostService {
               body: body == null ? body : jsonEncode(body))
           .timeout(const Duration(seconds: 10));
 
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        return response;
-      } else {
-        errorLog("apiPostService - HTTP Error", response.body);
-        Get.snackbar(
-          "Server Error",
-          "Received status code: ${response.statusCode}",
-          colorText: AppColors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
-        Get.toNamed(AppRoutes.serverOff);
-      }
+      return response;
     } on SocketException catch (e) {
       errorLog("apiPostService - No Internet", e);
       Get.snackbar(

@@ -40,4 +40,14 @@ class LeaderBoardModel {
       'totalView': totalView,
     };
   }
+
+  factory LeaderBoardModel.empty() => LeaderBoardModel(
+        userId: '',
+        name: '',
+        totalInvest: 0,
+        currentRank: 0,
+        previousRank: 0,
+        profileImg: 'Unknown',
+        totalView: 0,
+      );
 }

@@ -27,4 +27,5 @@ class AppIconPath {
   static const String editImageButtonIcon =
       'assets/icons/edit_image_button_icon.svg';
   static const String powerIcon = 'assets/icons/power_icon.svg';
+  static const String timeLeft = 'assets/icons/time_left.svg';
 }

@@ -189,8 +189,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       profileController: controller),
 
                   const SpaceWidget(spaceHeight: 12),
-                  // Country
-
+                  _buildTextField(
+                      label: "Facebook Profile Url",
+                      controller: controller.facebookController,
+                      profileController: controller),
+                  const SpaceWidget(spaceHeight: 12),
+                  _buildTextField(
+                      label: "Instagram Profile Url",
+                      controller: controller.instagramController,
+                      profileController: controller),
+                  const SpaceWidget(spaceHeight: 12),
+                  _buildTextField(
+                      label: "Twitter Profile Url",
+                      controller: controller.twitterController,
+                      profileController: controller),
+                  const SpaceWidget(spaceHeight: 12),
+                  _buildTextField(
+                      label: "Linkedin Profile Url",
+                      controller: controller.linkedinController,
+                      profileController: controller),
+                  const SpaceWidget(spaceHeight: 12),
                   // Save Changes Button
                 ],
               ),
