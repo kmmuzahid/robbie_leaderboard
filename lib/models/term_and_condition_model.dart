@@ -18,7 +18,7 @@ class TermAndConditionModel {
       id: json['_id'],
       v: json['__v'],
       createdAt: DateTime.parse(json['createdAt']),
-      text: json['text'],
+      text: json['text'] ?? "",
       updatedAt: DateTime.parse(json['updatedAt']),
     );
   }

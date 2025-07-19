@@ -118,7 +118,7 @@ class ForgotVerifyOtpController extends GetxController {
     } else {
       Get.snackbar(
         'Error',
-        'Please enter a valid 6-digit OTP',
+        'Please enter a valid 4-digit OTP',
         snackPosition: SnackPosition.BOTTOM,
       );
     }

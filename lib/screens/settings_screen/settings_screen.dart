@@ -60,17 +60,17 @@ class SettingsScreen extends StatelessWidget {
                   Get.toNamed(AppRoutes.reportProblemsScreen);
                 },
               ),
-              const SpaceWidget(spaceHeight: 8),
-              // Payment Method
-              SettingsItemWidget(
-                title: "Payment Method",
-                icon: AppIconPath.paymentIcon,
-                onTap: () {
-                  Get.snackbar("Payment method is not set yet",
-                      "Please wait for the future update",
-                      colorText: AppColors.white);
-                },
-              ),
+              // const SpaceWidget(spaceHeight: 8),
+              // // Payment Method
+              // SettingsItemWidget(
+              //   title: "Payment Method",
+              //   icon: AppIconPath.paymentIcon,
+              //   onTap: () {
+              //     Get.snackbar("Payment method is not set yet",
+              //         "Please wait for the future update",
+              //         colorText: AppColors.white);
+              //   },
+              // ),
               const SpaceWidget(spaceHeight: 8),
               // Change Password
               SettingsItemWidget(

@@ -61,7 +61,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           if (controller.notificationList.isEmpty) {
             const Center(
               child: TextWidget(
-                text: "There is no notification",
+                text: "You have no new notifications",
                 fontColor: AppColors.white,
               ),
             );

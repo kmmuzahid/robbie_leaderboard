@@ -54,13 +54,14 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     String userId = LocalStorage.userId;
     appLog("mydata");
     appLog(LocalStorage.userId);
-    final myData = leaderboard.firstWhere(
+    final myData = filteredList.firstWhere(
       (element) => element!.userId == userId,
       orElse: () => LeaderBoardModel.empty(),
     );
-    final myIndex = leaderboard.indexWhere(
+    final myIndex = filteredList.indexWhere(
       (element) => element?.userId == userId,
     );
+    bool showFloating = true;
     appLog("myIndex is: $myIndex");
     if (leaderboard.isEmpty) {
       return const Center(
@@ -159,8 +160,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
         Expanded(
           child: Stack(children: [
             NotificationListener<ScrollNotification>(
+              key: Key(myIndex.toString()),
               onNotification: (scrollNotification) {
-                if (myIndex < 3) return false;
                 final scrollOffset = scrollNotification.metrics.pixels;
                 final screenHeight =
                     scrollNotification.metrics.viewportDimension;
@@ -173,15 +174,16 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
                 final isInView =
                     itemBottom >= visibleTop && itemTop <= visibleBottom;
-                appLog("scrollOffset: $scrollOffset");
-                appLog("screenHeight: $screenHeight");
-                appLog("itemTop: $itemTop");
-                appLog("itemBottom: $itemBottom");
-                appLog("visibleTop: $visibleTop");
-                appLog("visibleBottom :$visibleBottom");
-                appLog("isInView: $isInView");
-
-                _controller.showFloating.value = !isInView;
+                print(screenHeight);
+                if (isInView && showFloating) {
+                  setState(() {
+                    showFloating = false;
+                  });
+                } else if (!isInView && !showFloating) {
+                  setState(() {
+                    showFloating = true;
+                  });
+                }
                 return false;
               },
               child: ListView.builder(
@@ -207,13 +209,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                 },
               ),
             ),
-            _controller.showFloating.value && myData != null && myIndex > 3
+            showFloating && myData != null && myIndex != -1
                 ? Positioned(
                     bottom: 0,
                     left: 0,
                     right: 0,
                     child: Container(
-                      color: AppColors.green,
+                      color: AppColors.greyDarker,
                       child: LeaderboardItem(
                         key: ValueKey(
                             '${myData.name}${myData.currentRank}$myIndex'),

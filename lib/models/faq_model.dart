@@ -18,8 +18,8 @@ class FaqModel {
   factory FaqModel.fromJson(Map<String, dynamic> json) {
     return FaqModel(
       id: json['_id'],
-      question: json['question'],
-      answer: json['answer'],
+      question: json['question'] ?? "",
+      answer: json['answer'] ?? "",
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
       v: json['__v'],

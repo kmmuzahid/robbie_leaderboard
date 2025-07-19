@@ -106,10 +106,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           launchUrl(Uri.parse(AppUrls.discordUrl),
                               mode: LaunchMode.externalApplication);
                         },
-                        youtubeButtonOnPressed: () {
-                          launchUrl(Uri.parse(AppUrls.youtubeUrl),
+                        facebookButtonOnPressed: () {
+                          launchUrl(Uri.parse(AppUrls.facebookUrl),
                               mode: LaunchMode.externalApplication);
                         },
+                        linkedinButtonOnPressed: () {
+                          launchUrl(Uri.parse(AppUrls.linkedinUrl),
+                              mode: LaunchMode.externalApplication);
+                        },
+                        // youtubeButtonOnPressed: () {
+                        //   launchUrl(Uri.parse(AppUrls.youtubeUrl),
+                        //       mode: LaunchMode.externalApplication);
+                        // },
                       ),
 
                       const SpaceWidget(spaceHeight: 16),

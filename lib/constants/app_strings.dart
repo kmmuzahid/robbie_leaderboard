@@ -111,4 +111,20 @@ class AppStrings {
       "Something went wrong. Please try again.";
   static const String noInternet = "Please check your internet connection.";
   static const String requestTimeOut = "Request timed out. Try again later.";
+  static const String missingPassword = "Missing Password";
+  static const String incorrectPassword = "Incorrect Password";
+  static const String passwordIsIncorrect =
+      "The password you entered is incorrect. Please try again.";
+  static const String formIncomplete = 'Form Incomplete';
+  static const String pleaseFillAllField = 'Please fill in all fields.';
+  static const String passwordMismatched = 'Password Mismatch';
+  static const String passwordDontMatch =
+      'The passwords you entered don\'t match. Please try again.';
+
+  // Account delete
+  static const String enterPassword = "Please enter your password to continue.";
+  static const String permanentDeleteAccount =
+      "This will permanently delete your account. Are you sure?";
+  static const String yes = "Yes";
+  static const String no = "No";
 }

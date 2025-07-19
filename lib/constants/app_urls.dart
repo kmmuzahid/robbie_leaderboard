@@ -33,6 +33,7 @@ class AppUrls {
   static const twitterUrl = "https://x.com/i/flow/login";
   static const discordUrl =
       "https://discord.com/login?redirect_to=%2Fchannels%2F%40me";
+  static const linkedinUrl = "https://www.linkedin.com/login";
   static const youtubeUrl = "https://www.youtube.com/";
   static const creatorLeaderboard = "$_baseUrl/rank/raised";
   static const countryLeaderboard = "$_baseUrl/rank/country";

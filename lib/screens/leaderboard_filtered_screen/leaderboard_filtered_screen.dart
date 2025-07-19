@@ -75,81 +75,78 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
         ),
       );
     }
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SpaceWidget(spaceHeight: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  if (widget.leaderBoardList.length > 1)
-                    InkWell(
-                      onTap: () {
-                        final userid = filterList[1]!.userId;
-                        Get.to(OtherProfileScreen(userId: userid));
-                      },
-                      child: Transform.translate(
-                        offset: Offset.zero,
-                        child: TopRankedItem(
-                            fromNetwork: filterList[1]!.profileImg != "Unknown",
-                            rankLabel: filterList[1]!.currentRank.toString(),
-                            name: filterList[1]!.name,
-                            amount:
-                                "\$${widget.leaderBoardList[1]!.totalInvest}",
-                            image: filterList[1]!.profileImg != "Unknown"
-                                ? "${AppUrls.mainUrl}${widget.leaderBoardList[1]!.profileImg}"
-                                : AppImagePath.profileImage,
-                            rankColor: AppColors.greyDark,
-                            avatarSize: 40),
-                      ),
-                    ),
-                  InkWell(
-                    onTap: () {
-                      final userId = filterList[0]!.userId;
-                      Get.to(OtherProfileScreen(userId: userId));
-                    },
-                    child: Transform.translate(
-                      offset: const Offset(0, -10),
-                      child: TopRankedItem(
-                          fromNetwork: filterList[0]!.profileImg != "Unknown",
-                          rankLabel: filterList[0]!.currentRank.toString(),
-                          name: filterList[0]!.name,
-                          amount: "\$${widget.leaderBoardList[0]!.totalInvest}",
-                          image: filterList[0]!.profileImg != "Unknown"
-                              ? "${AppUrls.mainUrl}${widget.leaderBoardList[0]!.profileImg}"
-                              : AppImagePath.profileImage,
-                          rankColor: AppColors.yellow,
-                          avatarSize: 55),
-                    ),
-                  ),
-                  if (widget.leaderBoardList.length > 2)
-                    InkWell(
-                      onTap: () {
-                        final userId = filterList[2]!.userId;
-                        Get.to(OtherProfileScreen(userId: userId));
-                      },
-                      child: Transform.translate(
-                        offset: Offset.zero,
-                        child: TopRankedItem(
-                            fromNetwork: filterList[2]!.profileImg != "Unknown",
-                            rankLabel: filterList[2]!.currentRank.toString(),
-                            name: filterList[2]!.name,
-                            amount:
-                                "\$${widget.leaderBoardList[2]!.totalInvest}",
-                            image: filterList[2]!.profileImg != "Unknown"
-                                ? "${AppUrls.mainUrl}${widget.leaderBoardList[2]!.profileImg}"
-                                : AppImagePath.profileImage,
-                            rankColor: AppColors.orange,
-                            avatarSize: 40),
-                      ),
-                    ),
-                ]),
-          ),
-          ...List.generate(
-            filteredList.length,
-            (index) {
+    return Column(
+      children: [
+        const SpaceWidget(spaceHeight: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            if (widget.leaderBoardList.length > 1)
+              InkWell(
+                onTap: () {
+                  final userid = filterList[1]!.userId;
+                  Get.to(OtherProfileScreen(userId: userid));
+                },
+                child: Transform.translate(
+                  offset: Offset.zero,
+                  child: TopRankedItem(
+                      fromNetwork: filterList[1]!.profileImg != "Unknown",
+                      rankLabel: filterList[1]!.currentRank.toString(),
+                      name: filterList[1]!.name,
+                      amount: "\$${widget.leaderBoardList[1]!.totalInvest}",
+                      image: filterList[1]!.profileImg != "Unknown"
+                          ? "${AppUrls.mainUrl}${widget.leaderBoardList[1]!.profileImg}"
+                          : AppImagePath.profileImage,
+                      rankColor: AppColors.greyDark,
+                      avatarSize: 40),
+                ),
+              ),
+            InkWell(
+              onTap: () {
+                final userId = filterList[0]!.userId;
+                Get.to(OtherProfileScreen(userId: userId));
+              },
+              child: Transform.translate(
+                offset: const Offset(0, -10),
+                child: TopRankedItem(
+                    fromNetwork: filterList[0]!.profileImg != "Unknown",
+                    rankLabel: filterList[0]!.currentRank.toString(),
+                    name: filterList[0]!.name,
+                    amount: "\$${widget.leaderBoardList[0]!.totalInvest}",
+                    image: filterList[0]!.profileImg != "Unknown"
+                        ? "${AppUrls.mainUrl}${widget.leaderBoardList[0]!.profileImg}"
+                        : AppImagePath.profileImage,
+                    rankColor: AppColors.yellow,
+                    avatarSize: 55),
+              ),
+            ),
+            if (widget.leaderBoardList.length > 2)
+              InkWell(
+                onTap: () {
+                  final userId = filterList[2]!.userId;
+                  Get.to(OtherProfileScreen(userId: userId));
+                },
+                child: Transform.translate(
+                  offset: Offset.zero,
+                  child: TopRankedItem(
+                      fromNetwork: filterList[2]!.profileImg != "Unknown",
+                      rankLabel: filterList[2]!.currentRank.toString(),
+                      name: filterList[2]!.name,
+                      amount: "\$${widget.leaderBoardList[2]!.totalInvest}",
+                      image: filterList[2]!.profileImg != "Unknown"
+                          ? "${AppUrls.mainUrl}${widget.leaderBoardList[2]!.profileImg}"
+                          : AppImagePath.profileImage,
+                      rankColor: AppColors.orange,
+                      avatarSize: 40),
+                ),
+              ),
+          ]),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: filteredList.length,
+            itemBuilder: (context, index) {
               final data = filteredList[index];
               return LeaderboardItem(
                 key: ValueKey('${data!.name}${data.currentRank}$index'),
@@ -166,8 +163,27 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
               );
             },
           ),
-        ],
-      ),
+        ),
+        // ...List.generate(
+        //   filteredList.length,
+        //   (index) {
+        //     final data = filteredList[index];
+        //     return LeaderboardItem(
+        //       key: ValueKey('${data!.name}${data.currentRank}$index'),
+        //       rank: data.currentRank,
+        //       name: data.name,
+        //       amount: "\$${data.totalInvest.toString()}",
+        //       isUp: (data.previousRank - data.currentRank) > 0 ? true : false,
+        //       image: data.profileImg != "Unknown"
+        //           ? "${AppUrls.mainUrl}${data.profileImg}"
+        //           : AppImagePath.profileImage,
+        //       onPressed: () {
+        //         Get.to(OtherProfileScreen(userId: data.userId));
+        //       },
+        //     );
+        //   },
+        // ),
+      ],
     );
   }
 

@@ -18,7 +18,9 @@ class ProfileHeaderWidget extends StatelessWidget {
   final VoidCallback tweeterButtonOnPressed;
   final VoidCallback instagramButtonOnPressed;
   final VoidCallback discordButtonOnPressed;
-  final VoidCallback youtubeButtonOnPressed;
+  final VoidCallback? facebookButtonOnPressed;
+  final VoidCallback? linkedinButtonOnPressed;
+  final VoidCallback? youtubeButtonOnPressed;
   final bool isLoading;
   final bool fromNetwork;
 
@@ -32,7 +34,9 @@ class ProfileHeaderWidget extends StatelessWidget {
       required this.tweeterButtonOnPressed,
       required this.instagramButtonOnPressed,
       required this.discordButtonOnPressed,
-      required this.youtubeButtonOnPressed,
+      this.youtubeButtonOnPressed,
+      this.facebookButtonOnPressed,
+      this.linkedinButtonOnPressed,
       required this.isLoading,
       required this.fromNetwork});
 
@@ -151,11 +155,20 @@ class ProfileHeaderWidget extends StatelessWidget {
               ),
               const SpaceWidget(spaceWidth: 16),
               InkWell(
-                onTap: youtubeButtonOnPressed,
+                onTap: facebookButtonOnPressed,
                 child: const ImageWidget(
                   height: 45,
                   width: 45,
-                  imagePath: AppImagePath.youtubeImage,
+                  imagePath: AppImagePath.facebookImage,
+                ),
+              ),
+              const SpaceWidget(spaceWidth: 16),
+              InkWell(
+                onTap: linkedinButtonOnPressed,
+                child: const ImageWidget(
+                  height: 45,
+                  width: 45,
+                  imagePath: AppImagePath.linkedinImage,
                 ),
               ),
             ],

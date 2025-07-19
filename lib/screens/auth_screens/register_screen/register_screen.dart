@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/screens/auth_screens/register_screen/widgets/dropdown_button_widget.dart';
+import 'package:the_leaderboard/widgets/phone_number_field_widget/phone_number_field_widget.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_icon_path.dart';
@@ -66,7 +68,7 @@ class RegisterScreen extends StatelessWidget {
                   const SpaceWidget(spaceHeight: 8),
                   TextFieldWidget(
                     controller: controller.emailController,
-                    hintText: 'Enter email',
+                    hintText: 'Enter Email',
                     maxLines: 1,
                   ),
                   const SpaceWidget(spaceHeight: 16),
@@ -82,7 +84,7 @@ class RegisterScreen extends StatelessWidget {
                   const SpaceWidget(spaceHeight: 8),
                   TextFieldWidget(
                     controller: controller.passwordController,
-                    hintText: 'Enter password',
+                    hintText: 'Enter Password',
                     maxLines: 1,
                     suffixIcon: AppIconPath.visibilityOnIcon,
                   ),
@@ -99,7 +101,7 @@ class RegisterScreen extends StatelessWidget {
                   const SpaceWidget(spaceHeight: 8),
                   TextFieldWidget(
                     controller: controller.confirmPasswordController,
-                    hintText: 'Enter password',
+                    hintText: 'Enter Password Again',
                     maxLines: 1,
                     suffixIcon: AppIconPath.visibilityOnIcon,
                   ),
@@ -116,7 +118,7 @@ class RegisterScreen extends StatelessWidget {
                   const SpaceWidget(spaceHeight: 8),
                   TextFieldWidget(
                       controller: controller.nameController,
-                      hintText: "Enter name"),
+                      hintText: "Enter Name"),
                   const SpaceWidget(spaceHeight: 16),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
@@ -184,7 +186,7 @@ class RegisterScreen extends StatelessWidget {
                   const SpaceWidget(spaceHeight: 8),
                   TextFieldWidget(
                       controller: controller.ageController,
-                      hintText: "Enter age"),
+                      hintText: "Enter Age"),
                   const SpaceWidget(spaceHeight: 16),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
@@ -196,9 +198,18 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   const SpaceWidget(spaceHeight: 8),
-                  TextFieldWidget(
-                      controller: controller.contactController,
-                      hintText: "Enter contact"),
+                  PhoneNumberFieldWidget(
+                    controller: controller.contactController,
+                    onInputChanged: (p0) {
+                      controller.phoneNumber.value = p0.phoneNumber!;
+                    },
+                    onInputValidated: (p0) {
+                      controller.isValidPhonenumber.value = p0;
+                    },
+                  ),
+                  // TextFieldWidget(
+                  //     controller: controller.contactController,
+                  //     hintText: "Enter Contact"),
                   const SpaceWidget(spaceHeight: 16),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),

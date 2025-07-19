@@ -31,6 +31,8 @@ class RegisterScreenController extends GetxController {
   List<String> cities = ["Sydney DC", "Melbourne", "Brisbane"];
   final List<String> genders = ['Male', 'Female', 'Other'];
 
+  final RxString phoneNumber = "".obs;
+  final RxBool isValidPhonenumber = true.obs;
   void updateCountry(String value) {
     selectedCountry.value = value;
     cities = findCity(value);
@@ -64,7 +66,7 @@ class RegisterScreenController extends GetxController {
     String city = selectedCity.value;
     String gender = selectedGender.value;
     String age = ageController.text;
-    String contact = contactController.text;
+    String contact = phoneNumber.value;
     String referral = referralController.text;
     if (email.isEmpty ||
         password.isEmpty ||
@@ -78,27 +80,40 @@ class RegisterScreenController extends GetxController {
     }
 
     if (password != confirmPassword) {
-      Get.snackbar('Password Mismatch', 'Passwords do not match.',
-          colorText: AppColors.white);
+      Get.snackbar(
+        'Password Mismatch',
+        'The passwords you entered don\'t match. Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+
       return;
     }
     if (password.length < 6) {
       Get.snackbar(
-        "Password is too short",
-        "Please write a password with atleast 6 characters",
+        "Password Too Short",
+        "Please enter a password with at least 6 characters.",
         colorText: AppColors.white,
+      );
+
+      return;
+    }
+    if (!isValidPhonenumber.value) {
+      Get.snackbar(
+        "Invalid Phone Number",
+        "Please enter a valid phone number.",
+        colorText: AppColors.white,
+        snackPosition: SnackPosition.BOTTOM,
       );
       return;
     }
-    if (!(contact.length == 11)) { 
-      Get.snackbar(
-          "Invalid phone number", "Phone number should be 11 characters",
-          colorText: AppColors.white);
-      return;
-    }
+
     if (int.parse(age) < 0) {
-      Get.snackbar("Age can't be negative", "Please write your correct age",
-          colorText: AppColors.white);
+      Get.snackbar(
+        "Invalid Age",
+        "Age cannot be negative. Please enter a valid age.",
+        colorText: AppColors.white,
+      );
+
       return;
     }
     appLog(

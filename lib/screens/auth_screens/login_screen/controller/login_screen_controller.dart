@@ -34,7 +34,7 @@ class LoginScreenController extends GetxController {
       return;
     }
     if (!email.contains("@")) {
-      Get.snackbar('Email invaild', 'PLease write a vaild email',
+      Get.snackbar('Email invaild', 'PLease write a vaild email address',
           snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
       return;
     }

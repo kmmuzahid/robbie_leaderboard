@@ -16,8 +16,7 @@ class LeaderboardController extends GetxController {
   final RxBool isLoading = true.obs;
 
   final ScrollController scrollController = ScrollController();
-  final double eachItemHeight = 60.0;
-  final RxBool showFloating = true.obs;
+  final double eachItemHeight = 50.0;
 
   void fetchLeaderBoardData() async {
     try {

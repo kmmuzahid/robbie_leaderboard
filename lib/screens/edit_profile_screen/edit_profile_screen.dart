@@ -7,8 +7,10 @@ import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/edit_profile_screen/controller/edit_profile_controller.dart';
 import 'package:the_leaderboard/screens/edit_profile_screen/widgets/dropdown_button_widget.dart';
+import 'package:the_leaderboard/screens/edit_profile_screen/widgets/phone_number_widget.dart';
 import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
+
 import 'package:the_leaderboard/widgets/shimmer_loading_widget/shimmer_loading.dart';
 
 import '../../constants/app_colors.dart';
@@ -155,10 +157,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       controller: controller.usernameController,
                       profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
-                  _buildTextField(
-                      label: "Contact",
-                      controller: controller.contactController,
-                      profileController: controller),
+                  PhoneNumberFieldWidget(
+                    label: "Contact",
+                    isLoading: controller.isLoading.value,
+                    controller: controller.contactController,
+                    onChanged: (p0) {
+                      controller.phoneNumber.value = p0;
+                    },
+                    onValidated: (p0) {
+                      controller.isValidPhonenumber.value = p0;
+                    },
+                  ),
+                  // _buildTextField(
+                  //     label: "Contact",
+                  //     controller: controller.contactController,
+                  //     profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
                   _buildDropdownField(
                       label: "Gender",

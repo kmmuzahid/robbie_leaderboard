@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
+import 'package:the_leaderboard/constants/app_strings.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
@@ -29,8 +30,8 @@ class CreateNewPasswordScreenController extends GetxController {
         "createNewPassword button pressed with password: $password and confirm password: $confirmPassword");
     if (password.isEmpty || confirmPassword.isEmpty) {
       Get.snackbar(
-        'Form Incomplete',
-        'Please fill in all fields.',
+        AppStrings.formIncomplete,
+        AppStrings.pleaseFillAllField,
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
@@ -38,10 +39,11 @@ class CreateNewPasswordScreenController extends GetxController {
 
     if (password != confirmPassword) {
       Get.snackbar(
-        'Password Mismatch',
-        'Passwords do not match.',
+        AppStrings.passwordMismatched,
+        AppStrings.passwordDontMatch,
         snackPosition: SnackPosition.BOTTOM,
       );
+
       return;
     }
     final response = await ApiPostService.apiPostService(

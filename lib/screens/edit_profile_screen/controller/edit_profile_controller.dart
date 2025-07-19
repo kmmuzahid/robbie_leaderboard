@@ -33,6 +33,9 @@ class EditProfileController extends GetxController {
   List<String> cities = ["Sydney", "Melbourne", "Brisbane"];
   final List<String> genders = ['Male', 'Female', 'Other'];
 
+  final RxString phoneNumber = "".obs;
+  final RxBool isValidPhonenumber = true.obs;
+
   void updateCountry(String value) {
     selectedCountry.value = value;
     cities = findCity(value);
@@ -71,22 +74,34 @@ class EditProfileController extends GetxController {
 
   void saveChange() async {
     appLog("Changes are saving");
-    if (contactController.text.isNotEmpty &&
-        contactController.text.length != 11) {
+    // if (contactController.text.isNotEmpty &&
+    //     contactController.text.length != 11) {
+    //   Get.snackbar(
+    //       "Invalid phone number", "Phone number should be 11 characters",
+    //       colorText: AppColors.white);
+    //   return;
+    // }
+    if (ageController.text.isNotEmpty && int.parse(ageController.text) < 0) {
       Get.snackbar(
-          "Invalid phone number", "Phone number should be 11 characters",
-          colorText: AppColors.white);
+        "Invalid Age",
+        "Age cannot be negative. Please enter a valid age.",
+        colorText: AppColors.white,
+      );
+
       return;
     }
-    if (ageController.text.isNotEmpty && int.parse(ageController.text) < 0) {
-      Get.snackbar("Age can't be negative", "Please write your correct age",
-          colorText: AppColors.white);
+    if (!(isValidPhonenumber.value)) {
+      Get.snackbar(
+        "Invalid Phone Number",
+        "Please enter a valid phone number.",
+        colorText: AppColors.white,
+      );
       return;
     }
     try {
       await ApiPatchService.updateProfile(
           usernameController.text,
-          contactController.text,
+          phoneNumber.value,
           selectedCountry.value,
           selectedCity.value,
           selectedGender.value,

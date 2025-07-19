@@ -17,15 +17,27 @@ class ChangePasswordController extends GetxController {
     if (oldPasswordController.text.isEmpty ||
         newPasswordController.text.isEmpty ||
         confirmNewPasswordController.text.isEmpty) {
-      Get.snackbar("Error", "Please fill the form correctly");
+      Get.snackbar("Error", "Please fill the form correctly",
+          colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
       return;
     }
     if (newPasswordController.text != confirmNewPasswordController.text) {
-      Get.snackbar("Error", "Password mismatched error");
+      Get.snackbar(
+        "Password Mismatch",
+        "The passwords you entered do not match. Please try again.",
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: AppColors.white,
+      );
       return;
     }
     if (oldPasswordController.text == newPasswordController.text) {
-      Get.snackbar("Error", "Old and new password are same");
+      Get.snackbar(
+        "Error",
+        "The new password cannot be the same as the old password.",
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: AppColors.white,
+      );
+
       return;
     }
     appLog(

@@ -169,7 +169,7 @@ class ProfileCardWidget extends StatelessWidget {
                 child: ButtonWidget(
                   onPressed: onJoinLeaderboardPressed,
                   label: AppStrings.joinLeaderboard,
-                  buttonWidth: 192,
+                  buttonWidth: AppSize.width(value: 192),
                   buttonHeight: 36,
                   buttonRadius: BorderRadius.circular(8),
                   fontSize: 15,
@@ -182,7 +182,7 @@ class ProfileCardWidget extends StatelessWidget {
                 child: ButtonWidget(
                   onPressed: onSharePressed,
                   label: AppStrings.share,
-                  buttonWidth: 192,
+                  buttonWidth: AppSize.width(value: 192),
                   buttonHeight: 36,
                   buttonRadius: BorderRadius.circular(8),
                   fontSize: 15,
