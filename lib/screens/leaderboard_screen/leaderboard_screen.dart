@@ -38,9 +38,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _controller.fetchLeaderBoardData();
-    _controller.fetchCreatorData();
-    _controller.fetchCountryData();
+    _controller.fetchData();
   }
 
   @override
@@ -160,7 +158,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
         Expanded(
           child: Stack(children: [
             NotificationListener<ScrollNotification>(
-              key: Key(myIndex.toString()),
+              key: ValueKey(myIndex.toString()),
               onNotification: (scrollNotification) {
                 final scrollOffset = scrollNotification.metrics.pixels;
                 final screenHeight =
@@ -174,15 +172,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
                 final isInView =
                     itemBottom >= visibleTop && itemTop <= visibleBottom;
-                print(screenHeight);
+
                 if (isInView && showFloating) {
-                  setState(() {
-                    showFloating = false;
-                  });
+                  showFloating = false;
                 } else if (!isInView && !showFloating) {
-                  setState(() {
-                    showFloating = true;
-                  });
+                  showFloating = true;
                 }
                 return false;
               },
@@ -202,6 +196,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                     image: fromNetwork
                         ? "${AppUrls.mainUrl}${data.profileImg}"
                         : AppImagePath.profileImage,
+                    backgrounColor: data.userId == myData?.userId
+                        ? AppColors.greyDarker
+                        : null,
                     onPressed: () {
                       Get.to(OtherProfileScreen(userId: data.userId));
                     },

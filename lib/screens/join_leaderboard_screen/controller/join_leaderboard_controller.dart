@@ -1,17 +1,18 @@
 import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
-import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class JoinLeaderboardController extends GetxController {
   final amountController = TextEditingController();
   final RxString generatedUrl = "".obs;
+  late WebViewController webController;
 
   void submit() async {
     try {
@@ -26,7 +27,6 @@ class JoinLeaderboardController extends GetxController {
           generatedUrl.value = data["data"];
           final url = Uri.parse(generatedUrl.value);
           await launchUrl(url, mode: LaunchMode.inAppBrowserView);
-          Get.offAll(AppRoutes.appNavigation);
         } else {
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }

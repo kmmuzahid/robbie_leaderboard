@@ -93,7 +93,7 @@ class RewardsScreenController extends GetxController {
     fetchUserTicket();
     totalTicket.value = LocalStorage.totalTicket;
     dayIndex.value = LocalStorage.dayIndex;
-    if (dayIndex.value == 7) {
+    if (dayIndex.value > 7) {
       dayIndex.value = 0;
     }
     //temp
@@ -108,14 +108,21 @@ class RewardsScreenController extends GetxController {
     //---end
   }
 
-  String getRemainingDays() {
+  String getRemainingTime() {
     final deadline = currentRuffle.value!.deadline;
-    final today = DateTime.now();
-    final remaining = deadline.difference(today).inDays;
-    if (remaining > 0) {
-      return "${remaining.toString()} Days Remaining";
-    } else {
+    final now = DateTime.now();
+    final diff = deadline.difference(now);
+
+    if (diff.isNegative) {
       return "Deadline has already passed";
+    } else if (diff.inDays >= 1) {
+      return "${diff.inDays} day${diff.inDays > 1 ? 's' : ''} remaining";
+    } else if (diff.inHours >= 1) {
+      return "${diff.inHours} hour${diff.inHours > 1 ? 's' : ''} remaining";
+    } else if (diff.inMinutes >= 1) {
+      return "${diff.inMinutes} minute${diff.inMinutes > 1 ? 's' : ''} remaining";
+    } else {
+      return "${diff.inSeconds} second${diff.inSeconds != 1 ? 's' : ''} remaining";
     }
   }
 
@@ -142,6 +149,13 @@ class RewardsScreenController extends GetxController {
     appLog(today);
     final lastwheelday = LocalStorage.lastWheelday;
     appLog(lastwheelday);
+    if (getRemainingTime() == "Deadline has already passed") {
+      Get.snackbar("Deadline Passed",
+          "The deadline has already passed. Please check the date.",
+          colorText: AppColors.white);
+      return;
+    }
+
     if (lastwheelday.isEmpty || today != lastwheelday) {
       // final random =
       //     math.Random().nextInt(currentRuffle.value!.ticketButtons.length);

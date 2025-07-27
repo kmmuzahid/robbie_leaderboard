@@ -17,21 +17,23 @@ class LeaderboardItem extends StatelessWidget {
   final bool isUp;
   final VoidCallback onPressed;
   final bool fromNetwork;
+  final Color? backgrounColor;
 
-  const LeaderboardItem({
-    super.key,
-    required this.rank,
-    required this.name,
-    required this.amount,
-    required this.image,
-    required this.isUp,
-    required this.onPressed,
-    required this.fromNetwork
-  });
+  const LeaderboardItem(
+      {super.key,
+      required this.rank,
+      required this.name,
+      required this.amount,
+      required this.image,
+      required this.isUp,
+      required this.onPressed,
+      required this.fromNetwork,
+      this.backgrounColor});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      color: backgrounColor,
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Row(
         mainAxisSize: MainAxisSize.max,

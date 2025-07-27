@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
@@ -76,6 +77,16 @@ class LoginScreenController extends GetxController {
     }
 
     return;
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    if (kDebugMode) {
+      emailController.text = "biwova9852@jxbav.com";
+      passwordController.text = "12345678";
+    }
   }
 
   @override

@@ -18,6 +18,13 @@ class LeaderboardController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final double eachItemHeight = 50.0;
 
+  void fetchData() {
+    update();
+    fetchLeaderBoardData();
+    fetchCountryData();
+    fetchCreatorData();
+  }
+
   void fetchLeaderBoardData() async {
     try {
       appLog("leaderboard data is fetching");

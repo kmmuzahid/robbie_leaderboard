@@ -185,7 +185,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                               controller.isRuffleLoading.value
                                   ? const ShimmerLoading(width: 120, height: 10)
                                   : GradientText(
-                                      text: controller.getRemainingDays(),
+                                      text: controller.getRemainingTime(),
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
                                       textAlign: TextAlign.start,
@@ -272,6 +272,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                       const EdgeInsets.symmetric(horizontal: 0),
                                   child:
                                       NotificationListener<ScrollNotification>(
+                                    key: const ValueKey("spin-wheel"),
                                     onNotification: (notification) {
                                       if (notification
                                           is ScrollStartNotification) {
@@ -281,12 +282,11 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                         appLog('stopped');
                                         appLog(controller.spinList.last);
                                         if (controller.spinList.length < 10) {
-                                          Get.snackbar(
-                                            AppStrings.almostThere,
-                                            AppStrings.giveBiggerSpin,
-                                            snackPosition: SnackPosition.BOTTOM,
-                                            colorText: AppColors.white
-                                          );
+                                          Get.snackbar(AppStrings.almostThere,
+                                              AppStrings.giveBiggerSpin,
+                                              snackPosition:
+                                                  SnackPosition.BOTTOM,
+                                              colorText: AppColors.white);
                                         } else {
                                           controller.spinWheel();
                                         }
@@ -330,8 +330,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 24),
                             child: TextWidget(
-                              text:
-                                 AppStrings.spinOncePerDay,
+                              text: AppStrings.spinOncePerDay,
                               fontColor: AppColors.silver,
                               fontWeight: FontWeight.w500,
                               fontSize: 12,
