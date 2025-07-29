@@ -73,6 +73,8 @@ class ProfileScreenController extends GetxController {
     LocalStorage.setString(LocalStorageKeys.myPassword, "");
     LocalStorage.setBool(LocalStorageKeys.rememberMe, false);
     LocalStorage.setString(LocalStorageKeys.token, "");
+    LocalStorage.userId = "";
+    LocalStorage.setString(LocalStorageKeys.userId, "");
     Get.offAllNamed(AppRoutes.loginScreen);
   }
 

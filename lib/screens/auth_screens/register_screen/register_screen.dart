@@ -1,9 +1,11 @@
+import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/screens/auth_screens/register_screen/widgets/dropdown_button_widget.dart';
+
 import 'package:the_leaderboard/widgets/phone_number_field_widget/phone_number_field_widget.dart';
 
 import '../../../constants/app_colors.dart';
@@ -130,6 +132,13 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   const SpaceWidget(spaceHeight: 8),
+
+                  // CustomCountryStateCityWidget(
+                  //   cityController: controller.cityController,
+                  //   countryController: controller.countryController,
+                  //   stateController: controller.stateController,
+                  // ),
+
                   Obx(
                     () => DropdownButtonWidget(
                       value: controller.selectedCountry.value,
@@ -231,6 +240,7 @@ class RegisterScreen extends StatelessWidget {
                     buttonWidth: double.infinity,
                   ),
                   const SpaceWidget(spaceHeight: 24),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

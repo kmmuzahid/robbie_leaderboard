@@ -23,6 +23,9 @@ class RegisterScreenController extends GetxController {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
+  final countryController = TextEditingController();
+  final stateController = TextEditingController();
+  final cityController = TextEditingController();
   final TextEditingController referralController =
       TextEditingController(text: "");
   final RxString selectedCountry = 'Australia'.obs;
@@ -161,6 +164,9 @@ class RegisterScreenController extends GetxController {
     ageController.dispose();
     contactController.dispose();
     referralController.dispose();
+    countryController.dispose();
+    stateController.dispose();
+    cityController.dispose();
     super.onClose();
   }
 }

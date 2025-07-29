@@ -84,8 +84,11 @@ class LoginScreenController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     if (kDebugMode) {
-      emailController.text = "biwova9852@jxbav.com";
-      passwordController.text = "12345678";
+      // emailController.text = "biwova9852@jxbav.com";
+      // passwordController.text = "12345678";
+
+      emailController.text = "vskg78yb46@mkzaso.com";
+      passwordController.text = "1234567";
     }
   }
 

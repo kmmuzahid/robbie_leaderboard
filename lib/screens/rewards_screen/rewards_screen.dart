@@ -312,7 +312,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                         controller.spinList.add(s);
                                       },
                                       // Trim spaces for logging
-                                      selectTextStyle: const TextStyle(
+                                      selectTextStyle: const TextStyle( 
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.green,

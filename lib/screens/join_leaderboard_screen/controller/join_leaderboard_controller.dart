@@ -4,15 +4,13 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
+import 'package:the_leaderboard/screens/webview_screen/webview_screen.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class JoinLeaderboardController extends GetxController {
   final amountController = TextEditingController();
   final RxString generatedUrl = "".obs;
-  late WebViewController webController;
 
   void submit() async {
     try {
@@ -25,8 +23,8 @@ class JoinLeaderboardController extends GetxController {
         if (response.statusCode == 200 || response.statusCode == 201) {
           Get.snackbar("Success", data["message"], colorText: AppColors.white);
           generatedUrl.value = data["data"];
-          final url = Uri.parse(generatedUrl.value);
-          await launchUrl(url, mode: LaunchMode.inAppBrowserView);
+          Get.to(WebviewScreen(
+              url: generatedUrl.value, title: "Join Leaderboard"));
         } else {
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }

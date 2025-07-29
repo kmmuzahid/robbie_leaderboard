@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,7 @@ Future<void> main() async {
   Get.put(NotificationController());
   HttpOverrides.global = MyHttpOverrides();
   await LocalStorage.getAllPrefData();
+ 
   // LocalStorage.getAllPrefData();
   runApp(const MainApp());
 }

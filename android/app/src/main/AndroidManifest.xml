@@ -6,6 +6,7 @@
         android:label="The Leaderboard"
         android:enableOnBackInvokedCallback="true"
         android:hardwareAccelerated="true"
+        android:usesCleartextTraffic="true"
         >
         <activity
             android:name=".MainActivity"

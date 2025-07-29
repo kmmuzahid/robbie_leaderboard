@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
+import 'package:the_leaderboard/models/country_leaderboard_model.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
@@ -11,7 +12,8 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 class LeaderboardController extends GetxController {
   final RxList<LeaderBoardModel?> leaderBoardList = <LeaderBoardModel>[].obs;
   final RxList<LeaderBoardModel?> creatorList = <LeaderBoardModel>[].obs;
-  final RxList<LeaderBoardModel?> countryList = <LeaderBoardModel>[].obs;
+  final RxList<CountryLeaderboardModel?> countryList =
+      <CountryLeaderboardModel>[].obs;
 
   final RxBool isLoading = true.obs;
 
@@ -96,15 +98,14 @@ class LeaderboardController extends GetxController {
       isLoading.value = false;
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
+        appLog(response.body);
         if (response.statusCode == 200) {
-          final List data = jsonbody["data"];
+          final List data = jsonbody["data"]["data"];
           countryList.value =
-              data.map((e) => LeaderBoardModel.fromJson(e)).toList();
-          appLog(countryList.map(
-            (element) => element!.profileImg,
-          ));
+              data.map((e) => CountryLeaderboardModel.fromJson(e)).toList();
+
           countryList.sort(
-            (a, b) => a!.currentRank.compareTo(b!.currentRank),
+            (a, b) => b!.totalInvest.compareTo(a!.totalInvest),
           );
         } else {
           Get.snackbar("Error", jsonbody["message"],

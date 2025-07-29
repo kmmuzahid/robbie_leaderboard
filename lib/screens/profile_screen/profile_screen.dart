@@ -5,6 +5,7 @@ import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/profile_screen/controller/profile_screen_controller.dart';
 import 'package:the_leaderboard/screens/profile_screen/widgets/affiliate_status_widget.dart';
 import 'package:the_leaderboard/screens/profile_screen/widgets/profile_header_widget.dart';
+import 'package:the_leaderboard/screens/webview_screen/webview_screen.dart';
 import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -95,24 +96,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         balance: "\$${controller.totalBalance.value}",
                         withdrawButtonOnPressed: controller.withdrawAmount,
                         tweeterButtonOnPressed: () {
-                          launchUrl(Uri.parse(AppUrls.twitterUrl),
-                              mode: LaunchMode.externalApplication);
+                          Get.to(const WebviewScreen(
+                            url: AppUrls.twitterUrl,
+                            title: "Twitter",
+                          ));
                         },
                         instagramButtonOnPressed: () {
-                          launchUrl(Uri.parse(AppUrls.instagramUrl),
-                              mode: LaunchMode.externalApplication);
+                          Get.to(const WebviewScreen(
+                            url: AppUrls.instagramUrl,
+                            title: "Instagram",
+                          ));
                         },
                         discordButtonOnPressed: () {
-                          launchUrl(Uri.parse(AppUrls.discordUrl),
-                              mode: LaunchMode.externalApplication);
+                          Get.to(const WebviewScreen(
+                            url: AppUrls.discordUrl,
+                            title: "Discord",
+                          ));
                         },
                         facebookButtonOnPressed: () {
-                          launchUrl(Uri.parse(AppUrls.facebookUrl),
-                              mode: LaunchMode.externalApplication);
+                          Get.to(const WebviewScreen(
+                            url: AppUrls.facebookUrl,
+                            title: "Facebook",
+                          ));
                         },
                         linkedinButtonOnPressed: () {
-                          launchUrl(Uri.parse(AppUrls.linkedinUrl),
-                              mode: LaunchMode.externalApplication);
+                          Get.to(const WebviewScreen(
+                            url: AppUrls.linkedinUrl,
+                            title: "Linkedin",
+                          ));
+                          // launchUrl(Uri.parse(AppUrls.linkedinUrl),
+                          //     mode: LaunchMode.externalApplication);
                         },
                         // youtubeButtonOnPressed: () {
                         //   launchUrl(Uri.parse(AppUrls.youtubeUrl),

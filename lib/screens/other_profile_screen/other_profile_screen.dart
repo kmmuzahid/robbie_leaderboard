@@ -8,6 +8,7 @@ import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/controller/other_profile_controller.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/widgets/affiliate_status_widget.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/widgets/profile_header_widget.dart';
+import 'package:the_leaderboard/screens/webview_screen/webview_screen.dart';
 import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -69,20 +70,28 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                           twitterUrlOn: _controller.twitterUrl.isNotEmpty,
                           linkedinUrlOn: _controller.instagramUrl.isNotEmpty,
                           instagramButtonOnPressed: () {
-                            launchUrl(Uri.parse(_controller.instagramUrl.value),
-                                mode: LaunchMode.externalApplication);
+                            Get.to(WebviewScreen(
+                              url: _controller.instagramUrl.value,
+                              title: "Instagram",
+                            ));
                           },
                           twitterButtonOnPressed: () {
-                            launchUrl(Uri.parse(_controller.twitterUrl.value),
-                                mode: LaunchMode.externalApplication);
+                            Get.to(WebviewScreen(
+                              url: _controller.twitterUrl.value,
+                              title: "Twitter",
+                            ));
                           },
                           facebookButtonOnPressed: () {
-                            launchUrl(Uri.parse(_controller.facebookUrl.value),
-                                mode: LaunchMode.externalApplication);
+                            Get.to(WebviewScreen(
+                              url: _controller.facebookUrl.value,
+                              title: "Facebook",
+                            ));
                           },
                           linkedinButtonOnPressed: () {
-                            launchUrl(Uri.parse(_controller.linkedinUrl.value),
-                                mode: LaunchMode.externalApplication);
+                            Get.to(WebviewScreen(
+                              url: _controller.linkedinUrl.value,
+                              title: "Linkedin",
+                            ));
                           },
                         ),
 

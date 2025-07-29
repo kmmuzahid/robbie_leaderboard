@@ -5,6 +5,7 @@ import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/controller/leaderboard_controller.dart';
+import 'package:the_leaderboard/screens/leaderboard_screen/widgets/country_leaderboard_widget.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_dropdown.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_item.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_tabbar.dart';
@@ -197,7 +198,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                         ? "${AppUrls.mainUrl}${data.profileImg}"
                         : AppImagePath.profileImage,
                     backgrounColor: data.userId == myData?.userId
-                        ? AppColors.greyDarker
+                        ? AppColors.midblue
                         : null,
                     onPressed: () {
                       Get.to(OtherProfileScreen(userId: data.userId));
@@ -212,7 +213,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                     left: 0,
                     right: 0,
                     child: Container(
-                      color: AppColors.greyDarker,
+                      color: AppColors.midblue,
                       child: LeaderboardItem(
                         key: ValueKey(
                             '${myData.name}${myData.currentRank}$myIndex'),
@@ -331,7 +332,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                               buildLeaderboardTabView(
                                   _controller.leaderBoardList)
                             else if (selectedLeaderboard == 'Event Leaderboard')
-                              buildLeaderboardTabView(_controller.countryList)
+                              CountryLeaderboardWidget(
+                                  leaderboard: _controller.countryList)
                             else
                               buildLeaderboardTabView(_controller.creatorList),
                             // Daily Tab
@@ -339,7 +341,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                               buildLeaderboardTabView(
                                   _controller.leaderBoardList)
                             else if (selectedLeaderboard == 'Event Leaderboard')
-                              buildLeaderboardTabView(_controller.countryList)
+                              CountryLeaderboardWidget(
+                                  leaderboard: _controller.countryList)
                             else
                               buildLeaderboardTabView(_controller.creatorList),
                             // Monthly Tab
@@ -347,7 +350,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                               buildLeaderboardTabView(
                                   _controller.leaderBoardList)
                             else if (selectedLeaderboard == 'Event Leaderboard')
-                              buildLeaderboardTabView(_controller.countryList)
+                              CountryLeaderboardWidget(
+                                  leaderboard: _controller.countryList)
                             else
                               buildLeaderboardTabView(_controller.creatorList),
                           ],

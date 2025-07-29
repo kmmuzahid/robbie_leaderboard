@@ -29,6 +29,7 @@ class AppColors {
   static const Color silver = Color(0xFFA2A9B2);
   static const Color goldLight = Color(0xFFE2C07E);
   static const Color greyBlue = Color(0xFF495D74);
+  static const Color midblue = Color.fromARGB(185, 8, 61, 102);
 
   static const Color gradientColorStart = Color(0xFFFFFFE9);
   static const Color gradientColorEnd = Color(0xFFD1AD72);
