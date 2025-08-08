@@ -14,3 +14,98 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+# Publish app in google play console
+
+## Add a launcher icon
+<li> install `flutter_launcher_icons` package </li>
+<li> run this command: </li>
+
+```bash
+dart run flutter_launcher_icons:generate
+```
+
+<li>Set necessary information in `flutter_launcher_icons.yaml` file</li>
+<li> Run this command:</li>
+
+```bash
+dart run flutter_launcher_icons
+```
+
+## Change app package name
+
+<li> install `change_app_package_name` package </li>
+
+<li> Run this command </li>
+
+```bash
+dart run change_app_package_name:main com.new.package.name
+```
+
+## Sign the app
+
+<li>Create an upload keystore </li>
+
+```bash
+keytool -genkey -v -keystore $env:USERPROFILE\upload-keystore.jks `
+        -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 `
+        -alias upload
+        
+```
+
+<li> Store the generated `upload-keystore.jks` file in `android/app` folder </li>
+
+<li> Create a file in android folder named `key.properties` and write this </li>
+
+```properties
+storePassword=srNXtfiJOu
+keyPassword=srNXtfiJOu
+keyAlias=upload
+storeFile=../app/upload-keystore.jks
+```
+
+<li> Now, write this code in `/android/app/build.gradle.kts` </li>
+
+```kts
+import java.util.Properties
+import java.io.FileInputStream
+
+plugins {
+   ...
+}
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
+android {
+   ...
+
+   signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
+            storePassword = keystoreProperties["storePassword"] as String
+        }
+    }
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now,
+            // so `flutter run --release` works.
+            // signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+```
+<li> Now write this command </li>
+
+```bash
+flutter build appbundle
+```

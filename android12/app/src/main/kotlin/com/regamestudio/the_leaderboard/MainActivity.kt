@@ -1,4 +1,4 @@
-package com.example.the_leaderboard
+package com.regamestudio.the_leaderboard
 
 import io.flutter.embedding.android.FlutterActivity
 

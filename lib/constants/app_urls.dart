@@ -1,6 +1,6 @@
 class AppUrls {
-  static const _baseUrl = "http://10.10.7.29:5000/api/v1";
-  static const mainUrl = "http://10.10.7.29:5000";
+  static const _baseUrl = "http://10.10.7.112:5000/api/v1";
+  static const mainUrl = "http://10.10.7.112:5000";
   static const profile = "$_baseUrl/users/me";
   static const login = "$_baseUrl/auth/login";
   static const createUser = "$_baseUrl/users/create-user";
