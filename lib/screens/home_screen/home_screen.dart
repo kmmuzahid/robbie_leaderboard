@@ -12,7 +12,6 @@ import 'package:the_leaderboard/screens/home_screen/widgets/home_appbar_widget.d
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_loading.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_widget.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/recent_activity_card_widget.dart';
-import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_icon_path.dart';

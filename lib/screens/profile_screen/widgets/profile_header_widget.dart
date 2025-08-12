@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_leaderboard/utils/app_size.dart';
 import 'package:the_leaderboard/widgets/shimmer_loading_widget/shimmer_loading.dart';
 
 import '../../../constants/app_colors.dart';
@@ -112,7 +113,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                 ButtonWidget(
                   onPressed: withdrawButtonOnPressed,
                   label: "Withdraw",
-                  buttonWidth: 102,
+                  buttonWidth: AppSize.width(value: 102),
                   buttonHeight: 32,
                   textColor: AppColors.black,
                   fontSize: 12,
@@ -135,7 +136,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                   imagePath: AppImagePath.tweeterImage,
                 ),
               ),
-              const SpaceWidget(spaceWidth: 16),
+              SpaceWidget(spaceWidth: AppSize.width(value: 16)),
               InkWell(
                 onTap: instagramButtonOnPressed,
                 child: const ImageWidget(

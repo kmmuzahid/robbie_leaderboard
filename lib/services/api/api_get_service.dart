@@ -14,11 +14,12 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 class ApiGetService {
   static Future<http.Response?> apiGetService(String url) async {
     try {
+      appLog("hitting url: $url");
       final response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
         'authorization': LocalStorage.token
       }).timeout(const Duration(seconds: 10));
-
+      appLog("response from $url");
       return response;
     } on SocketException catch (e) {
       errorLog("apiGetService - No Internet", e);

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/screens/rewards_screen/controller/rewards_screen_controller.dart';
 import 'package:the_leaderboard/screens/rewards_screen/widgets/ticket_gauge_painter.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
@@ -161,7 +160,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                     ),
                     const SpaceWidget(spaceHeight: 12),
                     Container(
-                      width: double.infinity,
+                      width: AppSize.width(value: double.infinity),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: AppColors.blue,
@@ -187,7 +186,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                   : GradientText(
                                       text: controller.getRemainingTime(),
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 12,
+                                      fontSize: AppSize.width(value: 12),
                                       textAlign: TextAlign.start,
                                       maxLines: 2,
                                     ),
@@ -312,7 +311,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                         controller.spinList.add(s);
                                       },
                                       // Trim spaces for logging
-                                      selectTextStyle: const TextStyle( 
+                                      selectTextStyle: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.green,

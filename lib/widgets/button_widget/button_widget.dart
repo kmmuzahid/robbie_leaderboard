@@ -99,6 +99,7 @@ class ButtonWidget extends StatelessWidget {
                       fontSize: ResponsiveUtils.width(fontSize),
                       fontWeight: fontWeight ?? FontWeight.w600,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

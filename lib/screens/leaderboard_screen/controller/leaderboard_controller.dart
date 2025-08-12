@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -19,12 +20,17 @@ class LeaderboardController extends GetxController {
 
   final ScrollController scrollController = ScrollController();
   final double eachItemHeight = 50.0;
+  Timer? refreshTimer;
 
   void fetchData() {
-    update();
     fetchLeaderBoardData();
     fetchCountryData();
     fetchCreatorData();
+    refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      fetchLeaderBoardData();
+      fetchCountryData();
+      fetchCreatorData(); // repeat fetch
+    });
   }
 
   void fetchLeaderBoardData() async {

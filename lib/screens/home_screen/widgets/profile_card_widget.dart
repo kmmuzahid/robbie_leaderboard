@@ -63,7 +63,7 @@ class ProfileCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: ResponsiveUtils.width(170),
+                        width: AppSize.width(value: 170),
                         child: TextWidget(
                           text: name,
                           fontColor: AppColors.white,
@@ -172,7 +172,7 @@ class ProfileCardWidget extends StatelessWidget {
                   buttonWidth: AppSize.width(value: 192),
                   buttonHeight: 36,
                   buttonRadius: BorderRadius.circular(8),
-                  fontSize: 15,
+                  fontSize: AppSize.width(value: 15),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -185,7 +185,7 @@ class ProfileCardWidget extends StatelessWidget {
                   buttonWidth: AppSize.width(value: 192),
                   buttonHeight: 36,
                   buttonRadius: BorderRadius.circular(8),
-                  fontSize: 15,
+                  fontSize: AppSize.width(value: 15),
                   fontWeight: FontWeight.w600,
                   icon: AppIconPath.shareIcon,
                   iconWidth: 16,
