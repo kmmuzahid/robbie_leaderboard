@@ -19,7 +19,7 @@ class ApiGetService {
         'Content-Type': 'application/json',
         'authorization': LocalStorage.token
       }).timeout(const Duration(seconds: 10));
-      appLog("response from $url");
+      appLog("response from Get- $url: ${response.body}");
       return response;
     } on SocketException catch (e) {
       errorLog("apiGetService - No Internet", e);

@@ -276,10 +276,6 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                       if (notification
                                           is ScrollStartNotification) {
                                         appLog('starting');
-                                      } else if (notification
-                                          is ScrollEndNotification) {
-                                        appLog('stopped');
-                                        appLog(controller.spinList.last);
                                         if (controller.spinList.length < 10) {
                                           Get.snackbar(AppStrings.almostThere,
                                               AppStrings.giveBiggerSpin,
@@ -289,6 +285,10 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                         } else {
                                           controller.spinWheel();
                                         }
+                                      } else if (notification
+                                          is ScrollEndNotification) {
+                                        appLog('stopped');
+                                        appLog(controller.spinList.last);
                                       }
                                       return true;
                                     },
@@ -301,8 +301,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                       itemSize: 70,
                                       squeeze: 1.0,
                                       perspective: 0.01,
-                                      datas: controller
-                                          .currentRuffle.value!.ticketButtons,
+                                      datas: controller.allSpin,
                                       isInfinite: true,
                                       magnification: 1,
                                       listHeight: 100,

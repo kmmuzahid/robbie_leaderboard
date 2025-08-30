@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_leaderboard/constants/app_image_path.dart';
 
 import '../../utils/app_size.dart';
 
@@ -28,6 +29,15 @@ class ImageWidget extends StatelessWidget {
         width: ResponsiveUtils.width(width),
         fit: fit,
         color: color,
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+            AppImagePath.profileImage,
+            height: ResponsiveUtils.width(height),
+            width: ResponsiveUtils.width(width),
+            fit: fit,
+            color: color,
+          );
+        },
       );
     }
     return Image.asset(

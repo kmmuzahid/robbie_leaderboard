@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,6 +13,7 @@ import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_patch_service.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
+import 'package:twitter_login/twitter_login.dart';
 
 class EditProfileController extends GetxController {
   final TextEditingController usernameController = TextEditingController();
@@ -146,6 +148,34 @@ class EditProfileController extends GetxController {
           appLog(userData.city);
         }
       }
+    }
+  }
+
+  void connectWithTwitter() async {
+    try {
+      final twitterLogin = TwitterLogin(
+        apiKey: 'xYM1UuCQGOtbYNyJQmn839Iea',
+        apiSecretKey: 'mKJGWhkpuOEyDpVAqhhzvvnl7PD1mzpKZj2wWl7Rff8NrBPxFE',
+        redirectURI: 'myapp://',
+      );
+
+      // Trigger the sign-in flow
+      final authResult = await twitterLogin.login();
+
+      // Create a credential from the access token
+      final twitterAuthCredential = TwitterAuthProvider.credential(
+        accessToken: authResult.authToken!,
+        secret: authResult.authTokenSecret!,
+      );
+
+      // Once signed in, return the UserCredential
+      final userCred = await FirebaseAuth.instance.signInWithCredential(
+        twitterAuthCredential,
+      );
+    
+      appLog("After twitter login, the usercred: $userCred");
+    } catch (e) {
+      errorLog("From twitter auth", e);
     }
   }
 

@@ -181,30 +181,36 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                 }
                 return false;
               },
-              child: ListView.builder(
-                controller: _controller.scrollController,
-                itemCount: filteredList.length,
-                itemBuilder: (context, index) {
-                  final data = filteredList[index]!;
-                  final fromNetwork = data.profileImg != "Unknown";
-                  return LeaderboardItem(
-                    key: ValueKey('${data.name}${data.currentRank}$index'),
-                    rank: data.currentRank,
-                    name: data.name,
-                    amount: "\$${data.totalInvest}",
-                    isUp: (data.previousRank - data.currentRank) > 0,
-                    fromNetwork: fromNetwork,
-                    image: fromNetwork
-                        ? "${AppUrls.mainUrl}${data.profileImg}"
-                        : AppImagePath.profileImage,
-                    backgrounColor: data.userId == myData?.userId
-                        ? AppColors.midblue
-                        : null,
-                    onPressed: () {
-                      Get.to(OtherProfileScreen(userId: data.userId));
-                    },
-                  );
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  _controller.fetchData();
                 },
+                child: ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: _controller.scrollController,
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final data = filteredList[index]!;
+                    final fromNetwork = data.profileImg != "Unknown";
+                    return LeaderboardItem(
+                      key: ValueKey('${data.name}${data.currentRank}$index'),
+                      rank: data.currentRank,
+                      name: data.name,
+                      amount: "\$${data.totalInvest}",
+                      isUp: (data.previousRank - data.currentRank) > 0,
+                      fromNetwork: fromNetwork,
+                      image: fromNetwork
+                          ? "${AppUrls.mainUrl}${data.profileImg}"
+                          : AppImagePath.profileImage,
+                      backgrounColor: data.userId == myData?.userId
+                          ? AppColors.midblue
+                          : null,
+                      onPressed: () {
+                        Get.to(OtherProfileScreen(userId: data.userId));
+                      },
+                    );
+                  },
+                ),
               ),
             ),
             showFloating && myData != null && myIndex != -1

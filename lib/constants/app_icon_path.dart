@@ -13,7 +13,7 @@ class AppIconPath {
   static const String shareIcon = 'assets/icons/share_icon.svg';
   static const String searchIcon = 'assets/icons/search_icon.svg';
   static const String bellIcon = 'assets/icons/bell_icon.svg';
-  static const String tweeterIcon = 'assets/icons/tweeter.svg';
+  static const String twitterIcon = 'assets/icons/tweeter.svg';
   static const String instagramIcon = 'assets/icons/instagram.svg';
 
   //

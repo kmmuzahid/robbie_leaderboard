@@ -20,7 +20,7 @@ class ApiPostService {
               },
               body: body == null ? body : jsonEncode(body))
           .timeout(const Duration(seconds: 10));
-
+      appLog("response from post- $url: ${response.body}");
       return response;
     } on SocketException catch (e) {
       errorLog("apiPostService - No Internet", e);

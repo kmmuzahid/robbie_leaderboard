@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/utils/app_size.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_image_path.dart';
@@ -15,19 +16,19 @@ class SplashScreen extends StatelessWidget {
     return GetBuilder(
         init: SplashController(),
         builder: (splashController) {
-          return const AnnotatedRegion(
-            value: SystemUiOverlayStyle(
+          return AnnotatedRegion(
+            value: const SystemUiOverlayStyle(
               statusBarIconBrightness: Brightness.light,
             ),
             child: Scaffold(
               backgroundColor: AppColors.blueDark,
               body: Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: ImageWidget(
                     imagePath: AppImagePath.appLogoGold,
-                    height: 180,
-                    width: 150,
+                    height: AppSize.height(value: 500),
+                    width: AppSize.width(value: 500),
                     fit: BoxFit.contain,
                   ),
                 ),

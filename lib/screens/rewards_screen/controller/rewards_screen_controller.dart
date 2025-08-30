@@ -30,8 +30,10 @@ class RewardsScreenController extends GetxController {
   final RxString today = ''.obs;
   final RxInt totalTicket = 0.obs;
   final notificationController = Get.find<NotificationController>();
-
+  final RxList<int> allSpin =
+      [1, 2, 3, 4, 5, 10, 25, 50, 100, 250, 500, 1000].obs;
   final RxList<int> spinList = <int>[].obs;
+  final luckyTicket = 0.obs;
   void fetchRuffle() async {
     try {
       appLog("fetching ruffle");
@@ -126,16 +128,19 @@ class RewardsScreenController extends GetxController {
     }
   }
 
-  void createTicket(int quantity) async {
-    final response = await ApiPostService.apiPostService(
-        AppUrls.createTicket, {"qty": quantity});
+  void createTicket() async {
+    final response =
+        await ApiPostService.apiPostService(AppUrls.createTicket, {});
 
     if (response != null) {
+      appLog(response.body);
       final data = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
+        luckyTicket.value = data['data']['ticket'] ?? 0;
         SocketService.instance.createTicket(LocalStorage.myName, data["data"]);
 
-        Get.snackbar("Success", "$quantity Tickets created successfully",
+        Get.snackbar(
+            "Success", "${luckyTicket.value} Tickets created successfully",
             colorText: AppColors.white);
       } else {
         Get.snackbar("Success", data["message"], colorText: AppColors.white);
@@ -144,7 +149,7 @@ class RewardsScreenController extends GetxController {
   }
 
   void spinWheel() {
-    int value = spinList.last;
+    int value = luckyTicket.value;
     final today = DateFormat("yyyy-MM-dd").format(DateTime.now());
     appLog(today);
     final lastwheelday = LocalStorage.lastWheelday;
@@ -171,7 +176,7 @@ class RewardsScreenController extends GetxController {
       totalTicket.value += value;
       LocalStorage.setInt(LocalStorageKeys.totalTicket, totalTicket.value);
       LocalStorage.totalTicket = totalTicket.value;
-      createTicket(value);
+      createTicket();
     } else {
       Get.snackbar(
         "Limit Reached",

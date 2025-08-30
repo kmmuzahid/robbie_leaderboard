@@ -109,3 +109,8 @@ android {
 ```bash
 flutter build appbundle
 ```
+
+# I need to implement
+
+
+1. Twitter and instagram auth 

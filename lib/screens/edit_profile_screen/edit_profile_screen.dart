@@ -222,6 +222,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       controller: controller.linkedinController,
                       profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
+                  // const ButtonWidget(label: 'Add Twitter Account'),
+
                   // Save Changes Button
                 ],
               ),

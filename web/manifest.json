@@ -1,6 +1,6 @@
 {
-    "name": "the_leaderboard",
-    "short_name": "the_leaderboard",
+    "name": "Leaderboard",
+    "short_name": "Leaderboard",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#hexcode",

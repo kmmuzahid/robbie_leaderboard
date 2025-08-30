@@ -64,7 +64,12 @@ dependencies:
   country_state_city_pro: ^0.0.6
   country_state_city_picker: ^1.2.8
   flutter_launcher_icons: ^0.14.4
-  in_app_purchase: ^3.2.3
+  rename_app: ^1.6.5
+  firebase_core: ^4.0.0
+  twitter_login: ^4.4.2
+  firebase_auth: ^6.0.1
+  purchases_flutter: ^9.2.1
+  
  
 
 dev_dependencies:

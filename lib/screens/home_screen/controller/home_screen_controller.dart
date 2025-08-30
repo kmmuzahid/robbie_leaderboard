@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/hall_of_fame_single_payment_model.dart';
@@ -182,6 +184,69 @@ class HomeScreenController extends GetxController {
         gender: "Unknown",
         profileImg: '',
         views: 0);
+  }
+
+  void purchaseProduct(Package packageToPurchase) async {
+    try {
+      // Attempt to purchase the selected package
+      PurchaseResult purchaseResult =
+          await Purchases.purchasePackage(packageToPurchase);
+      appLog(purchaseResult);
+      
+      // print(purchaseResult);
+      // Check if the entitlement is active
+      bool isPurchased = purchaseResult.customerInfo.entitlements.active
+          .containsKey('Leaderboard_invest_entitlement');
+      appLog(isPurchased);
+      // print(isPurchased);
+      if (isPurchased) {
+
+        // The user has unlocked the entitlement — grant access here
+      }
+    } on PurchasesError catch (e) {
+      // Handle different error scenarios (e.g., cancellation, network issues)
+      appLog(e);
+    }
+  }
+
+  void onJoinLeaderboard(BuildContext context) async {
+    Offerings offerings = await Purchases.getOfferings();
+    List<Package> package = [];
+    if (offerings.current != null &&
+        offerings.current!.availablePackages.isNotEmpty) {
+      package = offerings.current!.availablePackages;
+      appLog(package);
+    }
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      // allows full height if needed
+      builder: (context) {
+        return Container(
+            padding: EdgeInsets.all(16),
+            width: double.infinity,
+            child: ListView.builder(
+              itemCount: package.length,
+              itemBuilder: (context, index) {
+                final product = package[index].storeProduct;
+                return Card(
+                  child: ListTile(
+                    title: Text(product.description),
+                    trailing: Text(
+                      product.priceString,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                    subtitle: Text(product.identifier),
+                    onTap: () => purchaseProduct(package[index]),
+                  ),
+                );
+              },
+            ));
+      },
+    );
   }
 
   @override

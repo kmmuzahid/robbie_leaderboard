@@ -26,11 +26,11 @@ class LeaderboardController extends GetxController {
     fetchLeaderBoardData();
     fetchCountryData();
     fetchCreatorData();
-    refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
-      fetchLeaderBoardData();
-      fetchCountryData();
-      fetchCreatorData(); // repeat fetch
-    });
+    // refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    //   fetchLeaderBoardData();
+    //   fetchCountryData();
+    //   fetchCreatorData(); // repeat fetch
+    // });
   }
 
   void fetchLeaderBoardData() async {

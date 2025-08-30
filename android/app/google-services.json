@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "127599448717",
+    "project_id": "the-leaderboard-ffb68",
+    "storage_bucket": "the-leaderboard-ffb68.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127599448717:android:42deb46ce3a9f2dcf248c4",
+        "android_client_info": {
+          "package_name": "com.regamestudio.the_leaderboard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD40kJ-wsQsL44JRuqFOZmCdoN_TnogWEk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

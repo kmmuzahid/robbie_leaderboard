@@ -98,7 +98,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 "\$${controller.totalSpent.value}",
                             onViewProfilePressed: controller.viewMyProfile,
                             onJoinLeaderboardPressed: () {
-                              Get.toNamed(AppRoutes.joinLeaderboard);
+                              // Get.toNamed(AppRoutes.joinLeaderboard);
+                              // Get.to(() => SubscriptionViewWidget());
+                              controller.onJoinLeaderboard(context);
+
+                              // Show package.product.title, description, and price in your UI
                             },
                             onSharePressed: () {
                               // controller.sendData();
