@@ -15,6 +15,24 @@ val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
+fun getVersionCode(): Int {
+    val versionPropsFile = file("../version.properties") // adjust path if needed
+    if (!versionPropsFile.exists()) {
+        versionPropsFile.createNewFile()
+        versionPropsFile.writeText("VERSION_CODE=9")
+    }
+
+    val versionProps = Properties().apply {
+        load(versionPropsFile.inputStream())
+    }
+
+    val code = versionProps["VERSION_CODE"].toString().toInt() + 1
+    versionProps["VERSION_CODE"] = code.toString()
+    versionProps.store(versionPropsFile.writer(), null)
+
+    return code
+}
+
 android {
     namespace = "com.regamestudio.the_leaderboard"
     compileSdk = flutter.compileSdkVersion
@@ -28,7 +46,7 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
-
+   
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.regamestudio.the_leaderboard"
@@ -36,7 +54,7 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = 6
+        versionCode = getVersionCode()
         versionName = flutter.versionName
     }
 

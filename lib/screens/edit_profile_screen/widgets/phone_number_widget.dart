@@ -11,15 +11,16 @@ class PhoneNumberFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final void Function(bool) onValidated;
+  final PhoneNumber? initialValue;
 
-  const PhoneNumberFieldWidget({
-    super.key,
-    required this.label,
-    required this.isLoading,
-    this.controller,
-    this.onChanged,
-    required this.onValidated,
-  });
+  const PhoneNumberFieldWidget(
+      {super.key,
+      required this.label,
+      required this.isLoading,
+      this.controller,
+      this.onChanged,
+      required this.onValidated,
+      required this.initialValue});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class PhoneNumberFieldWidget extends StatelessWidget {
                 ),
                 child: InternationalPhoneNumberInput(
                   textFieldController: controller,
-                  initialValue: PhoneNumber(isoCode: 'BD'),
+                  initialValue: initialValue,
                   onInputChanged: (value) {
                     if (onChanged != null) {
                       onChanged!(value.phoneNumber ?? '');

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
+import 'package:the_leaderboard/constants/app_strings.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/hall_of_fame_single_payment_model.dart';
 import 'package:the_leaderboard/models/hall_of_frame_consisntantly_top_model.dart';
@@ -15,6 +16,7 @@ import 'package:the_leaderboard/models/ticket_won_socket_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/bottom_nav/controller/bottom_nav_controller.dart';
 import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
+import 'package:the_leaderboard/screens/profile_screen/controller/profile_screen_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/socket/socket_service.dart';
 import 'package:the_leaderboard/services/storage/storage_keys.dart';
@@ -64,9 +66,19 @@ class HomeScreenController extends GetxController {
     fetchHallofFrameSinglePayment();
     fetchHallofFrameConsistantlyTop();
     fetchHallofFrameMostEngaged();
+    Get.put(ProfileScreenController());
+    await Get.find<ProfileScreenController>().fetchProfile();
+
+    appLog(
+        "User email: ${LocalStorage.myEmail} and user id: ${LocalStorage.userId}");
+    await Purchases.configure(
+      PurchasesConfiguration("goog_gsyjGglgxeOOHLKmCuTaOliiTFa")
+        ..appUserID = LocalStorage.userId, // optional
+    );
   }
 
   void viewMyProfile() {
+    Get.put(BottomNavController());
     final profileTab = Get.find<BottomNavController>();
     profileTab.changeIndex(3);
   }
@@ -123,13 +135,13 @@ class HomeScreenController extends GetxController {
     } catch (e) {
       errorLog("Failed", e);
     }
-    recoredSinglePayment.value = HallOfFameSinglePaymentModel(
-        id: "0",
-        name: "Unknown",
-        country: "Unknown",
-        gender: "Unknown",
-        views: 0,
-        totalInvested: 0);
+    // recoredSinglePayment.value = HallOfFameSinglePaymentModel(
+    //     id: "0",
+    //     name: "Unknown",
+    //     country: "Unknown",
+    //     gender: "Unknown",
+    //     views: 0,
+    //     totalInvested: 0,  profileImg: '');
   }
 
   void fetchHallofFrameConsistantlyTop() async {
@@ -153,8 +165,8 @@ class HomeScreenController extends GetxController {
     } catch (e) {
       errorLog("Failed", e);
     }
-    consistantlyTop.value = HallOfFrameConsisntantlyTopModel(
-        id: "0", name: "Unknown", timesRankedTop: 0);
+    // consistantlyTop.value = HallOfFrameConsisntantlyTopModel(
+    //     id: "0", name: "Unknown", timesRankedTop: 0);
   }
 
   void fetchHallofFrameMostEngaged() async {
@@ -177,13 +189,13 @@ class HomeScreenController extends GetxController {
     } catch (e) {
       errorLog("Failed", e);
     }
-    mostEngaged.value = HallOfFrameMostEngagedModel(
-        id: "0",
-        name: "Unnknown",
-        country: "Unknown",
-        gender: "Unknown",
-        profileImg: '',
-        views: 0);
+    // mostEngaged.value = HallOfFrameMostEngagedModel(
+    //     id: "0",
+    //     name: "Unnknown",
+    //     country: "Unknown",
+    //     gender: "Unknown",
+    //     profileImg: '',
+    //     views: 0);
   }
 
   void purchaseProduct(Package packageToPurchase) async {
@@ -192,15 +204,14 @@ class HomeScreenController extends GetxController {
       PurchaseResult purchaseResult =
           await Purchases.purchasePackage(packageToPurchase);
       appLog(purchaseResult);
-      
+
       // print(purchaseResult);
       // Check if the entitlement is active
       bool isPurchased = purchaseResult.customerInfo.entitlements.active
-          .containsKey('Leaderboard_invest_entitlement');
+          .containsKey(AppStrings.leaderboardInvestEntitlement);
       appLog(isPurchased);
       // print(isPurchased);
       if (isPurchased) {
-
         // The user has unlocked the entitlement — grant access here
       }
     } on PurchasesError catch (e) {

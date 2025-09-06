@@ -11,12 +11,14 @@ class PhoneNumberFieldWidget extends StatelessWidget {
   final Function(PhoneNumber) onInputChanged;
   final Function(bool)? onInputValidated;
   final bool readOnly;
+  final PhoneNumber? initialValue;
 
   const PhoneNumberFieldWidget({
     super.key,
     required this.controller,
     required this.onInputChanged,
     this.onInputValidated,
+    required this.initialValue,
     this.readOnly = false,
   });
 
@@ -39,6 +41,7 @@ class PhoneNumberFieldWidget extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: ResponsiveUtils.width(12)),
         child: InternationalPhoneNumberInput(
           onInputChanged: onInputChanged,
+          initialValue: initialValue,
           onInputValidated: onInputValidated,
           textFieldController: controller,
           selectorConfig: const SelectorConfig(

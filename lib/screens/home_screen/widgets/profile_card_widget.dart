@@ -167,6 +167,7 @@ class ProfileCardWidget extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: ButtonWidget(
+                  backgroundColor: AppColors.blueLighter,
                   onPressed: onJoinLeaderboardPressed,
                   label: AppStrings.joinLeaderboard,
                   buttonWidth: AppSize.width(value: 192),
@@ -180,6 +181,7 @@ class ProfileCardWidget extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: ButtonWidget(
+                  backgroundColor: AppColors.blueLighter,
                   onPressed: onSharePressed,
                   label: AppStrings.share,
                   buttonWidth: AppSize.width(value: 192),

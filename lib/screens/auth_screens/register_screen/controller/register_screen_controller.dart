@@ -11,6 +11,7 @@ import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 import '../../../../routes/app_routes.dart';
+import 'package:country_state_city/country_state_city.dart';
 
 class RegisterScreenController extends GetxController {
   // Observable for checkbox state
@@ -36,10 +37,53 @@ class RegisterScreenController extends GetxController {
 
   final RxString phoneNumber = "".obs;
   final RxBool isValidPhonenumber = true.obs;
-  void updateCountry(String value) {
-    selectedCountry.value = value;
-    cities = findCity(value);
-    selectedCity.value = cities.first;
+  List<Country> countryList = [];
+  RxList<City> cityList = <City>[].obs;
+
+  Future<void> onInitial() async {
+    try {
+      countryList = await getAllCountries();
+      if (countryList.isNotEmpty) {
+        // Select first country by default
+        selectedCountry.value = countryList.first.isoCode;
+
+        // Load its cities
+        await loadCities(countryList.first.isoCode);
+      }
+    } catch (e) {
+      appLog("Error loading countries: $e");
+    }
+  }
+
+ Future<void> loadCities(String countryCode) async {
+    try {
+      final fetchedCities = await getCountryCities(countryCode);
+
+      // Use a Set to ensure uniqueness
+      final uniqueNames = <String>{};
+      final uniqueCities = fetchedCities.where((city) {
+        if (uniqueNames.contains(city.name)) {
+          return false; // skip duplicates
+        } else {
+          uniqueNames.add(city.name);
+          return true; // keep first occurrence
+        }
+      }).toList();
+
+      cityList.value = uniqueCities;
+
+      if (cityList.isNotEmpty) {
+        selectedCity.value = cityList.first.name;
+      }
+    } catch (e) {
+      appLog("Error loading cities: $e");
+    }
+  }
+
+  void updateCountry(String isoCode) async {
+    selectedCountry.value = isoCode;
+    await loadCities(isoCode);
+    appLog("Country updated: $isoCode");
   }
 
   void updateCity(String value) {
@@ -50,9 +94,12 @@ class RegisterScreenController extends GetxController {
     selectedGender.value = value;
   }
 
-  List<String> findCity(String country) {
-    return AppCountryCity.countryCityMap[country]!;
-  }
+  // List<String> findCity(String country) {
+  //   return cityList
+  //       .where((city) => city.countryName == country)
+  //       .map((city) => city.name)
+  //       .toList();
+  // }
 
   // Rxn<RegisterModel> profile = Rxn<RegisterModel>();
   // Function to toggle checkbox

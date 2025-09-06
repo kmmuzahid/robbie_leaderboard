@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/widgets/gradient_text_widget/gradient_text_widget.dart';
 
 import '../../constants/app_colors.dart';
 import '../../utils/app_size.dart';
@@ -45,11 +46,10 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
 
       titleSpacing: 10,
       actions: action != null ? [action!] : null,
-      title: TextWidget(
+      title: GradientText(
         text: title!,
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        fontColor: AppColors.blueGreen,
       ),
       bottom: bottom,
       // Add bottom to AppBar

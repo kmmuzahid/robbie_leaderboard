@@ -3,6 +3,9 @@ class AppImagePath {
 
   static const String appLogo = 'assets/images/app_logo.png';
   static const String appLogoGold = 'assets/images/app_logo_gold.png';
+  static const String appLogoCrown = 'assets/images/app_logo_final.png';
+  static const String appLogoNew =
+      'assets/images/THE LEADERBOARD Logo-Transparent.png';
   static const String crownImage = 'assets/images/crown_image.png';
   static const String tweeterImage = 'assets/images/tweeter.png';
   static const String instagramImage = 'assets/images/instagram.png';

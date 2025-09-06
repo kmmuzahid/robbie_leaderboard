@@ -43,10 +43,10 @@ Future<void> main() async {
     loadDataAfterLaunch: true,
   );
   await Purchases.setLogLevel(LogLevel.debug);
-  await Purchases.configure(
-    PurchasesConfiguration("goog_gsyjGglgxeOOHLKmCuTaOliiTFa")
-      ..appUserID = null, // optional
-  );
+  // await Purchases.configure(
+  //   PurchasesConfiguration("goog_gsyjGglgxeOOHLKmCuTaOliiTFa")
+  //     ..appUserID = LocalStorage.userId, // optional
+  // );
   // LocalStorage.getAllPrefData();
   runApp(const MainApp());
 }

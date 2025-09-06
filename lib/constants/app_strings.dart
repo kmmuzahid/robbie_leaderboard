@@ -6,6 +6,18 @@ class AppStrings {
 
   // Onboarding Screen
   static const String leaderboard = "LEADERBORAD";
+  static const String welComeToLeaderboard = "Welcome to The Leaderboard";
+  static const String leaderboardDescrition1 =
+      "By using this app, you agree that:";
+  static const String leaderboardDescrition2 =
+      "This platform is for entertainment only.";
+  static const String leaderboardDescrition3 =
+      "Spending is optional and non-refundable.";
+  static const String leaderboardDescrition4 =
+      "Raffles and giveaways follow official rules and may differ by region.";
+  static const String leaderboardDescrition5 =
+      "You accept our Terms of Use, Privacy Policy, and Refund Policy.";
+
   static const String description1 =
       "Step into the adventurous world of Wildlifeducks, where classic rubber ducks take on the spirit of the animal kingdom! From the mighty Big 5 to the adorable koala, giraffe, and more, each duck is designed to bring a splash of the wild into your collection.";
   static const String description2 =
@@ -13,6 +25,7 @@ class AppStrings {
   static const String description3 =
       "Explore the collection and find your wild side today!";
   static const String start = "Start";
+  static const String accept = "Accept";
 
   // Registration Screen
   static const String createAccount = "Create Account";
@@ -106,6 +119,10 @@ class AppStrings {
   // Other profile
   static const String linkNotFound = "Link not found";
 
+  // Edit Profle Screen
+  static const String takePhoto = "Take Photo";
+  static const String chooseFromGallery = "Choose from Gallery";
+
   // Error
   static const String somethingWentWrong =
       "Something went wrong. Please try again.";
@@ -127,4 +144,8 @@ class AppStrings {
       "This will permanently delete your account. Are you sure?";
   static const String yes = "Yes";
   static const String no = "No";
+
+  // In app purchase
+  static const String leaderboardInvestEntitlement =
+      "Leaderboard_invest_entitlement";
 }

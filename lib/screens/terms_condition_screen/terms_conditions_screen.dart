@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/screens/terms_condition_screen/controller/term_and_condition_controller.dart';
 import '../../constants/app_colors.dart';
@@ -44,23 +45,21 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
                 final data = _controller.termAndCondition.value;
                 if (data.isEmpty) {
                   return const Center(
-                    child: Text("There is no term and condition"),
+                    child: Text(
+                      "There is no term and condition",
+                      style: TextStyle(color: AppColors.white),
+                    ),
                   );
                 }
                 return SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 16),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextWidget(
-                            text: data,
-                            fontColor: AppColors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            textAlignment: TextAlign.start,
-                          ),
-                        ]));
+                    child: HtmlWidget(
+                      data,
+                      textStyle: const TextStyle(
+                        color: AppColors.white,
+                      ),
+                    ));
               },
             )));
 

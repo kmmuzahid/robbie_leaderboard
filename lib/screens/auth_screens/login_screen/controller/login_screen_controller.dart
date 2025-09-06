@@ -87,8 +87,8 @@ class LoginScreenController extends GetxController {
       // emailController.text = "biwova9852@jxbav.com";
       // passwordController.text = "12345678";
 
-      emailController.text = "debiy63504@bizmud.com";
-      passwordController.text = "1234567";
+      emailController.text = "copoc67793@lanipe.com";
+      passwordController.text = "12345678";
     }
   }
 

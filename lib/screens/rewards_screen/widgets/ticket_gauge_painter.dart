@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 
 class TicketGaugePainter extends CustomPainter {
   final int currentTickets;
+  final int dayIndex;
 
-  TicketGaugePainter({
-    required this.currentTickets,
-  });
+  TicketGaugePainter({required this.currentTickets, required this.dayIndex});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -35,8 +34,8 @@ class TicketGaugePainter extends CustomPainter {
 
     // Calculate progress - we'll hardcode the gauge to show approximately 75% filled
     // based on your screenshot
-    const progress = 0.50;
-    const progressAngle = sweepAngle * progress;
+    var progress = dayIndex / 7;
+    var progressAngle = sweepAngle * progress;
 
     // Progress arc (white)
     final progressPaint = Paint()

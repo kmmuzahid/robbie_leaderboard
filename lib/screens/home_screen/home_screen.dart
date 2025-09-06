@@ -138,18 +138,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ? const HallOfFrameLoading()
                                 : HallOfFameCardWidget(
                                     name: controller
-                                        .recoredSinglePayment.value!.name,
+                                            .recoredSinglePayment.value?.name ??
+                                        "N/A",
                                     status:
-                                        "\$${controller.recoredSinglePayment.value!.totalInvested}",
-                                    imageUrl: '',
+                                        "\$${controller.recoredSinglePayment.value?.totalInvested ?? "N/A"}",
+                                    imageUrl: controller.recoredSinglePayment
+                                            .value?.profileImg ??
+                                        '',
                                     type: AppStrings.highestPayment,
                                     title: AppStrings.recordSingle,
                                   ),
                             controller.ishallofframeConsisntantTopLoading.value
                                 ? const HallOfFrameLoading()
                                 : HallOfFameCardWidget(
-                                    name:
-                                        controller.consistantlyTop.value!.name,
+                                    name: controller
+                                            .consistantlyTop.value?.name ??
+                                        "N/A",
                                     status:
                                         "Last ${controller.consistantlyTop.value!.timesRankedTop} Days",
                                     imageUrl: '',
@@ -160,8 +164,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ? const HallOfFrameLoading()
                                 : HallOfFameCardWidget(
                                     imageUrl: controller
-                                        .mostEngaged.value!.profileImg,
-                                    name: controller.mostEngaged.value!.name,
+                                            .mostEngaged.value?.profileImg ??
+                                        "",
+                                    name: controller.mostEngaged.value?.name ??
+                                        "N/A",
                                     status:
                                         "${controller.mostEngaged.value!.views} Views",
                                     type: AppStrings.mostViewedProfile,

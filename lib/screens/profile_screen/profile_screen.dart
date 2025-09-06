@@ -159,6 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                         label: "View Settings",
                         buttonWidth: double.infinity,
+                        backgroundColor: AppColors.blueLighter,
                       ),
 
                       const SpaceWidget(spaceHeight: 12),

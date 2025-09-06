@@ -1,7 +1,7 @@
 class ProfileResponseModel {
   final ProfileUserModel? user;
   final List<dynamic> investments;
-  final int totalInvest;
+  final num totalInvest;
   final List<dynamic> raisedBonuses;
   final int totalRaised;
   final RankInfoModel rankInfo;
@@ -23,9 +23,9 @@ class ProfileResponseModel {
       investments: json['investments'] != null && json['investments'] is List
           ? json['investments']
           : [],
-      totalInvest: json['totalInvest'] ?? 0,
+      totalInvest: json['totalInvest'] ?? 0.0,
       raisedBonuses: json['raisedBonuses'] ?? [],
-      totalRaised: json['totalRaised'] ?? 0,
+      totalRaised: json['totalRaised'] ?? 0.0,
       rankInfo: RankInfoModel.fromJson(json['rankInfo']),
     );
   }
@@ -54,15 +54,15 @@ class ProfileUserModel {
   final String age;
   final String role;
   final String status;
-  final int views;
+  final num views;
   final bool isDeleted;
   final int rank;
   final int raisedRank;
-  final int totalInvest;
-  final int totalRaised;
-  final int totalReferredAmount;
-  final int totalAdminAmount;
-  final int withdraw;
+  final num totalInvest;
+  final num totalRaised;
+  final num totalReferredAmount;
+  final num totalAdminAmount;
+  final num withdraw;
   final String userCode;
   final List<dynamic> prevRank;
   final List<dynamic> prevRaisedRank;
@@ -74,6 +74,7 @@ class ProfileUserModel {
   final String instagram;
   final String twitter;
   final String linkedin;
+    final String youtube;
 
   ProfileUserModel(
       {required this.id,
@@ -106,41 +107,41 @@ class ProfileUserModel {
       this.facebook = "",
       this.instagram = "",
       this.twitter = "",
-      this.linkedin = ""});
+      this.linkedin = "", this.youtube = ""});
 
   factory ProfileUserModel.fromJson(Map<String, dynamic> json) {
     return ProfileUserModel(
-        id: json['_id'],
+        id: json['_id'] ?? "",
         name: json['name'] ?? "",
         email: json['email'] ?? "",
         contact: json['contact'] ?? "",
         password: json['password'] ?? "",
-        country: json['country'],
-        city: json['city'],
-        gender: json['gender'],
+        country: json['country'] ?? "",
+        city: json['city'] ?? "",
+        gender: json['gender'] ?? "",
         age: json['age'] ?? "",
         role: json['role'] ?? "",
         status: json['status'] ?? "",
         views: json['views'] ?? 0,
-        isDeleted: json['isDeleted'],
+        isDeleted: json['isDeleted'] ?? false,
         rank: json['rank'] ?? 0,
-        raisedRank: json['raisedRank'],
-        totalInvest: json['totalInvest'] ?? 0,
-        totalRaised: json['totalRaised'],
-        totalReferredAmount: json['totalRefferedAmount'],
-        totalAdminAmount: json['totalAdminAmount'],
-        withdraw: json['withdraw'],
-        userCode: json['userCode'],
+        raisedRank: json['raisedRank'] ?? 0.0,
+        totalInvest: json['totalInvest'] ?? 0.0,
+        totalRaised: json['totalRaised'] ?? 0.0,
+        totalReferredAmount: json['totalRefferedAmount'] ?? 0.0,
+        totalAdminAmount: json['totalAdminAmount'] ?? 0.0,
+        withdraw: json['withdraw'] ?? 0.0,
+        userCode: json['userCode'] ?? "",
         prevRank: json['prevRank'] ?? [],
         prevRaisedRank: json['prevRaisedRank'] ?? [],
-        createdAt: DateTime.parse(json['createdAt']),
-        updatedAt: DateTime.parse(json['updatedAt']),
-        v: json['__v'],
+        createdAt: DateTime.parse(json['createdAt'] ?? ""),
+        updatedAt: DateTime.parse(json['updatedAt'] ?? ""),
+        v: json['__v'] ?? 0,
         profileImg: json['profileImg'] ?? "",
         facebook: json['facebook'] ?? "",
         instagram: json['instagram'] ?? "",
         twitter: json['twitter'] ?? "",
-        linkedin: json['linkedin'] ?? "");
+        linkedin: json['linkedin'] ?? "", youtube: json['youtube'] ?? "");
   }
 
   Map<String, dynamic> toJson() {
@@ -174,7 +175,8 @@ class ProfileUserModel {
       'facebook': facebook,
       'instagram': instagram,
       'twitter': twitter,
-      'linkedin': linkedin
+      'linkedin': linkedin,
+      'youtube': youtube
     };
   }
 }

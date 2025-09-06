@@ -20,57 +20,165 @@ class OnboardingScreen extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: AppColors.blueDark,
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Center(
-                child: GradientText(
-                  text: AppStrings.leaderboard,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 32,
-                ),
+        body: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Center(
+                    child: GradientText(
+                      text: AppStrings.welComeToLeaderboard,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 32,
+                      maxLines: 3,
+                    ),
+                  ),
+                  const SpaceWidget(spaceHeight: 40),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: GradientText(
+                      text: AppStrings.leaderboardDescrition1,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15,
+                      maxLines: 6,
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  const SpaceWidget(spaceHeight: 10),
+                  const Row(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: GradientText(
+                          text: "• ",
+                          fontWeight: FontWeight.w400,
+                          fontSize: 30,
+                          maxLines: 6,
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: GradientText(
+                            text: AppStrings.leaderboardDescrition2,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15,
+                            maxLines: 6,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SpaceWidget(spaceHeight: 10),
+                  const Row(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: GradientText(
+                          text: "• ",
+                          fontWeight: FontWeight.w400,
+                          fontSize: 30,
+                          maxLines: 6,
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: GradientText(
+                            text: AppStrings.leaderboardDescrition3,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15,
+                            maxLines: 6,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SpaceWidget(spaceHeight: 10),
+                  const Row(
+                    children: [
+                      GradientText(
+                        text: "• ",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 30,
+                        maxLines: 6,
+                        textAlign: TextAlign.left,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: GradientText(
+                            text: AppStrings.leaderboardDescrition4,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15,
+                            maxLines: 6,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SpaceWidget(spaceHeight: 10),
+                  const Row(
+                    children: [
+                      GradientText(
+                        text: "• ",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 30,
+                        maxLines: 6,
+                        textAlign: TextAlign.left,
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: GradientText(
+                            text: AppStrings.leaderboardDescrition5,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15,
+                            maxLines: 6,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SpaceWidget(spaceHeight: 16),
+                  // const Center(
+                  //   child: GradientText(
+                  //     text: AppStrings.description2,
+                  //     fontWeight: FontWeight.w400,
+                  //     fontSize: 15,
+                  //     maxLines: 6,
+                  //     textAlign: TextAlign.justify,
+                  //   ),
+                  // ),
+                  // const SpaceWidget(spaceHeight: 16),
+                  // const Center(
+                  //   child: GradientText(
+                  //     text: AppStrings.description3,
+                  //     maxLines: 2,
+                  //     fontWeight: FontWeight.w400,
+                  //     fontSize: 15,
+                  //     textAlign: TextAlign.justify,
+                  //   ),
+                  // ),
+                  const SpaceWidget(spaceHeight: 70),
+                  ButtonWidget(
+                    onPressed: () {
+                      Get.toNamed(AppRoutes.loginScreen);
+                    },
+                    label: AppStrings.accept,
+                    buttonWidth: double.infinity,
+                  ),
+                ],
               ),
-              const SpaceWidget(spaceHeight: 16),
-              const Center(
-                child: GradientText(
-                  text: AppStrings.description1,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                  maxLines: 6,
-                  textAlign: TextAlign.justify,
-                ),
-              ),
-              const SpaceWidget(spaceHeight: 16),
-              const Center(
-                child: GradientText(
-                  text: AppStrings.description2,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                  maxLines: 6,
-                  textAlign: TextAlign.justify,
-                ),
-              ),
-              const SpaceWidget(spaceHeight: 16),
-              const Center(
-                child: GradientText(
-                  text: AppStrings.description3,
-                  maxLines: 2,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                  textAlign: TextAlign.justify,
-                ),
-              ),
-              const SpaceWidget(spaceHeight: 96),
-              ButtonWidget(
-                onPressed: () {
-                  Get.toNamed(AppRoutes.loginScreen);
-                },
-                label: AppStrings.start,
-                buttonWidth: double.infinity,
-              ),
-            ],
+            ),
           ),
         ),
       ),

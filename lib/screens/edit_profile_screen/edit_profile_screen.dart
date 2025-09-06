@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
+
 import 'package:the_leaderboard/screens/edit_profile_screen/controller/edit_profile_controller.dart';
 import 'package:the_leaderboard/screens/edit_profile_screen/widgets/dropdown_button_widget.dart';
+
 import 'package:the_leaderboard/screens/edit_profile_screen/widgets/phone_number_widget.dart';
 import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
@@ -27,6 +28,8 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  final controller = Get.put(EditProfileController());
+
   Widget _buildTextField(
       {required String label,
       required TextEditingController controller,
@@ -63,7 +66,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget _buildDropdownField(
       {required String label,
       required String value,
-      required List<String> items,
+      required List<DropdownMenuItem<String>> items,
       required EditProfileController profileController,
       required void Function(String?) onChanged}) {
     return Column(
@@ -86,81 +89,80 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-      init: EditProfileController(),
-      builder: (controller) => AnnotatedRegion(
-        value: const SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.light,
+    return AnnotatedRegion(
+      value: const SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.blueDark,
+        appBar: const AppbarWidget(
+          title: "Edit Profile",
+          centerTitle: true,
         ),
-        child: Scaffold(
-          backgroundColor: AppColors.blueDark,
-          appBar: const AppbarWidget(
-            title: "Edit Profile",
-            centerTitle: true,
-          ),
-          body: Obx(
-            () => SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Profile Picture
-                  Stack(
-                    children: [
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: controller.selectedImage.value != null
-                              ? Image.file(
-                                  controller.selectedImage.value!,
-                                  fit: BoxFit.cover,
-                                  width: 80,
-                                  height: 80,
-                                )
-                              : ImageWidget(
-                                  fromNetwork:
-                                      controller.userImage.value.isNotEmpty,
-                                  height: 80,
-                                  width: 80,
-                                  imagePath: controller
-                                          .userImage.value.isNotEmpty
-                                      ? "${AppUrls.mainUrl}${controller.userImage.value}"
-                                      : AppImagePath.profileImage,
-                                ),
+        body: Obx(
+          () => SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Profile Picture
+                Stack(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: controller.selectedImage.value != null
+                            ? Image.file(
+                                controller.selectedImage.value!,
+                                fit: BoxFit.cover,
+                                width: 80,
+                                height: 80,
+                              )
+                            : ImageWidget(
+                                fromNetwork:
+                                    controller.userImage.value.isNotEmpty,
+                                height: 80,
+                                width: 80,
+                                imagePath: controller.userImage.value.isNotEmpty
+                                    ? "${AppUrls.mainUrl}${controller.userImage.value}"
+                                    : AppImagePath.profileImage,
+                              ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: -2,
+                      right: -2,
+                      child: GestureDetector(
+                        onTap: () => controller
+                            .onClickEditImage(context), // Call the image picker
+                        child: const IconWidget(
+                          height: 30,
+                          width: 30,
+                          icon: AppIconPath.editImageButtonIcon,
                         ),
                       ),
-                      Positioned(
-                        bottom: -2,
-                        right: -2,
-                        child: GestureDetector(
-                          onTap: controller.pickImage, // Call the image picker
-                          child: const IconWidget(
-                            height: 30,
-                            width: 30,
-                            icon: AppIconPath.editImageButtonIcon,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SpaceWidget(spaceHeight: 24),
+                    ),
+                  ],
+                ),
+                const SpaceWidget(spaceHeight: 24),
 
-                  // Username
-                  _buildTextField(
-                      label: "Username",
-                      controller: controller.usernameController,
-                      profileController: controller),
-                  const SpaceWidget(spaceHeight: 12),
-                  PhoneNumberFieldWidget(
+                // Username
+                _buildTextField(
+                    label: "Username",
+                    controller: controller.usernameController,
+                    profileController: controller),
+                const SpaceWidget(spaceHeight: 12),
+                Obx(
+                  () => PhoneNumberFieldWidget(
                     label: "Contact",
+                    initialValue: controller.phone.value,
                     isLoading: controller.isLoading.value,
-                    controller: controller.contactController,
                     onChanged: (p0) {
                       controller.phoneNumber.value = p0;
                     },
@@ -168,74 +170,110 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       controller.isValidPhonenumber.value = p0;
                     },
                   ),
-                  // _buildTextField(
-                  //     label: "Contact",
-                  //     controller: controller.contactController,
-                  //     profileController: controller),
-                  const SpaceWidget(spaceHeight: 12),
-                  _buildDropdownField(
+                ),
+                // _buildTextField(
+                //     label: "Contact",
+                //     controller: controller.contactController,
+                //     profileController: controller),
+                const SpaceWidget(spaceHeight: 12),
+                Obx(
+                  () => _buildDropdownField(
                       label: "Gender",
                       value: controller.selectedGender.value,
-                      items: controller.genders,
+                      items: controller.genders
+                          .map((e) => DropdownMenuItem<String>(
+                              value: e,
+                              child: TextWidget(
+                                text: e,
+                                fontColor: AppColors.white,
+                              )))
+                          .toList(),
                       onChanged: (p0) => controller.updateGender(p0!),
                       profileController: controller),
+                ),
 
-                  const SpaceWidget(spaceHeight: 12),
-                  _buildTextField(
-                      label: "Age",
-                      controller: controller.ageController,
-                      profileController: controller),
-                  const SpaceWidget(spaceHeight: 12),
-                  _buildDropdownField(
+                const SpaceWidget(spaceHeight: 12),
+                _buildTextField(
+                    label: "Age",
+                    controller: controller.ageController,
+                    profileController: controller),
+                const SpaceWidget(spaceHeight: 12),
+                Obx(
+                  () => _buildDropdownField(
                       label: "Country",
                       value: controller.selectedCountry.value,
-                      items: AppCountryCity.countryCityMap.keys.toList(),
+                      items: controller.countryList
+                          .map((c) => DropdownMenuItem(
+                                value: c.isoCode,
+                                child: TextWidget(
+                                  text: c.name,
+                                  fontColor: AppColors.white,
+                                ),
+                              ))
+                          .toList(),
                       onChanged: (p0) => controller.updateCountry(p0!),
                       profileController: controller),
+                ),
 
-                  const SpaceWidget(spaceHeight: 12),
-                  _buildDropdownField(
+                const SpaceWidget(spaceHeight: 12),
+
+                Obx(
+                  () => _buildDropdownField(
                       label: "City",
                       value: controller.selectedCity.value,
-                      items: controller.cities,
+                      items: controller.cityList
+                          .map((c) => DropdownMenuItem(
+                                value: c.name,
+                                child: TextWidget(
+                                  text: c.name,
+                                  fontColor: AppColors.white,
+                                ),
+                              ))
+                          .toList(),
                       onChanged: (p0) => controller.updateCity(p0!),
                       profileController: controller),
+                ),
 
-                  const SpaceWidget(spaceHeight: 12),
-                  _buildTextField(
-                      label: "Facebook Profile Url",
-                      controller: controller.facebookController,
-                      profileController: controller),
-                  const SpaceWidget(spaceHeight: 12),
-                  _buildTextField(
-                      label: "Instagram Profile Url",
-                      controller: controller.instagramController,
-                      profileController: controller),
-                  const SpaceWidget(spaceHeight: 12),
-                  _buildTextField(
-                      label: "Twitter Profile Url",
-                      controller: controller.twitterController,
-                      profileController: controller),
-                  const SpaceWidget(spaceHeight: 12),
-                  _buildTextField(
-                      label: "Linkedin Profile Url",
-                      controller: controller.linkedinController,
-                      profileController: controller),
-                  const SpaceWidget(spaceHeight: 12),
-                  // const ButtonWidget(label: 'Add Twitter Account'),
+                const SpaceWidget(spaceHeight: 12),
+                _buildTextField(
+                    label: "Facebook Profile Url",
+                    controller: controller.facebookController,
+                    profileController: controller),
 
-                  // Save Changes Button
-                ],
-              ),
+                const SpaceWidget(spaceHeight: 12),
+                _buildTextField(
+                    label: "Instagram Profile Url",
+                    controller: controller.instagramController,
+                    profileController: controller),
+                const SpaceWidget(spaceHeight: 12),
+                _buildTextField(
+                    label: "Twitter Profile Url",
+                    controller: controller.twitterController,
+                    profileController: controller),
+                const SpaceWidget(spaceHeight: 12),
+                _buildTextField(
+                    label: "Linkedin Profile Url",
+                    controller: controller.linkedinController,
+                    profileController: controller),
+                const SpaceWidget(spaceHeight: 12),
+                _buildTextField(
+                    label: "Youtube Channel Url",
+                    controller: controller.youtubeController,
+                    profileController: controller),
+                const SpaceWidget(spaceHeight: 12),
+                // const ButtonWidget(label: 'Add Twitter Account'),
+
+                // Save Changes Button
+              ],
             ),
           ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: ButtonWidget(
-              onPressed: controller.saveChange,
-              label: "Save Changes",
-              buttonWidth: double.infinity,
-            ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: ButtonWidget(
+            onPressed: controller.saveChange,
+            label: "Save Changes",
+            buttonWidth: double.infinity,
           ),
         ),
       ),

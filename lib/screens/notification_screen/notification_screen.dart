@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
+import 'package:the_leaderboard/utils/app_logs.dart';
 import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
 
 import '../../constants/app_colors.dart';
@@ -59,10 +60,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             );
           }
           if (controller.notificationList.isEmpty) {
-            const Center(
+            return const Center(
               child: TextWidget(
                 text: "You have no new notifications",
-                fontColor: AppColors.white,
+                fontColor: Colors.white,
               ),
             );
           }

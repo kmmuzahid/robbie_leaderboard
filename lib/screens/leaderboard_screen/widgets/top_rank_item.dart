@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 
 import '../../../constants/app_colors.dart';
@@ -41,8 +42,13 @@ class TopRankedItem extends StatelessWidget {
               child: CircleAvatar(
                 radius: avatarSize,
                 backgroundImage: fromOnline
-                    ? NetworkImage("${AppUrls.mainUrl}$image")
+                    ? NetworkImage(
+                        "${AppUrls.mainUrl}$image",
+                      )
                     : AssetImage(image),
+                onBackgroundImageError: (exception, stackTrace) {
+                  // Optionally handle the error, e.g., log it or show a placeholder.
+                },
               ),
             ),
             Positioned(

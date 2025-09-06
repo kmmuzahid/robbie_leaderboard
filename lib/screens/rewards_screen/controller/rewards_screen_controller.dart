@@ -34,6 +34,9 @@ class RewardsScreenController extends GetxController {
       [1, 2, 3, 4, 5, 10, 25, 50, 100, 250, 500, 1000].obs;
   final RxList<int> spinList = <int>[].obs;
   final luckyTicket = 0.obs;
+  final isRotated = true.obs;
+  final responseMessage = "".obs;
+  final responseStatus = "".obs;
   void fetchRuffle() async {
     try {
       appLog("fetching ruffle");
@@ -98,6 +101,7 @@ class RewardsScreenController extends GetxController {
     if (dayIndex.value > 7) {
       dayIndex.value = 0;
     }
+    allSpin.shuffle();
     //temp
     // LocalStorage.totalTicket = 0;
     // LocalStorage.dayIndex = 0;
@@ -128,28 +132,52 @@ class RewardsScreenController extends GetxController {
     }
   }
 
-  void createTicket() async {
-    final response =
-        await ApiPostService.apiPostService(AppUrls.createTicket, {});
+  Future<void> createTicket() async {
+    try {
+      appLog("Now in create ticket");
+      final response =
+          await ApiPostService.apiPostService(AppUrls.createTicket, {});
 
-    if (response != null) {
-      appLog(response.body);
-      final data = jsonDecode(response.body);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        luckyTicket.value = data['data']['ticket'] ?? 0;
-        SocketService.instance.createTicket(LocalStorage.myName, data["data"]);
-
-        Get.snackbar(
-            "Success", "${luckyTicket.value} Tickets created successfully",
-            colorText: AppColors.white);
-      } else {
-        Get.snackbar("Success", data["message"], colorText: AppColors.white);
+      if (response != null) {
+        appLog(response.body);
+        final data = jsonDecode(response.body);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          luckyTicket.value = data['data']['ticket'] ?? 0;
+          appLog("The lucky number is ${luckyTicket.value}");
+          SocketService.instance
+              .createTicket(LocalStorage.myName, data["data"]);
+          responseStatus.value = "Success";
+          responseMessage.value =
+              "${luckyTicket.value} Tickets created successfully";
+          // Get.snackbar(
+          //     "Success", "${luckyTicket.value} Tickets created successfully",
+          //     colorText: AppColors.white);
+        } else {
+          responseStatus.value = "Failed";
+          responseMessage.value = data["message"];
+          // Get.snackbar("Success", data["message"], colorText: AppColors.white);
+        }
       }
+    } catch (e) {
+      appLog("Error in creating ticket: $e");
     }
   }
 
-  void spinWheel() {
+  void rotateWithButton(int rotations) {
     int value = luckyTicket.value;
+    int valueIndex = allSpin.indexOf(value);
+    int targetIndex = ((rotations * allSpin.length) + valueIndex).toInt();
+    appLog("Now in after create ticket and lucky number: $value");
+    // final targetIndex = (allSpin.length * 10) + value;
+
+    wheelController.animateToItem(
+      targetIndex,
+      duration: const Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void spinWheel(bool fromButton) async {
     final today = DateFormat("yyyy-MM-dd").format(DateTime.now());
     appLog(today);
     final lastwheelday = LocalStorage.lastWheelday;
@@ -162,6 +190,16 @@ class RewardsScreenController extends GetxController {
     }
 
     if (lastwheelday.isEmpty || today != lastwheelday) {
+      await createTicket();
+
+      int rotations = 100;
+      int value = luckyTicket.value;
+      if (fromButton) {
+        rotateWithButton(rotations);
+      } else {
+        spinToLuckyNumber();
+      }
+      // allSpin.shuffle();
       // final random =
       //     math.Random().nextInt(currentRuffle.value!.ticketButtons.length);
       // currentWheelIndex.value = random;
@@ -176,7 +214,15 @@ class RewardsScreenController extends GetxController {
       totalTicket.value += value;
       LocalStorage.setInt(LocalStorageKeys.totalTicket, totalTicket.value);
       LocalStorage.totalTicket = totalTicket.value;
-      createTicket();
+      Future.delayed(
+        const Duration(seconds: 3),
+        () {
+          Get.snackbar(responseStatus.value, responseMessage.value,
+              colorText: AppColors.white);
+        },
+      );
+
+      // createTicket();
     } else {
       Get.snackbar(
         "Limit Reached",
@@ -185,6 +231,69 @@ class RewardsScreenController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
+  }
+
+  // fast spin or slow spin
+  DateTime? _lastSpinTime;
+
+  /// Detect speed and return type
+  String detectSpinSpeed() {
+    final now = DateTime.now();
+
+    if (_lastSpinTime == null) {
+      _lastSpinTime = now;
+      return "normal";
+    }
+
+    final diff = now.difference(_lastSpinTime!).inMilliseconds;
+    _lastSpinTime = now;
+
+    if (diff < 150) {
+      return "fast";
+    } else if (diff < 400) {
+      return "medium";
+    } else {
+      return "slow";
+    }
+  }
+
+  /// Spin logic with adaptive duration & rotations
+  void spinToLuckyNumber() {
+    int valueIndex = allSpin.indexOf(luckyTicket.value);
+
+    // detect speed
+    String speed = detectSpinSpeed();
+    appLog("Detected spin speed: $speed");
+
+    int rotations;
+    Duration duration;
+
+    switch (speed) {
+      case "fast":
+        rotations = 100;
+        duration = const Duration(seconds: 1);
+        break;
+      case "medium":
+        rotations = 80;
+        duration = const Duration(seconds: 2);
+        break;
+      case "slow":
+      default:
+        rotations = 60;
+        duration = const Duration(seconds: 3);
+        break;
+    }
+
+    int targetIndex = (rotations * allSpin.length) + valueIndex;
+
+    appLog(
+        "Spinning to ${luckyTicket.value} with $rotations rotations in ${duration.inSeconds}s");
+
+    wheelController.animateToItem(
+      targetIndex,
+      duration: duration,
+      curve: Curves.fastOutSlowIn,
+    );
   }
 
   @override

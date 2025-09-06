@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
-import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
-import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_dropdown.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_item.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_tabbar.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/top_rank_filtered_item.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
 import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
-import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
 import 'package:the_leaderboard/widgets/text_widget/text_widgets.dart';
 
@@ -198,7 +195,7 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
           statusBarIconBrightness: Brightness.light,
         ),
         child: Scaffold(
-          backgroundColor: AppColors.blueDark,
+          backgroundColor: Colors.black,
           body: SafeArea(
             child: widget.isLoading
                 ? const Center(

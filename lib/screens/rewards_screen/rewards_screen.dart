@@ -123,14 +123,15 @@ class _RewardsScreenState extends State<RewardsScreen> {
                             width: double.infinity,
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [
-                                  AppColors.gradientColorStart,
-                                  AppColors.gradientColorEnd,
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
+                              color: AppColors.blueLighter,
+                              // gradient: const LinearGradient(
+                              //   colors: [
+                              //     AppColors.gradientColorStart,
+                              //     AppColors.gradientColorEnd,
+                              //   ],
+                              //   begin: Alignment.topLeft,
+                              //   end: Alignment.bottomRight,
+                              // ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Column(
@@ -203,7 +204,9 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                   size: const Size(120, 50),
                                   // Reduced size of custom paint
                                   painter: TicketGaugePainter(
-                                    currentTickets: currentTickets,
+                                    dayIndex: controller.dayIndex.value,
+                                    currentTickets:
+                                        controller.totalTicket.value,
                                   ),
                                 ),
                                 Column(
@@ -243,7 +246,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const TextWidget(
-                            text: 'Current Tickets',
+                            text: 'Spin to Win Tickets',
                             fontColor: AppColors.white,
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
@@ -270,59 +273,65 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 0),
                                   child:
-                                      NotificationListener<ScrollNotification>(
-                                    key: const ValueKey("spin-wheel"),
-                                    onNotification: (notification) {
-                                      if (notification
-                                          is ScrollStartNotification) {
-                                        appLog('starting');
-                                        if (controller.spinList.length < 10) {
-                                          Get.snackbar(AppStrings.almostThere,
-                                              AppStrings.giveBiggerSpin,
-                                              snackPosition:
-                                                  SnackPosition.BOTTOM,
-                                              colorText: AppColors.white);
-                                        } else {
-                                          controller.spinWheel();
-                                        }
-                                      } else if (notification
-                                          is ScrollEndNotification) {
-                                        appLog('stopped');
-                                        appLog(controller.spinList.last);
+                                      //   NotificationListener<ScrollNotification>(
+                                      // key: const ValueKey("spin-wheel"),
+                                      // onNotification: (notification) {
+                                      //   if (notification
+                                      //       is ScrollStartNotification) {
+                                      //     appLog('starting');
+
+                                      //     // if (controller.spinList.length < 10) {
+                                      //     //   Get.snackbar(AppStrings.almostThere,
+                                      //     //       AppStrings.giveBiggerSpin,
+                                      //     //       snackPosition:
+                                      //     //           SnackPosition.BOTTOM,
+                                      //     //       colorText: AppColors.white);
+                                      //     // } else {
+                                      //     //   controller.spinWheel();
+                                      //     // }
+                                      //   } else if (notification
+                                      //       is ScrollEndNotification) {
+                                      //     appLog('stopped');
+                                      //     appLog(controller.spinList.last);
+                                      //     controller.spinWheel();
+                                      //   }
+                                      //   return true;
+                                      // },
+                                      // child:
+                                      WheelChooser(
+                                    controller: controller.wheelController,
+                                    startPosition: null,
+                                    listWidth:
+                                        MediaQuery.of(context).size.width * 1.5,
+                                    itemSize: 70,
+                                    squeeze: 1.0,
+                                    perspective: 0.01,
+                                    datas: controller.allSpin,
+                                    isInfinite: true,
+                                    magnification: 1,
+                                    listHeight: 100,
+                                    onValueChanged: (s) {
+                                      // appLog(s);
+                                      controller.spinList.add(s);
+                                      if (controller.isRotated.value) {
+                                        controller.spinWheel(false);
+                                        controller.isRotated.value = false;
                                       }
-                                      return true;
                                     },
-                                    child: WheelChooser(
-                                      controller: controller.wheelController,
-                                      startPosition: null,
-                                      listWidth:
-                                          MediaQuery.of(context).size.width *
-                                              1.5,
-                                      itemSize: 70,
-                                      squeeze: 1.0,
-                                      perspective: 0.01,
-                                      datas: controller.allSpin,
-                                      isInfinite: true,
-                                      magnification: 1,
-                                      listHeight: 100,
-                                      onValueChanged: (s) {
-                                        appLog(s);
-                                        controller.spinList.add(s);
-                                      },
-                                      // Trim spaces for logging
-                                      selectTextStyle: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green,
-                                      ),
-                                      unSelectTextStyle: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey,
-                                        backgroundColor: Colors.transparent,
-                                      ),
-                                      horizontal: true,
+                                    // Trim spaces for logging
+                                    selectTextStyle: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green,
                                     ),
+                                    unSelectTextStyle: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                    horizontal: true,
                                   ),
+                                  // ),
                                 ),
                           const SpaceWidget(spaceHeight: 8),
                           const Padding(
@@ -355,7 +364,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                   const SpaceWidget(spaceWidth: 2),
                                   GradientText(
                                     text:
-                                        "${controller.dayIndex.value} Days Streak",
+                                        "${controller.dayIndex.value} ${controller.dayIndex.value == 0 ? "Day" : "Days"} Streak",
                                     fontWeight: FontWeight.w500,
                                     fontSize: 12,
                                   ),
@@ -401,12 +410,15 @@ class _RewardsScreenState extends State<RewardsScreen> {
                             fontSize: 12,
                           ),
                           const SpaceWidget(spaceHeight: 18),
-                          const ButtonWidget(
-                            onPressed: null,
-                            label: AppStrings.spinTowinTicket,
-                            buttonWidth: double.infinity,
-                            fontSize: 14,
-                            buttonHeight: 42,
+                          Center(
+                            child: ButtonWidget(
+                              backgroundColor: AppColors.blueLighter,
+                              onPressed: () => controller.spinWheel(true),
+                              label: "SPIN",
+                              buttonWidth: 200,
+                              fontSize: 17,
+                              buttonHeight: 42,
+                            ),
                           ),
                         ],
                       ),

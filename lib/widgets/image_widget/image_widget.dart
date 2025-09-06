@@ -46,6 +46,15 @@ class ImageWidget extends StatelessWidget {
       width: ResponsiveUtils.width(width),
       fit: fit,
       color: color,
+      errorBuilder: (context, error, stackTrace) {
+        return Image.asset(
+          AppImagePath.profileImage,
+          height: ResponsiveUtils.width(height),
+          width: ResponsiveUtils.width(width),
+          fit: fit,
+          color: color,
+        );
+      },
     );
   }
 }

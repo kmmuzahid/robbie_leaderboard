@@ -7,7 +7,9 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/country_leaderboard_model.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
+import 'package:the_leaderboard/screens/profile_screen/controller/profile_screen_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
 class LeaderboardController extends GetxController {
@@ -21,11 +23,21 @@ class LeaderboardController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final double eachItemHeight = 50.0;
   Timer? refreshTimer;
+  final userId = "".obs;
 
-  void fetchData() {
-    fetchLeaderBoardData();
-    fetchCountryData();
-    fetchCreatorData();
+  void fetchData() async {
+    try {
+      fetchLeaderBoardData();
+      fetchCountryData();
+      fetchCreatorData();
+      Get.put(ProfileScreenController());
+      await Get.find<ProfileScreenController>().fetchProfile();
+      userId.value = LocalStorage.userId;
+      appLog("The userid is: ${userId.value}");
+    } catch (e) {
+      errorLog("Error in leaderboad controller", e);
+    }
+
     // refreshTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
     //   fetchLeaderBoardData();
     //   fetchCountryData();

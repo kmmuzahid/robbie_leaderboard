@@ -49,8 +49,8 @@ class ProfileScreenController extends GetxController {
           instagramUrl.value = profile.instagram;
           twitterUrl.value = profile.twitter;
           linkedinUrl.value = profile.linkedin;
-          LocalStorage.userId = profile.id;
           LocalStorage.myName = profile.name;
+          LocalStorage.userId = profile.id;
           appLog("user id: ${profile.id} and token: ${LocalStorage.token}");
         } else {
           Get.snackbar("Error", data["message"], colorText: AppColors.white);

@@ -50,15 +50,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
 
   Widget buildLeaderboardTabView(List<LeaderBoardModel?> leaderboard) {
     final filteredList = leaderboard.skip(3).where((e) => e != null).toList();
-    String userId = LocalStorage.userId;
-    appLog("mydata");
-    appLog(LocalStorage.userId);
+
     final myData = filteredList.firstWhere(
-      (element) => element!.userId == userId,
+      (element) => element!.userId == _controller.userId.value,
       orElse: () => LeaderBoardModel.empty(),
     );
     final myIndex = filteredList.indexWhere(
-      (element) => element?.userId == userId,
+      (element) => element?.userId == _controller.userId.value,
     );
     bool showFloating = true;
     appLog("myIndex is: $myIndex");
@@ -219,7 +217,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                     left: 0,
                     right: 0,
                     child: Container(
-                      color: AppColors.midblue,
+                      color: AppColors.blue,
                       child: LeaderboardItem(
                         key: ValueKey(
                             '${myData.name}${myData.currentRank}$myIndex'),
@@ -268,7 +266,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.blueDark,
+        backgroundColor: Colors.black,
         body: Obx(
           () => SafeArea(
             child: _controller.isLoading.value

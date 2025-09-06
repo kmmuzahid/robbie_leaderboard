@@ -18,68 +18,76 @@ class BottomNav extends StatelessWidget {
         init: BottomNavController(),
         builder: (controller) {
           Get.put(NotificationController());
-          return Scaffold(
-            backgroundColor: AppColors.blueDark,
-            body: IndexedStack(
-              index: controller.selectedIndex.value,
-              children: controller.widgetOptions,
-            ),
-            bottomNavigationBar: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.blueDark,
+          return PopScope(
+            canPop: controller.selectedIndex.value == 0,
+            onPopInvoked: (didPop) {
+              if (!didPop && controller.selectedIndex.value != 0) {
+                controller.changeIndex(0);
+              }
+            },
+            child: Scaffold(
+              backgroundColor: Colors.black,
+              body: IndexedStack(
+                index: controller.selectedIndex.value,
+                children: controller.widgetOptions,
               ),
-              child: SafeArea(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: GNav(
-                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    // rippleColor: Colors.grey[300]!,
-                    // hoverColor: Colors.grey[100]!,
-                    gap: 0,
-                    iconSize: 24,
+              bottomNavigationBar: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.black,
+                ),
+                child: SafeArea(
+                  child: Padding(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    duration: const Duration(milliseconds: 400),
-                    tabBackgroundColor: AppColors.blueLighter,
-                    backgroundColor: AppColors.blueDark,
-                    tabBorderRadius: 8,
-                    tabs: [
-                      CustomGButton.build(
-                        iconPath: AppIconPath.homeIcon,
-                        label: AppStrings.home,
-                        index: 0,
-                        selectedIndex: controller.selectedIndex.value,
-                        selectedColor: AppColors.blueDark,
-                        unselectedColor: AppColors.blueLighter,
-                      ),
-                      CustomGButton.build(
-                        iconPath: AppIconPath.leaderboardIcon,
-                        label: AppStrings.leaderboards,
-                        index: 1,
-                        selectedIndex: controller.selectedIndex.value,
-                        selectedColor: AppColors.blueDark,
-                        unselectedColor: AppColors.blueLighter,
-                      ),
-                      CustomGButton.build(
-                        iconPath: AppIconPath.rewardsIcon,
-                        label: AppStrings.rewards,
-                        index: 2,
-                        selectedIndex: controller.selectedIndex.value,
-                        selectedColor: AppColors.blueDark,
-                        unselectedColor: AppColors.blueLighter,
-                      ),
-                      CustomGButton.build(
-                        iconPath: AppIconPath.profileIcon,
-                        label: AppStrings.profile,
-                        index: 3,
-                        selectedIndex: controller.selectedIndex.value,
-                        selectedColor: AppColors.blueDark,
-                        unselectedColor: AppColors.blueLighter,
-                      ),
-                    ],
-                    selectedIndex: controller.selectedIndex.value,
-                    onTabChange: (index) => controller.changeIndex(index),
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: GNav(
+                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      // rippleColor: Colors.grey[300]!,
+                      // hoverColor: Colors.grey[100]!,
+                      gap: 0,
+                      iconSize: 24,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
+                      duration: const Duration(milliseconds: 400),
+                      tabBackgroundColor: AppColors.blueLighter,
+                      backgroundColor: Colors.black,
+                      tabBorderRadius: 8,
+                      tabs: [
+                        CustomGButton.build(
+                          iconPath: AppIconPath.homeIcon,
+                          label: AppStrings.home,
+                          index: 0,
+                          selectedIndex: controller.selectedIndex.value,
+                          selectedColor: AppColors.blueDark,
+                          unselectedColor: AppColors.blueLighter,
+                        ),
+                        CustomGButton.build(
+                          iconPath: AppIconPath.leaderboardIcon,
+                          label: AppStrings.leaderboards,
+                          index: 1,
+                          selectedIndex: controller.selectedIndex.value,
+                          selectedColor: AppColors.blueDark,
+                          unselectedColor: AppColors.blueLighter,
+                        ),
+                        CustomGButton.build(
+                          iconPath: AppIconPath.rewardsIcon,
+                          label: AppStrings.rewards,
+                          index: 2,
+                          selectedIndex: controller.selectedIndex.value,
+                          selectedColor: AppColors.blueDark,
+                          unselectedColor: AppColors.blueLighter,
+                        ),
+                        CustomGButton.build(
+                          iconPath: AppIconPath.profileIcon,
+                          label: AppStrings.profile,
+                          index: 3,
+                          selectedIndex: controller.selectedIndex.value,
+                          selectedColor: AppColors.blueDark,
+                          unselectedColor: AppColors.blueLighter,
+                        ),
+                      ],
+                      selectedIndex: controller.selectedIndex.value,
+                      onTabChange: (index) => controller.changeIndex(index),
+                    ),
                   ),
                 ),
               ),

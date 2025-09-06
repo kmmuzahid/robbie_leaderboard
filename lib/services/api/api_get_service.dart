@@ -15,9 +15,11 @@ class ApiGetService {
   static Future<http.Response?> apiGetService(String url) async {
     try {
       appLog("hitting url: $url");
+      final token = LocalStorage.token;
+      appLog("Token: $token");
       final response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
-        'authorization': LocalStorage.token
+        'authorization': token,
       }).timeout(const Duration(seconds: 10));
       appLog("response from Get- $url: ${response.body}");
       return response;

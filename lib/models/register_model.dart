@@ -22,15 +22,15 @@ class RegisterModel {
 
   factory RegisterModel.fromJson(Map<String, dynamic> json) {
     return RegisterModel(
-        name: json['name'],
-        email: json['email'],
-        contact: json['contact'],
-        password: json['password'],
-        country: json['country'],
-        city: json['city'],
-        gender: json['gender'],
-        age: json['age'],
-        userCode: json['inviterCode']);
+        name: json['name'] ?? "",
+        email: json['email'] ?? "",
+        contact: json['contact'] ?? "",
+        password: json['password'] ?? "",
+        country: json['country'] ?? "",
+        city: json['city'] ?? "",
+        gender: json['gender'] ?? "",
+        age: json['age'] ?? "",
+        userCode: json['inviterCode'] ?? "");
   }
 
   Map<String, dynamic> toJson() {

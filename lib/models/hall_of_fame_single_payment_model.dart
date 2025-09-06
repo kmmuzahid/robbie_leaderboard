@@ -4,7 +4,8 @@ class HallOfFameSinglePaymentModel {
   final String country;
   final String gender;
   final int views;
-  final int totalInvested;
+  final num totalInvested;
+  final String profileImg;
 
   HallOfFameSinglePaymentModel({
     required this.id,
@@ -13,6 +14,7 @@ class HallOfFameSinglePaymentModel {
     required this.gender,
     required this.views,
     required this.totalInvested,
+    required this.profileImg,
   });
 
   factory HallOfFameSinglePaymentModel.fromJson(Map<String, dynamic> json) {
@@ -22,7 +24,8 @@ class HallOfFameSinglePaymentModel {
       country: json['country'] ?? '',
       gender: json['gender'] ?? '',
       views: json['views'] ?? 0,
-      totalInvested: json['totalInvested'] ?? 0,
+      totalInvested: json['totalInvested'] ?? 0.0,
+      profileImg: json['profileImg'] ?? '',
     );
   }
 

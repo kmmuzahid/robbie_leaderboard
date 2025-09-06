@@ -1,7 +1,7 @@
 class CurrentRuffleModel {
   final String id;
   final DateTime deadline;
-  final int prizeMoney;
+  final num prizeMoney;
   final List<int> ticketButtons;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -21,7 +21,7 @@ class CurrentRuffleModel {
     return CurrentRuffleModel(
       id: json['_id'] ?? '',
       deadline: DateTime.parse(json['deadline']),
-      prizeMoney: json['prizeMoney'] ?? 0,
+      prizeMoney: json['prizeMoney'] ?? 0.0,
       ticketButtons: List<int>.from(json['ticketButtons'] ?? []),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),

@@ -19,254 +19,282 @@ import '../../../widgets/text_field_widget/text_field_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 import 'controller/register_screen_controller.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final controller = Get.put(RegisterScreenController());
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller.onInitial();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-      init: RegisterScreenController(),
-      builder: (controller) => AnnotatedRegion(
-        value: const SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.light,
-        ),
-        child: Scaffold(
-          backgroundColor: AppColors.blueDark,
-          body: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SpaceWidget(spaceHeight: 48),
-                  const Center(
-                    child: TextWidget(
-                      text: AppStrings.createAccount,
-                      fontColor: AppColors.blueLighter,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 32,
-                    ),
+    return AnnotatedRegion(
+      value: const SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.blueDark,
+        body: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SpaceWidget(spaceHeight: 48),
+                const Center(
+                  child: TextWidget(
+                    text: AppStrings.createAccount,
+                    fontColor: AppColors.blueLighter,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 32,
                   ),
-                  const SpaceWidget(spaceHeight: 12),
-                  const Center(
-                    child: TextWidget(
-                      text: AppStrings.enterPersonalData,
+                ),
+                const SpaceWidget(spaceHeight: 12),
+                const Center(
+                  child: TextWidget(
+                    text: AppStrings.enterPersonalData,
+                    fontColor: AppColors.blueLighter,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 28),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.email,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
+                TextFieldWidget(
+                  controller: controller.emailController,
+                  hintText: 'Enter Email',
+                  maxLines: 1,
+                ),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.password,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
+                TextFieldWidget(
+                  controller: controller.passwordController,
+                  hintText: 'Enter Password',
+                  maxLines: 1,
+                  suffixIcon: AppIconPath.visibilityOnIcon,
+                ),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.confirmPassword,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
+                TextFieldWidget(
+                  controller: controller.confirmPasswordController,
+                  hintText: 'Enter Password Again',
+                  maxLines: 1,
+                  suffixIcon: AppIconPath.visibilityOnIcon,
+                ),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.name,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
+                TextFieldWidget(
+                    controller: controller.nameController,
+                    hintText: "Enter Name"),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.country,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),         
+
+                Obx(
+                  () => DropdownButtonWidget(
+                    value: controller.selectedCountry.value,
+                    items: controller.countryList
+                        .map((c) => DropdownMenuItem(
+                              value: c.isoCode,
+                              child: TextWidget(
+                                text: c.name,
+                                fontColor: AppColors.white,
+                              ),
+                            ))
+                        .toList(),
+                    onChanged: (value) => controller.updateCountry(value!),
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.city,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
+                Obx(
+                  () => DropdownButtonWidget(
+                    value: controller.selectedCity.value,
+                    items: controller.cityList
+                        .map((c) => DropdownMenuItem(
+                              value: c.name,
+                              child: TextWidget(
+                                text: c.name,
+                                fontColor: AppColors.white,
+                              ),
+                            ))
+                        .toList(),
+                    onChanged: (value) => controller.updateCity(value!),
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.gender,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
+                Obx(
+                  () => DropdownButtonWidget(
+                    value: controller.selectedGender.value,
+                    items: controller.genders
+                        .map((e) => DropdownMenuItem<String>(
+                            value: e,
+                            child: TextWidget(
+                              text: e,
+                              fontColor: AppColors.white,
+                            )))
+                        .toList(),
+                    onChanged: (value) => controller.updateGender(value!),
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.age,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
+                TextFieldWidget(
+                    controller: controller.ageController,
+                    hintText: "Enter Age"),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.contact,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
+                PhoneNumberFieldWidget(
+                  initialValue: PhoneNumber(isoCode: "ZA"),
+                  controller: controller.contactController,
+                  onInputChanged: (p0) {
+                    controller.phoneNumber.value = p0.phoneNumber!;
+                  },
+                  onInputValidated: (p0) {
+                    controller.isValidPhonenumber.value = p0;
+                  },
+                ),
+                // TextFieldWidget(
+                //     controller: controller.contactController,
+                //     hintText: "Enter Contact"),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.referral,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 8),
+                TextFieldWidget(
+                    controller: controller.referralController,
+                    hintText: "Enter Inviter Code (if any)"),
+                const SpaceWidget(spaceHeight: 24),
+                ButtonWidget(
+                  onPressed: controller.register,
+                  label: AppStrings.register,
+                  buttonWidth: double.infinity,
+                ),
+                const SpaceWidget(spaceHeight: 24),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const TextWidget(
+                      text: AppStrings.alreadyHaveAnAccount,
                       fontColor: AppColors.blueLighter,
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                     ),
-                  ),
-                  const SpaceWidget(spaceHeight: 28),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: TextWidget(
-                      text: AppStrings.email,
-                      fontColor: AppColors.greyDark,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
+                    const SpaceWidget(spaceWidth: 4),
+                    TextButtonWidget(
+                      onPressed: () {
+                        Get.offAllNamed(AppRoutes.loginScreen);
+                      },
+                      text: AppStrings.login,
+                      textColor: AppColors.skyBlue,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColors.skyBlue,
                     ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-                  TextFieldWidget(
-                    controller: controller.emailController,
-                    hintText: 'Enter Email',
-                    maxLines: 1,
-                  ),
-                  const SpaceWidget(spaceHeight: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: TextWidget(
-                      text: AppStrings.password,
-                      fontColor: AppColors.greyDark,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-                  TextFieldWidget(
-                    controller: controller.passwordController,
-                    hintText: 'Enter Password',
-                    maxLines: 1,
-                    suffixIcon: AppIconPath.visibilityOnIcon,
-                  ),
-                  const SpaceWidget(spaceHeight: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: TextWidget(
-                      text: AppStrings.confirmPassword,
-                      fontColor: AppColors.greyDark,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-                  TextFieldWidget(
-                    controller: controller.confirmPasswordController,
-                    hintText: 'Enter Password Again',
-                    maxLines: 1,
-                    suffixIcon: AppIconPath.visibilityOnIcon,
-                  ),
-                  const SpaceWidget(spaceHeight: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: TextWidget(
-                      text: AppStrings.name,
-                      fontColor: AppColors.greyDark,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-                  TextFieldWidget(
-                      controller: controller.nameController,
-                      hintText: "Enter Name"),
-                  const SpaceWidget(spaceHeight: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: TextWidget(
-                      text: AppStrings.country,
-                      fontColor: AppColors.greyDark,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-
-                  // CustomCountryStateCityWidget(
-                  //   cityController: controller.cityController,
-                  //   countryController: controller.countryController,
-                  //   stateController: controller.stateController,
-                  // ),
-
-                  Obx(
-                    () => DropdownButtonWidget(
-                      value: controller.selectedCountry.value,
-                      items: AppCountryCity.countryCityMap.keys.toList(),
-                      onChanged: (value) => controller.updateCountry(value!),
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: TextWidget(
-                      text: AppStrings.city,
-                      fontColor: AppColors.greyDark,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-                  Obx(
-                    () => DropdownButtonWidget(
-                      value: controller.selectedCity.value,
-                      items: controller.cities,
-                      onChanged: (value) => controller.updateCity(value!),
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: TextWidget(
-                      text: AppStrings.gender,
-                      fontColor: AppColors.greyDark,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-                  Obx(
-                    () => DropdownButtonWidget(
-                      value: controller.selectedGender.value,
-                      items: controller.genders,
-                      onChanged: (value) => controller.updateGender(value!),
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: TextWidget(
-                      text: AppStrings.age,
-                      fontColor: AppColors.greyDark,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-                  TextFieldWidget(
-                      controller: controller.ageController,
-                      hintText: "Enter Age"),
-                  const SpaceWidget(spaceHeight: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: TextWidget(
-                      text: AppStrings.contact,
-                      fontColor: AppColors.greyDark,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-                  PhoneNumberFieldWidget(
-                    controller: controller.contactController,
-                    onInputChanged: (p0) {
-                      controller.phoneNumber.value = p0.phoneNumber!;
-                    },
-                    onInputValidated: (p0) {
-                      controller.isValidPhonenumber.value = p0;
-                    },
-                  ),
-                  // TextFieldWidget(
-                  //     controller: controller.contactController,
-                  //     hintText: "Enter Contact"),
-                  const SpaceWidget(spaceHeight: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: TextWidget(
-                      text: AppStrings.referral,
-                      fontColor: AppColors.greyDark,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SpaceWidget(spaceHeight: 8),
-                  TextFieldWidget(
-                      controller: controller.referralController,
-                      hintText: "Enter Inviter Code (if any)"),
-                  const SpaceWidget(spaceHeight: 24),
-                  ButtonWidget(
-                    onPressed: controller.register,
-                    label: AppStrings.register,
-                    buttonWidth: double.infinity,
-                  ),
-                  const SpaceWidget(spaceHeight: 24),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const TextWidget(
-                        text: AppStrings.alreadyHaveAnAccount,
-                        fontColor: AppColors.blueLighter,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                      ),
-                      const SpaceWidget(spaceWidth: 4),
-                      TextButtonWidget(
-                        onPressed: () {
-                          Get.offAllNamed(AppRoutes.loginScreen);
-                        },
-                        text: AppStrings.login,
-                        textColor: AppColors.skyBlue,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        decoration: TextDecoration.underline,
-                        decorationColor: AppColors.skyBlue,
-                      ),
-                    ],
-                  ),
-                  const SpaceWidget(spaceHeight: 24),
-                ],
-              ),
+                  ],
+                ),
+                const SpaceWidget(spaceHeight: 24),
+              ],
             ),
           ),
         ),

@@ -26,7 +26,7 @@ class SplashScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: ImageWidget(
-                    imagePath: AppImagePath.appLogoGold,
+                    imagePath: AppImagePath.appLogoNew,
                     height: AppSize.height(value: 500),
                     width: AppSize.width(value: 500),
                     fit: BoxFit.contain,

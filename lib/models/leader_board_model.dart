@@ -2,7 +2,7 @@ class LeaderBoardModel {
   final String userId;
   final String name;
   final String profileImg;
-  final int totalInvest;
+  final num totalInvest;
   final int currentRank;
   final int previousRank;
   final int totalView;
@@ -22,7 +22,7 @@ class LeaderBoardModel {
       userId: json['userId'] ?? '',
       name: json['name'] ?? '',
       profileImg: json['profileImg'] ?? '',
-      totalInvest: json['totalInvest'] ?? 0,
+      totalInvest: json['totalInvest'] ?? 0.0,
       currentRank: json['currentRank'] ?? 0,
       previousRank: json['previousRank'] ?? 0,
       totalView: json['totalView'] ?? 0,
@@ -44,7 +44,7 @@ class LeaderBoardModel {
   factory LeaderBoardModel.empty() => LeaderBoardModel(
         userId: '',
         name: '',
-        totalInvest: 0,
+        totalInvest: 0.0,
         currentRank: 0,
         previousRank: 0,
         profileImg: 'Unknown',
