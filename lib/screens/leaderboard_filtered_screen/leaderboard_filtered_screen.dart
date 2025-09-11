@@ -10,6 +10,7 @@ import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/lead
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_tabbar.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/top_rank_filtered_item.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
+import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
 import 'package:the_leaderboard/widgets/text_widget/text_widgets.dart';
@@ -91,7 +92,8 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                       fromNetwork: filterList[1]!.profileImg != "Unknown",
                       rankLabel: filterList[1]!.currentRank.toString(),
                       name: filterList[1]!.name,
-                      amount: "\$${widget.leaderBoardList[1]!.totalInvest}",
+                      amount:
+                          "\$${AppCommonFunction.formatNumber(widget.leaderBoardList[1]!.totalInvest)}",
                       image: filterList[1]!.profileImg != "Unknown"
                           ? "${AppUrls.mainUrl}${widget.leaderBoardList[1]!.profileImg}"
                           : AppImagePath.profileImage,
@@ -110,7 +112,8 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                     fromNetwork: filterList[0]!.profileImg != "Unknown",
                     rankLabel: filterList[0]!.currentRank.toString(),
                     name: filterList[0]!.name,
-                    amount: "\$${widget.leaderBoardList[0]!.totalInvest}",
+                    amount:
+                        "\$${AppCommonFunction.formatNumber(widget.leaderBoardList[0]!.totalInvest)}",
                     image: filterList[0]!.profileImg != "Unknown"
                         ? "${AppUrls.mainUrl}${widget.leaderBoardList[0]!.profileImg}"
                         : AppImagePath.profileImage,
@@ -130,7 +133,8 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                       fromNetwork: filterList[2]!.profileImg != "Unknown",
                       rankLabel: filterList[2]!.currentRank.toString(),
                       name: filterList[2]!.name,
-                      amount: "\$${widget.leaderBoardList[2]!.totalInvest}",
+                      amount:
+                          "\$${AppCommonFunction.formatNumber(widget.leaderBoardList[2]!.totalInvest)}",
                       image: filterList[2]!.profileImg != "Unknown"
                           ? "${AppUrls.mainUrl}${widget.leaderBoardList[2]!.profileImg}"
                           : AppImagePath.profileImage,
@@ -149,7 +153,7 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                 key: ValueKey('${data!.name}${data.currentRank}$index'),
                 rank: data.currentRank,
                 name: data.name,
-                amount: "\$${data.totalInvest.toString()}",
+                amount: "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
                 isUp: (data.previousRank - data.currentRank) > 0 ? true : false,
                 image: data.profileImg != "Unknown"
                     ? "${AppUrls.mainUrl}${data.profileImg}"

@@ -5,6 +5,7 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/profile_model.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
+import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
 class OtherProfileController extends GetxController {
@@ -19,7 +20,7 @@ class OtherProfileController extends GetxController {
   final RxString instagramUrl = "".obs;
   final RxString twitterUrl = "".obs;
   final RxString linkedinUrl = "".obs;
-  final RxString discordUrl = "".obs;
+  final RxString youtubeUrl = "".obs;
 
   void fetchProfile(String userId) async {
     try {
@@ -35,7 +36,8 @@ class OtherProfileController extends GetxController {
           final profile = ProfileUserModel.fromJson(jsonbody["data"]["user"]);
           name.value = profile.name;
           email.value = profile.email;
-          totalSpent.value = profile.totalInvest.toString();
+          totalSpent.value =
+              AppCommonFunction.formatNumber(profile.totalInvest);
           totalViews.value = profile.views.toString();
           rank.value = profile.rank.toString();
           profileImage.value = profile.profileImg;
@@ -43,6 +45,7 @@ class OtherProfileController extends GetxController {
           instagramUrl.value = profile.instagram;
           twitterUrl.value = profile.twitter;
           linkedinUrl.value = profile.linkedin;
+          youtubeUrl.value = profile.youtube;
           appLog("Profile image of other users");
           appLog(profileImage.value);
           appLog(facebookUrl.value);

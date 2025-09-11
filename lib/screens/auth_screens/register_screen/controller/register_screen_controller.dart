@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
-import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/register_model.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
@@ -37,15 +36,17 @@ class RegisterScreenController extends GetxController {
 
   final RxString phoneNumber = "".obs;
   final RxBool isValidPhonenumber = true.obs;
-  List<Country> countryList = [];
+  RxList<Country> countryList = <Country>[].obs;
   RxList<City> cityList = <City>[].obs;
+  final finalSelectedCountry = "".obs;
 
   Future<void> onInitial() async {
     try {
-      countryList = await getAllCountries();
+      countryList.value = await getAllCountries();
       if (countryList.isNotEmpty) {
         // Select first country by default
         selectedCountry.value = countryList.first.isoCode;
+        updateCountry(selectedCountry.value);
 
         // Load its cities
         await loadCities(countryList.first.isoCode);
@@ -55,7 +56,7 @@ class RegisterScreenController extends GetxController {
     }
   }
 
- Future<void> loadCities(String countryCode) async {
+  Future<void> loadCities(String countryCode) async {
     try {
       final fetchedCities = await getCountryCities(countryCode);
 
@@ -80,10 +81,24 @@ class RegisterScreenController extends GetxController {
     }
   }
 
-  void updateCountry(String isoCode) async {
-    selectedCountry.value = isoCode;
-    await loadCities(isoCode);
-    appLog("Country updated: $isoCode");
+  Future<void> updateCountry(String isoCode) async {
+    try {
+      cityList.clear();
+      selectedCountry.value = isoCode;
+      countryList.value = await getAllCountries();
+      final country = countryList.firstWhereOrNull(
+        (c) => c.isoCode == isoCode,
+      );
+
+      appLog(
+          "Found country: ${country!.name} and country code: ${country.isoCode} and default isoCode: $isoCode");
+
+      finalSelectedCountry.value = country.name;
+      await loadCities(isoCode);
+      appLog("Country updated: $isoCode");
+    } catch (e) {
+      appLog(e); // TODO
+    }
   }
 
   void updateCity(String value) {
@@ -112,7 +127,7 @@ class RegisterScreenController extends GetxController {
     String password = passwordController.text.trim();
     String confirmPassword = confirmPasswordController.text.trim();
     String name = nameController.text;
-    String country = selectedCountry.value;
+    String country = finalSelectedCountry.value;
     String city = selectedCity.value;
     String gender = selectedGender.value;
     String age = ageController.text;
@@ -124,12 +139,14 @@ class RegisterScreenController extends GetxController {
         name.isEmpty ||
         age.isEmpty ||
         contact.isEmpty) {
+      Get.closeAllSnackbars();
       Get.snackbar('Form Incomplete', 'Please fill in all fields.',
           colorText: AppColors.white);
       return;
     }
 
     if (password != confirmPassword) {
+      Get.closeAllSnackbars();
       Get.snackbar(
         'Password Mismatch',
         'The passwords you entered don\'t match. Please try again.',
@@ -139,6 +156,7 @@ class RegisterScreenController extends GetxController {
       return;
     }
     if (password.length < 6) {
+      Get.closeAllSnackbars();
       Get.snackbar(
         "Password Too Short",
         "Please enter a password with at least 6 characters.",
@@ -148,6 +166,7 @@ class RegisterScreenController extends GetxController {
       return;
     }
     if (!isValidPhonenumber.value) {
+      Get.closeAllSnackbars();
       Get.snackbar(
         "Invalid Phone Number",
         "Please enter a valid phone number.",
@@ -158,9 +177,20 @@ class RegisterScreenController extends GetxController {
     }
 
     if (int.parse(age) < 0) {
+      Get.closeAllSnackbars();
       Get.snackbar(
         "Invalid Age",
         "Age cannot be negative. Please enter a valid age.",
+        colorText: AppColors.white,
+      );
+
+      return;
+    }
+    if (name.length > 16) {
+      Get.closeAllSnackbars();
+      Get.snackbar(
+        "Name is too long",
+        "Name should be maximum 16 characters",
         colorText: AppColors.white,
       );
 
@@ -187,10 +217,12 @@ class RegisterScreenController extends GetxController {
           LocalStorage.token = data["data"]["token"];
           LocalStorage.myEmail = email;
           LocalStorage.setString(LocalStorageKeys.myEmail, email);
+          Get.closeAllSnackbars();
           Get.snackbar("Success", data["message"], colorText: AppColors.white);
           // Proceed with registration (e.g., API call, navigation, etc.)
           Get.offNamed(AppRoutes.verifyOtpScreen);
         } else {
+          Get.closeAllSnackbars();
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }
       }

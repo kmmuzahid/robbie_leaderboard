@@ -167,7 +167,8 @@ class ApiPatchService {
       appLog("sending request successful: ${response.body}");
       appLog(response.statusCode);
       final resp = jsonDecode(response.body);
-      Get.snackbar("Success: ${resp['success']}", resp['message']);
+      Get.snackbar("Success: ${resp['success']}", resp['message'],
+          colorText: AppColors.white);
 
       return;
     } on SocketException {

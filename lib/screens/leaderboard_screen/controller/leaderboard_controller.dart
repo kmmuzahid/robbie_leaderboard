@@ -65,6 +65,7 @@ class LeaderboardController extends GetxController {
             (a, b) => a!.currentRank.compareTo(b!.currentRank),
           );
         } else {
+          Get.closeAllSnackbars();
           Get.snackbar("Error", jsonbody["message"],
               colorText: AppColors.white);
         }
@@ -96,6 +97,7 @@ class LeaderboardController extends GetxController {
             (a, b) => a!.currentRank.compareTo(b!.currentRank),
           );
         } else {
+          Get.closeAllSnackbars();
           Get.snackbar("Error", jsonbody["message"],
               colorText: AppColors.white);
         }
@@ -126,6 +128,7 @@ class LeaderboardController extends GetxController {
             (a, b) => b!.totalInvest.compareTo(a!.totalInvest),
           );
         } else {
+          Get.closeAllSnackbars();
           Get.snackbar("Error", jsonbody["message"],
               colorText: AppColors.white);
         }

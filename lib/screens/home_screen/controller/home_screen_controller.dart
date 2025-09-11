@@ -21,6 +21,7 @@ import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/socket/socket_service.dart';
 import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
+import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
 class HomeScreenController extends GetxController {
@@ -96,7 +97,8 @@ class HomeScreenController extends GetxController {
           final userData = ProfileResponseModel.fromJson(data["data"]).user;
           name.value = userData?.name ?? "";
           totalRaised.value = userData?.totalRaised.toString() ?? "";
-          totalSpent.value = userData?.totalInvest.toString() ?? "";
+          totalSpent.value =
+              AppCommonFunction.formatNumber(userData?.totalInvest);
           rank.value = userData?.rank ?? 0;
           image.value = userData?.profileImg ?? "";
           userCode.value = userData?.userCode ?? "";
@@ -104,6 +106,7 @@ class HomeScreenController extends GetxController {
           LocalStorage.setString(LocalStorageKeys.userId, userData.id);
           return;
         } else {
+          Get.closeAllSnackbars();
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }
       } else {
@@ -128,6 +131,7 @@ class HomeScreenController extends GetxController {
               HallOfFameSinglePaymentModel.fromJson(data["data"]);
           return;
         } else {
+          Get.closeAllSnackbars();
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }
       }
@@ -158,6 +162,7 @@ class HomeScreenController extends GetxController {
               HallOfFrameConsisntantlyTopModel.fromJson(data["data"]);
           return;
         } else {
+          Get.closeAllSnackbars();
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }
       }
@@ -182,6 +187,7 @@ class HomeScreenController extends GetxController {
               HallOfFrameMostEngagedModel.fromJson(data["data"]);
           return;
         } else {
+          Get.closeAllSnackbars();
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }
       }

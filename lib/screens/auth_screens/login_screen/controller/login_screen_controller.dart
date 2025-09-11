@@ -30,11 +30,13 @@ class LoginScreenController extends GetxController {
     appLog("User is logging in with $email and $password");
     final user = User(email: email, password: password);
     if (email.isEmpty || password.isEmpty) {
+      Get.closeAllSnackbars();
       Get.snackbar('Form Incomplete', 'Please fill in all fields.',
           snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
       return;
     }
     if (!email.contains("@")) {
+      Get.closeAllSnackbars();
       Get.snackbar('Email invaild', 'PLease write a vaild email address',
           snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
       return;
@@ -64,10 +66,12 @@ class LoginScreenController extends GetxController {
             LocalStorage.setString(LocalStorageKeys.myPassword, "");
             LocalStorage.setString(LocalStorageKeys.token, "");
           }
+          Get.closeAllSnackbars();
           Get.snackbar("Success", data["message"], colorText: AppColors.white);
           // Proceed with registration (e.g., API call, navigation, etc.)
           Get.offAll(() => const BottomNav());
         } else {
+          Get.closeAllSnackbars();
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }
       }
@@ -86,8 +90,9 @@ class LoginScreenController extends GetxController {
     if (kDebugMode) {
       // emailController.text = "biwova9852@jxbav.com";
       // passwordController.text = "12345678";
-
-      emailController.text = "copoc67793@lanipe.com";
+   
+      emailController.text = "fesad96953@dpwev.com";
+      // emailController.text = "copoc67793@lanipe.com";
       passwordController.text = "12345678";
     }
   }

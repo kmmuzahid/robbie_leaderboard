@@ -23,6 +23,7 @@ class DropdownButtonWidget extends StatelessWidget {
       iconEnabledColor: AppColors.white,
       icon: const Icon(Icons.keyboard_arrow_down_outlined),
       items: items,
+      isExpanded: true,
       onChanged: onChanged,
       decoration: InputDecoration(
         filled: true,

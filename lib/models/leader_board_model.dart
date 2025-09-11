@@ -22,7 +22,7 @@ class LeaderBoardModel {
       userId: json['userId'] ?? '',
       name: json['name'] ?? '',
       profileImg: json['profileImg'] ?? '',
-      totalInvest: json['totalInvest'] ?? 0.0,
+      totalInvest:  json['totalInvest'] ?? 0.0,
       currentRank: json['currentRank'] ?? 0,
       previousRank: json['previousRank'] ?? 0,
       totalView: json['totalView'] ?? 0,

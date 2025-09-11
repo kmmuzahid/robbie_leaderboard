@@ -6,6 +6,7 @@ import 'package:the_leaderboard/screens/profile_screen/controller/profile_screen
 import 'package:the_leaderboard/screens/profile_screen/widgets/affiliate_status_widget.dart';
 import 'package:the_leaderboard/screens/profile_screen/widgets/profile_header_widget.dart';
 import 'package:the_leaderboard/screens/webview_screen/webview_screen.dart';
+import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -93,35 +94,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             : AppImagePath.profileImage,
                         name: controller.name.value,
                         email: controller.email.value,
-                        balance: "\$${controller.totalBalance.value}",
+                        balance:
+                            "\$${AppCommonFunction.formatNumber(controller.totalBalance.value)}",
                         withdrawButtonOnPressed: controller.withdrawAmount,
                         tweeterButtonOnPressed: () {
-                          Get.to(const WebviewScreen(
-                            url: AppUrls.twitterUrl,
-                            title: "Twitter",
+                          Get.to(WebviewScreen(
+                            url: controller.twitterUrl.value.isEmpty
+                                ? AppUrls.twitterUrl
+                                : controller.twitterUrl.value,
+                            title: "X",
                           ));
                         },
                         instagramButtonOnPressed: () {
-                          Get.to(const WebviewScreen(
-                            url: AppUrls.instagramUrl,
+                          Get.to(WebviewScreen(
+                            url: controller.instagramUrl.value.isEmpty
+                                ? AppUrls.instagramUrl
+                                : controller.instagramUrl.value,
                             title: "Instagram",
                           ));
                         },
-                        discordButtonOnPressed: () {
-                          Get.to(const WebviewScreen(
-                            url: AppUrls.discordUrl,
-                            title: "Discord",
+                        youtubeButtonOnPressed: () {
+                          Get.to(WebviewScreen(
+                            url: controller.youtubeUrl.value.isEmpty
+                                ? AppUrls.youtubeUrl
+                                : controller.youtubeUrl.value,
+                            title: "Youtube",
                           ));
                         },
                         facebookButtonOnPressed: () {
-                          Get.to(const WebviewScreen(
-                            url: AppUrls.facebookUrl,
+                          Get.to(WebviewScreen(
+                            url: controller.facebookUrl.value.isEmpty
+                                ? AppUrls.facebookUrl
+                                : controller.facebookUrl.value,
                             title: "Facebook",
                           ));
                         },
                         linkedinButtonOnPressed: () {
-                          Get.to(const WebviewScreen(
-                            url: AppUrls.linkedinUrl,
+                          Get.to(WebviewScreen(
+                            url: controller.linkedinUrl.value.isEmpty
+                                ? AppUrls.linkedinUrl
+                                : controller.linkedinUrl.value,
                             title: "Linkedin",
                           ));
                           // launchUrl(Uri.parse(AppUrls.linkedinUrl),
@@ -138,7 +150,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       // Affiliate Status
                       AffiliateStatusWidget(
                         isLoading: controller.isLoading.value,
-                        totalRaisedValue: "\$${controller.totalSpent.value}",
+                        totalRaisedValue:
+                            "\$${AppCommonFunction.formatNumber(controller.totalSpent.value)}",
                         positionValue: "Top ${controller.rank.value}%",
                         profileViewValue: controller.totalViews.value,
                         iconButtonOnTap: () {

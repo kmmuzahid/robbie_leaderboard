@@ -45,9 +45,9 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
                 final data = _controller.termAndCondition.value;
                 if (data.isEmpty) {
                   return const Center(
-                    child: Text(
-                      "There is no term and condition",
-                      style: TextStyle(color: AppColors.white),
+                    child: TextWidget(
+                      text: "There is no term and condition",
+                      fontColor: AppColors.white,
                     ),
                   );
                 }

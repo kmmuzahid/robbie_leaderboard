@@ -142,7 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fontSize: 16,
                   ),
                 ),
-                const SpaceWidget(spaceHeight: 8),         
+                const SpaceWidget(spaceHeight: 8),
 
                 Obx(
                   () => DropdownButtonWidget(

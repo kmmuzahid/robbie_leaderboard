@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WebviewScreen extends StatefulWidget {
   const WebviewScreen({super.key, required this.url, required this.title});
@@ -104,6 +105,19 @@ class _WebviewScreenState extends State<WebviewScreen> {
                 appLog(consoleMessage);
                 appLog(urlController.text);
               }
+            },
+            shouldOverrideUrlLoading: (controller, navigationAction) async {
+              final uri = navigationAction.request.url;
+              if (uri == null) return NavigationActionPolicy.ALLOW;
+
+              // Only allow web URLs (http/https)
+              if (uri.scheme == "http" || uri.scheme == "https") {
+                return NavigationActionPolicy.ALLOW;
+              }
+
+              // Block other schemes inside WebView
+              debugPrint("Blocked unsupported scheme: ${uri.scheme}");
+              return NavigationActionPolicy.CANCEL;
             },
           ),
           progress < 1.0

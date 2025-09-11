@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
-import 'package:the_leaderboard/constants/app_strings.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/controller/other_profile_controller.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/widgets/affiliate_status_widget.dart';
@@ -11,7 +10,6 @@ import 'package:the_leaderboard/screens/other_profile_screen/widgets/profile_hea
 import 'package:the_leaderboard/screens/webview_screen/webview_screen.dart';
 import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class OtherProfileScreen extends StatefulWidget {
   const OtherProfileScreen({super.key, required this.userId});
@@ -64,11 +62,13 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                           socialButtonOn: _controller.facebookUrl.isNotEmpty ||
                               _controller.instagramUrl.isNotEmpty ||
                               _controller.twitterUrl.isNotEmpty ||
-                              _controller.linkedinUrl.isNotEmpty,
+                              _controller.linkedinUrl.isNotEmpty ||
+                              _controller.youtubeUrl.isNotEmpty,
                           facebookUrlOn: _controller.facebookUrl.isNotEmpty,
                           instagramUrlOn: _controller.instagramUrl.isNotEmpty,
                           twitterUrlOn: _controller.twitterUrl.isNotEmpty,
                           linkedinUrlOn: _controller.instagramUrl.isNotEmpty,
+                          youtubeUrlOn: _controller.youtubeUrl.isNotEmpty,
                           instagramButtonOnPressed: () {
                             Get.to(WebviewScreen(
                               url: _controller.instagramUrl.value,
@@ -78,7 +78,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                           twitterButtonOnPressed: () {
                             Get.to(WebviewScreen(
                               url: _controller.twitterUrl.value,
-                              title: "Twitter",
+                              title: "X",
                             ));
                           },
                           facebookButtonOnPressed: () {
@@ -91,6 +91,12 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                             Get.to(WebviewScreen(
                               url: _controller.linkedinUrl.value,
                               title: "Linkedin",
+                            ));
+                          },
+                          youtubeButtonOnPressed: () {
+                            Get.to(WebviewScreen(
+                              url: _controller.youtubeUrl.value,
+                              title: "Youtube",
                             ));
                           },
                         ),

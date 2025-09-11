@@ -74,7 +74,7 @@ class ProfileUserModel {
   final String instagram;
   final String twitter;
   final String linkedin;
-    final String youtube;
+  final String youtube;
 
   ProfileUserModel(
       {required this.id,
@@ -107,7 +107,8 @@ class ProfileUserModel {
       this.facebook = "",
       this.instagram = "",
       this.twitter = "",
-      this.linkedin = "", this.youtube = ""});
+      this.linkedin = "",
+      this.youtube = ""});
 
   factory ProfileUserModel.fromJson(Map<String, dynamic> json) {
     return ProfileUserModel(
@@ -141,7 +142,8 @@ class ProfileUserModel {
         facebook: json['facebook'] ?? "",
         instagram: json['instagram'] ?? "",
         twitter: json['twitter'] ?? "",
-        linkedin: json['linkedin'] ?? "", youtube: json['youtube'] ?? "");
+        linkedin: json['linkedin'] ?? "",
+        youtube: json['youtube'] ?? "");
   }
 
   Map<String, dynamic> toJson() {

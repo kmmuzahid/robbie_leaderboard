@@ -12,6 +12,7 @@ import 'package:the_leaderboard/screens/home_screen/widgets/home_appbar_widget.d
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_loading.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_widget.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/recent_activity_card_widget.dart';
+import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_icon_path.dart';
@@ -137,11 +138,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             controller.ishallofframeSinglePaymentLoading.value
                                 ? const HallOfFrameLoading()
                                 : HallOfFameCardWidget(
+                                    id: controller
+                                            .recoredSinglePayment.value?.id ??
+                                        '',
                                     name: controller
                                             .recoredSinglePayment.value?.name ??
                                         "N/A",
                                     status:
-                                        "\$${controller.recoredSinglePayment.value?.totalInvested ?? "N/A"}",
+                                        "\$${AppCommonFunction.formatNumber(controller.recoredSinglePayment.value?.totalInvested)}",
                                     imageUrl: controller.recoredSinglePayment
                                             .value?.profileImg ??
                                         '',
@@ -151,6 +155,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             controller.ishallofframeConsisntantTopLoading.value
                                 ? const HallOfFrameLoading()
                                 : HallOfFameCardWidget(
+                                    id: controller.consistantlyTop.value?.id ??
+                                        '',
                                     name: controller
                                             .consistantlyTop.value?.name ??
                                         "N/A",
@@ -163,6 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             controller.ishallofframeMostEngagedLoading.value
                                 ? const HallOfFrameLoading()
                                 : HallOfFameCardWidget(
+                                    id: controller.mostEngaged.value?.id ?? '',
                                     imageUrl: controller
                                             .mostEngaged.value?.profileImg ??
                                         "",

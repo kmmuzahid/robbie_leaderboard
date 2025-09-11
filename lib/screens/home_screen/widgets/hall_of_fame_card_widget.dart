@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
-
-import '../../../constants/app_colors.dart';
-import '../../../utils/app_size.dart';
-import '../../../widgets/gradient_text_widget/gradient_text_widget.dart';
-import '../../../widgets/image_widget/image_widget.dart';
-import '../../../widgets/space_widget/space_widget.dart';
-import '../../../widgets/text_widget/text_widgets.dart';
+import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
+import 'package:the_leaderboard/utils/app_size.dart';
+import 'package:the_leaderboard/widgets/gradient_text_widget/gradient_text_widget.dart';
+import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
+import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
+import 'package:the_leaderboard/widgets/text_widget/text_widgets.dart';
 
 class HallOfFameCardWidget extends StatelessWidget {
   final String imageUrl;
@@ -15,6 +16,7 @@ class HallOfFameCardWidget extends StatelessWidget {
   final String status;
   final String title;
   final String type;
+  final String id;
 
   const HallOfFameCardWidget({
     super.key,
@@ -23,6 +25,7 @@ class HallOfFameCardWidget extends StatelessWidget {
     this.status = '',
     this.title = '',
     this.type = '',
+    this.id = '',
   });
 
   @override
@@ -34,102 +37,104 @@ class HallOfFameCardWidget extends StatelessWidget {
         // Calculate a safe width value (35% of screen width)
         final cardWidth = screenWidth * 0.35;
 
-        return Container(
-          width: cardWidth,
-          margin: const EdgeInsets.only(right: 10),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: AppColors.blue,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            children: [
-              GradientText(
-                text: title,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                colors: const [
-                  AppColors.gradientColorStart,
-                  AppColors.gradientColorEnd,
-                ],
-              ),
-              const SpaceWidget(spaceHeight: 12),
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  SizedBox(
-                    height: 120,
-                    width: 120,
-                    child: ImageWidget(
-                      imagePath: imageUrl.isNotEmpty
-                          ? "${AppUrls.mainUrl}$imageUrl"
-                          : AppImagePath.profileImage,
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
-                      fromNetwork: imageUrl.isNotEmpty,
-                    ),
-                  ),
-                  Positioned(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 4,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            AppColors.gradientColorStart,
-                            AppColors.gradientColorEnd,
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: TextWidget(
-                          text: type,
-                          fontColor: AppColors.black,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                          textAlignment: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SpaceWidget(spaceHeight: 16),
-              SizedBox(
-                width: ResponsiveUtils.width(200),
-                child: TextWidget(
-                  text: name,
-                  fontColor: AppColors.white,
+        return InkWell(
+          onTap: () => Get.to(OtherProfileScreen(userId: id)),
+          child: Container(
+            width: cardWidth,
+            margin: const EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.blue,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              children: [
+                GradientText(
+                  text: title,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  textAlignment: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  colors: const [
+                    AppColors.gradientColorStart,
+                    AppColors.gradientColorEnd,
+                  ],
                 ),
-              ),
-              const SpaceWidget(spaceHeight: 2),
-              SizedBox(
-                width: ResponsiveUtils.width(200),
-                child: GradientText(
-                  text: status,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                const SpaceWidget(spaceHeight: 12),
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    SizedBox(
+                      height: 120,
+                      width: 120,
+                      child: ImageWidget(
+                        imagePath: imageUrl.isNotEmpty
+                            ? "${AppUrls.mainUrl}$imageUrl"
+                            : AppImagePath.profileImage,
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.cover,
+                        fromNetwork: imageUrl.isNotEmpty,
+                      ),
+                    ),
+                    Positioned(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              AppColors.gradientColorStart,
+                              AppColors.gradientColorEnd,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: TextWidget(
+                            text: type,
+                            fontColor: AppColors.black,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                            textAlignment: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+                const SpaceWidget(spaceHeight: 16),
+                SizedBox(
+                  width: ResponsiveUtils.width(200),
+                  child: TextWidget(
+                    text: name,
+                    fontColor: AppColors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    textAlignment: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 2),
+                SizedBox(
+                  width: ResponsiveUtils.width(200),
+                  child: GradientText(
+                    text: status,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

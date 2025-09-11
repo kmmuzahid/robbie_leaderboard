@@ -24,7 +24,7 @@ class HallOfFameSinglePaymentModel {
       country: json['country'] ?? '',
       gender: json['gender'] ?? '',
       views: json['views'] ?? 0,
-      totalInvested: json['totalInvested'] ?? 0.0,
+      totalInvested:  json['totalInvested'] ?? 0.0,
       profileImg: json['profileImg'] ?? '',
     );
   }

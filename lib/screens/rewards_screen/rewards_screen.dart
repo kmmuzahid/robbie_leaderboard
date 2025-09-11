@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:the_leaderboard/screens/rewards_screen/controller/rewards_screen_controller.dart';
 import 'package:the_leaderboard/screens/rewards_screen/widgets/ticket_gauge_painter.dart';
-import 'package:the_leaderboard/utils/app_logs.dart';
 import 'package:the_leaderboard/utils/app_size.dart';
 import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
 import 'package:the_leaderboard/widgets/shimmer_loading_widget/shimmer_loading.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
+import 'package:the_leaderboard/utils/app_size.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../widgets/image_widget/image_widget.dart';
@@ -16,12 +17,14 @@ class ProfileHeaderWidget extends StatelessWidget {
   final VoidCallback? discordButtonOnPressed;
   final VoidCallback? facebookButtonOnPressed;
   final VoidCallback? linkedinButtonOnPressed;
+  final VoidCallback? youtubeButtonOnPressed;
   final bool socialButtonOn;
   final bool twitterUrlOn;
   final bool facebookUrlOn;
   final bool instagramUrlOn;
   final bool linkedinUrlOn;
   final bool discordUrlOn;
+  final bool youtubeUrlOn;
 
   const ProfileHeaderWidget(
       {super.key,
@@ -39,7 +42,9 @@ class ProfileHeaderWidget extends StatelessWidget {
       this.instagramUrlOn = false,
       this.linkedinUrlOn = false,
       this.twitterUrlOn = false,
-      this.discordUrlOn = false});
+      this.discordUrlOn = false,
+      this.youtubeButtonOnPressed,
+      this.youtubeUrlOn = false});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +52,7 @@ class ProfileHeaderWidget extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.blue,
+          color: AppColors.blueDark,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(children: [
@@ -66,20 +71,13 @@ class ProfileHeaderWidget extends StatelessWidget {
             fontWeight: FontWeight.w600,
             fontSize: 20,
           ),
-          const SpaceWidget(spaceHeight: 2),
-          // Email
-          TextWidget(
-            text: email,
-            fontColor: AppColors.greyDarker,
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
-          ),
+
           const SpaceWidget(spaceHeight: 16),
           if (socialButtonOn)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (twitterUrlOn)
+                if (twitterUrlOn) ...[
                   InkWell(
                     onTap: twitterButtonOnPressed,
                     child: const ImageWidget(
@@ -88,8 +86,9 @@ class ProfileHeaderWidget extends StatelessWidget {
                       imagePath: AppImagePath.tweeterImage,
                     ),
                   ),
-                const SpaceWidget(spaceWidth: 16),
-                if (instagramUrlOn)
+                  SpaceWidget(spaceWidth: AppSize.width(value: 16)),
+                ],
+                if (instagramUrlOn) ...[
                   InkWell(
                     onTap: instagramButtonOnPressed,
                     child: const ImageWidget(
@@ -98,18 +97,20 @@ class ProfileHeaderWidget extends StatelessWidget {
                       imagePath: AppImagePath.instagramImage,
                     ),
                   ),
-                const SpaceWidget(spaceWidth: 16),
-                if (discordUrlOn)
+                  SpaceWidget(spaceWidth: AppSize.width(value: 16)),
+                ],
+                if (youtubeUrlOn) ...[
                   InkWell(
-                    onTap: discordButtonOnPressed,
+                    onTap: youtubeButtonOnPressed,
                     child: const ImageWidget(
                       height: 45,
                       width: 45,
-                      imagePath: AppImagePath.discordImage,
+                      imagePath: AppImagePath.youtubeImage,
                     ),
                   ),
-                const SpaceWidget(spaceWidth: 16),
-                if (facebookUrlOn)
+                  SpaceWidget(spaceWidth: AppSize.width(value: 16)),
+                ],
+                if (facebookUrlOn) ...[
                   InkWell(
                     onTap: facebookButtonOnPressed,
                     child: const ImageWidget(
@@ -118,8 +119,9 @@ class ProfileHeaderWidget extends StatelessWidget {
                       imagePath: AppImagePath.facebookImage,
                     ),
                   ),
-                const SpaceWidget(spaceWidth: 16),
-                if (linkedinUrlOn)
+                  SpaceWidget(spaceWidth: AppSize.width(value: 16)),
+                ],
+                if (linkedinUrlOn) ...[
                   InkWell(
                     onTap: linkedinButtonOnPressed,
                     child: const ImageWidget(
@@ -128,6 +130,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                       imagePath: AppImagePath.linkedinImage,
                     ),
                   ),
+                ]
               ],
             ),
         ]));

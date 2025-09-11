@@ -193,7 +193,8 @@ class EditProfileController extends GetxController {
       );
       return;
     }
-    if (!isValidFacebookProfileUrl(facebookController.text)) {
+    if (facebookController.text.isNotEmpty &&
+        !isValidFacebookProfileUrl(facebookController.text)) {
       Get.snackbar(
         "Invalid Facebook Url",
         "Please enter your valid facebook url",
@@ -201,7 +202,8 @@ class EditProfileController extends GetxController {
       );
       return;
     }
-    if (!isValidInstagramProfileUrl(instagramController.text)) {
+    if (instagramController.text.isNotEmpty &&
+        !isValidInstagramProfileUrl(instagramController.text)) {
       Get.snackbar(
         "Invalid Instagram Url",
         "Please enter your valid instagram url",
@@ -209,7 +211,8 @@ class EditProfileController extends GetxController {
       );
       return;
     }
-    if (!isValidTwitterProfileUrl(twitterController.text)) {
+    if (twitterController.text.isNotEmpty &&
+        !isValidTwitterProfileUrl(twitterController.text)) {
       Get.snackbar(
         "Invalid Twitter Url",
         "Please enter your valid twitter url",
@@ -217,7 +220,8 @@ class EditProfileController extends GetxController {
       );
       return;
     }
-    if (!isValidLinkedInProfileUrl(linkedinController.text)) {
+    if (linkedinController.text.isNotEmpty &&
+        !isValidLinkedInProfileUrl(linkedinController.text)) {
       Get.snackbar(
         "Invalid Linkedin Url",
         "Please enter your valid linkedin url",
@@ -225,7 +229,8 @@ class EditProfileController extends GetxController {
       );
       return;
     }
-    if (!isValidYouTubeChannelUrl(youtubeController.text)) {
+    if (youtubeController.text.isNotEmpty &&
+        !isValidYouTubeChannelUrl(youtubeController.text)) {
       Get.snackbar(
         "Invalid Youtube Url",
         "Please enter your valid youtube channel url",
@@ -354,90 +359,46 @@ class EditProfileController extends GetxController {
 
   /// Returns true if [input] is a valid Facebook profile URL.
   bool isValidFacebookProfileUrl(String input) {
-    final url = input.trim();
+    final url = input.trim().toLowerCase();
 
-    final pattern = RegExp(
-      r'^(?:https?:\/\/)?' // protocol (optional)
-      r'(?:(?:www|m|web)\.)?' // subdomain (optional)
-      r'facebook\.com\/' // domain
-      r'(?:' // start group
-      r'profile\.php\?id=\d+' // numeric profile ID
-      r'|[A-Za-z0-9\.]{5,50}' // username (5–50 chars, letters/numbers/dots)
-      r')' // end group
-      r'(?:\/)?$', // optional trailing slash
-      caseSensitive: false,
-    );
-
-    return pattern.hasMatch(url);
+    // Check if it contains "facebook.com" and is a valid URL
+    return url.contains('facebook.com') &&
+        Uri.tryParse(url)?.hasAbsolutePath == true;
   }
 
   /// Returns true if [input] is a valid Instagram profile URL.
   bool isValidInstagramProfileUrl(String input) {
-    final url = input.trim();
+    final url = input.trim().toLowerCase();
 
-    final pattern = RegExp(
-      r'^(?:https?:\/\/)?' // protocol optional
-      r'(?:www\.)?' // www optional
-      r'instagram\.com\/' // domain
-      r'([A-Za-z0-9._]{1,30})' // username (1–30 chars)
-      r'\/?$', // optional trailing slash
-      caseSensitive: false,
-    );
-
-    return pattern.hasMatch(url);
+    // Check if it contains "instagram.com" and is a valid URL
+    return url.contains('instagram.com') &&
+        Uri.tryParse(url)?.hasAbsolutePath == true;
   }
 
   /// Returns true if [input] is a valid Twitter (X) profile URL.
   bool isValidTwitterProfileUrl(String input) {
-    final url = input.trim();
+    final url = input.trim().toLowerCase();
 
-    final pattern = RegExp(
-      r'^(?:https?:\/\/)?' // protocol optional
-      r'(?:www\.)?' // www optional
-      r'twitter\.com\/' // domain
-      r'([A-Za-z0-9_]{1,15})' // username (1–15 chars)
-      r'\/?$', // optional trailing slash
-      caseSensitive: false,
-    );
-
-    return pattern.hasMatch(url);
+    // Check if it contains "twitter.com" and is a valid URL
+    return url.contains('x.com') && Uri.tryParse(url)?.hasAbsolutePath == true;
   }
 
   /// Returns true if [input] is a valid LinkedIn personal profile URL.
   bool isValidLinkedInProfileUrl(String input) {
-    final url = input.trim();
+    final url = input.trim().toLowerCase();
 
-    final pattern = RegExp(
-      r'^(?:https?:\/\/)?' // protocol optional
-      r'(?:[a-z]{2,3}\.)?' // subdomain optional (www., fr., etc.)
-      r'linkedin\.com\/in\/' // domain + /in/ path
-      r'([A-Za-z0-9-]{3,100})' // username/handle
-      r'\/?$', // optional trailing slash
-      caseSensitive: false,
-    );
-
-    return pattern.hasMatch(url);
+    // Check if it contains "linkedin.com/in/" and is a valid URL
+    return url.contains('linkedin.com/in/') &&
+        Uri.tryParse(url)?.hasAbsolutePath == true;
   }
 
   /// Returns true if [input] is a valid YouTube channel/profile URL.
   bool isValidYouTubeChannelUrl(String input) {
-    final url = input.trim();
+    final url = input.trim().toLowerCase();
 
-    final pattern = RegExp(
-      r'^(?:https?:\/\/)?' // protocol optional
-      r'(?:www\.)?' // www optional
-      r'youtube\.com\/' // domain
-      r'(?:' // start group
-      r'channel\/[A-Za-z0-9_-]{24}' // channel ID (24 chars, usually starts with UC)
-      r'|c\/[A-Za-z0-9_-]+' // /c/ custom name
-      r'|user\/[A-Za-z0-9_-]+' // /user/ legacy
-      r'|@[\w.-]{3,30}' // @handle (3–30 chars)
-      r')' // end group
-      r'\/?$', // optional trailing slash
-      caseSensitive: false,
-    );
-
-    return pattern.hasMatch(url);
+    // Check if it contains "youtube.com" and is a valid URL
+    return url.contains('youtube.com') &&
+        Uri.tryParse(url)?.hasAbsolutePath == true;
   }
 
   @override

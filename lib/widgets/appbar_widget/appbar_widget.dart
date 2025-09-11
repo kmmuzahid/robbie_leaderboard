@@ -5,7 +5,6 @@ import 'package:the_leaderboard/widgets/gradient_text_widget/gradient_text_widge
 
 import '../../constants/app_colors.dart';
 import '../../utils/app_size.dart';
-import '../text_widget/text_widgets.dart';
 
 class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Widget? action;

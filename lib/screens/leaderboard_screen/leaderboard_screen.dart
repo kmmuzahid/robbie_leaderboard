@@ -12,6 +12,7 @@ import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_t
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/top_rank_item.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
+import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
 import 'package:the_leaderboard/widgets/text_widget/text_widgets.dart';
@@ -38,7 +39,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 1);
     _controller.fetchData();
   }
 
@@ -102,7 +103,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       rankLabel: _controller.leaderBoardList[1]!.currentRank
                           .toString(),
                       name: leaderboard[1]!.name,
-                      amount: "\$${leaderboard[1]!.totalInvest}",
+                      amount:
+                          "\$${AppCommonFunction.formatNumber(leaderboard[1]!.totalInvest)}",
                       image: leaderboard[1]!.profileImg != "Unknown"
                           ? leaderboard[1]!.profileImg
                           : AppImagePath.profileImage,
@@ -123,7 +125,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       rankLabel: _controller.leaderBoardList[0]!.currentRank
                           .toString(),
                       name: leaderboard[0]!.name,
-                      amount: "\$${leaderboard[0]!.totalInvest}",
+                      amount:
+                          "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalInvest)}",
                       image: leaderboard[0]!.profileImg != "Unknown"
                           ? leaderboard[0]!.profileImg
                           : AppImagePath.profileImage,
@@ -144,7 +147,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       rankLabel: _controller.leaderBoardList[2]!.currentRank
                           .toString(),
                       name: leaderboard[2]!.name,
-                      amount: "\$${leaderboard[2]!.totalInvest}",
+                      amount:
+                          "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalInvest)}",
                       image: leaderboard[2]!.profileImg != "Unknown"
                           ? leaderboard[2]!.profileImg
                           : AppImagePath.profileImage,
@@ -194,7 +198,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       key: ValueKey('${data.name}${data.currentRank}$index'),
                       rank: data.currentRank,
                       name: data.name,
-                      amount: "\$${data.totalInvest}",
+                      amount:
+                          "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
                       isUp: (data.previousRank - data.currentRank) > 0,
                       fromNetwork: fromNetwork,
                       image: fromNetwork
@@ -223,7 +228,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                             '${myData.name}${myData.currentRank}$myIndex'),
                         rank: myData.currentRank,
                         name: myData.name,
-                        amount: "\$${myData.totalInvest}",
+                        amount:
+                            "\$${AppCommonFunction.formatNumber(myData.totalInvest)}",
                         isUp: (myData.previousRank - myData.currentRank) > 0,
                         fromNetwork: myData.profileImg != "Unknown",
                         image: myData.profileImg != "Unknown"

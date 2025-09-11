@@ -25,7 +25,7 @@ class AffiliateStatusWidget extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.blue,
+        color: AppColors.blueDark,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -47,7 +47,7 @@ class AffiliateStatusWidget extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
                   decoration: BoxDecoration(
-                    color: AppColors.blueDarker,
+                    color: AppColors.blue,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -75,7 +75,7 @@ class AffiliateStatusWidget extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
                   decoration: BoxDecoration(
-                    color: AppColors.blueDarker,
+                    color: AppColors.blue,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -103,7 +103,7 @@ class AffiliateStatusWidget extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
                   decoration: BoxDecoration(
-                    color: AppColors.blueDarker,
+                    color: AppColors.blue,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(

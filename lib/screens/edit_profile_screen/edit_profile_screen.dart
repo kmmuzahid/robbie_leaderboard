@@ -247,7 +247,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     profileController: controller),
                 const SpaceWidget(spaceHeight: 12),
                 _buildTextField(
-                    label: "Twitter Profile Url",
+                    label: "X Account Profile Url",
                     controller: controller.twitterController,
                     profileController: controller),
                 const SpaceWidget(spaceHeight: 12),

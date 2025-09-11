@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_strings.dart';
-import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';

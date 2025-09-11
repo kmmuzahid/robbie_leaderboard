@@ -14,8 +14,8 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 class ProfileScreenController extends GetxController {
   final RxString name = ''.obs;
   final RxString email = ''.obs;
-  final RxString totalBalance = ''.obs;
-  final RxString totalSpent = ''.obs;
+  final RxDouble totalBalance = 0.0.obs;
+  final RxDouble totalSpent = 0.0.obs;
   final RxString totalViews = ''.obs;
   final RxString creatorCode = ''.obs;
   final RxString rank = ''.obs;
@@ -25,6 +25,7 @@ class ProfileScreenController extends GetxController {
   final RxString instagramUrl = "".obs;
   final RxString twitterUrl = "".obs;
   final RxString linkedinUrl = "".obs;
+  final RxString youtubeUrl = "".obs;
   final notificationController = Get.find<NotificationController>();
   Future fetchProfile() async {
     try {
@@ -39,8 +40,8 @@ class ProfileScreenController extends GetxController {
           final profile = ProfileUserModel.fromJson(data["data"]["user"]);
           name.value = profile.name;
           email.value = profile.email;
-          totalBalance.value = profile.totalAdminAmount.toString();
-          totalSpent.value = profile.totalInvest.toString();
+          totalBalance.value = profile.totalAdminAmount.toDouble();
+          totalSpent.value = profile.totalInvest.toDouble();
           totalViews.value = profile.views.toString();
           creatorCode.value = profile.userCode;
           rank.value = profile.rank.toString();
@@ -49,10 +50,12 @@ class ProfileScreenController extends GetxController {
           instagramUrl.value = profile.instagram;
           twitterUrl.value = profile.twitter;
           linkedinUrl.value = profile.linkedin;
+          youtubeUrl.value = profile.youtube;
           LocalStorage.myName = profile.name;
           LocalStorage.userId = profile.id;
           appLog("user id: ${profile.id} and token: ${LocalStorage.token}");
         } else {
+          Get.closeAllSnackbars();
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }
       }

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 void appLog(dynamic value) {
   try {
     if (kDebugMode) {
-      log("""
+      print("""
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 $value
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -18,7 +18,7 @@ $value
 void errorLog(String title, dynamic e, {String subtitle = "Error Form"}) {
   try {
     if (kDebugMode) {
-      log("""
+      print("""
 👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺👺
 $subtitle
 
