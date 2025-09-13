@@ -75,6 +75,7 @@ class ProfileUserModel {
   final String twitter;
   final String linkedin;
   final String youtube;
+  final num wallet;
 
   ProfileUserModel(
       {required this.id,
@@ -108,6 +109,7 @@ class ProfileUserModel {
       this.instagram = "",
       this.twitter = "",
       this.linkedin = "",
+      this.wallet = 0.0,
       this.youtube = ""});
 
   factory ProfileUserModel.fromJson(Map<String, dynamic> json) {
@@ -118,6 +120,7 @@ class ProfileUserModel {
         contact: json['contact'] ?? "",
         password: json['password'] ?? "",
         country: json['country'] ?? "",
+        wallet: json['wallet'] ?? 0.0,
         city: json['city'] ?? "",
         gender: json['gender'] ?? "",
         age: json['age'] ?? "",

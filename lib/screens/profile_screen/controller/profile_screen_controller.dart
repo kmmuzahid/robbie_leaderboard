@@ -40,7 +40,7 @@ class ProfileScreenController extends GetxController {
           final profile = ProfileUserModel.fromJson(data["data"]["user"]);
           name.value = profile.name;
           email.value = profile.email;
-          totalBalance.value = profile.totalAdminAmount.toDouble();
+          totalBalance.value = profile.wallet.toDouble();
           totalSpent.value = profile.totalInvest.toDouble();
           totalViews.value = profile.views.toString();
           creatorCode.value = profile.userCode;
