@@ -5,6 +5,7 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
+import 'package:the_leaderboard/screens/home_screen/controller/home_screen_controller.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_dropdown.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_item.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_tabbar.dart';
@@ -191,6 +192,11 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: IconButton(
+          style: IconButton.styleFrom(backgroundColor: AppColors.goldLight),
+          onPressed: () =>
+              Get.find<HomeScreenController>().onJoinLeaderboard(context),
+          icon: const Icon(Icons.add)),
       appBar: const AppbarWidget(
         title: "",
       ),

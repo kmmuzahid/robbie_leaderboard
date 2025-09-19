@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
+import 'package:the_leaderboard/screens/home_screen/controller/home_screen_controller.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/controller/leaderboard_controller.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/country_leaderboard_widget.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_dropdown.dart';
@@ -272,6 +273,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
+        floatingActionButton: IconButton(
+            style: IconButton.styleFrom(backgroundColor: AppColors.goldLight),
+            onPressed: () =>
+                Get.find<HomeScreenController>().onJoinLeaderboard(context),
+            icon: const Icon(Icons.add)),
         backgroundColor: Colors.black,
         body: Obx(
           () => SafeArea(

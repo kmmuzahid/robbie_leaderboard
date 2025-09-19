@@ -13,6 +13,7 @@ import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_loading
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_widget.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/recent_activity_card_widget.dart';
 import 'package:the_leaderboard/utils/app_common_function.dart';
+import 'package:the_leaderboard/widgets/icon_button_widget/icon_button_widget.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_icon_path.dart';
@@ -38,6 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
           statusBarIconBrightness: Brightness.light,
         ),
         child: Scaffold(
+          floatingActionButton: IconButton(
+              style: IconButton.styleFrom(backgroundColor: AppColors.goldLight),
+              onPressed: () => controller.onJoinLeaderboard(context),
+              icon: const Icon(Icons.add)),
           backgroundColor: AppColors.blueDark,
           appBar: HomeAppbarWidget(
             title: AppStrings.theLeaderboard,

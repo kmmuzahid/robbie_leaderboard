@@ -297,38 +297,42 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                       //   return true;
                                       // },
                                       // child:
-                                      WheelChooser(
-                                    controller: controller.wheelController,
-                                    startPosition: null,
-                                    listWidth:
-                                        MediaQuery.of(context).size.width * 1.5,
-                                    itemSize: 70,
-                                    squeeze: 1.0,
-                                    perspective: 0.01,
-                                    datas: controller.allSpin,
-                                    isInfinite: true,
-                                    magnification: 1,
-                                    listHeight: 100,
-                                    onValueChanged: (s) {
-                                      // appLog(s);
-                                      controller.spinList.add(s);
-                                      if (controller.isRotated.value) {
-                                        controller.spinWheel(false);
-                                        controller.isRotated.value = false;
-                                      }
-                                    },
-                                    // Trim spaces for logging
-                                    selectTextStyle: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green,
+                                      IgnorePointer(
+                                    ignoring: controller.isLocked.value,
+                                    child: WheelChooser(
+                                      controller: controller.wheelController,
+                                      startPosition: null,
+                                      listWidth:
+                                          MediaQuery.of(context).size.width *
+                                              1.5,
+                                      itemSize: 70,
+                                      squeeze: 1.0,
+                                      perspective: 0.01,
+                                      datas: controller.allSpin,
+                                      isInfinite: true,
+                                      magnification: 1,
+                                      listHeight: 100,
+                                      onValueChanged: (s) {
+                                        // appLog(s);
+                                        controller.spinList.add(s);
+                                        if (controller.isRotated.value) {
+                                          controller.spinWheel(false);
+                                          controller.isRotated.value = false;
+                                        }
+                                      },
+                                      // Trim spaces for logging
+                                      selectTextStyle: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green,
+                                      ),
+                                      unSelectTextStyle: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                        backgroundColor: Colors.transparent,
+                                      ),
+                                      horizontal: true,
                                     ),
-                                    unSelectTextStyle: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                      backgroundColor: Colors.transparent,
-                                    ),
-                                    horizontal: true,
                                   ),
                                   // ),
                                 ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:the_leaderboard/constants/app_country_city.dart';
+import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/dropdown_button_widget.dart';
 import 'package:the_leaderboard/screens/search_screen/controller/search_screen_controller.dart';
-import 'package:the_leaderboard/screens/search_screen/widgets/dropdown_button_widget.dart';
 import 'package:the_leaderboard/screens/search_screen/widgets/title_text_widget.dart';
 import 'package:the_leaderboard/widgets/button_widget/button_widget.dart';
+import 'package:the_leaderboard/widgets/text_widget/text_widgets.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_strings.dart';
@@ -59,26 +59,47 @@ class SearchScreen extends StatelessWidget {
                 // Country
                 const TitleTextWidget(text: AppStrings.country),
                 const SpaceWidget(spaceHeight: 8),
-                Obx(() => DropdownButtonWidget(
-                      value: controller.selectedCountry.value,
-                      items: AppCountryCity.countryCityMap.keys.toList(),
-                      onChanged: (value) {
-                        controller.updateCountry(value!);
-                      },
-                    )),
-
-                const SpaceWidget(spaceHeight: 14),
-
-                // City
-                const TitleTextWidget(text: AppStrings.city),
+                Obx(
+                  () => DropdownButtonWidget(
+                    value: controller.selectedCountry.value,
+                    items: controller.countryList
+                        .map((c) => DropdownMenuItem(
+                              value: c.isoCode,
+                              child: TextWidget(
+                                text: c.name,
+                                fontColor: AppColors.white,
+                              ),
+                            ))
+                        .toList(),
+                    onChanged: (value) => controller.updateCountry(value!),
+                  ),
+                ),
+                const SpaceWidget(spaceHeight: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: AppStrings.city,
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
                 const SpaceWidget(spaceHeight: 8),
-                Obx(() => DropdownButtonWidget(
-                      value: controller.selectedCity.value,
-                      items: controller.cities,
-                      onChanged: (value) {
-                        controller.updateCity(value!);
-                      },
-                    )),
+                Obx(
+                  () => DropdownButtonWidget(
+                    value: controller.selectedCity.value,
+                    items: controller.cityList
+                        .map((c) => DropdownMenuItem(
+                              value: c.name,
+                              child: TextWidget(
+                                text: c.name,
+                                fontColor: AppColors.white,
+                              ),
+                            ))
+                        .toList(),
+                    onChanged: (value) => controller.updateCity(value!),
+                  ),
+                ),
 
                 const SpaceWidget(spaceHeight: 14),
 
@@ -117,13 +138,20 @@ class SearchScreen extends StatelessWidget {
                 // Gender
                 const TitleTextWidget(text: AppStrings.gender),
                 const SpaceWidget(spaceHeight: 8),
-                Obx(() => DropdownButtonWidget(
-                      value: controller.selectedGender.value,
-                      items: controller.genders,
-                      onChanged: (value) {
-                        controller.updateGender(value!);
-                      },
-                    )),
+                Obx(
+                  () => DropdownButtonWidget(
+                    value: controller.selectedGender.value,
+                    items: controller.genders
+                        .map((e) => DropdownMenuItem<String>(
+                            value: e,
+                            child: TextWidget(
+                              text: e,
+                              fontColor: AppColors.white,
+                            )))
+                        .toList(),
+                    onChanged: (value) => controller.updateGender(value!),
+                  ),
+                ),
 
                 const SpaceWidget(spaceHeight: 48),
 

@@ -37,6 +37,7 @@ class RewardsScreenController extends GetxController {
   final isRotated = true.obs;
   final responseMessage = "".obs;
   final responseStatus = "".obs;
+  final isLocked = false.obs;
   void fetchRuffle() async {
     try {
       appLog("fetching ruffle");
@@ -221,9 +222,10 @@ class RewardsScreenController extends GetxController {
               colorText: AppColors.white);
         },
       );
-
+      isLocked.value = true;
       // createTicket();
     } else {
+      isLocked.value = true;
       Get.snackbar(
         "Limit Reached",
         "You've reached today's limit. Please come back tomorrow!",
