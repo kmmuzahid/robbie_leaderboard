@@ -8,13 +8,14 @@ import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/leaderboard_filtered_screen.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
+import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
 class SearchScreenController extends GetxController {
   // Observable variables
-  final RxString selectedCountry = 'Australia'.obs;
-  final RxString selectedCity = 'Sydney'.obs;
-  final RxString selectedGender = 'Male'.obs;
+  final RxString selectedCountry = ''.obs;
+  final RxString selectedCity = ''.obs;
+  final RxString selectedGender = ''.obs;
   final RxInt minAge = 22.obs;
   final RxInt maxAge = 26.obs;
   RxList<Country> countryList = <Country>[].obs;
@@ -31,14 +32,7 @@ class SearchScreenController extends GetxController {
   Future<void> onInitial() async {
     try {
       countryList.value = await getAllCountries();
-      if (countryList.isNotEmpty) {
-        // Select first country by default
-        selectedCountry.value = countryList.first.isoCode;
-        updateCountry(selectedCountry.value);
-
-        // Load its cities
-        await loadCities(countryList.first.isoCode);
-      }
+      update();
     } catch (e) {
       appLog("Error loading countries: $e");
     }
@@ -84,6 +78,7 @@ class SearchScreenController extends GetxController {
       finalSelectedCountry.value = country.name;
       await loadCities(isoCode);
       appLog("Country updated: $isoCode");
+      update();
     } catch (e) {
       appLog(e); // TODO
     }
@@ -95,6 +90,7 @@ class SearchScreenController extends GetxController {
 
   void updateGender(String value) {
     selectedGender.value = value;
+    appLog("selected gender: $value");
   }
 
   void incrementMaxAge() {
@@ -110,22 +106,35 @@ class SearchScreenController extends GetxController {
   }
 
   // Method for search action
-  void search() async {
+  void search(BuildContext context) async {
     // Implement search logic or navigation
-    if (nameController.text.isEmpty) {
-      Get.snackbar("Please a name", "",
-          colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+    if (nameController.text.isEmpty &&
+        finalSelectedCountry.isEmpty &&
+        selectedCity.isEmpty &&
+        selectedGender.isEmpty) {
+      AppCommonFunction.showSnackbar(
+          context, "Please write or select something");
       return;
     }
-    final name = nameController.text.capitalizeFirst!;
+    final name = nameController.text.capitalizeFirst;
+
+    // final body = "
+    //     'name': nameController.text.capitalizeFirst,
+    //   if (finalSelectedCountry.isNotEmpty)
+    //     'country': finalSelectedCountry.value,
+    //   if (selectedCity.isNotEmpty) 'city': selectedCity.value,
+    //   if (selectedGender.isNotEmpty) 'gender': selectedGender.value
+    //   "
+    // };
+
     try {
-      appLog(
-          "user is searching with $name, ${finalSelectedCountry.value}, ${selectedCity.value} and ${selectedGender.value}");
+      // appLog(
+      //     "user is searching with $name, ${finalSelectedCountry.value}, ${selectedCity.value} and ${selectedGender.value}");
       bool isloading = true;
       final responseLeaderboard =
           await ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.leaderBoardData,
-        name: name,
+        name: name!,
         country: finalSelectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
@@ -157,7 +166,7 @@ class SearchScreenController extends GetxController {
             creatorList: responseCreator,
             isLoading: isloading));
       } else {
-        Get.snackbar("Error", "No user found", colorText: AppColors.white);
+        AppCommonFunction.showSnackbar(context, "No user found");
       }
     } catch (e) {
       errorLog("Failed", e);

@@ -6,7 +6,8 @@ class AppImagePath {
   static const String appLogoCrown = 'assets/images/app_logo_final.png';
   static const String appLogoNew =
       'assets/images/THE LEADERBOARD Logo-Transparent.png';
-  static const String crownImage = 'assets/images/gold_crown.png';
+  static const String crownImage =
+      'assets/images/THE LEADERBOARD Logo crown.png';
   static const String tweeterImage = 'assets/images/tweeter.png';
   static const String instagramImage = 'assets/images/instagram.png';
   static const String youtubeImage = "assets/images/youtube.png";
@@ -28,4 +29,5 @@ class AppImagePath {
   static const String topRanked1 = 'assets/dev_images/top_ranked1.png';
   static const String topRanked2 = 'assets/dev_images/top_ranked2.png';
   static const String topRanked3 = 'assets/dev_images/top_ranked3.png';
+  // static const String appCornerLogo = 'assets/images/THE LEADERBOARD Logo crown.png';
 }

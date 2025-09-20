@@ -146,7 +146,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 Obx(
                   () => DropdownButtonWidget(
-                    value: controller.selectedCountry.value,
                     items: controller.countryList
                         .map((c) => DropdownMenuItem(
                               value: c.isoCode,
@@ -172,7 +171,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SpaceWidget(spaceHeight: 8),
                 Obx(
                   () => DropdownButtonWidget(
-                    value: controller.selectedCity.value,
                     items: controller.cityList
                         .map((c) => DropdownMenuItem(
                               value: c.name,
@@ -196,25 +194,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SpaceWidget(spaceHeight: 8),
-                Obx(
-                  () => DropdownButtonWidget(
-                    value: controller.selectedGender.value,
-                    items: controller.genders
-                        .map((e) => DropdownMenuItem<String>(
-                            value: e,
-                            child: TextWidget(
-                              text: e,
-                              fontColor: AppColors.white,
-                            )))
-                        .toList(),
-                    onChanged: (value) => controller.updateGender(value!),
-                  ),
+                DropdownButtonWidget(
+                  items: controller.genders
+                      .map((e) => DropdownMenuItem<String>(
+                          value: e,
+                          child: TextWidget(
+                            text: e,
+                            fontColor: AppColors.white,
+                          )))
+                      .toList(),
+                  onChanged: (value) => controller.updateGender(value!),
                 ),
                 const SpaceWidget(spaceHeight: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextWidget(
-                    text: AppStrings.age,
+                    text: AppStrings.dateOfBirth,
                     fontColor: AppColors.greyDark,
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
@@ -222,8 +217,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SpaceWidget(spaceHeight: 8),
                 TextFieldWidget(
-                    controller: controller.ageController,
-                    hintText: "Enter Age"),
+                  controller: controller.ageController,
+                  hintText: "Enter Date of Birth",
+                  keyboardType: TextInputType.datetime,
+                  suffixIcon: AppIconPath.calenderIcon,
+                  onTapSuffix: () => controller.onSelectDateBirth(context),
+                ),
                 const SpaceWidget(spaceHeight: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),

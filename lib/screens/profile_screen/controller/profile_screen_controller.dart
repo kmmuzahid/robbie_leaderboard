@@ -42,7 +42,7 @@ class ProfileScreenController extends GetxController {
           email.value = profile.email;
           totalBalance.value = profile.wallet.toDouble();
           totalSpent.value = profile.totalInvest.toDouble();
-          totalViews.value = profile.views.toString();
+          totalViews.value = data['data']['views'].toString();
           creatorCode.value = profile.userCode;
           rank.value = profile.rank.toString();
           image.value = profile.profileImg;

@@ -6,6 +6,7 @@ import 'package:the_leaderboard/models/country_leaderboard_model.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/country_leaderboard_item.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/top_rank_item.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
+import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
 import 'package:the_leaderboard/widgets/text_widget/text_widgets.dart';
@@ -57,7 +58,8 @@ class CountryLeaderboardWidget extends StatelessWidget {
                         false, //leaderboard[1]!.profileImg != "Unknown",
                     rankLabel: "2",
                     name: leaderboard[1]!.country.toUpperCase(),
-                    amount: "\$${leaderboard[1]!.totalInvest}",
+                    amount:
+                        "\$${AppCommonFunction.formatNumber(leaderboard[1]!.totalInvest)}",
                     image: AppImagePath.profileImage,
                     rankColor: AppColors.greyDark,
                     avatarSize: 40),
@@ -69,7 +71,8 @@ class CountryLeaderboardWidget extends StatelessWidget {
                     fromOnline: false,
                     rankLabel: "1",
                     name: leaderboard[0]!.country.toUpperCase(),
-                    amount: "\$${leaderboard[0]!.totalInvest}",
+                    amount:
+                        "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalInvest)}",
                     image: AppImagePath.profileImage,
                     rankColor: AppColors.yellow,
                     avatarSize: 55),
@@ -81,7 +84,8 @@ class CountryLeaderboardWidget extends StatelessWidget {
                     fromOnline: false,
                     rankLabel: "3",
                     name: leaderboard[2]!.country.toUpperCase(),
-                    amount: "\$${leaderboard[2]!.totalInvest}",
+                    amount:
+                        "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalInvest)}",
                     image: AppImagePath.profileImage,
                     rankColor: AppColors.orange,
                     avatarSize: 40),
@@ -98,7 +102,8 @@ class CountryLeaderboardWidget extends StatelessWidget {
                   key: ValueKey('${data.country}${data.totalInvest}$index'),
                   rank: index,
                   name: data.country,
-                  amount: "\$${data.totalInvest}",
+                  amount:
+                      "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
                   fromNetwork: false,
                   image: AppImagePath.profileImage,
                 );

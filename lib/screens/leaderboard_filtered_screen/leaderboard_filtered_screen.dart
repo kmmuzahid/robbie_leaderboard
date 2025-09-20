@@ -10,6 +10,7 @@ import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/lead
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_item.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_tabbar.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/top_rank_filtered_item.dart';
+import 'package:the_leaderboard/screens/leaderboard_screen/widgets/floating_button_widget.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
 import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
@@ -192,11 +193,7 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: IconButton(
-          style: IconButton.styleFrom(backgroundColor: AppColors.goldLight),
-          onPressed: () =>
-              Get.find<HomeScreenController>().onJoinLeaderboard(context),
-          icon: const Icon(Icons.add)),
+      floatingActionButton: const FloatingButtonWidget(),
       appBar: const AppbarWidget(
         title: "",
       ),

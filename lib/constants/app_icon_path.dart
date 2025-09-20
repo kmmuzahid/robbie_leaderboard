@@ -28,5 +28,5 @@ class AppIconPath {
       'assets/icons/edit_image_button_icon.svg';
   static const String powerIcon = 'assets/icons/power_icon.svg';
   static const String timeLeft = 'assets/icons/time_left.svg';
-  
+  static const String calenderIcon = 'assets/icons/calendar.svg';
 }

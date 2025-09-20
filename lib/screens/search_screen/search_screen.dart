@@ -17,9 +17,6 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize the controller using Get.put()
-    final SearchScreenController controller = Get.put(SearchScreenController());
-
     return AnnotatedRegion(
       value: const SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.light,
@@ -29,141 +26,137 @@ class SearchScreen extends StatelessWidget {
         appBar:
             const AppbarWidget(title: AppStrings.searching, centerTitle: true),
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Search
-                const TitleTextWidget(text: AppStrings.search),
-                const SpaceWidget(spaceHeight: 8),
-                TextField(
-                  controller: controller.nameController,
-                  style: const TextStyle(color: AppColors.white),
-                  decoration: InputDecoration(
-                    hintText: 'Type here...',
-                    hintStyle: const TextStyle(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    filled: true,
-                    fillColor: AppColors.blue,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
+          child: GetBuilder(
+              init: SearchScreenController(),
+              builder: (controller) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Search
+                      const TitleTextWidget(text: AppStrings.search),
+                      const SpaceWidget(spaceHeight: 8),
+                      TextField(
+                        controller: controller.nameController,
+                        style: const TextStyle(color: AppColors.white),
+                        decoration: InputDecoration(
+                          hintText: 'Write a name',
+                          hintStyle: const TextStyle(
+                            color: AppColors.greyDarker,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          filled: true,
+                          fillColor: AppColors.blue,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                      const SpaceWidget(spaceHeight: 14),
+
+                      // Country
+                      const TitleTextWidget(text: AppStrings.country),
+                      const SpaceWidget(spaceHeight: 8),
+                      DropdownButtonWidget(
+                        items: controller.countryList
+                            .map((c) => DropdownMenuItem(
+                                  value: c.isoCode,
+                                  child: TextWidget(
+                                    text: c.name,
+                                    fontColor: AppColors.white,
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) => controller.updateCountry(value!),
+                      ),
+                      const SpaceWidget(spaceHeight: 16),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: TextWidget(
+                          text: AppStrings.city,
+                          fontColor: AppColors.greyDark,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SpaceWidget(spaceHeight: 8),
+                      DropdownButtonWidget(
+                        items: controller.cityList
+                            .map((c) => DropdownMenuItem(
+                                  value: c.name,
+                                  child: TextWidget(
+                                    text: c.name,
+                                    fontColor: AppColors.white,
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) => controller.updateCity(value!),
+                      ),
+
+                      const SpaceWidget(spaceHeight: 14),
+
+                      // Age
+                      // const TitleTextWidget(text: AppStrings.age),
+                      // const SpaceWidget(spaceHeight: 8),
+                      // Row(
+                      //   children: [
+                      //     Obx(() =>
+                      //         AgeTextWidget(text: '${_controller.minAge.value} Y')),
+                      //     const SpaceWidget(spaceWidth: 8),
+                      //     const TextWidget(
+                      //       text: AppStrings.to,
+                      //       fontColor: AppColors.white,
+                      //       fontWeight: FontWeight.w400,
+                      //       fontSize: 16,
+                      //     ),
+                      //     const SpaceWidget(spaceWidth: 8),
+                      //     Obx(() =>
+                      //         AgeTextWidget(text: '${_controller.maxAge.value} Y')),
+                      //     const SpaceWidget(spaceWidth: 12),
+                      //     AgeIconButton(
+                      //       icon: const Icon(Icons.add),
+                      //       onPressed: _controller.incrementMaxAge,
+                      //     ),
+                      //     const SpaceWidget(spaceWidth: 12),
+                      //     AgeIconButton(
+                      //       icon: const Icon(Icons.remove),
+                      //       onPressed: _controller.decrementMinAge,
+                      //     ),
+                      //   ],
+                      // ),
+
+                      // const SpaceWidget(spaceHeight: 14),
+
+                      // Gender
+                      const TitleTextWidget(text: AppStrings.gender),
+                      const SpaceWidget(spaceHeight: 8),
+                      DropdownButtonWidget(
+                        items: controller.genders
+                            .map((e) => DropdownMenuItem<String>(
+                                value: e,
+                                child: TextWidget(
+                                  text: e,
+                                  fontColor: AppColors.white,
+                                )))
+                            .toList(),
+                        onChanged: (value) => controller.updateGender(value!),
+                      ),
+
+                      const SpaceWidget(spaceHeight: 48),
+
+                      // Search Button
+                      ButtonWidget(
+                        onPressed: () => controller.search(context),
+                        label: AppStrings.searchNow,
+                        buttonWidth: double.infinity,
+                      ),
+                    ],
                   ),
-                ),
-                const SpaceWidget(spaceHeight: 14),
-
-                // Country
-                const TitleTextWidget(text: AppStrings.country),
-                const SpaceWidget(spaceHeight: 8),
-                Obx(
-                  () => DropdownButtonWidget(
-                    value: controller.selectedCountry.value,
-                    items: controller.countryList
-                        .map((c) => DropdownMenuItem(
-                              value: c.isoCode,
-                              child: TextWidget(
-                                text: c.name,
-                                fontColor: AppColors.white,
-                              ),
-                            ))
-                        .toList(),
-                    onChanged: (value) => controller.updateCountry(value!),
-                  ),
-                ),
-                const SpaceWidget(spaceHeight: 16),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: TextWidget(
-                    text: AppStrings.city,
-                    fontColor: AppColors.greyDark,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                  ),
-                ),
-                const SpaceWidget(spaceHeight: 8),
-                Obx(
-                  () => DropdownButtonWidget(
-                    value: controller.selectedCity.value,
-                    items: controller.cityList
-                        .map((c) => DropdownMenuItem(
-                              value: c.name,
-                              child: TextWidget(
-                                text: c.name,
-                                fontColor: AppColors.white,
-                              ),
-                            ))
-                        .toList(),
-                    onChanged: (value) => controller.updateCity(value!),
-                  ),
-                ),
-
-                const SpaceWidget(spaceHeight: 14),
-
-                // Age
-                // const TitleTextWidget(text: AppStrings.age),
-                // const SpaceWidget(spaceHeight: 8),
-                // Row(
-                //   children: [
-                //     Obx(() =>
-                //         AgeTextWidget(text: '${_controller.minAge.value} Y')),
-                //     const SpaceWidget(spaceWidth: 8),
-                //     const TextWidget(
-                //       text: AppStrings.to,
-                //       fontColor: AppColors.white,
-                //       fontWeight: FontWeight.w400,
-                //       fontSize: 16,
-                //     ),
-                //     const SpaceWidget(spaceWidth: 8),
-                //     Obx(() =>
-                //         AgeTextWidget(text: '${_controller.maxAge.value} Y')),
-                //     const SpaceWidget(spaceWidth: 12),
-                //     AgeIconButton(
-                //       icon: const Icon(Icons.add),
-                //       onPressed: _controller.incrementMaxAge,
-                //     ),
-                //     const SpaceWidget(spaceWidth: 12),
-                //     AgeIconButton(
-                //       icon: const Icon(Icons.remove),
-                //       onPressed: _controller.decrementMinAge,
-                //     ),
-                //   ],
-                // ),
-
-                // const SpaceWidget(spaceHeight: 14),
-
-                // Gender
-                const TitleTextWidget(text: AppStrings.gender),
-                const SpaceWidget(spaceHeight: 8),
-                Obx(
-                  () => DropdownButtonWidget(
-                    value: controller.selectedGender.value,
-                    items: controller.genders
-                        .map((e) => DropdownMenuItem<String>(
-                            value: e,
-                            child: TextWidget(
-                              text: e,
-                              fontColor: AppColors.white,
-                            )))
-                        .toList(),
-                    onChanged: (value) => controller.updateGender(value!),
-                  ),
-                ),
-
-                const SpaceWidget(spaceHeight: 48),
-
-                // Search Button
-                ButtonWidget(
-                  onPressed: controller.search,
-                  label: AppStrings.searchNow,
-                  buttonWidth: double.infinity,
-                ),
-              ],
-            ),
-          ),
+                );
+              }),
         ),
       ),
     );

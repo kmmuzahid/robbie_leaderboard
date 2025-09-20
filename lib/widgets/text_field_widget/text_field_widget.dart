@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:the_leaderboard/widgets/icon_button_widget/icon_button_widget.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_icon_path.dart';
@@ -77,23 +78,30 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
               fontSize: ResponsiveUtils.width(16),
             ),
             suffixIcon: widget.suffixIcon != null
-                ? GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        obscureText = !obscureText;
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(13),
-                      child: SvgPicture.asset(
-                        obscureText
-                            ? AppIconPath.visibilityOnIcon
-                            : AppIconPath.visibilityOffIcon,
-                        height: ResponsiveUtils.width(18),
-                        width: ResponsiveUtils.width(18),
-                      ),
-                    ),
-                  )
+                ? widget.suffixIcon == AppIconPath.visibilityOnIcon ||
+                        widget.suffixIcon == AppIconPath.visibilityOffIcon
+                    ? GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            obscureText = !obscureText;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(13),
+                          child: SvgPicture.asset(
+                            obscureText
+                                ? AppIconPath.visibilityOnIcon
+                                : AppIconPath.visibilityOffIcon,
+                            height: ResponsiveUtils.width(18),
+                            width: ResponsiveUtils.width(18),
+                          ),
+                        ),
+                      )
+                    : IconButtonWidget(
+                        onTap: widget.onTapSuffix!,
+                        icon: AppIconPath.calenderIcon,
+                        color: AppColors.white,
+                        size: 20)
                 : null,
             contentPadding: EdgeInsets.all(ResponsiveUtils.width(18)),
             enabledBorder: OutlineInputBorder(

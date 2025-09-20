@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
+import 'package:the_leaderboard/utils/app_size.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../widgets/gradient_text_widget/gradient_text_widget.dart';
@@ -28,62 +29,66 @@ class TopRankedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: rankColor,
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: CircleAvatar(
-                radius: avatarSize,
-                backgroundImage: fromOnline
-                    ? NetworkImage(
-                        "${AppUrls.mainUrl}$image",
-                      )
-                    : AssetImage(image),
-                onBackgroundImageError: (exception, stackTrace) {
-                  // Optionally handle the error, e.g., log it or show a placeholder.
-                },
-              ),
-            ),
-            Positioned(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+    return SizedBox(
+      width: AppSize.width(value: 120),
+      child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: rankColor,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(100),
                 ),
-                child: TextWidget(
-                  text: rankLabel,
-                  fontColor: AppColors.black,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 10,
+                child: CircleAvatar(
+                  radius: avatarSize,
+                  backgroundImage: fromOnline
+                      ? NetworkImage(
+                          "${AppUrls.mainUrl}$image",
+                        )
+                      : AssetImage(image),
+                  onBackgroundImageError: (exception, stackTrace) {
+                    // Optionally handle the error, e.g., log it or show a placeholder.
+                  },
                 ),
               ),
-            ),
-          ],
-        ),
-        const SpaceWidget(spaceHeight: 8),
-        TextWidget(
-          text: name,
-          fontColor: AppColors.white,
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
-        ),
-        const SpaceWidget(spaceHeight: 4),
-        GradientText(
-          text: amount,
-          fontWeight: FontWeight.w600,
-          fontSize: 16,
-          textAlign: TextAlign.right,
-        ),
-      ],
+              Positioned(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: rankColor,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: TextWidget(
+                    text: rankLabel,
+                    fontColor: AppColors.black,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SpaceWidget(spaceHeight: 8),
+          TextWidget(
+            text: name,
+            overflow: TextOverflow.ellipsis,
+            fontColor: AppColors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+          const SpaceWidget(spaceHeight: 4),
+          GradientText(
+            text: amount,
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+            textAlign: TextAlign.right,
+          ),
+        ],
+      ),
     );
   }
 }

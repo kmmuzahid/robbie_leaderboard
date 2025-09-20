@@ -38,7 +38,7 @@ class OtherProfileController extends GetxController {
           email.value = profile.email;
           totalSpent.value =
               AppCommonFunction.formatNumber(profile.totalInvest);
-          totalViews.value = profile.views.toString();
+          totalViews.value = jsonbody["data"]["views"].toString();
           rank.value = profile.rank.toString();
           profileImage.value = profile.profileImg;
           facebookUrl.value = profile.facebook;

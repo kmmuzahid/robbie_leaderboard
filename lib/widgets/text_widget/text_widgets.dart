@@ -41,7 +41,7 @@ class TextWidget extends StatelessWidget {
     ResponsiveUtils.initialize(context);
     return Text(
       text,
-      overflow: overflow,
+      overflow: overflow ?? TextOverflow.ellipsis,
       maxLines: maxLines,
       textAlign: textAlignment,
       style: TextStyle(

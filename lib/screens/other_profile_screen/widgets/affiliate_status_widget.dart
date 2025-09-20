@@ -10,13 +10,11 @@ class AffiliateStatusWidget extends StatelessWidget {
   final String positionValue;
   final String profileViewValue;
 
-
   const AffiliateStatusWidget({
     super.key,
     required this.totalRaisedValue,
     required this.positionValue,
     required this.profileViewValue,
-
   });
 
   @override

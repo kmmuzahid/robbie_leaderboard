@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/register_model.dart';
@@ -28,8 +29,8 @@ class RegisterScreenController extends GetxController {
   final cityController = TextEditingController();
   final TextEditingController referralController =
       TextEditingController(text: "");
-  final RxString selectedCountry = 'Australia'.obs;
-  final RxString selectedCity = 'Sydney DC'.obs;
+  final RxString selectedCountry = ''.obs;
+  final RxString selectedCity = ''.obs;
   final RxString selectedGender = 'Male'.obs;
   List<String> cities = ["Sydney DC", "Melbourne", "Brisbane"];
   final List<String> genders = ['Male', 'Female', 'Other'];
@@ -43,14 +44,15 @@ class RegisterScreenController extends GetxController {
   Future<void> onInitial() async {
     try {
       countryList.value = await getAllCountries();
-      if (countryList.isNotEmpty) {
-        // Select first country by default
-        selectedCountry.value = countryList.first.isoCode;
-        updateCountry(selectedCountry.value);
 
-        // Load its cities
-        await loadCities(countryList.first.isoCode);
-      }
+      // if (countryList.isNotEmpty) {
+      //   // Select first country by default
+      //   selectedCountry.value = countryList.first.isoCode;
+      //   updateCountry(selectedCountry.value);
+
+      //   // Load its cities
+      //   await loadCities(countryList.first.isoCode);
+      // }
     } catch (e) {
       appLog("Error loading countries: $e");
     }
@@ -138,7 +140,9 @@ class RegisterScreenController extends GetxController {
         confirmPassword.isEmpty ||
         name.isEmpty ||
         age.isEmpty ||
-        contact.isEmpty) {
+        finalSelectedCountry.isEmpty ||
+        selectedCity.isEmpty ||
+        selectedGender.isEmpty) {
       Get.closeAllSnackbars();
       Get.snackbar('Form Incomplete', 'Please fill in all fields.',
           colorText: AppColors.white);
@@ -231,6 +235,19 @@ class RegisterScreenController extends GetxController {
       errorLog("Failed", e);
     }
     return;
+  }
+
+  void onSelectDateBirth(BuildContext context) async {
+    final temp = await showDatePicker(
+        initialDate: DateTime.now(),
+        context: context,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(3000));
+    appLog(temp);
+    if (temp != null) {
+      final date = DateFormat("yyyy-MM-dd").format(temp);
+      ageController.text = date;
+    }
   }
 
   @override

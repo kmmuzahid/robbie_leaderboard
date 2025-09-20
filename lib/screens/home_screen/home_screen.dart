@@ -12,6 +12,7 @@ import 'package:the_leaderboard/screens/home_screen/widgets/home_appbar_widget.d
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_loading.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/profile_card_widget.dart';
 import 'package:the_leaderboard/screens/home_screen/widgets/recent_activity_card_widget.dart';
+import 'package:the_leaderboard/screens/leaderboard_screen/widgets/floating_button_widget.dart';
 import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/widgets/icon_button_widget/icon_button_widget.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
@@ -39,10 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
           statusBarIconBrightness: Brightness.light,
         ),
         child: Scaffold(
-          floatingActionButton: IconButton(
-              style: IconButton.styleFrom(backgroundColor: AppColors.goldLight),
-              onPressed: () => controller.onJoinLeaderboard(context),
-              icon: const Icon(Icons.add)),
+          floatingActionButton: const FloatingButtonWidget(),
           backgroundColor: AppColors.blueDark,
           appBar: HomeAppbarWidget(
             title: AppStrings.theLeaderboard,
@@ -118,8 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               //     colorText: AppColors.white);
                               SharePlus.instance.share(ShareParams(
                                   subject: "User Code",
-                                  title: "User Code",
-                                  text: controller.userCode.value));
+                                  title:
+                                      "🎉 Get an Extra Spin in the Raffle Draw! 🎉",
+                                  text:
+                                      "Use my referral code ${controller.userCode.value} when you sign up to the Leaderboard and unlock an additional spin for more chances to win exciting rewards.👉 Don’t miss out—share the fun and boost your luck!"));
                             },
                           ),
                     const SpaceWidget(spaceHeight: 16),

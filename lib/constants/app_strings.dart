@@ -101,6 +101,7 @@ class AppStrings {
   static const String country = "Country";
   static const String city = "City";
   static const String age = "Age";
+  static const String dateOfBirth = "Date of Birth";
   static const String to = "to";
   static const String gender = "Gender";
   static const String searchNow = "Search Now";

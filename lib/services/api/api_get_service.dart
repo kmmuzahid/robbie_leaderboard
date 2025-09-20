@@ -60,18 +60,21 @@ class ApiGetService {
       required String city,
       required String gender}) async {
     try {
+      final link = Uri.parse(url).replace(queryParameters: {
+        if (name.isNotEmpty) "name": name,
+        if (country.isNotEmpty) "country": country,
+        if (city.isNotEmpty) "city": city,
+        if (gender.isNotEmpty) "gender": gender,
+      });
+      appLog(link);
       final response = await http.get(
-        Uri.parse(url).replace(queryParameters: {
-          "name": name,
-          "country": country,
-          "city": city,
-          "gender": gender,
-        }),
+        link,
         headers: {
           'Content-Type': 'application/json',
           'authorization': LocalStorage.token
         },
       );
+      appLog(response.body);
       final jsonbody = jsonDecode(response.body);
       if (response.statusCode == 200) {
         final List data = jsonbody["data"];
