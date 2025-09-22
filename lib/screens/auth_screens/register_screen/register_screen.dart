@@ -147,6 +147,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 Obx(
                   () => DropdownButtonWidget(
+                    hintText: 'PLease select your country',
                     items: controller.countryList
                         .map((c) => DropdownMenuItem(
                               value: c.isoCode,
@@ -163,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextWidget(
-                    text: AppStrings.city,
+                    text: "${AppStrings.city} (Optional)",
                     fontColor: AppColors.greyDark,
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
@@ -172,6 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SpaceWidget(spaceHeight: 8),
                 Obx(
                   () => DropdownButtonWidget(
+                    hintText: 'Please select your city',
                     items: controller.cityList
                         .map((c) => DropdownMenuItem(
                               value: c.name,
@@ -196,6 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SpaceWidget(spaceHeight: 8),
                 DropdownButtonWidget(
+                  hintText: 'Please select your gender',
                   items: controller.genders
                       .map((e) => DropdownMenuItem<String>(
                           value: e,
@@ -252,7 +255,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextWidget(
-                    text: AppStrings.referral,
+                    text: "${AppStrings.referral} (Optional)",
                     fontColor: AppColors.greyDark,
                     fontWeight: FontWeight.w400,
                     fontSize: 16,

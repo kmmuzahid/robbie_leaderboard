@@ -141,7 +141,7 @@ class RegisterScreenController extends GetxController {
         name.isEmpty ||
         age.isEmpty ||
         finalSelectedCountry.isEmpty ||
-        selectedCity.isEmpty ||
+        contact.isEmpty ||
         selectedGender.isEmpty) {
       Get.closeAllSnackbars();
       Get.snackbar('Form Incomplete', 'Please fill in all fields.',

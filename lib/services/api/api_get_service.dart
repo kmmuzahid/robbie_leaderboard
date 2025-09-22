@@ -61,7 +61,7 @@ class ApiGetService {
       required String gender}) async {
     try {
       final link = Uri.parse(url).replace(queryParameters: {
-        if (name.isNotEmpty) "name": name,
+        if (name.isNotEmpty) "searchTerm": name,
         if (country.isNotEmpty) "country": country,
         if (city.isNotEmpty) "city": city,
         if (gender.isNotEmpty) "gender": gender,

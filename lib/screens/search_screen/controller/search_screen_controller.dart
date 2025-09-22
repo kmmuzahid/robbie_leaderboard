@@ -55,9 +55,9 @@ class SearchScreenController extends GetxController {
 
       cityList.value = uniqueCities;
 
-      if (cityList.isNotEmpty) {
-        selectedCity.value = cityList.first.name;
-      }
+      // if (cityList.isNotEmpty) {
+      //   selectedCity.value = cityList.first.name;
+      // }
     } catch (e) {
       appLog("Error loading cities: $e");
     }
