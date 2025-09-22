@@ -82,6 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFieldWidget(
                   controller: controller.emailController,
                   hintText: 'Enter Email',
+                  keyboardType: TextInputType.emailAddress,
                   maxLines: 1,
                 ),
                 const SpaceWidget(spaceHeight: 16),

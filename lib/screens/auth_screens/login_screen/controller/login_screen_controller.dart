@@ -14,10 +14,10 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 
 class LoginScreenController extends GetxController {
   // TextEditingControllers for form fields
-  TextEditingController emailController =
-      TextEditingController(text: LocalStorage.myEmail);
-  TextEditingController passwordController =
-      TextEditingController(text: LocalStorage.myPassword);
+  late TextEditingController emailController;
+
+  late TextEditingController passwordController;
+
   // Observable for remember me checkbox
   final RxBool rememberMe = LocalStorage.rememberMe.obs;
 
@@ -87,10 +87,13 @@ class LoginScreenController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    appLog("login controller initialized");
+    emailController = TextEditingController(text: LocalStorage.myEmail);
+    passwordController = TextEditingController(text: LocalStorage.myPassword);
     if (kDebugMode) {
       // emailController.text = "biwova9852@jxbav.com";
       // passwordController.text = "12345678";
-   
+
       // emailController.text = "fesad96953@dpwev.com";
       emailController.text = "copoc67793@lanipe.com";
       passwordController.text = "12345678";
@@ -100,8 +103,10 @@ class LoginScreenController extends GetxController {
   @override
   void onClose() {
     // Dispose of controllers
+
+    super.onClose();
     emailController.dispose();
     passwordController.dispose();
-    super.onClose();
+    appLog("login controller disposed");
   }
 }

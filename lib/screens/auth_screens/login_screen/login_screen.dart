@@ -155,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               const SpaceWidget(spaceWidth: 4),
                               TextButtonWidget(
                                 onPressed: () {
-                                  Get.toNamed(AppRoutes.registerScreen);
+                                  Get.offAllNamed(AppRoutes.registerScreen);
                                 },
                                 text: AppStrings.register,
                                 textColor: AppColors.skyBlue,
