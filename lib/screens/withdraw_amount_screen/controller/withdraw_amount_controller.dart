@@ -17,6 +17,7 @@ class WithdrawAmountController extends GetxController {
           colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
       return;
     }
+
     try {
       appLog("user is withdrawing \$${amountController.text}");
       int amount = int.parse(amountController.text);
@@ -24,15 +25,16 @@ class WithdrawAmountController extends GetxController {
           AppUrls.withdrawAmount, {"amount": amount});
       if (response != null) {
         final data = jsonDecode(response.body);
+        amountController.clear();
         if (response.statusCode == 200 || response.statusCode == 201) {
           Get.snackbar("Success", data["message"], colorText: AppColors.white);
           Get.offAll(const BottomNav());
         } else {
-          Get.snackbar("Success", data["message"], colorText: AppColors.white);
+          Get.snackbar("Error", data["message"], colorText: AppColors.white);
         }
       }
     } catch (e) {
-       errorLog("Failed", e);
+      errorLog("Failed", e);
     }
     // await ApiPostService.withdrawAmount(amount);
   }

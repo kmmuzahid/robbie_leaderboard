@@ -180,16 +180,6 @@ class RegisterScreenController extends GetxController {
       return;
     }
 
-    if (int.parse(age) < 0) {
-      Get.closeAllSnackbars();
-      Get.snackbar(
-        "Invalid Age",
-        "Age cannot be negative. Please enter a valid age.",
-        colorText: AppColors.white,
-      );
-
-      return;
-    }
     if (name.length > 16) {
       Get.closeAllSnackbars();
       Get.snackbar(

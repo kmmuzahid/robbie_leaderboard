@@ -98,46 +98,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             "\$${AppCommonFunction.formatNumber(controller.totalBalance.value)}",
                         withdrawButtonOnPressed: controller.withdrawAmount,
                         tweeterButtonOnPressed: () {
-                          Get.to(WebviewScreen(
-                            url: controller.twitterUrl.value.isEmpty
-                                ? AppUrls.twitterUrl
-                                : controller.twitterUrl.value,
-                            title: "X",
-                          ));
+                          // Get.to(WebviewScreen(
+                          //   url: controller.twitterUrl.value.isEmpty
+                          //       ? AppUrls.twitterUrl
+                          //       : controller.twitterUrl.value,
+                          //   title: "X",
+                          // ));
+                          launchUrl(Uri.parse(AppUrls.twitterUrl),
+                              mode: LaunchMode.externalApplication);
                         },
                         instagramButtonOnPressed: () {
-                          Get.to(WebviewScreen(
-                            url: controller.instagramUrl.value.isEmpty
-                                ? AppUrls.instagramUrl
-                                : controller.instagramUrl.value,
-                            title: "Instagram",
-                          ));
+                          // Get.to(WebviewScreen(
+                          //   url: controller.instagramUrl.value.isEmpty
+                          //       ? AppUrls.instagramUrl
+                          //       : controller.instagramUrl.value,
+                          //   title: "Instagram",
+                          // ));
+                          launchUrl(Uri.parse(AppUrls.instagramUrl),
+                              mode: LaunchMode.externalApplication);
                         },
                         youtubeButtonOnPressed: () {
-                          Get.to(WebviewScreen(
-                            url: controller.youtubeUrl.value.isEmpty
-                                ? AppUrls.youtubeUrl
-                                : controller.youtubeUrl.value,
-                            title: "Youtube",
-                          ));
+                          // Get.to(WebviewScreen(
+                          //   url: controller.youtubeUrl.value.isEmpty
+                          //       ? AppUrls.youtubeUrl
+                          //       : controller.youtubeUrl.value,
+                          //   title: "Youtube",
+                          // ));
+                          launchUrl(Uri.parse(AppUrls.youtubeUrl),
+                              mode: LaunchMode.externalApplication);
                         },
                         facebookButtonOnPressed: () {
-                          Get.to(WebviewScreen(
-                            url: controller.facebookUrl.value.isEmpty
-                                ? AppUrls.facebookUrl
-                                : controller.facebookUrl.value,
-                            title: "Facebook",
-                          ));
+                          // Get.to(WebviewScreen(
+                          //   url: controller.facebookUrl.value.isEmpty
+                          //       ? AppUrls.facebookUrl
+                          //       : controller.facebookUrl.value,
+                          //   title: "Facebook",
+                          // ));
+                          launchUrl(Uri.parse(AppUrls.facebookUrl),
+                              mode: LaunchMode.externalApplication);
                         },
                         linkedinButtonOnPressed: () {
-                          Get.to(WebviewScreen(
-                            url: controller.linkedinUrl.value.isEmpty
-                                ? AppUrls.linkedinUrl
-                                : controller.linkedinUrl.value,
-                            title: "Linkedin",
-                          ));
-                          // launchUrl(Uri.parse(AppUrls.linkedinUrl),
-                          //     mode: LaunchMode.externalApplication);
+                          // Get.to(WebviewScreen(
+                          //   url: controller.linkedinUrl.value.isEmpty
+                          //       ? AppUrls.linkedinUrl
+                          //       : controller.linkedinUrl.value,
+                          //   title: "Linkedin",
+                          // ));
+                          launchUrl(Uri.parse(AppUrls.linkedinUrl),
+                              mode: LaunchMode.externalApplication);
                         },
                         // youtubeButtonOnPressed: () {
                         //   launchUrl(Uri.parse(AppUrls.youtubeUrl),

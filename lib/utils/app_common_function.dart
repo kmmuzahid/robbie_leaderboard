@@ -4,6 +4,9 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 
 class AppCommonFunction {
   static String formatNumber(dynamic value) {
+    if (value == null) {
+      return "";
+    }
     String formatted = NumberFormat("#,##0.00").format(value);
     return formatted;
   }

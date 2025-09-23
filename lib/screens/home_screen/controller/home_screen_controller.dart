@@ -98,12 +98,12 @@ class HomeScreenController extends GetxController {
           name.value = userData?.name ?? "";
           totalRaised.value = userData?.totalRaised.toString() ?? "";
           totalSpent.value =
-              AppCommonFunction.formatNumber(userData?.totalInvest);
+              AppCommonFunction.formatNumber(userData?.totalInvest ?? "");
           rank.value = userData?.rank ?? 0;
           image.value = userData?.profileImg ?? "";
           userCode.value = userData?.userCode ?? "";
-          LocalStorage.userId = userData!.id;
-          LocalStorage.setString(LocalStorageKeys.userId, userData.id);
+          LocalStorage.userId = userData?.id ?? "";
+          LocalStorage.setString(LocalStorageKeys.userId, LocalStorage.userId);
           return;
         } else {
           Get.closeAllSnackbars();

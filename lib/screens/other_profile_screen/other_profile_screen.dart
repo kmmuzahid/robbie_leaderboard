@@ -10,6 +10,7 @@ import 'package:the_leaderboard/screens/other_profile_screen/widgets/profile_hea
 import 'package:the_leaderboard/screens/webview_screen/webview_screen.dart';
 import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OtherProfileScreen extends StatefulWidget {
   const OtherProfileScreen({super.key, required this.userId});
@@ -67,37 +68,47 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                           facebookUrlOn: _controller.facebookUrl.isNotEmpty,
                           instagramUrlOn: _controller.instagramUrl.isNotEmpty,
                           twitterUrlOn: _controller.twitterUrl.isNotEmpty,
-                          linkedinUrlOn: _controller.instagramUrl.isNotEmpty,
+                          linkedinUrlOn: _controller.linkedinUrl.isNotEmpty,
                           youtubeUrlOn: _controller.youtubeUrl.isNotEmpty,
                           instagramButtonOnPressed: () {
-                            Get.to(WebviewScreen(
-                              url: _controller.instagramUrl.value,
-                              title: "Instagram",
-                            ));
+                            // Get.to(WebviewScreen(
+                            //   url: _controller.instagramUrl.value,
+                            //   title: "Instagram",
+                            // ));
+                            launchUrl(Uri.parse(_controller.instagramUrl.value),
+                                mode: LaunchMode.externalApplication);
                           },
                           twitterButtonOnPressed: () {
-                            Get.to(WebviewScreen(
-                              url: _controller.twitterUrl.value,
-                              title: "X",
-                            ));
+                            // Get.to(WebviewScreen(
+                            //   url: _controller.twitterUrl.value,
+                            //   title: "X",
+                            // ));
+                            launchUrl(Uri.parse(_controller.twitterUrl.value),
+                                mode: LaunchMode.externalApplication);
                           },
                           facebookButtonOnPressed: () {
-                            Get.to(WebviewScreen(
-                              url: _controller.facebookUrl.value,
-                              title: "Facebook",
-                            ));
+                            // Get.to(WebviewScreen(
+                            //   url: _controller.facebookUrl.value,
+                            //   title: "Facebook",
+                            // ));
+                            launchUrl(Uri.parse(_controller.facebookUrl.value),
+                                mode: LaunchMode.externalApplication);
                           },
                           linkedinButtonOnPressed: () {
-                            Get.to(WebviewScreen(
-                              url: _controller.linkedinUrl.value,
-                              title: "Linkedin",
-                            ));
+                            // Get.to(WebviewScreen(
+                            //   url: _controller.linkedinUrl.value,
+                            //   title: "Linkedin",
+                            // ));
+                            launchUrl(Uri.parse(_controller.linkedinUrl.value),
+                                mode: LaunchMode.externalApplication);
                           },
                           youtubeButtonOnPressed: () {
-                            Get.to(WebviewScreen(
-                              url: _controller.youtubeUrl.value,
-                              title: "Youtube",
-                            ));
+                            // Get.to(WebviewScreen(
+                            //   url: _controller.youtubeUrl.value,
+                            //   title: "Youtube",
+                            // ));
+                            launchUrl(Uri.parse(_controller.youtubeUrl.value),
+                                mode: LaunchMode.externalApplication);
                           },
                         ),
 

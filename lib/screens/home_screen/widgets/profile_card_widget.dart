@@ -37,7 +37,7 @@ class ProfileCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     ResponsiveUtils.initialize(context);
     return Container(
-      width: double.infinity,
+      width: AppSize.width(value: double.infinity),
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -171,7 +171,7 @@ class ProfileCardWidget extends StatelessWidget {
                   onPressed: onJoinLeaderboardPressed,
                   label: AppStrings.joinLeaderboard,
                   buttonWidth: AppSize.width(value: 192),
-                  buttonHeight: 36,
+                  buttonHeight: AppSize.height(value: 36),
                   buttonRadius: BorderRadius.circular(8),
                   fontSize: AppSize.width(value: 15),
                   fontWeight: FontWeight.w600,
@@ -185,13 +185,13 @@ class ProfileCardWidget extends StatelessWidget {
                   onPressed: onSharePressed,
                   label: AppStrings.share,
                   buttonWidth: AppSize.width(value: 192),
-                  buttonHeight: 36,
+                  buttonHeight: AppSize.height(value: 36),
                   buttonRadius: BorderRadius.circular(8),
                   fontSize: AppSize.width(value: 15),
                   fontWeight: FontWeight.w600,
                   icon: AppIconPath.shareIcon,
-                  iconWidth: 16,
-                  iconHeight: 16,
+                  iconWidth: AppSize.width(value: 16),
+                  iconHeight: AppSize.width(value: 16),
                 ),
               ),
             ],

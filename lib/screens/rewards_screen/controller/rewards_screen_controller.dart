@@ -142,14 +142,17 @@ class RewardsScreenController extends GetxController {
       if (response != null) {
         appLog(response.body);
         final data = jsonDecode(response.body);
+
         if (response.statusCode == 200 || response.statusCode == 201) {
-          luckyTicket.value = data['data']['ticket'] ?? 0;
-          appLog("The lucky number is ${luckyTicket.value}");
-          SocketService.instance
-              .createTicket(LocalStorage.myName, data["data"]);
-          responseStatus.value = "Success";
-          responseMessage.value =
-              "${luckyTicket.value} Tickets created successfully";
+          if (data['data'] != null) {
+            luckyTicket.value = data['data']['ticket'] ?? 0;
+            appLog("The lucky number is ${luckyTicket.value}");
+            SocketService.instance
+                .createTicket(LocalStorage.myName, data["data"]);
+            responseStatus.value = "Success";
+            responseMessage.value =
+                "${luckyTicket.value} Tickets created successfully";
+          }
           // Get.snackbar(
           //     "Success", "${luckyTicket.value} Tickets created successfully",
           //     colorText: AppColors.white);
