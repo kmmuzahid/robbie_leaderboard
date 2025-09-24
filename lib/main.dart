@@ -37,7 +37,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await revenue_cat.initialize(
-    "App Store API Key",
+    "appl_rimufSpBKwPOxttWpZFbNQGgPFi",
     "goog_gsyjGglgxeOOHLKmCuTaOliiTFa",
     debugLogEnabled: true,
     loadDataAfterLaunch: true,
