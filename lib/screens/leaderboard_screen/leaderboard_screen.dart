@@ -278,7 +278,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
         backgroundColor: Colors.black,
         body: Obx(
           () => SafeArea(
-            child: _controller.isLoading.value
+            child: _controller.isLoading.value ||
+                    _controller.isLoadingCountry.value ||
+                    _controller.isLoadingCreator.value
                 ? const Center(
                     child: CircularProgressIndicator.adaptive(),
                   )
@@ -346,6 +348,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                                   _controller.leaderBoardList)
                             else if (selectedLeaderboard == 'Event Leaderboard')
                               CountryLeaderboardWidget(
+                                  controller: _controller,
                                   leaderboard: _controller.countryList)
                             else
                               buildLeaderboardTabView(_controller.creatorList),
@@ -355,6 +358,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                                   _controller.leaderBoardList)
                             else if (selectedLeaderboard == 'Event Leaderboard')
                               CountryLeaderboardWidget(
+                                  controller: _controller,
                                   leaderboard: _controller.countryList)
                             else
                               buildLeaderboardTabView(_controller.creatorList),
@@ -364,6 +368,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                                   _controller.leaderBoardList)
                             else if (selectedLeaderboard == 'Event Leaderboard')
                               CountryLeaderboardWidget(
+                                  controller: _controller,
                                   leaderboard: _controller.countryList)
                             else
                               buildLeaderboardTabView(_controller.creatorList),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:country_state_city/country_state_city.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
@@ -15,15 +16,18 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 class LeaderboardController extends GetxController {
   final RxList<LeaderBoardModel?> leaderBoardList = <LeaderBoardModel>[].obs;
   final RxList<LeaderBoardModel?> creatorList = <LeaderBoardModel>[].obs;
-  final RxList<CountryLeaderboardModel?> countryList =
+  final RxList<CountryLeaderboardModel> countryList =
       <CountryLeaderboardModel>[].obs;
 
-  final RxBool isLoading = true.obs;
+  final RxBool isLoading = false.obs;
+  final isLoadingCreator = false.obs;
+  final isLoadingCountry = false.obs;
 
   final ScrollController scrollController = ScrollController();
   final double eachItemHeight = 50.0;
   Timer? refreshTimer;
   final userId = "".obs;
+  final isoCodes = <String>[].obs;
 
   void fetchData() async {
     try {
@@ -51,7 +55,7 @@ class LeaderboardController extends GetxController {
       isLoading.value = true;
       final response =
           await ApiGetService.apiGetService(AppUrls.leaderBoardData);
-      isLoading.value = false;
+
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
         if (response.statusCode == 200) {
@@ -73,6 +77,8 @@ class LeaderboardController extends GetxController {
       appLog("Succeed");
     } catch (e) {
       errorLog("Failed", e);
+    } finally {
+      isLoading.value = false;
     }
     return;
   }
@@ -80,10 +86,10 @@ class LeaderboardController extends GetxController {
   void fetchCreatorData() async {
     try {
       appLog("creator data is fetching");
-      isLoading.value = true;
+      isLoadingCreator.value = true;
       final response =
           await ApiGetService.apiGetService(AppUrls.creatorLeaderboard);
-      isLoading.value = false;
+
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
         if (response.statusCode == 200) {
@@ -105,6 +111,8 @@ class LeaderboardController extends GetxController {
       appLog("Succeed");
     } catch (e) {
       errorLog("Failed", e);
+    } finally {
+      isLoadingCreator.value = false;
     }
     return;
   }
@@ -112,31 +120,64 @@ class LeaderboardController extends GetxController {
   void fetchCountryData() async {
     try {
       appLog("leaderboard data is fetching");
-      isLoading.value = true;
+      isLoadingCountry.value = true;
       final response =
           await ApiGetService.apiGetService(AppUrls.countryLeaderboard);
-      isLoading.value = false;
+
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
         appLog(response.body);
         if (response.statusCode == 200) {
           final List data = jsonbody["data"]["data"];
+
           countryList.value =
               data.map((e) => CountryLeaderboardModel.fromJson(e)).toList();
 
           countryList.sort(
             (a, b) => b!.totalInvest.compareTo(a!.totalInvest),
           );
+
+          await getAllIsoCode();
         } else {
           Get.closeAllSnackbars();
-          Get.snackbar("Error", jsonbody["message"],
+          Get.snackbar("Error in fetching country", jsonbody["message"],
               colorText: AppColors.white);
         }
       }
       appLog("Succeed");
     } catch (e) {
       errorLog("Failed", e);
+    } finally {
+      isLoadingCountry.value = false;
     }
     return;
+  }
+
+  Future<void> getAllIsoCode() async {
+    appLog("The size of country leaderboard: ${countryList.length}");
+    final temp = await getAllCountries();
+    isoCodes.value = List.generate(
+        countryList.length,
+        (index) =>
+            temp
+                .firstWhereOrNull(
+                  (element) =>
+                      element.name.toLowerCase() ==
+                      countryList[index].country.toLowerCase(),
+                )
+                ?.isoCode ??
+            "ZA");
+    appLog("The size of isocodes ${isoCodes.length}");
+    // for (int i = 0; i < countryList.length; i++) {
+    //   isoCodes.add(temp
+    //       .firstWhere(
+    //         (element) =>
+    //             element.name.toLowerCase() ==
+    //             countryList[i].country.toLowerCase(),
+    //       )
+    //       .isoCode);
+    // }
+    appLog(countryList);
+    appLog("The couuntrycode: ${countryList.first.isoCode}");
   }
 }

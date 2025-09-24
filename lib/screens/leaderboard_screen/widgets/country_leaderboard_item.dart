@@ -19,7 +19,7 @@ class CountryLeaderboardItem extends StatelessWidget {
   final int rank;
   final String name;
   final String amount;
-  final String image;
+  final Widget image;
   final bool fromNetwork;
   final Color? backgrounColor;
 
@@ -42,13 +42,14 @@ class CountryLeaderboardItem extends StatelessWidget {
                 fontSize: 12,
               ),
               const SpaceWidget(spaceWidth: 16),
-              ImageWidget(
-                height: 44,
-                width: 44,
-                imagePath: image,
-                fit: BoxFit.cover,
-                fromNetwork: fromNetwork,
-              ),
+              image,
+              // ImageWidget(
+              //   height: 44,
+              //   width: 44,
+              //   imagePath: image,
+              //   fit: BoxFit.cover,
+              //   fromNetwork: fromNetwork,
+              // ),
               const SpaceWidget(spaceWidth: 16),
               SizedBox(
                 width: ResponsiveUtils.width(180),

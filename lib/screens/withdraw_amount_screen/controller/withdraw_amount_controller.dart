@@ -20,7 +20,7 @@ class WithdrawAmountController extends GetxController {
 
     try {
       appLog("user is withdrawing \$${amountController.text}");
-      int amount = int.parse(amountController.text);
+      num amount = num.parse(amountController.text);
       final response = await ApiPostService.apiPostService(
           AppUrls.withdrawAmount, {"amount": amount});
       if (response != null) {

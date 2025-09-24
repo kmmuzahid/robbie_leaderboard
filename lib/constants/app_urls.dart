@@ -1,9 +1,9 @@
 class AppUrls {
-  static const _baseUrl = "https://api.theleaderboard.site/api/v1";
-  // static const _baseUrl = "http://10.10.7.112:5000/api/v1";
+  // static const _baseUrl = "https://api.theleaderboard.site/api/v1";
+  static const _baseUrl = "http://10.10.7.112:5000/api/v1";
 
-  // static const mainUrl = "http://10.10.7.112:5000";
-  static const mainUrl = "https://api.theleaderboard.site";
+  static const mainUrl = "http://10.10.7.112:5000";
+  // static const mainUrl = "https://api.theleaderboard.site";
 
   static const profile = "$_baseUrl/users/me";
   static const login = "$_baseUrl/auth/login";
