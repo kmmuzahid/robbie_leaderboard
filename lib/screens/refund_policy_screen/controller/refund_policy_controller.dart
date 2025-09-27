@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
+import 'package:the_leaderboard/models/term_and_condition_model.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
-class TermAndConditionController extends GetxController {
+class RefundPolicyController extends GetxController {
   final RxString termAndCondition = ''.obs;
   final RxBool isLoading = true.obs;
 

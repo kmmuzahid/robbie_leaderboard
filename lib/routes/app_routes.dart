@@ -24,4 +24,7 @@ class AppRoutes {
   static const joinLeaderboard = "/joinLeaderboard";
   static const serverOff = "/server_off";
   static const accountDelete = "/account_delete";
+  static const refundPolicyScreen = "/refund_policy_screen";
+  static const raffleRulesScreen = "/raffle_rules_screen";
+  static const privacyPolicyScreen = "/privacy_policy_screen";
 }

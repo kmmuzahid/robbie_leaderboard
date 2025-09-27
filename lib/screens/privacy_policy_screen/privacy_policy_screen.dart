@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:get/get.dart';
-import 'package:the_leaderboard/screens/terms_condition_screen/controller/term_and_condition_controller.dart';
+import 'package:the_leaderboard/screens/privacy_policy_screen/controller/privacy_policy_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../constants/app_colors.dart';
 import '../../widgets/appbar_widget/appbar_widget.dart';
 import '../../widgets/text_widget/text_widgets.dart';
 
-class TermsAndConditionsScreen extends StatefulWidget {
-  const TermsAndConditionsScreen({super.key});
+class PrivacyPolicyScreen extends StatefulWidget {
+  const PrivacyPolicyScreen({super.key});
 
   @override
-  State<TermsAndConditionsScreen> createState() =>
-      _TermsAndConditionsScreenState();
+  State<PrivacyPolicyScreen> createState() => _TermsAndConditionsScreenState();
 }
 
-class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
-  final _controller = Get.put(TermAndConditionController());
+class _TermsAndConditionsScreenState extends State<PrivacyPolicyScreen> {
+  final _controller = Get.put(PrivacyPolicyController());
 
   @override
   void initState() {
@@ -33,9 +32,9 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
           statusBarIconBrightness: Brightness.light,
         ),
         child: Scaffold(
-            backgroundColor: AppColors.white,
-            appBar: const AppbarWidget(
-                title: "Terms & Conditions", centerTitle: true),
+            backgroundColor: AppColors.blueDark,
+            appBar:
+                const AppbarWidget(title: "Privacy Policy", centerTitle: true),
             body: Obx(
               () {
                 if (_controller.isLoading.value) {
@@ -47,7 +46,7 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
                 if (data.isEmpty) {
                   return const Center(
                     child: TextWidget(
-                      text: "There is no term and condition",
+                      text: "There is no privacy policy",
                       fontColor: AppColors.white,
                     ),
                   );

@@ -52,6 +52,30 @@ class SettingsScreen extends StatelessWidget {
                 },
               ),
               const SpaceWidget(spaceHeight: 8),
+              SettingsItemWidget(
+                title: "Refund Policy",
+                icon: AppIconPath.termsIcon,
+                onTap: () {
+                  Get.toNamed(AppRoutes.refundPolicyScreen);
+                },
+              ),
+              const SpaceWidget(spaceHeight: 8),
+              SettingsItemWidget(
+                title: "Raffle Rules",
+                icon: AppIconPath.termsIcon,
+                onTap: () {
+                  Get.toNamed(AppRoutes.raffleRulesScreen);
+                },
+              ),
+              const SpaceWidget(spaceHeight: 8),
+              SettingsItemWidget(
+                title: "Privacy Policy",
+                icon: AppIconPath.termsIcon,
+                onTap: () {
+                  Get.toNamed(AppRoutes.privacyPolicyScreen);
+                },
+              ),
+              const SpaceWidget(spaceHeight: 8),
               // Report Problem
               SettingsItemWidget(
                 title: "Report Problem",
