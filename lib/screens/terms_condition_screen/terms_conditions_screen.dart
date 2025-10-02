@@ -33,7 +33,7 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
           statusBarIconBrightness: Brightness.light,
         ),
         child: Scaffold(
-            backgroundColor: AppColors.white,
+            backgroundColor: AppColors.blueDark,
             appBar: const AppbarWidget(
                 title: "Terms & Conditions", centerTitle: true),
             body: Obx(
@@ -57,6 +57,7 @@ class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
                         horizontal: 20, vertical: 16),
                     child: HtmlWidget(
                       data,
+                      textStyle: const TextStyle(color: AppColors.white),
                       onTapUrl: (url) => launchUrl(Uri.parse(url),
                           mode: LaunchMode.externalApplication),
                     ));

@@ -83,24 +83,23 @@ class LeaderboardItem extends StatelessWidget {
                     ),
                   ),
                   const SpaceWidget(spaceHeight: 8),
-                  if (rank <= 10)
-                    ButtonWidget(
-                      onPressed: onPressed,
-                      label: AppStrings.viewProfile,
-                      backgroundColor: AppColors.blueDark,
-                      textColor: AppColors.white,
-                      buttonWidth: 100,
-                      buttonHeight: 24,
-                      borderGradient: const LinearGradient(
-                        colors: [
-                          AppColors.gradientColorStart,
-                          AppColors.gradientColorEnd
-                        ],
-                      ),
-                      buttonRadius: BorderRadius.circular(4),
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
+                  ButtonWidget(
+                    onPressed: onPressed,
+                    label: AppStrings.viewProfile,
+                    backgroundColor: AppColors.blueDark,
+                    textColor: AppColors.white,
+                    buttonWidth: 100,
+                    buttonHeight: 24,
+                    borderGradient: const LinearGradient(
+                      colors: [
+                        AppColors.gradientColorStart,
+                        AppColors.gradientColorEnd
+                      ],
                     ),
+                    buttonRadius: BorderRadius.circular(4),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ],
               ),
             ],

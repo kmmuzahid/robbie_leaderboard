@@ -13,8 +13,19 @@ class WithdrawAmountController extends GetxController {
 
   void submit() async {
     if (amountController.text.isEmpty) {
-      Get.snackbar("Please enter an amount", "",
-          colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        "Please enter an amount",
+        "",
+        colorText: AppColors.white,
+      );
+      return;
+    }
+    if (int.parse(amountController.text) < 100) {
+      Get.snackbar(
+        "Invalid Amount",
+        "You must enter at least 100\$.",
+        colorText: AppColors.white,
+      );
       return;
     }
 

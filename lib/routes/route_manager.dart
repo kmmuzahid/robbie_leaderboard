@@ -4,6 +4,7 @@ import 'package:the_leaderboard/screens/auth_screens/verify_otp_screen/verify_ot
 import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
 import 'package:the_leaderboard/screens/change_password_screen/change_password_screen.dart';
 import 'package:the_leaderboard/screens/join_leaderboard_screen/join_leaderboard_screen.dart';
+import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
 import 'package:the_leaderboard/screens/privacy_policy_screen/privacy_policy_screen.dart';
 import 'package:the_leaderboard/screens/profile_screen/profile_screen.dart';
 import 'package:the_leaderboard/screens/raffle_rules_screen/raffle_rules_screen.dart';
@@ -180,7 +181,9 @@ class RouteManager {
       GetPage(
         name: AppRoutes.privacyPolicyScreen,
         page: () => PrivacyPolicyScreen(),
-      )
+      ),
+      GetPage(
+          name: AppRoutes.otherProfileScreen, page: () => OtherProfileScreen())
     ];
   }
 }

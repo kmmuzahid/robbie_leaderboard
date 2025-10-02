@@ -28,7 +28,7 @@ class ApiPostService {
         "Connection Error",
         AppStrings.noInternet,
         colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
+        
       );
       Get.toNamed(AppRoutes.serverOff);
     } on TimeoutException catch (e) {
@@ -37,7 +37,7 @@ class ApiPostService {
         "Timeout",
         AppStrings.requestTimeOut,
         colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
+        
       );
       Get.toNamed(AppRoutes.serverOff);
     } catch (e) {
@@ -46,7 +46,7 @@ class ApiPostService {
         "Error",
         AppStrings.somethingWentWrong,
         colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
+        
       );
       Get.toNamed(AppRoutes.serverOff);
     }

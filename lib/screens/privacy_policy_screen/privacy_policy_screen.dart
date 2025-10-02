@@ -56,6 +56,7 @@ class _TermsAndConditionsScreenState extends State<PrivacyPolicyScreen> {
                         horizontal: 20, vertical: 16),
                     child: HtmlWidget(
                       data,
+                      textStyle: const TextStyle(color: AppColors.white),
                       onTapUrl: (url) => launchUrl(Uri.parse(url),
                           mode: LaunchMode.externalApplication),
                     ));

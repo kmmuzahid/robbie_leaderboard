@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
+import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
 import 'package:the_leaderboard/utils/app_size.dart';
 import 'package:the_leaderboard/widgets/gradient_text_widget/gradient_text_widget.dart';
@@ -38,7 +39,7 @@ class HallOfFameCardWidget extends StatelessWidget {
         final cardWidth = screenWidth * 0.35;
 
         return InkWell(
-          onTap: () => Get.to(OtherProfileScreen(userId: id)),
+          onTap: () => Get.toNamed(AppRoutes.otherProfileScreen, arguments: id),
           child: Container(
             width: cardWidth,
             margin: const EdgeInsets.only(right: 10),

@@ -22,8 +22,11 @@ class TermAndConditionController extends GetxController {
         if (response.statusCode == 200) {
           termAndCondition.value = jsonbody["data"]["text"];
         } else {
-          Get.snackbar("Error", jsonbody["message"],
-              colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+          Get.snackbar(
+            "Error",
+            jsonbody["message"],
+            colorText: AppColors.white,
+          );
           termAndCondition.value = "";
         }
       }

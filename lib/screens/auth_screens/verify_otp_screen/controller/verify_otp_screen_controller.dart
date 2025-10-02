@@ -115,7 +115,7 @@ class VerifyOtpController extends GetxController {
       // Navigate to next screen or perform action
     } else {
       Get.snackbar('Error', 'Please enter a valid 4-digit OTP',
-          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
+          colorText: AppColors.white);
     }
     return;
   }

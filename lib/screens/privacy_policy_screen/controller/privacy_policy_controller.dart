@@ -15,16 +15,18 @@ class PrivacyPolicyController extends GetxController {
     try {
       appLog("term and condition data is fetching");
       isLoading.value = true;
-      final response =
-          await ApiGetService.apiGetService(AppUrls.termAndCondition);
+      final response = await ApiGetService.apiGetService(AppUrls.privacyPolicy);
       isLoading.value = false;
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
         if (response.statusCode == 200) {
           termAndCondition.value = jsonbody["data"]["text"];
         } else {
-          Get.snackbar("Error", jsonbody["message"],
-              colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+          Get.snackbar(
+            "Error",
+            jsonbody["message"],
+            colorText: AppColors.white,
+          );
           termAndCondition.value = "";
         }
       }

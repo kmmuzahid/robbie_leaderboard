@@ -19,7 +19,7 @@ class ApiGetService {
       final response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
         'authorization': token,
-      }).timeout(const Duration(seconds: 10));
+      }).timeout(const Duration(seconds: 40));
       appLog("response from Get- $url: ${response.body}");
       return response;
     } on SocketException catch (e) {
@@ -28,7 +28,6 @@ class ApiGetService {
         "Connection Error",
         AppStrings.noInternet,
         colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
       );
       Get.toNamed(AppRoutes.serverOff);
     } on TimeoutException catch (e) {
@@ -37,7 +36,6 @@ class ApiGetService {
         "Timeout",
         AppStrings.requestTimeOut,
         colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
       );
       Get.toNamed(AppRoutes.serverOff);
     } catch (e) {
@@ -46,7 +44,6 @@ class ApiGetService {
         "Error",
         AppStrings.somethingWentWrong,
         colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
       );
       Get.toNamed(AppRoutes.serverOff);
     }
@@ -81,7 +78,8 @@ class ApiGetService {
         appLog(data);
         return data.map((e) => LeaderBoardModel.fromJson(e)).toList();
       } else {
-        Get.snackbar("Error", jsonbody["message"], colorText: AppColors.white);
+        appLog(jsonbody["message"]);
+        // Get.snackbar("Error", jsonbody["message"], colorText: AppColors.white);
         return [];
       }
     } on SocketException catch (e) {
@@ -90,7 +88,6 @@ class ApiGetService {
         "Connection Error",
         AppStrings.noInternet,
         colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
       );
       Get.toNamed(AppRoutes.serverOff);
       return [];
@@ -100,7 +97,6 @@ class ApiGetService {
         "Timeout",
         AppStrings.requestTimeOut,
         colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
       );
       Get.toNamed(AppRoutes.serverOff);
       return [];

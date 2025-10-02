@@ -32,13 +32,13 @@ class LoginScreenController extends GetxController {
     if (email.isEmpty || password.isEmpty) {
       Get.closeAllSnackbars();
       Get.snackbar('Form Incomplete', 'Please fill in all fields.',
-          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
+          colorText: AppColors.white);
       return;
     }
     if (!email.contains("@")) {
       Get.closeAllSnackbars();
       Get.snackbar('Email invaild', 'PLease write a vaild email address',
-          snackPosition: SnackPosition.BOTTOM, colorText: AppColors.white);
+          colorText: AppColors.white);
       return;
     }
 

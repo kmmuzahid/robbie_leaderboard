@@ -154,7 +154,7 @@ class RegisterScreenController extends GetxController {
       Get.snackbar(
         'Password Mismatch',
         'The passwords you entered don\'t match. Please try again.',
-        snackPosition: SnackPosition.BOTTOM,
+        
       );
 
       return;
@@ -175,7 +175,7 @@ class RegisterScreenController extends GetxController {
         "Invalid Phone Number",
         "Please enter a valid phone number.",
         colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
+       
       );
       return;
     }

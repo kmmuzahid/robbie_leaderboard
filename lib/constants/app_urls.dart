@@ -41,4 +41,13 @@ class AppUrls {
   static const youtubeUrl = "https://www.youtube.com/";
   static const creatorLeaderboard = "$_baseUrl/rank/raised";
   static const countryLeaderboard = "$_baseUrl/rank/country";
+  static const refundPolicy = "$_baseUrl/about/return-policy";
+  static const privacyPolicy = "$_baseUrl/about/privacy-policy";
+  static const raffleRules = "$_baseUrl/about/rules";
+  static const rankDaily = "$_baseUrl/rank/today";
+  static const rankMonthly = "$_baseUrl/rank/monthly";
+  static const raisedDaily = "$_baseUrl/rank/raised/today";
+  static const raisedMonthly = "$_baseUrl/rank/raised/monthly";
+  static const countryDaily = "$_baseUrl/rank/country/today";
+  static const countryMonthly = "$_baseUrl/rank/country/monthly";
 }

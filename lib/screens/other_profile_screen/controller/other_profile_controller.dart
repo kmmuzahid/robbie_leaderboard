@@ -21,12 +21,24 @@ class OtherProfileController extends GetxController {
   final RxString twitterUrl = "".obs;
   final RxString linkedinUrl = "".obs;
   final RxString youtubeUrl = "".obs;
+  final RxString bio = "".obs;
 
-  void fetchProfile(String userId) async {
+  final userId = "".obs;
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    final args = Get.arguments;
+    userId.value = args;
+    appLog(userId.value);
+    fetchProfile();
+  }
+
+  void fetchProfile() async {
     try {
       appLog("other profile data is loading");
       isLoading.value = true;
-      final url = "${AppUrls.otherUserProfile}/$userId";
+      final url = "${AppUrls.otherUserProfile}/${userId.value}";
       final response = await ApiGetService.apiGetService(url);
       isLoading.value = false;
       if (response != null) {
@@ -46,17 +58,23 @@ class OtherProfileController extends GetxController {
           twitterUrl.value = profile.twitter;
           linkedinUrl.value = profile.linkedin;
           youtubeUrl.value = profile.youtube;
+          bio.value = profile.bio;
           appLog("Profile image of other users");
           appLog(profileImage.value);
           appLog(facebookUrl.value);
         } else {
-          Get.snackbar("Error", jsonbody["message"],
-              colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+          Get.snackbar(
+            "Error",
+            jsonbody["message"],
+            colorText: AppColors.white,
+          );
         }
       }
       appLog("Succeed");
     } catch (e) {
       appLog("Succeed");
+    } finally {
+      update();
     }
     return;
   }

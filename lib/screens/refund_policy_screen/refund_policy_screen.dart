@@ -13,8 +13,7 @@ class RefundPolicyScreen extends StatefulWidget {
   const RefundPolicyScreen({super.key});
 
   @override
-  State<RefundPolicyScreen> createState() =>
-      _TermsAndConditionsScreenState();
+  State<RefundPolicyScreen> createState() => _TermsAndConditionsScreenState();
 }
 
 class _TermsAndConditionsScreenState extends State<RefundPolicyScreen> {
@@ -35,8 +34,8 @@ class _TermsAndConditionsScreenState extends State<RefundPolicyScreen> {
         ),
         child: Scaffold(
             backgroundColor: AppColors.blueDark,
-            appBar: const AppbarWidget(
-                title: "Refund Policy", centerTitle: true),
+            appBar:
+                const AppbarWidget(title: "Refund Policy", centerTitle: true),
             body: Obx(
               () {
                 if (_controller.isLoading.value) {
@@ -58,7 +57,8 @@ class _TermsAndConditionsScreenState extends State<RefundPolicyScreen> {
                         horizontal: 20, vertical: 16),
                     child: HtmlWidget(
                       data,
-                     onTapUrl: (url) => launchUrl(Uri.parse(url),
+                      textStyle: const TextStyle(color: AppColors.white),
+                      onTapUrl: (url) => launchUrl(Uri.parse(url),
                           mode: LaunchMode.externalApplication),
                     ));
               },

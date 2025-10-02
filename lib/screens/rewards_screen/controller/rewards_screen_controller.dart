@@ -50,8 +50,11 @@ class RewardsScreenController extends GetxController {
           currentRuffle.value = CurrentRuffleModel.fromJson(jsonbody["data"]);
           return;
         } else {
-          Get.snackbar("Error", jsonbody["message"],
-              colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+          Get.snackbar(
+            "Error",
+            jsonbody["message"],
+            colorText: AppColors.white,
+          );
         }
       }
     } catch (e) {
@@ -82,8 +85,11 @@ class RewardsScreenController extends GetxController {
           appLog(userTicket);
           return;
         } else {
-          Get.snackbar("Error", jsonbody["message"],
-              colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+          Get.snackbar(
+            "Error",
+            jsonbody["message"],
+            colorText: AppColors.white,
+          );
         }
       }
     } catch (e) {
@@ -233,7 +239,6 @@ class RewardsScreenController extends GetxController {
         "Limit Reached",
         "You've reached today's limit. Please come back tomorrow!",
         colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
       );
     }
   }

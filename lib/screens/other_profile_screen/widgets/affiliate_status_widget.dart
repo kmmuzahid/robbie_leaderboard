@@ -107,7 +107,7 @@ class AffiliateStatusWidget extends StatelessWidget {
                   child: Column(
                     children: [
                       const TextWidget(
-                        text: "Profile View",
+                        text: "Profile Views",
                         fontColor: AppColors.white,
                         fontWeight: FontWeight.w600,
                         fontSize: 12,

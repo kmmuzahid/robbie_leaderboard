@@ -5,6 +5,7 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/leader_board_model.dart';
+import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/home_screen/controller/home_screen_controller.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_dropdown.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/leaderboard_filtered_item.dart';
@@ -23,10 +24,22 @@ class LeaderboardFilteredScreen extends StatefulWidget {
       required this.leaderBoardList,
       required this.countryList,
       required this.creatorList,
-      required this.isLoading});
+      required this.isLoading,
+      required this.leaderBoardListDaily,
+      required this.leaderBoardListMonthly,
+      required this.countryListDaily,
+      required this.countryListMonthly,
+      required this.creatorListDaily,
+      required this.creatorListMonthly});
   final List<LeaderBoardModel?> leaderBoardList;
+  final List<LeaderBoardModel?> leaderBoardListDaily;
+  final List<LeaderBoardModel?> leaderBoardListMonthly;
   final List<LeaderBoardModel?> countryList;
+  final List<LeaderBoardModel?> countryListDaily;
+  final List<LeaderBoardModel?> countryListMonthly;
   final List<LeaderBoardModel?> creatorList;
+  final List<LeaderBoardModel?> creatorListDaily;
+  final List<LeaderBoardModel?> creatorListMonthly;
 
   final bool isLoading;
   @override
@@ -86,7 +99,7 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
               InkWell(
                 onTap: () {
                   final userid = filterList[1]!.userId;
-                  Get.to(OtherProfileScreen(userId: userid));
+                  Get.toNamed(AppRoutes.otherProfileScreen, arguments: userid);
                 },
                 child: Transform.translate(
                   offset: Offset.zero,
@@ -106,7 +119,7 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
             InkWell(
               onTap: () {
                 final userId = filterList[0]!.userId;
-                Get.to(OtherProfileScreen(userId: userId));
+                Get.toNamed(AppRoutes.otherProfileScreen, arguments: userId);
               },
               child: Transform.translate(
                 offset: const Offset(0, -10),
@@ -127,7 +140,7 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
               InkWell(
                 onTap: () {
                   final userId = filterList[2]!.userId;
-                  Get.to(OtherProfileScreen(userId: userId));
+                  Get.toNamed(AppRoutes.otherProfileScreen, arguments: userId);
                 },
                 child: Transform.translate(
                   offset: Offset.zero,
@@ -161,7 +174,7 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                     ? "${AppUrls.mainUrl}${data.profileImg}"
                     : AppImagePath.profileImage,
                 onPressed: () {
-                  Get.to(OtherProfileScreen(userId: data.userId));
+                 Get.toNamed(AppRoutes.otherProfileScreen, arguments: data.userId);
                 },
               );
             },
@@ -251,18 +264,21 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                               buildLeaderboardTabView(widget.creatorList),
                             // Daily Tab
                             if (selectedLeaderboard == 'Leaderboard')
-                              buildLeaderboardTabView(widget.leaderBoardList)
+                              buildLeaderboardTabView(
+                                  widget.leaderBoardListDaily)
                             else if (selectedLeaderboard == 'Event Leaderboard')
-                              buildLeaderboardTabView(widget.countryList)
+                              buildLeaderboardTabView(widget.countryListDaily)
                             else
-                              buildLeaderboardTabView(widget.creatorList),
+                              buildLeaderboardTabView(widget.creatorListDaily),
                             // Monthly Tab
                             if (selectedLeaderboard == 'Leaderboard')
-                              buildLeaderboardTabView(widget.leaderBoardList)
+                              buildLeaderboardTabView(
+                                  widget.leaderBoardListMonthly)
                             else if (selectedLeaderboard == 'Event Leaderboard')
-                              buildLeaderboardTabView(widget.countryList)
+                              buildLeaderboardTabView(widget.countryListMonthly)
                             else
-                              buildLeaderboardTabView(widget.creatorList),
+                              buildLeaderboardTabView(
+                                  widget.creatorListMonthly),
                           ],
                         ),
                       ),

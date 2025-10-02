@@ -12,8 +12,11 @@ class ApiDeleteService {
       });
       return response;
     } catch (e) {
-      Get.snackbar("Error", "Something went wrong",
-          colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        "Error",
+        "Something went wrong",
+        colorText: AppColors.white,
+      );
     }
     return null;
   }

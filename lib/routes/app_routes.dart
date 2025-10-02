@@ -27,4 +27,5 @@ class AppRoutes {
   static const refundPolicyScreen = "/refund_policy_screen";
   static const raffleRulesScreen = "/raffle_rules_screen";
   static const privacyPolicyScreen = "/privacy_policy_screen";
+  static const otherProfileScreen = "/other_profile_screen";
 }

@@ -32,7 +32,7 @@ class CreateNewPasswordScreenController extends GetxController {
       Get.snackbar(
         AppStrings.formIncomplete,
         AppStrings.pleaseFillAllField,
-        snackPosition: SnackPosition.BOTTOM,
+       
       );
       return;
     }
@@ -41,7 +41,7 @@ class CreateNewPasswordScreenController extends GetxController {
       Get.snackbar(
         AppStrings.passwordMismatched,
         AppStrings.passwordDontMatch,
-        snackPosition: SnackPosition.BOTTOM,
+       
       );
 
       return;

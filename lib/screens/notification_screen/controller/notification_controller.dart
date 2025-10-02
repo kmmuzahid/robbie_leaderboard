@@ -39,8 +39,11 @@ class NotificationController extends GetxController {
               data.map((e) => NotificationModel.fromJson(e)).toList();
           appLog(notificationList);
         } else {
-          Get.snackbar("Error", jsonbody["message"],
-              colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+          Get.snackbar(
+            "Error",
+            jsonbody["message"],
+            colorText: AppColors.white,
+          );
         }
       }
       appLog("Succeed");

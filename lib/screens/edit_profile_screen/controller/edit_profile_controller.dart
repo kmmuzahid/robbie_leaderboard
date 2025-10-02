@@ -37,6 +37,8 @@ class EditProfileController extends GetxController {
   // Image picker instance
   final ImagePicker _picker = ImagePicker();
 
+  final bioController = TextEditingController();
+
   final RxString selectedCountry = ''.obs;
   final RxString selectedCity = ''.obs;
   final RxString selectedGender = 'Male'.obs;
@@ -162,8 +164,11 @@ class EditProfileController extends GetxController {
       }
     } catch (e) {
       errorLog("Failed", e);
-      Get.snackbar("Error", "Error picking image",
-          colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        "Error",
+        "Error picking image",
+        colorText: AppColors.white,
+      );
     }
   }
 
@@ -251,7 +256,8 @@ class EditProfileController extends GetxController {
         "instagram": instagramController.text,
         "linkedin": linkedinController.text,
         "twitter": twitterController.text,
-        "youtube": youtubeController.text
+        "youtube": youtubeController.text,
+        "bio": bioController.text
       };
       final url = "${AppUrls.updateUser}/${LocalStorage.userId}";
       // await ApiPatchService.formDataRequest(
@@ -274,8 +280,10 @@ class EditProfileController extends GetxController {
       appLog("Succeed");
     } catch (e) {
       Get.snackbar(
-          "Something went wrong", "Please check your internet connection",
-          colorText: AppColors.white, snackPosition: SnackPosition.BOTTOM);
+        "Something went wrong",
+        "Please check your internet connection",
+        colorText: AppColors.white,
+      );
       errorLog("Failed", e);
     }
   }
@@ -300,6 +308,7 @@ class EditProfileController extends GetxController {
           twitterController.text = userData.twitter;
           linkedinController.text = userData.linkedin;
           youtubeController.text = userData.youtube;
+          bioController.text = userData.bio;
           phone.value =
               await PhoneNumber.getRegionInfoFromPhoneNumber(userData.contact);
           countryList.value = await getAllCountries();
@@ -421,5 +430,6 @@ class EditProfileController extends GetxController {
     twitterController.dispose();
     linkedinController.dispose();
     youtubeController.dispose();
+    bioController.dispose();
   }
 }

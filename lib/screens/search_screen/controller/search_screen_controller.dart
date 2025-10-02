@@ -139,8 +139,40 @@ class SearchScreenController extends GetxController {
         city: selectedCity.value,
         gender: selectedGender.value,
       );
+      final responseLeaderboardDaily =
+          await ApiGetService.fetchFilteredLeaderboardData(
+        url: AppUrls.rankDaily,
+        name: name!,
+        country: finalSelectedCountry.value,
+        city: selectedCity.value,
+        gender: selectedGender.value,
+      );
+      final responseLeaderboardMonthly =
+          await ApiGetService.fetchFilteredLeaderboardData(
+        url: AppUrls.rankMonthly,
+        name: name!,
+        country: finalSelectedCountry.value,
+        city: selectedCity.value,
+        gender: selectedGender.value,
+      );
       final responseCountry = await ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.countryLeaderboard,
+        name: name,
+        country: finalSelectedCountry.value,
+        city: selectedCity.value,
+        gender: selectedGender.value,
+      );
+      final responseCountryDaily =
+          await ApiGetService.fetchFilteredLeaderboardData(
+        url: AppUrls.countryDaily,
+        name: name,
+        country: finalSelectedCountry.value,
+        city: selectedCity.value,
+        gender: selectedGender.value,
+      );
+      final responseCountryMonthly =
+          await ApiGetService.fetchFilteredLeaderboardData(
+        url: AppUrls.countryMonthly,
         name: name,
         country: finalSelectedCountry.value,
         city: selectedCity.value,
@@ -153,17 +185,45 @@ class SearchScreenController extends GetxController {
         city: selectedCity.value,
         gender: selectedGender.value,
       );
-      appLog(responseCreator);
-      appLog(responseCountry);
-      appLog(responseLeaderboard);
+      final responseCreatorDaily =
+          await ApiGetService.fetchFilteredLeaderboardData(
+        url: AppUrls.raisedDaily,
+        name: name,
+        country: finalSelectedCountry.value,
+        city: selectedCity.value,
+        gender: selectedGender.value,
+      );
+      final responseCreatorMonthly =
+          await ApiGetService.fetchFilteredLeaderboardData(
+        url: AppUrls.raisedMonthly,
+        name: name,
+        country: finalSelectedCountry.value,
+        city: selectedCity.value,
+        gender: selectedGender.value,
+      );
+      // appLog(responseCreator);
+      // appLog(responseCountry);
+      // appLog(responseLeaderboard);
       isloading = false;
       if (responseLeaderboard.isNotEmpty ||
           responseCountry.isNotEmpty ||
-          responseCreator.isNotEmpty) {
+          responseCreator.isNotEmpty ||
+          responseLeaderboardDaily.isNotEmpty ||
+          responseLeaderboardMonthly.isNotEmpty ||
+          responseCreatorDaily.isNotEmpty ||
+          responseCreatorMonthly.isNotEmpty ||
+          responseCountryDaily.isNotEmpty ||
+          responseCountryMonthly.isNotEmpty) {
         Get.to(LeaderboardFilteredScreen(
             leaderBoardList: responseLeaderboard,
+            leaderBoardListDaily: responseLeaderboardDaily,
+            leaderBoardListMonthly: responseLeaderboardMonthly,
             countryList: responseCountry,
+            countryListDaily: responseCountryDaily,
+            countryListMonthly: responseCountryMonthly,
             creatorList: responseCreator,
+            creatorListDaily: responseCreatorDaily,
+            creatorListMonthly: responseCreatorMonthly,
             isLoading: isloading));
       } else {
         AppCommonFunction.showSnackbar(context, "No user found");

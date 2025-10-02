@@ -21,7 +21,8 @@ class ForgotPasswordScreenController extends GetxController {
       Get.snackbar(
         'Form Incomplete',
         'Please fill in the fields.',
-        snackPosition: SnackPosition.BOTTOM,
+       
+        colorText: AppColors.white
       );
       return;
     }

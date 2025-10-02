@@ -34,6 +34,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
         TextField(
           controller: controller,
           style: const TextStyle(color: AppColors.white),
+          keyboardType: TextInputType.number,
           decoration: InputDecoration(
             filled: true,
             fillColor: AppColors.blue,
