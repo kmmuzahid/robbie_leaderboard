@@ -302,7 +302,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   Widget buildLeaderboardRaisedTabView(
     List<LeaderBoardModelRaised?> leaderboard,
   ) {
+    leaderboard.clear();
     try {
+      appLog("The raised data: ${leaderboard.length}");
       final filteredList = leaderboard.skip(3).where((e) => e != null).toList();
 
       final myData = filteredList.firstWhere(
@@ -339,7 +341,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                 if (leaderboard.length > 1)
                   InkWell(
                     onTap: () {
-                      final userid = leaderboard[1]?.userId;
+                      final userid = leaderboard[1]?.userId ?? "N/A";
                       Get.toNamed(
                         AppRoutes.otherProfileScreen,
                         arguments: userid,
@@ -349,11 +351,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       offset: Offset.zero,
                       child: TopRankedItem(
                         fromOnline: leaderboard[1]!.profileImg != "Unknown",
-                        rankLabel: _controller.leaderBoardList[1]!.currentRank
-                            .toString(),
+                        rankLabel:
+                            "${_controller.leaderBoardList[1]?.currentRank}",
                         name: leaderboard[1]!.name,
                         amount:
-                            "\$${AppCommonFunction.formatNumber(leaderboard[1]!.totalRaised)}",
+                            "\$${AppCommonFunction.formatNumber(leaderboard[1]?.totalRaised ?? 0)}",
                         image: leaderboard[1]!.profileImg != "Unknown"
                             ? leaderboard[1]!.profileImg
                             : AppImagePath.profileImage,
@@ -365,7 +367,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                 if (leaderboard.isNotEmpty)
                   InkWell(
                     onTap: () {
-                      final userId = leaderboard[0]!.userId;
+                      final userId = leaderboard[0]?.userId ?? "N/A";
                       Get.toNamed(
                         AppRoutes.otherProfileScreen,
                         arguments: userId,
@@ -539,7 +541,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
         ],
       );
     } catch (e) {
-      appLog(e);
+      appLog("the error: $e");
       return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -16,17 +16,20 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 
 class LeaderboardController extends GetxController {
   final RxList<LeaderBoardModel?> leaderBoardList = <LeaderBoardModel>[].obs;
-  final RxList<LeaderBoardModelRaised?> creatorList = <LeaderBoardModelRaised>[].obs;
+  final RxList<LeaderBoardModelRaised?> creatorList =
+      <LeaderBoardModelRaised>[].obs;
   final RxList<CountryLeaderboardModel> countryList =
       <CountryLeaderboardModel>[].obs;
   final RxList<LeaderBoardModel?> leaderBoardDailyList =
       <LeaderBoardModel>[].obs;
-  final RxList<LeaderBoardModelRaised?> creatorDailyList = <LeaderBoardModelRaised>[].obs;
+  final RxList<LeaderBoardModelRaised?> creatorDailyList =
+      <LeaderBoardModelRaised>[].obs;
   final RxList<CountryLeaderboardModel> countryDailyList =
       <CountryLeaderboardModel>[].obs;
   final RxList<LeaderBoardModel?> leaderBoardMonthlyList =
       <LeaderBoardModel>[].obs;
-  final RxList<LeaderBoardModelRaised?> creatorMonthlyList = <LeaderBoardModelRaised>[].obs;
+  final RxList<LeaderBoardModelRaised?> creatorMonthlyList =
+      <LeaderBoardModelRaised>[].obs;
   final RxList<CountryLeaderboardModel> countryMonthlyList =
       <CountryLeaderboardModel>[].obs;
 
@@ -188,6 +191,7 @@ class LeaderboardController extends GetxController {
 
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
+        appLog("Creator alltime data $jsonbody");
         if (response.statusCode == 200) {
           final List data = jsonbody["data"];
           if (data.isNotEmpty) {

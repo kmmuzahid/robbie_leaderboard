@@ -214,7 +214,8 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     TextWidget(
-                                      text: "${controller.totalTicket.value}",
+                                      text:
+                                          "${controller.userTicket.value?.totalTickets}",
                                       fontColor: AppColors.white,
                                       fontWeight: FontWeight.w600,
                                       fontSize: 15,
