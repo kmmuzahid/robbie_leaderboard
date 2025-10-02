@@ -15,6 +15,32 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+# For IOS
+
+```dart
+target 'Runner' do
+  use_frameworks!
+  use_modular_headers!
+
+  # Add this line explicitly
+  pod 'PhoneNumberKit', '~> 3.6'
+
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
+```
+
+```cmd
+flutter clean
+cd ios
+rm -rf Podfile.lock Pods
+pod install
+cd ..
+flutter pub get
+```
 
 # Publish app in google play console
 
