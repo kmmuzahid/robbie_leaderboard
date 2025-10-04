@@ -174,7 +174,8 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
                     ? "${AppUrls.mainUrl}${data.profileImg}"
                     : AppImagePath.profileImage,
                 onPressed: () {
-                 Get.toNamed(AppRoutes.otherProfileScreen, arguments: data.userId);
+                  Get.toNamed(AppRoutes.otherProfileScreen,
+                      arguments: data.userId);
                 },
               );
             },
@@ -217,73 +218,66 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
         child: Scaffold(
           backgroundColor: Colors.black,
           body: SafeArea(
-            child: widget.isLoading
-                ? const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  )
-                : Column(
+            child: Column(
+              children: [
+                const SpaceWidget(spaceHeight: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: LeaderboardDropdown(
+                    value: selectedLeaderboard,
+                    text: const [
+                      'Leaderboard',
+                      'Event Leaderboard',
+                      'Creator Leaderboard',
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLeaderboard = value!;
+                        _tabController.index = 0;
+                      });
+                    },
+                  ),
+                ),
+
+                // Replaced TabBar with LeaderboardTabBar
+                LeaderboardTabBar(
+                  tabTexts: const ['All Time', 'Daily', 'Monthly'],
+                  tabController: _tabController,
+                ),
+
+                // TabBarView
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    physics: const BouncingScrollPhysics(),
                     children: [
-                      const SpaceWidget(spaceHeight: 16),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
-                        child: LeaderboardDropdown(
-                          value: selectedLeaderboard,
-                          text: const [
-                            'Leaderboard',
-                            'Event Leaderboard',
-                            'Creator Leaderboard',
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedLeaderboard = value!;
-                              _tabController.index = 0;
-                            });
-                          },
-                        ),
-                      ),
-
-                      // Replaced TabBar with LeaderboardTabBar
-                      LeaderboardTabBar(
-                        tabTexts: const ['All Time', 'Daily', 'Monthly'],
-                        tabController: _tabController,
-                      ),
-
-                      // TabBarView
-                      Expanded(
-                        child: TabBarView(
-                          controller: _tabController,
-                          physics: const BouncingScrollPhysics(),
-                          children: [
-                            // All Time Tab
-                            if (selectedLeaderboard == 'Leaderboard')
-                              buildLeaderboardTabView(widget.leaderBoardList)
-                            else if (selectedLeaderboard == 'Event Leaderboard')
-                              buildLeaderboardTabView(widget.countryList)
-                            else
-                              buildLeaderboardTabView(widget.creatorList),
-                            // Daily Tab
-                            if (selectedLeaderboard == 'Leaderboard')
-                              buildLeaderboardTabView(
-                                  widget.leaderBoardListDaily)
-                            else if (selectedLeaderboard == 'Event Leaderboard')
-                              buildLeaderboardTabView(widget.countryListDaily)
-                            else
-                              buildLeaderboardTabView(widget.creatorListDaily),
-                            // Monthly Tab
-                            if (selectedLeaderboard == 'Leaderboard')
-                              buildLeaderboardTabView(
-                                  widget.leaderBoardListMonthly)
-                            else if (selectedLeaderboard == 'Event Leaderboard')
-                              buildLeaderboardTabView(widget.countryListMonthly)
-                            else
-                              buildLeaderboardTabView(
-                                  widget.creatorListMonthly),
-                          ],
-                        ),
-                      ),
+                      // All Time Tab
+                      if (selectedLeaderboard == 'Leaderboard')
+                        buildLeaderboardTabView(widget.leaderBoardList)
+                      else if (selectedLeaderboard == 'Event Leaderboard')
+                        buildLeaderboardTabView(widget.countryList)
+                      else
+                        buildLeaderboardTabView(widget.creatorList),
+                      // Daily Tab
+                      if (selectedLeaderboard == 'Leaderboard')
+                        buildLeaderboardTabView(widget.leaderBoardListDaily)
+                      else if (selectedLeaderboard == 'Event Leaderboard')
+                        buildLeaderboardTabView(widget.countryListDaily)
+                      else
+                        buildLeaderboardTabView(widget.creatorListDaily),
+                      // Monthly Tab
+                      if (selectedLeaderboard == 'Leaderboard')
+                        buildLeaderboardTabView(widget.leaderBoardListMonthly)
+                      else if (selectedLeaderboard == 'Event Leaderboard')
+                        buildLeaderboardTabView(widget.countryListMonthly)
+                      else
+                        buildLeaderboardTabView(widget.creatorListMonthly),
                     ],
                   ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

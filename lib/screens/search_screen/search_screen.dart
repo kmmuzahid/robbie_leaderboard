@@ -148,11 +148,15 @@ class SearchScreen extends StatelessWidget {
                       const SpaceWidget(spaceHeight: 48),
 
                       // Search Button
-                      ButtonWidget(
-                        onPressed: () => controller.search(context),
-                        label: AppStrings.searchNow,
-                        buttonWidth: double.infinity,
-                      ),
+                      controller.isLoading.value
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : ButtonWidget(
+                              onPressed: () => controller.search(context),
+                              label: AppStrings.searchNow,
+                              buttonWidth: double.infinity,
+                            ),
                     ],
                   ),
                 );

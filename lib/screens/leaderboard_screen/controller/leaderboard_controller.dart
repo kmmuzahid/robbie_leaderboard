@@ -191,18 +191,19 @@ class LeaderboardController extends GetxController {
 
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
-        appLog("Creator alltime data $jsonbody");
         if (response.statusCode == 200) {
           final List data = jsonbody["data"];
           if (data.isNotEmpty) {
             creatorList.value =
                 data.map((e) => LeaderBoardModelRaised.fromJson(e)).toList();
-            appLog(creatorList.map(
-              (element) => element!.profileImg,
-            ));
+            // appLog(creatorList.map(
+            //   (element) => element!.profileImg,
+            // ));
             creatorList.sort(
               (a, b) => a!.currentRaisedRank.compareTo(b!.currentRaisedRank),
             );
+            update();
+            appLog("Creator alltime data $creatorList");
           }
         } else {
           Get.closeAllSnackbars();
@@ -227,6 +228,7 @@ class LeaderboardController extends GetxController {
 
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
+
         if (response.statusCode == 200) {
           final List data = jsonbody["data"];
           if (data.isNotEmpty) {
@@ -236,6 +238,8 @@ class LeaderboardController extends GetxController {
             creatorDailyList.sort(
               (a, b) => a!.currentRaisedRank.compareTo(b!.currentRaisedRank),
             );
+            update();
+            appLog("fetch creator daily: $creatorDailyList");
           }
         } else {
           Get.closeAllSnackbars();
@@ -260,8 +264,10 @@ class LeaderboardController extends GetxController {
 
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
+
         if (response.statusCode == 200) {
           final List data = jsonbody["data"];
+          appLog("fetch creator monthly data: $data");
           if (data.isNotEmpty) {
             creatorMonthlyList.value =
                 data.map((e) => LeaderBoardModelRaised.fromJson(e)).toList();
@@ -269,6 +275,7 @@ class LeaderboardController extends GetxController {
             creatorMonthlyList.sort(
               (a, b) => a!.currentRaisedRank.compareTo(b!.currentRaisedRank),
             );
+            update();
           }
         } else {
           Get.closeAllSnackbars();

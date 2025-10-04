@@ -181,15 +181,7 @@ class EditProfileController extends GetxController {
     //       colorText: AppColors.white);
     //   return;
     // }
-    if (ageController.text.isNotEmpty && int.parse(ageController.text) < 0) {
-      Get.snackbar(
-        "Invalid Age",
-        "Age cannot be negative. Please enter a valid age.",
-        colorText: AppColors.white,
-      );
 
-      return;
-    }
     if (!(isValidPhonenumber.value)) {
       Get.snackbar(
         "Invalid Phone Number",

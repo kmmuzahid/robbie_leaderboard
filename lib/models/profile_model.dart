@@ -3,7 +3,7 @@ class ProfileResponseModel {
   final List<dynamic> investments;
   final num totalInvest;
   final List<dynamic> raisedBonuses;
-  final int totalRaised;
+  final num totalRaised;
   final RankInfoModel rankInfo;
 
   ProfileResponseModel({

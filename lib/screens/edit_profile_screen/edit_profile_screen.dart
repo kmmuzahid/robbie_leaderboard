@@ -201,7 +201,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                   const SpaceWidget(spaceHeight: 12),
                   _buildTextField(
-                      label: "Age",
+                      label: "Date of Birth",
                       controller: controller.ageController,
                       profileController: controller),
                   const SpaceWidget(spaceHeight: 12),

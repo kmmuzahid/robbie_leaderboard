@@ -98,8 +98,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       offset: Offset.zero,
                       child: TopRankedItem(
                         fromOnline: leaderboard[1]!.profileImg != "Unknown",
-                        rankLabel: _controller.leaderBoardList[1]!.currentRank
-                            .toString(),
+                        rankLabel: leaderboard[1]!.currentRank.toString(),
                         name: leaderboard[1]!.name,
                         amount:
                             "\$${AppCommonFunction.formatNumber(leaderboard[1]!.totalInvest)}",
@@ -124,8 +123,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       offset: const Offset(0, -10),
                       child: TopRankedItem(
                         fromOnline: leaderboard[0]!.profileImg != "Unknown",
-                        rankLabel: _controller.leaderBoardList[0]!.currentRank
-                            .toString(),
+                        rankLabel: leaderboard[0]!.currentRank.toString(),
                         name: leaderboard[0]!.name,
                         amount:
                             "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalInvest)}",
@@ -150,8 +148,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       offset: Offset.zero,
                       child: TopRankedItem(
                         fromOnline: leaderboard[2]!.profileImg != "Unknown",
-                        rankLabel: _controller.leaderBoardList[2]!.currentRank
-                            .toString(),
+                        rankLabel: leaderboard[2]!.currentRank.toString(),
                         name: leaderboard[2]!.name,
                         amount:
                             "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalInvest)}",
@@ -302,7 +299,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
   Widget buildLeaderboardRaisedTabView(
     List<LeaderBoardModelRaised?> leaderboard,
   ) {
-    leaderboard.clear();
     try {
       appLog("The raised data: ${leaderboard.length}");
       final filteredList = leaderboard.skip(3).where((e) => e != null).toList();
@@ -315,7 +311,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
         (element) => element?.userId == _controller.userId.value,
       );
       bool showFloating = true;
-      appLog("myIndex is: $myIndex");
+      appLog("myIndex is: $myIndex, leaderboard length: ${leaderboard.length}");
       if (leaderboard.isEmpty) {
         return const Center(
           child: Column(
@@ -351,8 +347,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       offset: Offset.zero,
                       child: TopRankedItem(
                         fromOnline: leaderboard[1]!.profileImg != "Unknown",
-                        rankLabel:
-                            "${_controller.leaderBoardList[1]?.currentRank}",
+                        rankLabel: "${leaderboard[1]?.currentRaisedRank}",
                         name: leaderboard[1]!.name,
                         amount:
                             "\$${AppCommonFunction.formatNumber(leaderboard[1]?.totalRaised ?? 0)}",
@@ -377,8 +372,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       offset: const Offset(0, -10),
                       child: TopRankedItem(
                         fromOnline: leaderboard[0]!.profileImg != "Unknown",
-                        rankLabel: _controller.leaderBoardList[0]!.currentRank
-                            .toString(),
+                        rankLabel: leaderboard[0]!.currentRaisedRank.toString(),
                         name: leaderboard[0]!.name,
                         amount:
                             "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalRaised)}",
@@ -403,8 +397,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       offset: Offset.zero,
                       child: TopRankedItem(
                         fromOnline: leaderboard[2]!.profileImg != "Unknown",
-                        rankLabel: _controller.leaderBoardList[2]!.currentRank
-                            .toString(),
+                        rankLabel: leaderboard[2]!.currentRaisedRank.toString(),
                         name: leaderboard[2]!.name,
                         amount:
                             "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalRaised)}",
@@ -419,107 +412,108 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
               ],
             ),
           ),
-          Expanded(
-            child: Stack(
-              children: [
-                NotificationListener<ScrollNotification>(
-                  key: ValueKey(myIndex.toString()),
-                  onNotification: (scrollNotification) {
-                    final scrollOffset = scrollNotification.metrics.pixels;
-                    final screenHeight =
-                        scrollNotification.metrics.viewportDimension;
+          if (filteredList.isNotEmpty)
+            Expanded(
+              child: Stack(
+                children: [
+                  NotificationListener<ScrollNotification>(
+                    key: ValueKey(myIndex.toString()),
+                    onNotification: (scrollNotification) {
+                      final scrollOffset = scrollNotification.metrics.pixels;
+                      final screenHeight =
+                          scrollNotification.metrics.viewportDimension;
 
-                    final itemTop = myIndex * _controller.eachItemHeight;
-                    final itemBottom = itemTop + _controller.eachItemHeight;
+                      final itemTop = myIndex * _controller.eachItemHeight;
+                      final itemBottom = itemTop + _controller.eachItemHeight;
 
-                    final visibleTop = scrollOffset;
-                    final visibleBottom = scrollOffset + screenHeight;
+                      final visibleTop = scrollOffset;
+                      final visibleBottom = scrollOffset + screenHeight;
 
-                    final isInView =
-                        itemBottom >= visibleTop && itemTop <= visibleBottom;
+                      final isInView =
+                          itemBottom >= visibleTop && itemTop <= visibleBottom;
 
-                    if (isInView && showFloating) {
-                      showFloating = false;
-                    } else if (!isInView && !showFloating) {
-                      showFloating = true;
-                    }
-                    return false;
-                  },
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      _controller.fetchData();
+                      if (isInView && showFloating) {
+                        showFloating = false;
+                      } else if (!isInView && !showFloating) {
+                        showFloating = true;
+                      }
+                      return false;
                     },
-                    child: ListView.builder(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      controller: _controller.scrollController,
-                      itemCount: filteredList.length,
-                      itemBuilder: (context, index) {
-                        final data = filteredList[index]!;
-                        final fromNetwork = data.profileImg != "Unknown";
-                        return LeaderboardItem(
-                          key: ValueKey(
-                            '${data.name}${data.currentRaisedRank}$index',
-                          ),
-                          rank: data.currentRaisedRank,
-                          name: data.name,
-                          amount:
-                              "\$${AppCommonFunction.formatNumber(data.totalRaised)}",
-                          isUp: (data.previousRaisedRank -
-                                  data.currentRaisedRank) >
-                              0,
-                          fromNetwork: fromNetwork,
-                          image: fromNetwork
-                              ? "${AppUrls.mainUrl}${data.profileImg}"
-                              : AppImagePath.profileImage,
-                          backgrounColor: data.userId == myData?.userId
-                              ? AppColors.midblue
-                              : null,
-                          onPressed: () {
-                            Get.toNamed(
-                              AppRoutes.otherProfileScreen,
-                              arguments: data.userId,
-                            );
-                          },
-                        );
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        _controller.fetchData();
                       },
-                    ),
-                  ),
-                ),
-                showFloating && myData != null && myIndex != -1
-                    ? Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          color: AppColors.blue,
-                          child: LeaderboardItem(
+                      child: ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        controller: _controller.scrollController,
+                        itemCount: filteredList.length,
+                        itemBuilder: (context, index) {
+                          final data = filteredList[index]!;
+                          final fromNetwork = data.profileImg != "Unknown";
+                          return LeaderboardItem(
                             key: ValueKey(
-                              '${myData.name}${myData.currentRaisedRank}$myIndex',
+                              '${data.name}${data.currentRaisedRank}$index',
                             ),
-                            rank: myData.currentRaisedRank,
-                            name: myData.name,
+                            rank: data.currentRaisedRank,
+                            name: data.name,
                             amount:
-                                "\$${AppCommonFunction.formatNumber(myData.totalRaised)}",
-                            isUp: (myData.previousRaisedRank -
-                                    myData.currentRaisedRank) >
+                                "\$${AppCommonFunction.formatNumber(data.totalRaised)}",
+                            isUp: (data.previousRaisedRank -
+                                    data.currentRaisedRank) >
                                 0,
-                            fromNetwork: myData.profileImg != "Unknown",
-                            image: myData.profileImg != "Unknown"
-                                ? "${AppUrls.mainUrl}${myData.profileImg}"
+                            fromNetwork: fromNetwork,
+                            image: fromNetwork
+                                ? "${AppUrls.mainUrl}${data.profileImg}"
                                 : AppImagePath.profileImage,
+                            backgrounColor: data.userId == myData?.userId
+                                ? AppColors.midblue
+                                : null,
                             onPressed: () {
                               Get.toNamed(
                                 AppRoutes.otherProfileScreen,
-                                arguments: myData.userId,
+                                arguments: data.userId,
                               );
                             },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  showFloating && myData != null && myIndex != -1
+                      ? Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            color: AppColors.blue,
+                            child: LeaderboardItem(
+                              key: ValueKey(
+                                '${myData.name}${myData.currentRaisedRank}$myIndex',
+                              ),
+                              rank: myData.currentRaisedRank,
+                              name: myData.name,
+                              amount:
+                                  "\$${AppCommonFunction.formatNumber(myData.totalRaised)}",
+                              isUp: (myData.previousRaisedRank -
+                                      myData.currentRaisedRank) >
+                                  0,
+                              fromNetwork: myData.profileImg != "Unknown",
+                              image: myData.profileImg != "Unknown"
+                                  ? "${AppUrls.mainUrl}${myData.profileImg}"
+                                  : AppImagePath.profileImage,
+                              onPressed: () {
+                                Get.toNamed(
+                                  AppRoutes.otherProfileScreen,
+                                  arguments: myData.userId,
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-              ],
+                        )
+                      : const SizedBox.shrink(),
+                ],
+              ),
             ),
-          ),
           // ...List.generate(filteredList.length, (index) {
           //   final data = filteredList[index]!;
           //   final fromNetwork = data.profileImg != "Unknown";
@@ -563,7 +557,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        floatingActionButton: const FloatingButtonWidget(),
         backgroundColor: Colors.black,
         body: Obx(
           () => SafeArea(
@@ -577,109 +570,119 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                     _controller.isLoadingCountryToday.value ||
                     _controller.isLoadingCountryMonthly.value
                 ? const Center(child: CircularProgressIndicator.adaptive())
-                : Column(
+                : Stack(
                     children: [
-                      const SpaceWidget(spaceHeight: 16),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 8.0,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Dropdown Button
-                            LeaderboardDropdown(
-                              value: selectedLeaderboard,
-                              text: const [
-                                'Leaderboard',
-                                'Event Leaderboard',
-                                'Creator Leaderboard',
+                      const Positioned(
+                          bottom: 90, right: 20, child: FloatingButtonWidget()),
+                      Column(
+                        children: [
+                          const SpaceWidget(spaceHeight: 16),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 8.0,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Dropdown Button
+                                LeaderboardDropdown(
+                                  value: selectedLeaderboard,
+                                  text: const [
+                                    'Leaderboard',
+                                    'Event Leaderboard',
+                                    'Creator Leaderboard',
+                                  ],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedLeaderboard = value!;
+                                      _tabController.index = 0;
+                                    });
+                                  },
+                                ),
+                                // Search Icon
+                                InkWell(
+                                  onTap: () {
+                                    Get.toNamed(AppRoutes.searchScreen);
+                                  },
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  child: CircleAvatar(
+                                    radius: 25,
+                                    backgroundColor:
+                                        AppColors.white.withOpacity(
+                                      0.15,
+                                    ),
+                                    child: const IconWidget(
+                                      height: 22,
+                                      width: 22,
+                                      icon: AppIconPath.searchIcon,
+                                    ),
+                                  ),
+                                ),
                               ],
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedLeaderboard = value!;
-                                  _tabController.index = 0;
-                                });
-                              },
                             ),
-                            // Search Icon
-                            InkWell(
-                              onTap: () {
-                                Get.toNamed(AppRoutes.searchScreen);
-                              },
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              child: CircleAvatar(
-                                radius: 25,
-                                backgroundColor: AppColors.white.withOpacity(
-                                  0.15,
-                                ),
-                                child: const IconWidget(
-                                  height: 22,
-                                  width: 22,
-                                  icon: AppIconPath.searchIcon,
-                                ),
-                              ),
+                          ),
+
+                          // Replaced TabBar with LeaderboardTabBar
+                          LeaderboardTabBar(
+                            tabTexts: const ['All Time', 'Daily', 'Monthly'],
+                            tabController: _tabController,
+                          ),
+
+                          // TabBarView
+                          Expanded(
+                            child: TabBarView(
+                              controller: _tabController,
+                              physics: const BouncingScrollPhysics(),
+                              children: [
+                                // All Time Tab
+                                if (selectedLeaderboard == 'Leaderboard')
+                                  buildLeaderboardTabView(
+                                    _controller.leaderBoardList,
+                                  )
+                                else if (selectedLeaderboard ==
+                                    'Event Leaderboard')
+                                  CountryLeaderboardWidget(
+                                    controller: _controller,
+                                    leaderboard: _controller.countryList,
+                                  )
+                                else
+                                  buildLeaderboardRaisedTabView(
+                                      _controller.creatorList),
+                                // Daily Tab
+                                if (selectedLeaderboard == 'Leaderboard')
+                                  buildLeaderboardTabView(
+                                    _controller.leaderBoardDailyList,
+                                  )
+                                else if (selectedLeaderboard ==
+                                    'Event Leaderboard')
+                                  CountryLeaderboardWidget(
+                                    controller: _controller,
+                                    leaderboard: _controller.countryDailyList,
+                                  )
+                                else
+                                  buildLeaderboardRaisedTabView(
+                                      _controller.creatorDailyList),
+                                // Monthly Tab
+                                if (selectedLeaderboard == 'Leaderboard')
+                                  buildLeaderboardTabView(
+                                    _controller.leaderBoardMonthlyList,
+                                  )
+                                else if (selectedLeaderboard ==
+                                    'Event Leaderboard')
+                                  CountryLeaderboardWidget(
+                                    controller: _controller,
+                                    leaderboard: _controller.countryMonthlyList,
+                                  )
+                                else
+                                  buildLeaderboardRaisedTabView(
+                                    _controller.creatorMonthlyList,
+                                  ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-
-                      // Replaced TabBar with LeaderboardTabBar
-                      LeaderboardTabBar(
-                        tabTexts: const ['All Time', 'Daily', 'Monthly'],
-                        tabController: _tabController,
-                      ),
-
-                      // TabBarView
-                      Expanded(
-                        child: TabBarView(
-                          controller: _tabController,
-                          physics: const BouncingScrollPhysics(),
-                          children: [
-                            // All Time Tab
-                            if (selectedLeaderboard == 'Leaderboard')
-                              buildLeaderboardTabView(
-                                _controller.leaderBoardList,
-                              )
-                            else if (selectedLeaderboard == 'Event Leaderboard')
-                              CountryLeaderboardWidget(
-                                controller: _controller,
-                                leaderboard: _controller.countryList,
-                              )
-                            else
-                              buildLeaderboardRaisedTabView(
-                                  _controller.creatorList),
-                            // Daily Tab
-                            if (selectedLeaderboard == 'Leaderboard')
-                              buildLeaderboardTabView(
-                                _controller.leaderBoardDailyList,
-                              )
-                            else if (selectedLeaderboard == 'Event Leaderboard')
-                              CountryLeaderboardWidget(
-                                controller: _controller,
-                                leaderboard: _controller.countryDailyList,
-                              )
-                            else
-                              buildLeaderboardRaisedTabView(
-                                  _controller.creatorDailyList),
-                            // Monthly Tab
-                            if (selectedLeaderboard == 'Leaderboard')
-                              buildLeaderboardTabView(
-                                _controller.leaderBoardMonthlyList,
-                              )
-                            else if (selectedLeaderboard == 'Event Leaderboard')
-                              CountryLeaderboardWidget(
-                                controller: _controller,
-                                leaderboard: _controller.countryMonthlyList,
-                              )
-                            else
-                              buildLeaderboardRaisedTabView(
-                                _controller.creatorMonthlyList,
-                              ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

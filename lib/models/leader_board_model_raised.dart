@@ -23,8 +23,8 @@ class LeaderBoardModelRaised {
       name: json['name'] ?? '',
       profileImg: json['profileImg'] ?? '',
       totalRaised:  json['totalRaised'] ?? 0.0,
-      currentRaisedRank: json['currentRank'] ?? 0,
-      previousRaisedRank: json['previousRank'] ?? 0,
+      currentRaisedRank: json['currentRaisedRank'] ?? 0,
+      previousRaisedRank: json['previousRaisedRank'] ?? 0,
       totalView: json['totalView'] ?? 0,
     );
   }

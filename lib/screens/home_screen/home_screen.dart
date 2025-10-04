@@ -167,7 +167,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         "N/A",
                                     status:
                                         "Last ${controller.consistantlyTop.value!.timesRankedTop} Days",
-                                    imageUrl: '',
+                                    imageUrl: controller.consistantlyTop.value
+                                            ?.profileImg ??
+                                        '',
                                     type: AppStrings.consecutively1st,
                                     title: AppStrings.consistentlyTop,
                                   ),

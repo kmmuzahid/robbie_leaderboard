@@ -22,6 +22,8 @@ class SearchScreenController extends GetxController {
   RxList<City> cityList = <City>[].obs;
   final finalSelectedCountry = "".obs;
 
+  final isLoading = false.obs;
+
   // Lists for dropdown options
   List<String> cities = ["Sydney", "Melbourne", "Brisbane"];
   final List<String> genders = ['Male', 'Female', 'Other'];
@@ -130,7 +132,8 @@ class SearchScreenController extends GetxController {
     try {
       // appLog(
       //     "user is searching with $name, ${finalSelectedCountry.value}, ${selectedCity.value} and ${selectedGender.value}");
-      bool isloading = true;
+      isLoading.value = true;
+      update();
       final responseLeaderboard =
           await ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.leaderBoardData,
@@ -204,7 +207,7 @@ class SearchScreenController extends GetxController {
       // appLog(responseCreator);
       // appLog(responseCountry);
       // appLog(responseLeaderboard);
-      isloading = false;
+
       if (responseLeaderboard.isNotEmpty ||
           responseCountry.isNotEmpty ||
           responseCreator.isNotEmpty ||
@@ -224,12 +227,15 @@ class SearchScreenController extends GetxController {
             creatorList: responseCreator,
             creatorListDaily: responseCreatorDaily,
             creatorListMonthly: responseCreatorMonthly,
-            isLoading: isloading));
+            isLoading: isLoading.value));
       } else {
         AppCommonFunction.showSnackbar(context, "No user found");
       }
     } catch (e) {
       errorLog("Failed", e);
+    } finally {
+      isLoading.value = false;
+      update();
     }
   }
 

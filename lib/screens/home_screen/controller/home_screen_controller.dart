@@ -96,7 +96,8 @@ class HomeScreenController extends GetxController {
         if (responseHomeData.statusCode == 200) {
           final userData = ProfileResponseModel.fromJson(data["data"]).user;
           name.value = userData?.name ?? "";
-          totalRaised.value = userData?.totalRaised.toString() ?? "";
+          totalRaised.value =
+              AppCommonFunction.formatNumber(userData?.totalRaised);
           totalSpent.value =
               AppCommonFunction.formatNumber(userData?.totalInvest ?? "");
           rank.value = userData?.rank ?? 0;
