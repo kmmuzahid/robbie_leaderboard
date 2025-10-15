@@ -32,6 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    
     controller.onInitial();
   }
 
@@ -190,7 +191,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextWidget(
-                    text: AppStrings.gender,
+                    text: '${AppStrings.gender} (Optional)',
                     fontColor: AppColors.greyDark,
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
@@ -213,7 +214,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextWidget(
-                    text: AppStrings.dateOfBirth,
+                    text: '${AppStrings.dateOfBirth} (Optional)',
                     fontColor: AppColors.greyDark,
                     fontWeight: FontWeight.w400,
                     fontSize: 16,

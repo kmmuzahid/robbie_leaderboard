@@ -335,41 +335,117 @@ class HomeScreenController extends GetxController {
     _iap.buyConsumable(purchaseParam: param, autoConsume: true);
   }
 
-  void _showProductSelectorBottomSheet() {
+void _showProductSelectorBottomSheet() {
     Get.bottomSheet(
       Obx(() {
         return products.isEmpty
             ? Container(
-                padding: const EdgeInsets.all(16),
-                child: const Center(child: Text('No products found')),
-              )
-            : Container(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.all(24),
                 decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                 ),
-                child: SingleChildScrollView(
+                child: const Center(
+                  child: Text(
+                    'No products found',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ),
+              )
+            : Container(
+                padding: const EdgeInsets.only(top: 12, left: 16, right: 16, bottom: 24),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      spreadRadius: 1,
+                      offset: Offset(0, -4),
+                    ),
+                  ],
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: Get.size.height * 0.8),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: products.map((product) {
-                      return ListTile(
-                        title: Text(product.title,
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text(product.description),
-                        trailing: Text(product.price, style: const TextStyle(color: Colors.green)),
-                        onTap: () {
-                          Get.back(); // Close bottom sheet
-                          buyProduct(product);
-                        },
-                      );
-                    }).toList(),
+                    children: [
+                      // Drag handle
+                      Container(
+                        width: 40,
+                        height: 4,
+                        margin: const EdgeInsets.only(bottom: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[400],
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+
+                      // Title/Header
+                      const Text(
+                        'Select a Product',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Product list
+                      Flexible(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: products.map((product) {
+                              return Card(
+                                elevation: 2,
+                                margin: const EdgeInsets.symmetric(vertical: 6),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: ListTile(
+                                  contentPadding:
+                                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                  title: Text(
+                                    product.title,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    product.description,
+                                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                                  ),
+                                  trailing: Text(
+                                    product.price,
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Get.back(); // Close bottom sheet
+                                    buyProduct(product);
+                                  },
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );
       }),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
     );
   }
+
 
   @override
   void onInit() {

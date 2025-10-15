@@ -4,10 +4,10 @@ class RegisterModel {
   final String contact;
   final String password;
   final String country;
-  final String city;
-  final String gender;
-  final String age;
-  final String userCode;
+  final String? city;
+  final String? gender;
+  final String? age;
+  final String? userCode;
 
   RegisterModel(
       {required this.name,
@@ -15,10 +15,10 @@ class RegisterModel {
       required this.contact,
       required this.password,
       required this.country,
-      required this.city,
-      required this.gender,
-      required this.age,
-      required this.userCode});
+      this.city,
+      this.gender,
+      this.age,
+      this.userCode});
 
   factory RegisterModel.fromJson(Map<String, dynamic> json) {
     return RegisterModel(
