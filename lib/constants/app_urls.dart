@@ -21,6 +21,7 @@ class AppUrls {
   static const deleteUser = "$_baseUrl/users";
   static const notification = "$_baseUrl/notifications";
   static const mostViewed = "$_baseUrl/fame/most-viewed";
+  static const paymentsuccess = "$_baseUrl/payments/inapp-success";
   static const highestInvestor = "$_baseUrl/fame/highest-investor";
   static const consecutiveToper = "$_baseUrl/fame/consecutively-toper";
   static const currentRuffle = "$_baseUrl/ruffles/current";

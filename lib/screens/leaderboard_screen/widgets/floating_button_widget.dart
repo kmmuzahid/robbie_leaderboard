@@ -8,11 +8,14 @@ class FloatingButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeScreenController>();
     return IconButton(
         iconSize: 35,
         style: IconButton.styleFrom(backgroundColor: AppColors.goldLight),
-        onPressed: () =>
-            Get.find<HomeScreenController>().onJoinLeaderboard(context),
+        onPressed: controller.initialize,
         icon: const Icon(Icons.add));
   }
+
+  
+  
 }

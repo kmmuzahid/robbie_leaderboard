@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
+// import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/revenue_cat_util.dart' as revenue_cat;
@@ -36,13 +36,13 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await revenue_cat.initialize(
-    "appl_rimufSpBKwPOxttWpZFbNQGgPFi",
-    "goog_gsyjGglgxeOOHLKmCuTaOliiTFa",
-    debugLogEnabled: true,
-    loadDataAfterLaunch: true,
-  );
-  await Purchases.setLogLevel(LogLevel.debug);
+  // await revenue_cat.initialize(
+  //   "appl_rimufSpBKwPOxttWpZFbNQGgPFi",
+  //   "goog_gsyjGglgxeOOHLKmCuTaOliiTFa",
+  //   debugLogEnabled: true,
+  //   loadDataAfterLaunch: true,
+  // );
+  // await Purchases.setLogLevel(LogLevel.debug);
   // await Purchases.configure(
   //   PurchasesConfiguration("goog_gsyjGglgxeOOHLKmCuTaOliiTFa")
   //     ..appUserID = LocalStorage.userId, // optional
