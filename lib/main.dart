@@ -5,10 +5,16 @@ import 'package:get/get.dart';
 // import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
-import 'package:the_leaderboard/utils/revenue_cat_util.dart' as revenue_cat;
 import 'main_app_entry.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
+// fvm flutter clean
+// fvm flutter pub get
+// cd ios
+// pod install
+// cd ..
+// fvm flutter build ios
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

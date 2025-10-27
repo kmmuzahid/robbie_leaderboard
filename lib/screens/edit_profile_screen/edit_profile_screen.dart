@@ -185,7 +185,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   const SpaceWidget(spaceHeight: 12),
                   Obx(
                     () => _buildDropdownField(
-                        label: "Gender",
+                        label: "Gender (Optional)",
                         value: controller.selectedGender.value,
                         items: controller.genders
                             .map((e) => DropdownMenuItem<String>(
@@ -201,7 +201,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                   const SpaceWidget(spaceHeight: 12),
                   _buildTextField(
-                      label: "Date of Birth",
+                      label: "Date of Birth (Optional)",
                       controller: controller.ageController,
                       profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
@@ -226,7 +226,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                   Obx(
                     () => _buildDropdownField(
-                        label: "City",
+                        label: "City (Optional)",
                         value: controller.selectedCity.value,
                         items: controller.cityList
                             .map((c) => DropdownMenuItem(

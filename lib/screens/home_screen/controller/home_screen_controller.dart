@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:intl/intl.dart';
+import 'package:the_leaderboard/common/app_log.dart';
 // import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_strings.dart';
@@ -35,7 +37,8 @@ class HomeScreenController extends GetxController {
       Rxn<HallOfFameSinglePaymentModel>();
   final Rxn<HallOfFrameConsisntantlyTopModel> consistantlyTop =
       Rxn<HallOfFrameConsisntantlyTopModel>();
-  final Rxn<HallOfFrameMostEngagedModel> mostEngaged = Rxn<HallOfFrameMostEngagedModel>();
+  final Rxn<HallOfFrameMostEngagedModel> mostEngaged =
+      Rxn<HallOfFrameMostEngagedModel>();
 
   final RxBool ismydataLoading = true.obs;
   final RxBool ishallofframeSinglePaymentLoading = true.obs;
@@ -69,7 +72,8 @@ class HomeScreenController extends GetxController {
     Get.put(ProfileScreenController());
     await Get.find<ProfileScreenController>().fetchProfile();
 
-    appLog("User email: ${LocalStorage.myEmail} and user id: ${LocalStorage.userId}");
+    appLog(
+        "User email: ${LocalStorage.myEmail} and user id: ${LocalStorage.userId}");
     // await Purchases.configure(
     //   PurchasesConfiguration("goog_gsyjGglgxeOOHLKmCuTaOliiTFa")
     //     ..appUserID = LocalStorage.userId, // optional
@@ -86,15 +90,18 @@ class HomeScreenController extends GetxController {
     appLog("fetching home data");
     try {
       ismydataLoading.value = true;
-      final responseHomeData = await ApiGetService.apiGetService(AppUrls.profile);
+      final responseHomeData =
+          await ApiGetService.apiGetService(AppUrls.profile);
       ismydataLoading.value = false;
       if (responseHomeData != null) {
         final data = jsonDecode(responseHomeData.body);
         if (responseHomeData.statusCode == 200) {
           final userData = ProfileResponseModel.fromJson(data["data"]).user;
           name.value = userData?.name ?? "";
-          totalRaised.value = AppCommonFunction.formatNumber(userData?.totalRaised);
-          totalSpent.value = AppCommonFunction.formatNumber(userData?.totalInvest ?? "");
+          totalRaised.value =
+              AppCommonFunction.formatNumber(userData?.totalRaised);
+          totalSpent.value =
+              AppCommonFunction.formatNumber(userData?.totalInvest ?? "");
           rank.value = userData?.rank ?? 0;
           image.value = userData?.profileImg ?? "";
           userCode.value = userData?.userCode ?? "";
@@ -117,12 +124,14 @@ class HomeScreenController extends GetxController {
     appLog("fetching single payment data");
     ishallofframeSinglePaymentLoading.value = true;
     try {
-      final response = await ApiGetService.apiGetService(AppUrls.highestInvestor);
+      final response =
+          await ApiGetService.apiGetService(AppUrls.highestInvestor);
       ishallofframeSinglePaymentLoading.value = false;
       if (response != null) {
         final data = jsonDecode(response.body);
         if (response.statusCode == 200) {
-          recoredSinglePayment.value = HallOfFameSinglePaymentModel.fromJson(data["data"]);
+          recoredSinglePayment.value =
+              HallOfFameSinglePaymentModel.fromJson(data["data"]);
           return;
         } else {
           Get.closeAllSnackbars();
@@ -146,12 +155,14 @@ class HomeScreenController extends GetxController {
     appLog("fetching consistantly top ");
     try {
       ishallofframeConsisntantTopLoading.value = true;
-      final response = await ApiGetService.apiGetService(AppUrls.consecutiveToper);
+      final response =
+          await ApiGetService.apiGetService(AppUrls.consecutiveToper);
       ishallofframeConsisntantTopLoading.value = false;
       if (response != null) {
         final data = jsonDecode(response.body);
         if (response.statusCode == 200) {
-          consistantlyTop.value = HallOfFrameConsisntantlyTopModel.fromJson(data["data"]);
+          consistantlyTop.value =
+              HallOfFrameConsisntantlyTopModel.fromJson(data["data"]);
           return;
         } else {
           Get.closeAllSnackbars();
@@ -175,7 +186,8 @@ class HomeScreenController extends GetxController {
       if (response != null) {
         final data = jsonDecode(response.body);
         if (response.statusCode == 200) {
-          mostEngaged.value = HallOfFrameMostEngagedModel.fromJson(data["data"]);
+          mostEngaged.value =
+              HallOfFrameMostEngagedModel.fromJson(data["data"]);
           return;
         } else {
           Get.closeAllSnackbars();
@@ -218,6 +230,7 @@ class HomeScreenController extends GetxController {
   // }
 
   void onJoinLeaderboard(BuildContext context) async {
+    initialize();
     // Offerings offerings = await Purchases.getOfferings();
     // List<Package> package = [];
     // if (offerings.current != null &&
@@ -270,11 +283,24 @@ class HomeScreenController extends GetxController {
     "leaderboard_1",
     "leaderboard_3",
     "leaderboard_5",
-    "theleaderbaord_100",
     "theleaderboard_10",
+    "theleaderbaord_100",
     "theleaderboard_250",
     "theleaderboard_50",
     "theleaderboard_500",
+  };
+
+  final Set<String> _productIdsIos = {
+    "TheLeaderboard_30",
+    // "TheLeaderboard_3",
+    // "TheLeaderboard_5",
+    // "TheLeaderboard_10",
+    // "TheLeaderboard_20",
+    // "TheLeaderboard_50",
+    // "TheLeaderboard_100",
+    // "TheLeaderboard_250",
+    // "TheLeaderboard_500",
+    // "TheLeaderboard_1000"
   };
 
   void initialize() async {
@@ -290,7 +316,8 @@ class HomeScreenController extends GetxController {
       return;
     }
 
-    final response = await _iap.queryProductDetails(_productIds);
+    final response = await _iap
+        .queryProductDetails(Platform.isAndroid ? _productIds : _productIdsIos);
     if (response.error != null || response.productDetails.isEmpty) {
       Get.snackbar('Error', 'No products found');
     } else {
@@ -316,11 +343,14 @@ class HomeScreenController extends GetxController {
             "purchase_token": purchase.purchaseID,
             "transaction_date": purchase.transactionDate,
             "verification_data": {
-              "localVerificationData": purchase.verificationData.localVerificationData,
-              "serverVerificationData": purchase.verificationData.serverVerificationData,
+              "localVerificationData":
+                  purchase.verificationData.localVerificationData,
+              "serverVerificationData":
+                  purchase.verificationData.serverVerificationData,
               "source": purchase.verificationData.source,
             }
           });
+          await fetchData();
 
           Get.snackbar('Success', 'Purchased: ${purchase.productID}');
         } else if (purchase.status == PurchaseStatus.error) {
@@ -335,25 +365,31 @@ class HomeScreenController extends GetxController {
     _iap.buyConsumable(purchaseParam: param, autoConsume: true);
   }
 
-void _showProductSelectorBottomSheet() {
+  void _showProductSelectorBottomSheet() {
     Get.bottomSheet(
       Obx(() {
         return products.isEmpty
-            ? Container(
-                padding: const EdgeInsets.all(24),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                ),
-                child: const Center(
-                  child: Text(
-                    'No products found',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ? ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: Get.size.height * .4),
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(24)),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'No products found',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
               )
             : Container(
-                padding: const EdgeInsets.only(top: 12, left: 16, right: 16, bottom: 24),
+                padding: const EdgeInsets.only(
+                    top: 12, left: 16, right: 16, bottom: 24),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -405,8 +441,8 @@ void _showProductSelectorBottomSheet() {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: ListTile(
-                                  contentPadding:
-                                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 12),
                                   title: Text(
                                     product.title,
                                     style: const TextStyle(
@@ -416,7 +452,8 @@ void _showProductSelectorBottomSheet() {
                                   ),
                                   subtitle: Text(
                                     product.description,
-                                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black87),
                                   ),
                                   trailing: Text(
                                     product.price,
@@ -445,7 +482,6 @@ void _showProductSelectorBottomSheet() {
       isScrollControlled: true,
     );
   }
-
 
   @override
   void onInit() {

@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:the_leaderboard/common/permission_handler_helper.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
@@ -143,6 +145,12 @@ class EditProfileController extends GetxController {
 
   void onTakePhoto() async {
     try {
+      final status =
+          await const PermissionHandlerHelper(permission: Permission.camera)
+              .getStatus();
+
+      if (status == false) return;
+
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
@@ -156,6 +164,10 @@ class EditProfileController extends GetxController {
 
   // Method to pick an image from the gallery
   Future<void> pickImage() async {
+    final status =
+        await const PermissionHandlerHelper(permission: Permission.photos)
+            .getStatus();
+    if (!status) return;
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
