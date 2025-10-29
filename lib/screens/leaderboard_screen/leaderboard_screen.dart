@@ -14,6 +14,7 @@ import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_i
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_tabbar.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/top_rank_item.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
+import 'package:the_leaderboard/screens/profile_screen/controller/profile_screen_controller.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
@@ -32,15 +33,14 @@ class LeaderboardScreen extends StatefulWidget {
   _LeaderboardScreenState createState() => _LeaderboardScreenState();
 }
 
-class _LeaderboardScreenState extends State<LeaderboardScreen>
-    with SingleTickerProviderStateMixin {
+class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTickerProviderStateMixin {
   String selectedLeaderboard = 'Leaderboard';
   late TabController _tabController;
   final _controller = Get.put(LeaderboardController());
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this, initialIndex: 1);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     _controller.fetchData();
   }
 
@@ -68,9 +68,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.access_time_outlined,
-                  color: AppColors.white, size: 100),
-              SpaceWidget(spaceHeight: 20),
+              Icon(Icons.access_time_outlined, color: AppColors.white, size: 100),
+              // SpaceWidget(spaceHeight: 20),
               TextWidget(text: "Coming Soon", fontColor: AppColors.white),
               // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
             ],
@@ -79,12 +78,13 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
       }
       return Column(
         children: [
-          const SpaceWidget(spaceHeight: 20),
+          // const SpaceWidget(spaceHeight: 20),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                //rank two
                 if (leaderboard.length > 1)
                   InkWell(
                     onTap: () {
@@ -100,8 +100,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                         fromOnline: leaderboard[1]!.profileImg != "Unknown",
                         rankLabel: leaderboard[1]!.currentRank.toString(),
                         name: leaderboard[1]!.name,
-                        amount:
-                            "\$${AppCommonFunction.formatNumber(leaderboard[1]!.totalInvest)}",
+                        amount: "\$${AppCommonFunction.formatNumber(leaderboard[1]!.totalInvest)}",
                         image: leaderboard[1]!.profileImg != "Unknown"
                             ? leaderboard[1]!.profileImg
                             : AppImagePath.profileImage,
@@ -110,6 +109,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       ),
                     ),
                   ),
+                //rank one
                 if (leaderboard.isNotEmpty)
                   InkWell(
                     onTap: () {
@@ -125,8 +125,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                         fromOnline: leaderboard[0]!.profileImg != "Unknown",
                         rankLabel: leaderboard[0]!.currentRank.toString(),
                         name: leaderboard[0]!.name,
-                        amount:
-                            "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalInvest)}",
+                        amount: "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalInvest)}",
                         image: leaderboard[0]!.profileImg != "Unknown"
                             ? leaderboard[0]!.profileImg
                             : AppImagePath.profileImage,
@@ -135,6 +134,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       ),
                     ),
                   ),
+                //rank 3
                 if (leaderboard.length > 2)
                   InkWell(
                     onTap: () {
@@ -150,8 +150,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                         fromOnline: leaderboard[2]!.profileImg != "Unknown",
                         rankLabel: leaderboard[2]!.currentRank.toString(),
                         name: leaderboard[2]!.name,
-                        amount:
-                            "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalInvest)}",
+                        amount: "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalInvest)}",
                         image: leaderboard[2]!.profileImg != "Unknown"
                             ? leaderboard[2]!.profileImg
                             : AppImagePath.profileImage,
@@ -170,8 +169,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                   key: ValueKey(myIndex.toString()),
                   onNotification: (scrollNotification) {
                     final scrollOffset = scrollNotification.metrics.pixels;
-                    final screenHeight =
-                        scrollNotification.metrics.viewportDimension;
+                    final screenHeight = scrollNotification.metrics.viewportDimension;
 
                     final itemTop = myIndex * _controller.eachItemHeight;
                     final itemBottom = itemTop + _controller.eachItemHeight;
@@ -179,8 +177,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                     final visibleTop = scrollOffset;
                     final visibleBottom = scrollOffset + screenHeight;
 
-                    final isInView =
-                        itemBottom >= visibleTop && itemTop <= visibleBottom;
+                    final isInView = itemBottom >= visibleTop && itemTop <= visibleBottom;
 
                     if (isInView && showFloating) {
                       showFloating = false;
@@ -201,20 +198,16 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                         final data = filteredList[index]!;
                         final fromNetwork = data.profileImg != "Unknown";
                         return LeaderboardItem(
-                          key:
-                              ValueKey('${data.name}${data.currentRank}$index'),
-                          rank: data.currentRank,
+                          key: ValueKey('${data.name}${data.currentRank}$index'),
+                          rank: data.currentRank.toString().padLeft(2, '0'),
                           name: data.name,
-                          amount:
-                              "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
+                          amount: "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
                           isUp: (data.previousRank - data.currentRank) > 0,
                           fromNetwork: fromNetwork,
                           image: fromNetwork
                               ? "${AppUrls.mainUrl}${data.profileImg}"
                               : AppImagePath.profileImage,
-                          backgrounColor: data.userId == myData?.userId
-                              ? AppColors.midblue
-                              : null,
+                          backgrounColor: data.userId == myData?.userId ? AppColors.midblue : null,
                           onPressed: () {
                             Get.toNamed(
                               AppRoutes.otherProfileScreen,
@@ -226,37 +219,12 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                     ),
                   ),
                 ),
-                showFloating && myData != null && myIndex != -1
-                    ? Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          color: AppColors.blue,
-                          child: LeaderboardItem(
-                            key: ValueKey(
-                              '${myData.name}${myData.currentRank}$myIndex',
-                            ),
-                            rank: myData.currentRank,
-                            name: myData.name,
-                            amount:
-                                "\$${AppCommonFunction.formatNumber(myData.totalInvest)}",
-                            isUp:
-                                (myData.previousRank - myData.currentRank) > 0,
-                            fromNetwork: myData.profileImg != "Unknown",
-                            image: myData.profileImg != "Unknown"
-                                ? "${AppUrls.mainUrl}${myData.profileImg}"
-                                : AppImagePath.profileImage,
-                            onPressed: () {
-                              Get.toNamed(
-                                AppRoutes.otherProfileScreen,
-                                arguments: myData.userId,
-                              );
-                            },
-                          ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: _selfRank(myData, myIndex, showFloating),
+                )
               ],
             ),
           ),
@@ -296,6 +264,31 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
     }
   }
 
+  Widget _selfRank(LeaderBoardModel? myData, int myIndex, bool showFloating) {
+    return Obx(() => Container(
+          color: AppColors.blue,
+          child: LeaderboardItem(
+            key: ValueKey(
+              '${myData?.name ?? 'N/A'}${myData?.currentRank ?? 'N/A'}$myIndex',
+            ),
+            rank: myData?.currentRank.toString().padLeft(2, '0') ?? 'N/A',
+            name: LocalStorage.myName,
+            amount: "\$${AppCommonFunction.formatNumber(myData?.totalInvest ?? 0)}",
+            isUp: showFloating && myData != null && myIndex != -1
+                ? (myData.previousRank - myData.currentRank) > 0
+                : false,
+            fromNetwork: myData?.profileImg != "Unknown",
+            image: '${AppUrls.mainUrl}${Get.find<ProfileScreenController>().image.value}',
+            onPressed: () {
+              Get.toNamed(
+                AppRoutes.otherProfileScreen,
+                arguments: myData?.userId ?? LocalStorage.userId,
+              );
+            },
+          ),
+        ));
+  }
+
   Widget buildLeaderboardRaisedTabView(
     List<LeaderBoardModelRaised?> leaderboard,
   ) {
@@ -317,8 +310,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.access_time_outlined,
-                  color: AppColors.white, size: 100),
+              Icon(Icons.access_time_outlined, color: AppColors.white, size: 100),
               SpaceWidget(spaceHeight: 20),
               TextWidget(text: "Coming Soon", fontColor: AppColors.white),
               // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
@@ -374,8 +366,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                         fromOnline: leaderboard[0]!.profileImg != "Unknown",
                         rankLabel: leaderboard[0]!.currentRaisedRank.toString(),
                         name: leaderboard[0]!.name,
-                        amount:
-                            "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalRaised)}",
+                        amount: "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalRaised)}",
                         image: leaderboard[0]!.profileImg != "Unknown"
                             ? leaderboard[0]!.profileImg
                             : AppImagePath.profileImage,
@@ -399,8 +390,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                         fromOnline: leaderboard[2]!.profileImg != "Unknown",
                         rankLabel: leaderboard[2]!.currentRaisedRank.toString(),
                         name: leaderboard[2]!.name,
-                        amount:
-                            "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalRaised)}",
+                        amount: "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalRaised)}",
                         image: leaderboard[2]!.profileImg != "Unknown"
                             ? leaderboard[2]!.profileImg
                             : AppImagePath.profileImage,
@@ -420,8 +410,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                     key: ValueKey(myIndex.toString()),
                     onNotification: (scrollNotification) {
                       final scrollOffset = scrollNotification.metrics.pixels;
-                      final screenHeight =
-                          scrollNotification.metrics.viewportDimension;
+                      final screenHeight = scrollNotification.metrics.viewportDimension;
 
                       final itemTop = myIndex * _controller.eachItemHeight;
                       final itemBottom = itemTop + _controller.eachItemHeight;
@@ -429,8 +418,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                       final visibleTop = scrollOffset;
                       final visibleBottom = scrollOffset + screenHeight;
 
-                      final isInView =
-                          itemBottom >= visibleTop && itemTop <= visibleBottom;
+                      final isInView = itemBottom >= visibleTop && itemTop <= visibleBottom;
 
                       if (isInView && showFloating) {
                         showFloating = false;
@@ -454,20 +442,16 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                             key: ValueKey(
                               '${data.name}${data.currentRaisedRank}$index',
                             ),
-                            rank: data.currentRaisedRank,
+                            rank: data.currentRaisedRank.toString().padLeft(2, '0'),
                             name: data.name,
-                            amount:
-                                "\$${AppCommonFunction.formatNumber(data.totalRaised)}",
-                            isUp: (data.previousRaisedRank -
-                                    data.currentRaisedRank) >
-                                0,
+                            amount: "\$${AppCommonFunction.formatNumber(data.totalRaised)}",
+                            isUp: (data.previousRaisedRank - data.currentRaisedRank) > 0,
                             fromNetwork: fromNetwork,
                             image: fromNetwork
                                 ? "${AppUrls.mainUrl}${data.profileImg}"
                                 : AppImagePath.profileImage,
-                            backgrounColor: data.userId == myData?.userId
-                                ? AppColors.midblue
-                                : null,
+                            backgrounColor:
+                                data.userId == myData?.userId ? AppColors.midblue : null,
                             onPressed: () {
                               Get.toNamed(
                                 AppRoutes.otherProfileScreen,
@@ -490,13 +474,11 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                               key: ValueKey(
                                 '${myData.name}${myData.currentRaisedRank}$myIndex',
                               ),
-                              rank: myData.currentRaisedRank,
+                              rank: myData.currentRaisedRank.toString().padLeft(2, '0'),
                               name: myData.name,
                               amount:
-                                  "\$${AppCommonFunction.formatNumber(myData.totalRaised)}",
-                              isUp: (myData.previousRaisedRank -
-                                      myData.currentRaisedRank) >
-                                  0,
+                                  "\$${myData.totalRaised > 0 ? AppCommonFunction.formatNumber(myData.totalRaised) : 'N/A'}",
+                              isUp: (myData.previousRaisedRank - myData.currentRaisedRank) > 0,
                               fromNetwork: myData.profileImg != "Unknown",
                               image: myData.profileImg != "Unknown"
                                   ? "${AppUrls.mainUrl}${myData.profileImg}"
@@ -609,8 +591,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                                   highlightColor: Colors.transparent,
                                   child: CircleAvatar(
                                     radius: 25,
-                                    backgroundColor:
-                                        AppColors.white.withOpacity(
+                                    backgroundColor: AppColors.white.withOpacity(
                                       0.15,
                                     ),
                                     child: const IconWidget(
@@ -641,36 +622,31 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                                   buildLeaderboardTabView(
                                     _controller.leaderBoardList,
                                   )
-                                else if (selectedLeaderboard ==
-                                    'Event Leaderboard')
+                                else if (selectedLeaderboard == 'Event Leaderboard')
                                   CountryLeaderboardWidget(
                                     controller: _controller,
                                     leaderboard: _controller.countryList,
                                   )
                                 else
-                                  buildLeaderboardRaisedTabView(
-                                      _controller.creatorList),
+                                  buildLeaderboardRaisedTabView(_controller.creatorList),
                                 // Daily Tab
                                 if (selectedLeaderboard == 'Leaderboard')
                                   buildLeaderboardTabView(
                                     _controller.leaderBoardDailyList,
                                   )
-                                else if (selectedLeaderboard ==
-                                    'Event Leaderboard')
+                                else if (selectedLeaderboard == 'Event Leaderboard')
                                   CountryLeaderboardWidget(
                                     controller: _controller,
                                     leaderboard: _controller.countryDailyList,
                                   )
                                 else
-                                  buildLeaderboardRaisedTabView(
-                                      _controller.creatorDailyList),
+                                  buildLeaderboardRaisedTabView(_controller.creatorDailyList),
                                 // Monthly Tab
                                 if (selectedLeaderboard == 'Leaderboard')
                                   buildLeaderboardTabView(
                                     _controller.leaderBoardMonthlyList,
                                   )
-                                else if (selectedLeaderboard ==
-                                    'Event Leaderboard')
+                                else if (selectedLeaderboard == 'Event Leaderboard')
                                   CountryLeaderboardWidget(
                                     controller: _controller,
                                     leaderboard: _controller.countryMonthlyList,

@@ -38,10 +38,10 @@ class RewardsScreenController extends GetxController {
   final responseMessage = "".obs;
   final responseStatus = "".obs;
   final isLocked = false.obs;
-  void fetchRuffle() async {
+  void fetchRuffle({bool isUpdating = false}) async {
     try {
       appLog("fetching ruffle");
-      isRuffleLoading.value = true;
+      isRuffleLoading.value = isUpdating ? false : true;
       final response = await ApiGetService.apiGetService(AppUrls.currentRuffle);
       isRuffleLoading.value = false;
       if (response != null) {
@@ -72,10 +72,10 @@ class RewardsScreenController extends GetxController {
     return;
   }
 
-  void fetchUserTicket() async {
+  void fetchUserTicket({bool isUpdating = false}) async {
     try {
       appLog("fetching userticket");
-      isTicketLoading.value = true;
+      isTicketLoading.value = isUpdating ? false : true;
       final response = await ApiGetService.apiGetService(AppUrls.myTicket);
       isTicketLoading.value = false;
       if (response != null) {
@@ -100,9 +100,9 @@ class RewardsScreenController extends GetxController {
     return;
   }
 
-  Future fetchData() async {
-    fetchRuffle();
-    fetchUserTicket();
+  Future fetchData({bool isUpdating = false}) async {
+    fetchRuffle(isUpdating: isUpdating);
+    fetchUserTicket(isUpdating: isUpdating);
     totalTicket.value = LocalStorage.totalTicket;
     dayIndex.value = LocalStorage.dayIndex;
     if (dayIndex.value > 7) {

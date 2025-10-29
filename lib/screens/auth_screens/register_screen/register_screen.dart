@@ -265,7 +265,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SpaceWidget(spaceHeight: 8),
                 TextFieldWidget(
                     controller: controller.referralController,
-                    hintText: "Enter Inviter Code (if any)"),
+                    hintText: "Enter Invite Code (if any)"),
                 const SpaceWidget(spaceHeight: 24),
                 ButtonWidget(
                   onPressed: controller.register,

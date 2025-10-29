@@ -51,17 +51,17 @@ class LeaderboardController extends GetxController {
   final userId = "".obs;
   final isoCodes = <String>[].obs;
 
-  void fetchData() async {
+  void fetchData({bool isUpdating = false}) async {
     try {
-      fetchLeaderBoardData();
-      fetchCountryData();
-      fetchCreatorData();
-      fetchLeaderBoardDataDaily();
-      fetchLeaderBoardDataMonthly();
-      fetchCreatorDataDaily();
-      fetchCreatorDataMonthly();
-      fetchCountryDataDaily();
-      fetchCountryDataMonth();
+      fetchLeaderBoardData(isUpdating: isUpdating);
+      fetchCountryData(isUpdating: isUpdating);
+      fetchCreatorData(isUpdating: isUpdating);
+      fetchLeaderBoardDataDaily(isUpdating: isUpdating);
+      fetchLeaderBoardDataMonthly(isUpdating: isUpdating);
+      fetchCreatorDataDaily(isUpdating: isUpdating);
+      fetchCreatorDataMonthly(isUpdating: isUpdating);
+      fetchCountryDataDaily(isUpdating: isUpdating);
+      fetchCountryDataMonth(isUpdating: isUpdating);
       Get.put(ProfileScreenController());
       await Get.find<ProfileScreenController>().fetchProfile();
       userId.value = LocalStorage.userId;
@@ -80,10 +80,10 @@ class LeaderboardController extends GetxController {
     // });
   }
 
-  void fetchLeaderBoardData() async {
+  void fetchLeaderBoardData({bool isUpdating = false}) async {
     try {
       appLog("leaderboard data is fetching");
-      isLoading.value = true;
+      isLoading.value = isUpdating ? false : true;
       final response =
           await ApiGetService.apiGetService(AppUrls.leaderBoardData);
       if (response != null) {
@@ -116,10 +116,10 @@ class LeaderboardController extends GetxController {
     return;
   }
 
-  void fetchLeaderBoardDataDaily() async {
+  void fetchLeaderBoardDataDaily({bool isUpdating = false}) async {
     try {
       appLog("leaderboard data is fetching");
-      isLoadingToday.value = true;
+      isLoadingToday.value = isUpdating ? false : true;
       final response = await ApiGetService.apiGetService(AppUrls.rankDaily);
 
       if (response != null) {
@@ -149,10 +149,10 @@ class LeaderboardController extends GetxController {
     return;
   }
 
-  void fetchLeaderBoardDataMonthly() async {
+  void fetchLeaderBoardDataMonthly({bool isUpdating = false}) async {
     try {
       appLog("leaderboard data is fetching");
-      isLoadingMonthly.value = true;
+      isLoadingMonthly.value = isUpdating ? false : true;
       final response = await ApiGetService.apiGetService(AppUrls.rankMonthly);
 
       if (response != null) {
@@ -182,10 +182,10 @@ class LeaderboardController extends GetxController {
     return;
   }
 
-  void fetchCreatorData() async {
+  void fetchCreatorData({bool isUpdating = false}) async {
     try {
       appLog("creator data is fetching");
-      isLoadingCreator.value = true;
+      isLoadingCreator.value = isUpdating ? false : true;
       final response =
           await ApiGetService.apiGetService(AppUrls.creatorLeaderboard);
 
@@ -220,10 +220,10 @@ class LeaderboardController extends GetxController {
     return;
   }
 
-  void fetchCreatorDataDaily() async {
+  void fetchCreatorDataDaily({bool isUpdating = false}) async {
     try {
       appLog("creator data is fetching");
-      isLoadingCreatorToday.value = true;
+      isLoadingCreatorToday.value = isUpdating ? false : true;
       final response = await ApiGetService.apiGetService(AppUrls.raisedDaily);
 
       if (response != null) {
@@ -256,10 +256,10 @@ class LeaderboardController extends GetxController {
     return;
   }
 
-  void fetchCreatorDataMonthly() async {
+  void fetchCreatorDataMonthly({bool isUpdating = false}) async {
     try {
       appLog("creator data is fetching");
-      isLoadingCreatorMonthly.value = true;
+      isLoadingCreatorMonthly.value = isUpdating ? false : true;
       final response = await ApiGetService.apiGetService(AppUrls.raisedMonthly);
 
       if (response != null) {
@@ -292,10 +292,10 @@ class LeaderboardController extends GetxController {
     return;
   }
 
-  void fetchCountryData() async {
+  void fetchCountryData({bool isUpdating = false}) async {
     try {
       appLog("leaderboard data is fetching");
-      isLoadingCountry.value = true;
+      isLoadingCountry.value = isUpdating ? false : true;
       final response =
           await ApiGetService.apiGetService(AppUrls.countryLeaderboard);
 
@@ -328,10 +328,10 @@ class LeaderboardController extends GetxController {
     return;
   }
 
-  void fetchCountryDataDaily() async {
+  void fetchCountryDataDaily({bool isUpdating = false}) async {
     try {
       appLog("leaderboard data is fetching");
-      isLoadingCountryToday.value = true;
+      isLoadingCountryToday.value = isUpdating ? false : true;
       final response = await ApiGetService.apiGetService(AppUrls.countryDaily);
 
       if (response != null) {
@@ -363,10 +363,10 @@ class LeaderboardController extends GetxController {
     return;
   }
 
-  void fetchCountryDataMonth() async {
+  void fetchCountryDataMonth({bool isUpdating = false}) async {
     try {
       appLog("leaderboard data is fetching");
-      isLoadingCountryMonthly.value = true;
+      isLoadingCountryMonthly.value = isUpdating ? false : true;
       final response =
           await ApiGetService.apiGetService(AppUrls.countryMonthly);
 

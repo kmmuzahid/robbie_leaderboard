@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_leaderboard/common/leaderboard_animation.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/utils/app_size.dart';
@@ -33,45 +34,31 @@ class TopRankedItem extends StatelessWidget {
       width: AppSize.width(value: 120),
       child: Column(
         children: [
-          Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(4),
+          Container(
                 decoration: BoxDecoration(
-                  color: rankColor,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: CircleAvatar(
-                  radius: avatarSize,
-                  backgroundImage: fromOnline
-                      ? NetworkImage(
-                          "${AppUrls.mainUrl}$image",
-                        )
-                      : AssetImage(image),
-                  onBackgroundImageError: (exception, stackTrace) {
-                    // Optionally handle the error, e.g., log it or show a placeholder.
-                  },
-                ),
-              ),
-              Positioned(
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: rankColor,
-                    borderRadius: BorderRadius.circular(4),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: rankColor.withOpacity(0.7),
+                    blurRadius: 1.0,
+                    spreadRadius: 2.0,
                   ),
-                  child: TextWidget(
-                    text: rankLabel,
-                    fontColor: AppColors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 10,
+                  BoxShadow(
+                    color: rankColor.withOpacity(0.4),
+                    blurRadius: 2.0,
+                    spreadRadius: 5.0,
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+              child: AuraGlowWrapper(
+                auraColor: rankColor,
+                rankLabel: rankLabel,
+                avatarSize: avatarSize,
+                fromOnline: fromOnline,
+                image: image,
+              )),
+            
+          
           const SpaceWidget(spaceHeight: 8),
           TextWidget(
             text: name,

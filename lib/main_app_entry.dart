@@ -15,6 +15,7 @@ class MainApp extends StatelessWidget {
       AppSize.size = MediaQuery.of(context).size;
       ResponsiveUtils.initialize(context);
       return GetMaterialApp(
+        navigatorObservers: [MyRouteObserver()],
         debugShowCheckedModeBanner: false,
         title: AppStrings.appName,
         theme: ThemeData(
@@ -26,5 +27,19 @@ class MainApp extends StatelessWidget {
         getPages: RouteManager.getPages(),
       );
     });
+  }
+}
+
+class MyRouteObserver extends GetObserver {
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    print('Route pushed: ${route.settings.name}');
+    super.didPush(route, previousRoute);
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    print('Route popped: ${route.settings.name}');
+    super.didPop(route, previousRoute);
   }
 }

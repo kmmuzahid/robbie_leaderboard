@@ -11,6 +11,8 @@ import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
+import '../../home_screen/controller/home_screen_controller.dart';
+
 class ProfileScreenController extends GetxController {
   final RxString name = ''.obs;
   final RxString email = ''.obs;
@@ -27,10 +29,10 @@ class ProfileScreenController extends GetxController {
   final RxString linkedinUrl = "".obs;
   final RxString youtubeUrl = "".obs;
   final notificationController = Get.find<NotificationController>();
-  Future fetchProfile() async {
+  Future fetchProfile({bool isUpdating = false}) async {
     try {
       appLog("Profile data is fetching");
-      isLoading.value = true;
+      isLoading.value = isUpdating ? false : true;
       final response = await ApiGetService.apiGetService(AppUrls.profile);
       isLoading.value = false;
       if (response != null) {
@@ -53,6 +55,7 @@ class ProfileScreenController extends GetxController {
           youtubeUrl.value = profile.youtube;
           LocalStorage.myName = profile.name;
           LocalStorage.userId = profile.id;
+          LocalStorage.setString(LocalStorageKeys.userId, profile.id);
           appLog("user id: ${profile.id} and token: ${LocalStorage.token}");
         } else {
           Get.closeAllSnackbars();
@@ -89,6 +92,6 @@ class ProfileScreenController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    fetchProfile();
+    fetchProfile(isUpdating: false);
   }
 }

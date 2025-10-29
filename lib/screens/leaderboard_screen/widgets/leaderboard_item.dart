@@ -10,7 +10,7 @@ import '../../../widgets/space_widget/space_widget.dart';
 import '../../../widgets/text_widget/text_widgets.dart';
 
 class LeaderboardItem extends StatelessWidget {
-  final int rank;
+  final String rank;
   final String name;
   final String amount;
   final String image;
@@ -46,7 +46,7 @@ class LeaderboardItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextWidget(
-                    text: rank.toString().padLeft(2, '0'),
+                    text: rank,
                     fontColor: AppColors.goldLight,
                     fontWeight: FontWeight.w500,
                     fontSize: 12,
@@ -91,10 +91,7 @@ class LeaderboardItem extends StatelessWidget {
                     buttonWidth: 100,
                     buttonHeight: 24,
                     borderGradient: const LinearGradient(
-                      colors: [
-                        AppColors.gradientColorStart,
-                        AppColors.gradientColorEnd
-                      ],
+                      colors: [AppColors.gradientColorStart, AppColors.gradientColorEnd],
                     ),
                     buttonRadius: BorderRadius.circular(4),
                     fontSize: 10,

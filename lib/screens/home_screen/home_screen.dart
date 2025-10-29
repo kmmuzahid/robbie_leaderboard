@@ -33,8 +33,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-      init: HomeScreenController(),
+    return GetBuilder<HomeScreenController>(
+      
       builder: (controller) => AnnotatedRegion(
         value: const SystemUiOverlayStyle(
           statusBarIconBrightness: Brightness.light,

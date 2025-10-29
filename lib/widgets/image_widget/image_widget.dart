@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
+import 'package:the_leaderboard/widgets/image_widget/common_image.dart';
 
 import '../../utils/app_size.dart';
 
@@ -22,39 +23,7 @@ class ImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (fromNetwork != null && fromNetwork == true) {
-      return Image.network(
-        imagePath,
-        height: ResponsiveUtils.width(height),
-        width: ResponsiveUtils.width(width),
-        fit: fit,
-        color: color,
-        errorBuilder: (context, error, stackTrace) {
-          return Image.asset(
-            AppImagePath.profileImage,
-            height: ResponsiveUtils.width(height),
-            width: ResponsiveUtils.width(width),
-            fit: fit,
-            color: color,
-          );
-        },
-      );
-    }
-    return Image.asset(
-      imagePath,
-      height: ResponsiveUtils.width(height),
-      width: ResponsiveUtils.width(width),
-      fit: fit,
-      color: color,
-      errorBuilder: (context, error, stackTrace) {
-        return Image.asset(
-          AppImagePath.profileImage,
-          height: ResponsiveUtils.width(height),
-          width: ResponsiveUtils.width(width),
-          fit: fit,
-          color: color,
-        );
-      },
-    );
+    return CommonImage(
+        imageSrc: imagePath, height: height, width: width, fill: fit, imageColor: color);
   }
 }

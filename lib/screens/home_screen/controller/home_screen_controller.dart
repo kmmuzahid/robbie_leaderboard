@@ -37,8 +37,7 @@ class HomeScreenController extends GetxController {
       Rxn<HallOfFameSinglePaymentModel>();
   final Rxn<HallOfFrameConsisntantlyTopModel> consistantlyTop =
       Rxn<HallOfFrameConsisntantlyTopModel>();
-  final Rxn<HallOfFrameMostEngagedModel> mostEngaged =
-      Rxn<HallOfFrameMostEngagedModel>();
+  final Rxn<HallOfFrameMostEngagedModel> mostEngaged = Rxn<HallOfFrameMostEngagedModel>();
 
   final RxBool ismydataLoading = true.obs;
   final RxBool ishallofframeSinglePaymentLoading = true.obs;
@@ -64,16 +63,14 @@ class HomeScreenController extends GetxController {
     );
   }
 
-  Future fetchData() async {
-    fetchHomeData();
-    fetchHallofFrameSinglePayment();
-    fetchHallofFrameConsistantlyTop();
-    fetchHallofFrameMostEngaged();
-    Get.put(ProfileScreenController());
-    await Get.find<ProfileScreenController>().fetchProfile();
+  Future fetchData({bool isUpdating = false}) async {
+    fetchHomeData(isUpdating);
+    fetchHallofFrameSinglePayment(isUpdating);
+    fetchHallofFrameConsistantlyTop(isUpdating);
+    fetchHallofFrameMostEngaged(isUpdating);
+    await Get.find<ProfileScreenController>().fetchProfile(isUpdating: isUpdating);
 
-    appLog(
-        "User email: ${LocalStorage.myEmail} and user id: ${LocalStorage.userId}");
+    appLog("User email: ${LocalStorage.myEmail} and user id: ${LocalStorage.userId}");
     // await Purchases.configure(
     //   PurchasesConfiguration("goog_gsyjGglgxeOOHLKmCuTaOliiTFa")
     //     ..appUserID = LocalStorage.userId, // optional
@@ -86,27 +83,25 @@ class HomeScreenController extends GetxController {
     profileTab.changeIndex(3);
   }
 
-  void fetchHomeData() async {
+  void fetchHomeData(bool isUpdating) async {
     appLog("fetching home data");
     try {
-      ismydataLoading.value = true;
-      final responseHomeData =
-          await ApiGetService.apiGetService(AppUrls.profile);
+      ismydataLoading.value = isUpdating ? false : true;
+      final responseHomeData = await ApiGetService.apiGetService(AppUrls.profile);
       ismydataLoading.value = false;
       if (responseHomeData != null) {
         final data = jsonDecode(responseHomeData.body);
         if (responseHomeData.statusCode == 200) {
           final userData = ProfileResponseModel.fromJson(data["data"]).user;
           name.value = userData?.name ?? "";
-          totalRaised.value =
-              AppCommonFunction.formatNumber(userData?.totalRaised);
-          totalSpent.value =
-              AppCommonFunction.formatNumber(userData?.totalInvest ?? "");
+          totalRaised.value = AppCommonFunction.formatNumber(userData?.totalRaised);
+          totalSpent.value = AppCommonFunction.formatNumber(userData?.totalInvest ?? "");
           rank.value = userData?.rank ?? 0;
           image.value = userData?.profileImg ?? "";
           userCode.value = userData?.userCode ?? "";
           LocalStorage.userId = userData?.id ?? "";
           LocalStorage.setString(LocalStorageKeys.userId, LocalStorage.userId);
+          update();
           return;
         } else {
           Get.closeAllSnackbars();
@@ -120,18 +115,16 @@ class HomeScreenController extends GetxController {
     }
   }
 
-  void fetchHallofFrameSinglePayment() async {
+  void fetchHallofFrameSinglePayment(bool isUpdating) async {
     appLog("fetching single payment data");
-    ishallofframeSinglePaymentLoading.value = true;
+    ishallofframeSinglePaymentLoading.value = isUpdating ? false : true;
     try {
-      final response =
-          await ApiGetService.apiGetService(AppUrls.highestInvestor);
+      final response = await ApiGetService.apiGetService(AppUrls.highestInvestor);
       ishallofframeSinglePaymentLoading.value = false;
       if (response != null) {
         final data = jsonDecode(response.body);
         if (response.statusCode == 200) {
-          recoredSinglePayment.value =
-              HallOfFameSinglePaymentModel.fromJson(data["data"]);
+          recoredSinglePayment.value = HallOfFameSinglePaymentModel.fromJson(data["data"]);
           return;
         } else {
           Get.closeAllSnackbars();
@@ -151,18 +144,16 @@ class HomeScreenController extends GetxController {
     //     totalInvested: 0,  profileImg: '');
   }
 
-  void fetchHallofFrameConsistantlyTop() async {
+  void fetchHallofFrameConsistantlyTop(bool isUpdating) async {
     appLog("fetching consistantly top ");
+    ishallofframeConsisntantTopLoading.value = isUpdating ? false : true;
     try {
-      ishallofframeConsisntantTopLoading.value = true;
-      final response =
-          await ApiGetService.apiGetService(AppUrls.consecutiveToper);
+      final response = await ApiGetService.apiGetService(AppUrls.consecutiveToper);
       ishallofframeConsisntantTopLoading.value = false;
       if (response != null) {
         final data = jsonDecode(response.body);
         if (response.statusCode == 200) {
-          consistantlyTop.value =
-              HallOfFrameConsisntantlyTopModel.fromJson(data["data"]);
+          consistantlyTop.value = HallOfFrameConsisntantlyTopModel.fromJson(data["data"]);
           return;
         } else {
           Get.closeAllSnackbars();
@@ -177,17 +168,16 @@ class HomeScreenController extends GetxController {
     //     id: "0", name: "Unknown", timesRankedTop: 0);
   }
 
-  void fetchHallofFrameMostEngaged() async {
+  void fetchHallofFrameMostEngaged(bool isUpdating) async {
     appLog("fetching most engaged");
+    ishallofframeMostEngagedLoading.value = isUpdating ? false : true;
     try {
-      ishallofframeMostEngagedLoading.value = true;
       final response = await ApiGetService.apiGetService(AppUrls.mostViewed);
       ishallofframeMostEngagedLoading.value = false;
       if (response != null) {
         final data = jsonDecode(response.body);
         if (response.statusCode == 200) {
-          mostEngaged.value =
-              HallOfFrameMostEngagedModel.fromJson(data["data"]);
+          mostEngaged.value = HallOfFrameMostEngagedModel.fromJson(data["data"]);
           return;
         } else {
           Get.closeAllSnackbars();
@@ -316,8 +306,8 @@ class HomeScreenController extends GetxController {
       return;
     }
 
-    final response = await _iap
-        .queryProductDetails(Platform.isAndroid ? _productIds : _productIdsIos);
+    final response =
+        await _iap.queryProductDetails(Platform.isAndroid ? _productIds : _productIdsIos);
     if (response.error != null || response.productDetails.isEmpty) {
       // Get.snackbar('Error', 'No products found');
     } else {
@@ -343,10 +333,8 @@ class HomeScreenController extends GetxController {
             "purchase_token": purchase.purchaseID,
             "transaction_date": purchase.transactionDate,
             "verification_data": {
-              "localVerificationData":
-                  purchase.verificationData.localVerificationData,
-              "serverVerificationData":
-                  purchase.verificationData.serverVerificationData,
+              "localVerificationData": purchase.verificationData.localVerificationData,
+              "serverVerificationData": purchase.verificationData.serverVerificationData,
               "source": purchase.verificationData.source,
             }
           });
@@ -375,8 +363,7 @@ class HomeScreenController extends GetxController {
                   padding: const EdgeInsets.all(24),
                   decoration: const BoxDecoration(
                     color: AppColors.blueDark,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(24)),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                   ),
                   child: Column(
                     children: [
@@ -394,9 +381,7 @@ class HomeScreenController extends GetxController {
                       const Text(
                         'Couldn’t load purchase options. Please refresh or try again soon.',
                         style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.redDark),
+                            fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.redDark),
                       ),
                       const Spacer()
                     ],
@@ -404,8 +389,7 @@ class HomeScreenController extends GetxController {
                 ),
               )
             : Container(
-                padding: const EdgeInsets.only(
-                    top: 12, left: 16, right: 16, bottom: 24),
+                padding: const EdgeInsets.only(top: 12, left: 16, right: 16, bottom: 24),
                 color: AppColors.blueDark,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxHeight: Get.size.height * 0.8),
@@ -443,8 +427,7 @@ class HomeScreenController extends GetxController {
                               return Card(
                                   color: AppColors.blueDarker,
                                   elevation: 2,
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 6),
+                                  margin: const EdgeInsets.symmetric(vertical: 6),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -460,14 +443,10 @@ class HomeScreenController extends GetxController {
                                           Row(
                                             children: [
                                               Text(
-                                                product.title
-                                                    .split('(')
-                                                    .last
-                                                    .replaceAll(')', ''),
+                                                product.title.split('(').last.replaceAll(')', ''),
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.w600,
-                                                  color: AppColors
-                                                      .gradientColorEnd,
+                                                  color: AppColors.gradientColorEnd,
                                                   fontSize: 16,
                                                 ),
                                               ),
@@ -483,11 +462,9 @@ class HomeScreenController extends GetxController {
                                             ],
                                           ),
                                           Text(
-                                            product.description
-                                                .replaceAll('\n', ' '),
+                                            product.description.replaceAll('\n', ' '),
                                             style: const TextStyle(
-                                                fontSize: 14,
-                                                color: AppColors.white),
+                                                fontSize: 14, color: AppColors.white),
                                           )
                                         ],
                                       ),

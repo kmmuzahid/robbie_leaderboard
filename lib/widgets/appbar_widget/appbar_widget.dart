@@ -14,6 +14,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Color? backgroundColor;
   final Widget? leading;
   final bool showLeading;
+  final Function? onPress;
 
   const AppbarWidget({
     super.key,
@@ -24,6 +25,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.leading,
     this.showLeading = true,
+    this.onPress,
   });
 
   @override
@@ -35,7 +37,11 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
       //titleSpacing: showLeading ? 1 : -35,
       leading: (leading ??
           IconButton(
-            onPressed: () => Get.back(),
+            onPressed: () {
+              onPress?.call();
+
+              Get.back();
+            },
             icon: const Icon(
               Icons.arrow_back_ios_new_rounded,
               color: AppColors.blueLighter,
@@ -57,6 +63,5 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize =>
-      Size.fromHeight(kToolbarHeight + (bottom?.preferredSize.height ?? 0.0));
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + (bottom?.preferredSize.height ?? 0.0));
 }

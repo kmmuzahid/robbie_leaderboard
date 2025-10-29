@@ -282,13 +282,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
             ),
           ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: ButtonWidget(
-              onPressed: controller.saveChange,
-              label: "Save Changes",
-              buttonWidth: double.infinity,
-            ),
+          bottomNavigationBar: Obx(() {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: controller.isSaving.value == true
+                  ? const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                        SpaceWidget(spaceWidth: 12),
+                        TextWidget(text: "Saving..."),
+                      ],
+                    )
+                  : ButtonWidget(
+                      onPressed: controller.saveChange,
+                      label: "Save Changes",
+                      buttonWidth: double.infinity,
+                    ),
+            );
+          }
           ),
         ),
       ),

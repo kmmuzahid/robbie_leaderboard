@@ -39,7 +39,7 @@ class AppStrings {
   static const String alreadyHaveAnAccount = "Already have an account? ";
   static const String name = "Name";
   static const String contact = "Contact";
-  static const String referral = "Inviter Code";
+  static const String referral = "Invite Code";
 
   // Login Screen
   static const String welcome = "Welcome Back !";

@@ -16,8 +16,13 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/profile_model.dart';
+import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/bottom_nav/bottom_nav.dart';
 import 'package:the_leaderboard/screens/edit_profile_screen/widgets/show_modal_bottom_sheet_widget.dart';
+import 'package:the_leaderboard/screens/home_screen/controller/home_screen_controller.dart';
+import 'package:the_leaderboard/screens/home_screen/home_screen.dart';
+import 'package:the_leaderboard/screens/profile_screen/controller/profile_screen_controller.dart';
+import 'package:the_leaderboard/screens/profile_screen/profile_screen.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_patch_service.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
@@ -53,6 +58,7 @@ class EditProfileController extends GetxController {
   RxList<Country> countryList = <Country>[].obs;
   RxList<City> cityList = <City>[].obs;
   final finalSelectedCountry = "".obs;
+  RxBool isSaving = false.obs;
 
   Future<void> onInitial() async {
     try {
@@ -145,9 +151,7 @@ class EditProfileController extends GetxController {
 
   void onTakePhoto() async {
     try {
-      final status =
-          await const PermissionHandlerHelper(permission: Permission.camera)
-              .getStatus();
+      final status = await const PermissionHandlerHelper(permission: Permission.camera).getStatus();
 
       if (status == false) return;
 
@@ -164,9 +168,7 @@ class EditProfileController extends GetxController {
 
   // Method to pick an image from the gallery
   Future<void> pickImage() async {
-    final status =
-        await const PermissionHandlerHelper(permission: Permission.photos)
-            .getStatus();
+    final status = await const PermissionHandlerHelper(permission: Permission.photos).getStatus();
     if (!status) return;
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -185,6 +187,8 @@ class EditProfileController extends GetxController {
   }
 
   void saveChange() async {
+    if (isSaving.value) return;
+    isSaving.value = true;
     appLog("Changes are saving");
     // if (contactController.text.isNotEmpty &&
     //     contactController.text.length != 11) {
@@ -202,8 +206,7 @@ class EditProfileController extends GetxController {
       );
       return;
     }
-    if (facebookController.text.isNotEmpty &&
-        !isValidFacebookProfileUrl(facebookController.text)) {
+    if (facebookController.text.isNotEmpty && !isValidFacebookProfileUrl(facebookController.text)) {
       Get.snackbar(
         "Invalid Facebook Url",
         "Please enter your valid facebook url",
@@ -220,8 +223,7 @@ class EditProfileController extends GetxController {
       );
       return;
     }
-    if (twitterController.text.isNotEmpty &&
-        !isValidTwitterProfileUrl(twitterController.text)) {
+    if (twitterController.text.isNotEmpty && !isValidTwitterProfileUrl(twitterController.text)) {
       Get.snackbar(
         "Invalid Twitter Url",
         "Please enter your valid twitter url",
@@ -229,8 +231,7 @@ class EditProfileController extends GetxController {
       );
       return;
     }
-    if (linkedinController.text.isNotEmpty &&
-        !isValidLinkedInProfileUrl(linkedinController.text)) {
+    if (linkedinController.text.isNotEmpty && !isValidLinkedInProfileUrl(linkedinController.text)) {
       Get.snackbar(
         "Invalid Linkedin Url",
         "Please enter your valid linkedin url",
@@ -238,8 +239,7 @@ class EditProfileController extends GetxController {
       );
       return;
     }
-    if (youtubeController.text.isNotEmpty &&
-        !isValidYouTubeChannelUrl(youtubeController.text)) {
+    if (youtubeController.text.isNotEmpty && !isValidYouTubeChannelUrl(youtubeController.text)) {
       Get.snackbar(
         "Invalid Youtube Url",
         "Please enter your valid youtube channel url",
@@ -279,8 +279,9 @@ class EditProfileController extends GetxController {
       //     instagramController.text,
       //     twitterController.text,
       //     linkedinController.text);
+      Get.find<ProfileScreenController>().fetchProfile(isUpdating: true);
+      Get.until((route) => route.settings.name == '/BottomNav');
 
-      Get.offAll(const BottomNav());
       appLog("Succeed");
     } catch (e) {
       Get.snackbar(
@@ -290,6 +291,7 @@ class EditProfileController extends GetxController {
       );
       errorLog("Failed", e);
     }
+    isSaving.value = false;
   }
 
   void fetchProfile() async {
@@ -313,23 +315,20 @@ class EditProfileController extends GetxController {
           linkedinController.text = userData.linkedin;
           youtubeController.text = userData.youtube;
           bioController.text = userData.bio;
-          phone.value =
-              await PhoneNumber.getRegionInfoFromPhoneNumber(userData.contact);
+          phone.value = await PhoneNumber.getRegionInfoFromPhoneNumber(userData.contact);
           countryList.value = await getAllCountries();
           final country = countryList.firstWhereOrNull(
             (c) => c.name.toLowerCase() == userData.country.toLowerCase(),
           );
           if (country != null) {
-            appLog(
-                "Found country: ${country.name} and country code: ${country.isoCode}");
+            appLog("Found country: ${country.name} and country code: ${country.isoCode}");
             await updateCountry(country.isoCode);
             // After cities loaded, select user’s saved city
             appLog("City list: $cityList");
             final city = cityList.firstWhereOrNull(
               (c) => c.name.toLowerCase() == userData.city.toLowerCase(),
             );
-            appLog(
-                "Found city: ${city?.name} and default city: ${userData.city}");
+            appLog("Found city: ${city?.name} and default city: ${userData.city}");
             if (city != null) {
               updateCity(city.name);
             }
@@ -375,8 +374,7 @@ class EditProfileController extends GetxController {
     final url = input.trim().toLowerCase();
 
     // Check if it contains "facebook.com" and is a valid URL
-    return url.contains('facebook.com') &&
-        Uri.tryParse(url)?.hasAbsolutePath == true;
+    return url.contains('facebook.com') && Uri.tryParse(url)?.hasAbsolutePath == true;
   }
 
   /// Returns true if [input] is a valid Instagram profile URL.
@@ -384,8 +382,7 @@ class EditProfileController extends GetxController {
     final url = input.trim().toLowerCase();
 
     // Check if it contains "instagram.com" and is a valid URL
-    return url.contains('instagram.com') &&
-        Uri.tryParse(url)?.hasAbsolutePath == true;
+    return url.contains('instagram.com') && Uri.tryParse(url)?.hasAbsolutePath == true;
   }
 
   /// Returns true if [input] is a valid Twitter (X) profile URL.
@@ -401,8 +398,7 @@ class EditProfileController extends GetxController {
     final url = input.trim().toLowerCase();
 
     // Check if it contains "linkedin.com/in/" and is a valid URL
-    return url.contains('linkedin.com/in/') &&
-        Uri.tryParse(url)?.hasAbsolutePath == true;
+    return url.contains('linkedin.com/in/') && Uri.tryParse(url)?.hasAbsolutePath == true;
   }
 
   /// Returns true if [input] is a valid YouTube channel/profile URL.
@@ -410,8 +406,7 @@ class EditProfileController extends GetxController {
     final url = input.trim().toLowerCase();
 
     // Check if it contains "youtube.com" and is a valid URL
-    return url.contains('youtube.com') &&
-        Uri.tryParse(url)?.hasAbsolutePath == true;
+    return url.contains('youtube.com') && Uri.tryParse(url)?.hasAbsolutePath == true;
   }
 
   @override

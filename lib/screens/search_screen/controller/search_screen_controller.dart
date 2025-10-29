@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
+import 'package:the_leaderboard/models/leader_board_model.dart';
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/leaderboard_filtered_screen.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/utils/app_common_function.dart';
@@ -22,7 +23,51 @@ class SearchScreenController extends GetxController {
   RxList<City> cityList = <City>[].obs;
   final finalSelectedCountry = "".obs;
 
-  final isLoading = false.obs;
+  final List<LeaderBoardModel?> sLeaderBoardList = [];
+  final List<LeaderBoardModel?> sLeaderBoardListDaily = [];
+  final List<LeaderBoardModel?> sLeaderBoardListMonthly = [];
+  final List<LeaderBoardModel?> sCountryList = [];
+  final List<LeaderBoardModel?> sCountryListDaily = [];
+  final List<LeaderBoardModel?> sCountryListMonthly = [];
+  final List<LeaderBoardModel?> sCreatorList = [];
+  final List<LeaderBoardModel?> sCreatorListDaily = [];
+  final List<LeaderBoardModel?> sCreatorListMonthly = [];
+
+  final isLoadingLeaderBoardList = false.obs;
+  final isLoadingLeaderBoardListDaily = false.obs;
+  final isLoadingLeaderBoardListMonthly = false.obs;
+  final isLoadingCountryList = false.obs;
+  final isLoadingCountryListDaily = false.obs;
+  final isLoadingCountryListMonthly = false.obs;
+  final isLoadingCreatorList = false.obs;
+  final isLoadingCreatorListDaily = false.obs;
+  final isLoadingCreatorListMonthly = false.obs;
+
+  clearSearch() {
+    sLeaderBoardList.clear();
+    sLeaderBoardListDaily.clear();
+    sLeaderBoardListMonthly.clear();
+    sCountryList.clear();
+    sCountryListDaily.clear();
+    sCountryListMonthly.clear();
+    sCreatorList.clear();
+    sCreatorListDaily.clear();
+    sCreatorListMonthly.clear();
+    update();
+  }
+
+  void _setAllLoadingStates(bool isLoading) {
+    isLoadingLeaderBoardList.value = isLoading;
+    isLoadingLeaderBoardListDaily.value = isLoading;
+    isLoadingLeaderBoardListMonthly.value = isLoading;
+    isLoadingCountryList.value = isLoading;
+    isLoadingCountryListDaily.value = isLoading;
+    isLoadingCountryListMonthly.value = isLoading;
+    isLoadingCreatorList.value = isLoading;
+    isLoadingCreatorListDaily.value = isLoading;
+    isLoadingCreatorListMonthly.value = isLoading;
+    update();
+  }
 
   // Lists for dropdown options
   List<String> cities = ["Sydney", "Melbourne", "Brisbane"];
@@ -114,8 +159,7 @@ class SearchScreenController extends GetxController {
         finalSelectedCountry.isEmpty &&
         selectedCity.isEmpty &&
         selectedGender.isEmpty) {
-      AppCommonFunction.showSnackbar(
-          context, "Please write or select something");
+      AppCommonFunction.showSnackbar(context, "Please write or select something");
       return;
     }
     final name = nameController.text.capitalizeFirst;
@@ -130,111 +174,180 @@ class SearchScreenController extends GetxController {
     // };
 
     try {
-      // appLog(
-      //     "user is searching with $name, ${finalSelectedCountry.value}, ${selectedCity.value} and ${selectedGender.value}");
-      isLoading.value = true;
-      update();
-      final responseLeaderboard =
-          await ApiGetService.fetchFilteredLeaderboardData(
+      // Clear previous search results
+      clearSearch();
+
+      // Set all loading states to true
+      _setAllLoadingStates(true);
+
+      // Leaderboard data
+      ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.leaderBoardData,
         name: name!,
         country: finalSelectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
-      );
-      final responseLeaderboardDaily =
-          await ApiGetService.fetchFilteredLeaderboardData(
+      ).then((value) {
+        if (value.isNotEmpty) {
+          sLeaderBoardList.assignAll(value);
+        }
+        isLoadingLeaderBoardList.value = false;
+        update();
+      }).catchError((error) {
+        isLoadingLeaderBoardList.value = false;
+        update();
+        errorLog("Error fetching leaderboard data", error);
+      });
+
+      // Daily leaderboard
+      ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.rankDaily,
-        name: name!,
+        name: name,
         country: finalSelectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
-      );
-      final responseLeaderboardMonthly =
-          await ApiGetService.fetchFilteredLeaderboardData(
+      ).then((value) {
+        if (value.isNotEmpty) {
+          sLeaderBoardListDaily.assignAll(value);
+        }
+        isLoadingLeaderBoardListDaily.value = false;
+        update();
+      }).catchError((error) {
+        isLoadingLeaderBoardListDaily.value = false;
+        update();
+        errorLog("Error fetching daily leaderboard data", error);
+      });
+
+      // Monthly leaderboard
+      ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.rankMonthly,
-        name: name!,
+        name: name,
         country: finalSelectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
-      );
-      final responseCountry = await ApiGetService.fetchFilteredLeaderboardData(
+      ).then((value) {
+        if (value.isNotEmpty) {
+          sLeaderBoardListMonthly.addAll(value);
+        }
+        isLoadingLeaderBoardListMonthly.value = false;
+        update();
+      }).catchError((error) {
+        isLoadingLeaderBoardListMonthly.value = false;
+        update();
+        errorLog("Error fetching monthly leaderboard data", error);
+      });
+
+      // Country leaderboard
+      ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.countryLeaderboard,
         name: name,
         country: finalSelectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
-      );
-      final responseCountryDaily =
-          await ApiGetService.fetchFilteredLeaderboardData(
+      ).then((value) {
+        if (value.isNotEmpty) {
+          sCountryList.addAll(value);
+        }
+        isLoadingCountryList.value = false;
+        update();
+      }).catchError((error) {
+        isLoadingCountryList.value = false;
+        update();
+        errorLog("Error fetching country leaderboard data", error);
+      });
+
+      // Country daily
+      ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.countryDaily,
         name: name,
         country: finalSelectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
-      );
-      final responseCountryMonthly =
-          await ApiGetService.fetchFilteredLeaderboardData(
+      ).then((value) {
+        if (value.isNotEmpty) {
+          sCountryListDaily.addAll(value);
+        }
+        isLoadingCountryListDaily.value = false;
+        update();
+      });
+      // Country monthly
+      ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.countryMonthly,
         name: name,
         country: finalSelectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
-      );
-      final responseCreator = await ApiGetService.fetchFilteredLeaderboardData(
+      ).then((value) {
+        if (value.isNotEmpty) {
+          sCountryListMonthly.addAll(value);
+        }
+        isLoadingCountryListMonthly.value = false;
+        update();
+      });
+      // Creator leaderboard
+      ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.creatorLeaderboard,
         name: name,
         country: finalSelectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
-      );
-      final responseCreatorDaily =
-          await ApiGetService.fetchFilteredLeaderboardData(
+      ).then((value) {
+        if (value.isNotEmpty) {
+          sCreatorList.addAll(value);
+        }
+        isLoadingCreatorList.value = false;
+        update();
+      });
+      // Creator daily
+      ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.raisedDaily,
         name: name,
         country: finalSelectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
-      );
-      final responseCreatorMonthly =
-          await ApiGetService.fetchFilteredLeaderboardData(
+      ).then((value) {
+        if (value.isNotEmpty) {
+          sCreatorListDaily.addAll(value);
+        }
+        isLoadingCreatorListDaily.value = false;
+        update();
+      });
+      // Creator monthly
+      ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.raisedMonthly,
         name: name,
         country: finalSelectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
-      );
-      // appLog(responseCreator);
-      // appLog(responseCountry);
-      // appLog(responseLeaderboard);
+      ).then((value) {
+        if (value.isNotEmpty) {
+          sCreatorListMonthly.addAll(value);
+        }
+        isLoadingCreatorListMonthly.value = false;
+        update();
+      });
 
-      if (responseLeaderboard.isNotEmpty ||
-          responseCountry.isNotEmpty ||
-          responseCreator.isNotEmpty ||
-          responseLeaderboardDaily.isNotEmpty ||
-          responseLeaderboardMonthly.isNotEmpty ||
-          responseCreatorDaily.isNotEmpty ||
-          responseCreatorMonthly.isNotEmpty ||
-          responseCountryDaily.isNotEmpty ||
-          responseCountryMonthly.isNotEmpty) {
-        Get.to(LeaderboardFilteredScreen(
-            leaderBoardList: responseLeaderboard,
-            leaderBoardListDaily: responseLeaderboardDaily,
-            leaderBoardListMonthly: responseLeaderboardMonthly,
-            countryList: responseCountry,
-            countryListDaily: responseCountryDaily,
-            countryListMonthly: responseCountryMonthly,
-            creatorList: responseCreator,
-            creatorListDaily: responseCreatorDaily,
-            creatorListMonthly: responseCreatorMonthly,
-            isLoading: isLoading.value));
-      } else {
-        AppCommonFunction.showSnackbar(context, "No user found");
-      }
+      Get.to(LeaderboardFilteredScreen());
     } catch (e) {
-      errorLog("Failed", e);
+      isLoadingLeaderBoardList.value = false;
+      isLoadingLeaderBoardListDaily.value = false;
+      isLoadingLeaderBoardListMonthly.value = false;
+      isLoadingCountryList.value = false;
+      isLoadingCountryListDaily.value = false;
+      isLoadingCountryListMonthly.value = false;
+      isLoadingCreatorList.value = false;
+      isLoadingCreatorListDaily.value = false;
+      isLoadingCreatorListMonthly.value = false;
     } finally {
-      isLoading.value = false;
+      // isLoadingLeaderBoardList.value = false;
+      // isLoadingLeaderBoardListDaily.value = false;
+      // isLoadingLeaderBoardListMonthly.value = false;
+      // isLoadingCountryList.value = false;
+      // isLoadingCountryListDaily.value = false;
+      // isLoadingCountryListMonthly.value = false;
+      // isLoadingCreatorList.value = false;
+      // isLoadingCreatorListDaily.value = false;
+      // isLoadingCreatorListMonthly.value = false;
       update();
     }
   }

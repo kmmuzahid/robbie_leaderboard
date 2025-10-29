@@ -13,38 +13,23 @@ import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/lead
 import 'package:the_leaderboard/screens/leaderboard_filtered_screen/widgets/top_rank_filtered_item.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/floating_button_widget.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
+import 'package:the_leaderboard/screens/search_screen/controller/search_screen_controller.dart';
 import 'package:the_leaderboard/utils/app_common_function.dart';
 import 'package:the_leaderboard/widgets/appbar_widget/appbar_widget.dart';
 import 'package:the_leaderboard/widgets/space_widget/space_widget.dart';
 import 'package:the_leaderboard/widgets/text_widget/text_widgets.dart';
 
-class LeaderboardFilteredScreen extends StatefulWidget {
-  const LeaderboardFilteredScreen(
-      {super.key,
-      required this.leaderBoardList,
-      required this.countryList,
-      required this.creatorList,
-      required this.isLoading,
-      required this.leaderBoardListDaily,
-      required this.leaderBoardListMonthly,
-      required this.countryListDaily,
-      required this.countryListMonthly,
-      required this.creatorListDaily,
-      required this.creatorListMonthly});
-  final List<LeaderBoardModel?> leaderBoardList;
-  final List<LeaderBoardModel?> leaderBoardListDaily;
-  final List<LeaderBoardModel?> leaderBoardListMonthly;
-  final List<LeaderBoardModel?> countryList;
-  final List<LeaderBoardModel?> countryListDaily;
-  final List<LeaderBoardModel?> countryListMonthly;
-  final List<LeaderBoardModel?> creatorList;
-  final List<LeaderBoardModel?> creatorListDaily;
-  final List<LeaderBoardModel?> creatorListMonthly;
+import '../leaderboard_screen/widgets/leaderboard_item.dart';
+import '../leaderboard_screen/widgets/top_rank_item.dart';
 
-  final bool isLoading;
+class LeaderboardFilteredScreen extends StatefulWidget {
+  const LeaderboardFilteredScreen({
+    super.key,
+  });
+
+  // final bool isLoading;
   @override
-  _LeaderboardFilteredScreenState createState() =>
-      _LeaderboardFilteredScreenState();
+  _LeaderboardFilteredScreenState createState() => _LeaderboardFilteredScreenState();
 }
 
 class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
@@ -64,9 +49,51 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
     super.dispose();
   }
 
-  Widget buildLeaderboardTabView(List<LeaderBoardModel?> filterList) {
-    final filteredList = filterList.where((e) => e!.currentRank > 4).toList();
-    if (filterList.isEmpty) {
+  // Helper method to safely get an item from a list or return null if index is out of bounds
+  T? safeGet<T>(List<T?> list, int index) {
+    return index < list.length ? list[index] : null;
+  }
+
+  // Helper method to build a ranked item widget
+  Widget _buildRankedItem(
+    List<LeaderBoardModel?> list,
+    int index,
+    double dx,
+    double dy,
+    Color rankColor,
+    double avatarSize,
+    SearchScreenController controller,
+  ) {
+    final user = safeGet(list, index);
+    if (user == null) return const SizedBox.shrink();
+
+    return InkWell(
+      onTap: () {
+        Get.toNamed(AppRoutes.otherProfileScreen, arguments: user.userId);
+      },
+      child: Transform.translate(
+        offset: Offset(dx, dy),
+        child: TopRankedItem(
+          fromOnline: user.profileImg != "Unknown",
+          rankLabel: user.currentRank.toString(),
+          name: user.name,
+          amount: safeGet(controller.sLeaderBoardList, index)?.totalInvest != null
+              ? "\$${AppCommonFunction.formatNumber(controller.sLeaderBoardList[index]!.totalInvest)}"
+              : "\$0",
+          image: user.profileImg != "Unknown" ? "${user.profileImg}" : AppImagePath.profileImage,
+          rankColor: rankColor,
+          avatarSize: avatarSize,
+        ),
+      ),
+    );
+  }
+
+  Widget buildLeaderboardTabView(
+      List<LeaderBoardModel?> filterList, SearchScreenController controller) {
+    // Filter out null items and items with rank <= 4
+    final filteredList = filterList.where((e) => e != null && e.currentRank > 4).toList();
+
+    if (filteredList.isEmpty) {
       return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -80,106 +107,82 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
               spaceHeight: 20,
             ),
             TextWidget(
-              text: "Coming Soon",
+              text: "No results found",
               fontColor: AppColors.white,
             ),
-            // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
           ],
         ),
       );
     }
+
     return Column(
       children: [
-        const SpaceWidget(spaceHeight: 20),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            if (widget.leaderBoardList.length > 1)
-              InkWell(
-                onTap: () {
-                  final userid = filterList[1]!.userId;
-                  Get.toNamed(AppRoutes.otherProfileScreen, arguments: userid);
-                },
-                child: Transform.translate(
-                  offset: Offset.zero,
-                  child: TopRankedItem(
-                      fromNetwork: filterList[1]!.profileImg != "Unknown",
-                      rankLabel: filterList[1]!.currentRank.toString(),
-                      name: filterList[1]!.name,
-                      amount:
-                          "\$${AppCommonFunction.formatNumber(widget.leaderBoardList[1]!.totalInvest)}",
-                      image: filterList[1]!.profileImg != "Unknown"
-                          ? "${AppUrls.mainUrl}${widget.leaderBoardList[1]!.profileImg}"
-                          : AppImagePath.profileImage,
-                      rankColor: AppColors.greyDark,
-                      avatarSize: 40),
+        SizedBox(
+          height: 200,
+          child: Stack(
+            children: [
+              // First place (middle)
+              if (filteredList.isNotEmpty)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child:
+                      _buildRankedItem(filteredList, 0, 0, -10, AppColors.yellow, 55, controller),
                 ),
-              ),
-            InkWell(
-              onTap: () {
-                final userId = filterList[0]!.userId;
-                Get.toNamed(AppRoutes.otherProfileScreen, arguments: userId);
-              },
-              child: Transform.translate(
-                offset: const Offset(0, -10),
-                child: TopRankedItem(
-                    fromNetwork: filterList[0]!.profileImg != "Unknown",
-                    rankLabel: filterList[0]!.currentRank.toString(),
-                    name: filterList[0]!.name,
-                    amount:
-                        "\$${AppCommonFunction.formatNumber(widget.leaderBoardList[0]!.totalInvest)}",
-                    image: filterList[0]!.profileImg != "Unknown"
-                        ? "${AppUrls.mainUrl}${widget.leaderBoardList[0]!.profileImg}"
-                        : AppImagePath.profileImage,
-                    rankColor: AppColors.yellow,
-                    avatarSize: 55),
-              ),
-            ),
-            if (widget.leaderBoardList.length > 2)
-              InkWell(
-                onTap: () {
-                  final userId = filterList[2]!.userId;
-                  Get.toNamed(AppRoutes.otherProfileScreen, arguments: userId);
-                },
-                child: Transform.translate(
-                  offset: Offset.zero,
-                  child: TopRankedItem(
-                      fromNetwork: filterList[2]!.profileImg != "Unknown",
-                      rankLabel: filterList[2]!.currentRank.toString(),
-                      name: filterList[2]!.name,
-                      amount:
-                          "\$${AppCommonFunction.formatNumber(widget.leaderBoardList[2]!.totalInvest)}",
-                      image: filterList[2]!.profileImg != "Unknown"
-                          ? "${AppUrls.mainUrl}${widget.leaderBoardList[2]!.profileImg}"
-                          : AppImagePath.profileImage,
-                      rankColor: AppColors.orange,
-                      avatarSize: 40),
+
+              // Second place (left)
+              if (filteredList.length > 1)
+                Positioned(
+                  left: 20,
+                  bottom: 0,
+                  child:
+                      _buildRankedItem(filteredList, 1, 0, 0, AppColors.greyDark, 40, controller),
                 ),
-              ),
-          ]),
+
+              // Third place (right)
+              if (filteredList.length > 2)
+                Positioned(
+                  right: 20,
+                  bottom: 0,
+                  child: _buildRankedItem(filteredList, 2, 0, 0, AppColors.orange, 40, controller),
+                ),
+            ],
+          ),
         ),
         Expanded(
-          child: ListView.builder(
-            itemCount: filteredList.length,
-            itemBuilder: (context, index) {
-              final data = filteredList[index];
-              return LeaderboardItem(
-                key: ValueKey('${data!.name}${data.currentRank}$index'),
-                rank: data.currentRank,
-                name: data.name,
-                amount: "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
-                isUp: (data.previousRank - data.currentRank) > 0 ? true : false,
-                image: data.profileImg != "Unknown"
-                    ? "${AppUrls.mainUrl}${data.profileImg}"
-                    : AppImagePath.profileImage,
-                onPressed: () {
-                  Get.toNamed(AppRoutes.otherProfileScreen,
-                      arguments: data.userId);
-                },
-              );
-            },
-          ),
+          child: filteredList.isEmpty
+              ? Center(
+                  child: Text(
+                    'No results found',
+                    style: TextStyle(color: AppColors.white, fontSize: 16),
+                  ),
+                )
+              : filteredList.length > 3
+                  ? ListView.builder(
+                      itemCount: filteredList.length,
+                      itemBuilder: (context, index) {
+                        final data = filteredList[index];
+                        if (data == null) return const SizedBox.shrink();
+                        print(data.profileImg);
+
+                        return LeaderboardItem(
+                          key: ValueKey('${data.name}${data.currentRank}$index'),
+                          rank: (data.currentRank + 3).toString().padLeft(2, '0'),
+                          name: data.name,
+                          amount: "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
+                          isUp: (data.previousRank - data.currentRank) > 0,
+                          image: data.profileImg != "Unknown"
+                              ? "${AppUrls.mainUrl}${data.profileImg}"
+                              : AppImagePath.profileImage,
+                          onPressed: () {
+                            Get.toNamed(AppRoutes.otherProfileScreen, arguments: data.userId);
+                          },
+                          fromNetwork: data.profileImg != "Unknown",
+                        );
+                      },
+                    )
+                  : const SizedBox.shrink(),
         ),
         // ...List.generate(
         //   filteredList.length,
@@ -206,81 +209,105 @@ class _LeaderboardFilteredScreenState extends State<LeaderboardFilteredScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: const FloatingButtonWidget(),
-      appBar: const AppbarWidget(
-        title: "",
-      ),
-      body: AnnotatedRegion(
-        value: const SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.light,
+    return GetBuilder<SearchScreenController>(builder: (controller) {
+      return Scaffold(
+        floatingActionButton: const FloatingButtonWidget(),
+        appBar: AppbarWidget(
+          title: "",
+          onPress: controller.clearSearch,
         ),
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: SafeArea(
-            child: Column(
-              children: [
-                const SpaceWidget(spaceHeight: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  child: LeaderboardDropdown(
-                    value: selectedLeaderboard,
-                    text: const [
-                      'Leaderboard',
-                      'Event Leaderboard',
-                      'Creator Leaderboard',
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedLeaderboard = value!;
-                        _tabController.index = 0;
-                      });
-                    },
-                  ),
-                ),
+        body: AnnotatedRegion(
+          value: const SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.light,
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.black,
+            body: SafeArea(
+              child: Column(
+                children: [
+                  // const SpaceWidget(spaceHeight: 16),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  //   child: LeaderboardDropdown(
+                  //     value: selectedLeaderboard,
+                  //     text: const [
+                  //       'Leaderboard',
+                  //       'Event Leaderboard',
+                  //       'Creator Leaderboard',
+                  //     ],
+                  //     onChanged: (value) {
+                  //       setState(() {
+                  //         selectedLeaderboard = value!;
+                  //         _tabController.index = 0;
+                  //       });
+                  //     },
+                  //   ),
+                  // ),
 
-                // Replaced TabBar with LeaderboardTabBar
-                LeaderboardTabBar(
-                  tabTexts: const ['All Time', 'Daily', 'Monthly'],
-                  tabController: _tabController,
-                ),
-
-                // TabBarView
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    physics: const BouncingScrollPhysics(),
-                    children: [
-                      // All Time Tab
-                      if (selectedLeaderboard == 'Leaderboard')
-                        buildLeaderboardTabView(widget.leaderBoardList)
-                      else if (selectedLeaderboard == 'Event Leaderboard')
-                        buildLeaderboardTabView(widget.countryList)
-                      else
-                        buildLeaderboardTabView(widget.creatorList),
-                      // Daily Tab
-                      if (selectedLeaderboard == 'Leaderboard')
-                        buildLeaderboardTabView(widget.leaderBoardListDaily)
-                      else if (selectedLeaderboard == 'Event Leaderboard')
-                        buildLeaderboardTabView(widget.countryListDaily)
-                      else
-                        buildLeaderboardTabView(widget.creatorListDaily),
-                      // Monthly Tab
-                      if (selectedLeaderboard == 'Leaderboard')
-                        buildLeaderboardTabView(widget.leaderBoardListMonthly)
-                      else if (selectedLeaderboard == 'Event Leaderboard')
-                        buildLeaderboardTabView(widget.countryListMonthly)
-                      else
-                        buildLeaderboardTabView(widget.creatorListMonthly),
-                    ],
+                  // Replaced TabBar with LeaderboardTabBar
+                  LeaderboardTabBar(
+                    tabTexts: const ['All Time', 'Daily', 'Monthly'],
+                    tabController: _tabController,
                   ),
-                ),
-              ],
+
+                  // TabBarView
+                  Expanded(
+                    child: _tabview(controller),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
+      );
+    });
+  }
+
+  Widget _tabview(SearchScreenController controller) {
+    return TabBarView(
+      controller: _tabController,
+      physics: const BouncingScrollPhysics(),
+      children: [
+        // All Time Tab
+        if (selectedLeaderboard == 'Leaderboard')
+          controller.isLoadingLeaderBoardList.value
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : buildLeaderboardTabView(controller.sLeaderBoardList, controller)
+        else if (selectedLeaderboard == 'Event Leaderboard')
+          controller.isLoadingCountryList.value
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : buildLeaderboardTabView(controller.sCountryList, controller)
+        else
+          controller.isLoadingCreatorList.value
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : buildLeaderboardTabView(controller.sCreatorList, controller),
+        // Daily Tab
+        if (selectedLeaderboard == 'Leaderboard')
+          controller.isLoadingLeaderBoardListDaily.value
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : buildLeaderboardTabView(controller.sLeaderBoardListDaily, controller)
+        else if (selectedLeaderboard == 'Event Leaderboard')
+          controller.isLoadingCountryListDaily.value
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : buildLeaderboardTabView(controller.sCountryListDaily, controller)
+        else
+          controller.isLoadingCreatorListDaily.value
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : buildLeaderboardTabView(controller.sCreatorListDaily, controller),
+        // Monthly Tab
+        if (selectedLeaderboard == 'Leaderboard')
+          controller.isLoadingLeaderBoardListMonthly.value
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : buildLeaderboardTabView(controller.sLeaderBoardListMonthly, controller)
+        else if (selectedLeaderboard == 'Event Leaderboard')
+          controller.isLoadingCountryListMonthly.value
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : buildLeaderboardTabView(controller.sCountryListMonthly, controller)
+        else
+          controller.isLoadingCreatorListMonthly.value
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : buildLeaderboardTabView(controller.sCreatorListMonthly, controller),
+      ],
     );
   }
 }
