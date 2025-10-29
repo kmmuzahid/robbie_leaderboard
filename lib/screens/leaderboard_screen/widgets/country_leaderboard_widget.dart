@@ -117,7 +117,7 @@ class CountryLeaderboardWidget extends StatelessWidget {
                 final data = filteredList[index]!;
                 return CountryLeaderboardItem(
                   key: ValueKey('${data.country}${data.totalInvest}$index'),
-                  rank: index,
+                  rank: index + 4,
                   name: data.country,
                   amount:
                       "\$${AppCommonFunction.formatNumber(data.totalInvest)}",

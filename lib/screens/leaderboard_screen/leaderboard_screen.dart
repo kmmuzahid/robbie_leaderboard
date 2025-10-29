@@ -572,8 +572,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen>
                 ? const Center(child: CircularProgressIndicator.adaptive())
                 : Stack(
                     children: [
-                      const Positioned(
-                          bottom: 90, right: 20, child: FloatingButtonWidget()),
+                      // const Positioned(
+                      //     bottom: 90, right: 20, child: FloatingButtonWidget()),
                       Column(
                         children: [
                           const SpaceWidget(spaceHeight: 16),

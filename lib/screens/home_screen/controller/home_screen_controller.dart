@@ -291,7 +291,7 @@ class HomeScreenController extends GetxController {
   };
 
   final Set<String> _productIdsIos = {
-    "TheLeaderboard_30",
+    "TheLeaderboard_030",
     // "TheLeaderboard_3",
     // "TheLeaderboard_5",
     // "TheLeaderboard_10",
@@ -319,7 +319,7 @@ class HomeScreenController extends GetxController {
     final response = await _iap
         .queryProductDetails(Platform.isAndroid ? _productIds : _productIdsIos);
     if (response.error != null || response.productDetails.isEmpty) {
-      Get.snackbar('Error', 'No products found');
+      // Get.snackbar('Error', 'No products found');
     } else {
       products.assignAll(response.productDetails);
       appLog(products.length.toString());
@@ -374,34 +374,39 @@ class HomeScreenController extends GetxController {
                 child: Container(
                   padding: const EdgeInsets.all(24),
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.blueDark,
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(24)),
                   ),
-                  child: const Center(
-                    child: Text(
-                      'No products found',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                    ),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 4,
+                        padding: EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(bottom: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[400],
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const Spacer(),
+                      const Text(
+                        'Couldn’t load purchase options. Please refresh or try again soon.',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.redDark),
+                      ),
+                      const Spacer()
+                    ],
                   ),
                 ),
               )
             : Container(
                 padding: const EdgeInsets.only(
                     top: 12, left: 16, right: 16, bottom: 24),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                      spreadRadius: 1,
-                      offset: Offset(0, -4),
-                    ),
-                  ],
-                ),
+                color: AppColors.blueDark,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxHeight: Get.size.height * 0.8),
                   child: Column(
@@ -420,8 +425,9 @@ class HomeScreenController extends GetxController {
 
                       // Title/Header
                       const Text(
-                        'Select a Product',
+                        'Choose Your Purchase Amount',
                         style: TextStyle(
+                          color: AppColors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.5,
@@ -435,40 +441,58 @@ class HomeScreenController extends GetxController {
                           child: Column(
                             children: products.map((product) {
                               return Card(
-                                elevation: 2,
-                                margin: const EdgeInsets.symmetric(vertical: 6),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 12),
-                                  title: Text(
-                                    product.title,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
+                                  color: AppColors.blueDarker,
+                                  elevation: 2,
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 6),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.back(); // Close bottom sheet
+                                      buyProduct(product);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                product.title
+                                                    .split('(')
+                                                    .last
+                                                    .replaceAll(')', ''),
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppColors
+                                                      .gradientColorEnd,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                product.price,
+                                                style: const TextStyle(
+                                                  color: Colors.green,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Text(
+                                            product.description
+                                                .replaceAll('\n', ' '),
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: AppColors.white),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  subtitle: Text(
-                                    product.description,
-                                    style: const TextStyle(
-                                        fontSize: 14, color: Colors.black87),
-                                  ),
-                                  trailing: Text(
-                                    product.price,
-                                    style: const TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Get.back(); // Close bottom sheet
-                                    buyProduct(product);
-                                  },
-                                ),
-                              );
+                                  ));
                             }).toList(),
                           ),
                         ),

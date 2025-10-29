@@ -86,11 +86,11 @@ class LeaderboardController extends GetxController {
       isLoading.value = true;
       final response =
           await ApiGetService.apiGetService(AppUrls.leaderBoardData);
-
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
         if (response.statusCode == 200) {
           final List data = jsonbody["data"];
+
           if (data.isNotEmpty) {
             leaderBoardList.value =
                 data.map((e) => LeaderBoardModel.fromJson(e)).toList();

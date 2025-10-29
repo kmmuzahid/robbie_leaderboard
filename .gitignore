@@ -1,48 +1,83 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
+# =======================================
+# FLUTTER / DART
+# =======================================
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
+.packages
 .pub-cache/
 .pub/
-/build/
+build/
+**/doc/api/
+**/ios/Flutter/.last_build_id
 
-# Symbolication related
+# =======================================
+# IOS
+# =======================================
+# Ignore build artifacts and generated files
+ios/Flutter/
+ios/Pods/
+ios/.symlinks/
+ios/Runner.xcworkspace/
+ios/DerivedData/
+ios/Runner.xcodeproj/project.xcworkspace/
+ios/Runner.xcodeproj/xcuserdata/
+
+# Keep manually editable files
+!ios/Podfile
+!ios/Runner.xcodeproj/project.pbxproj
+!ios/Runner/Info.plist
+!ios/Runner/Assets.xcassets/
+!ios/Runner/Base.lproj/
+!ios/Runner/GeneratedPluginRegistrant.*
+
+# =======================================
+# ANDROID
+# =======================================
+# Ignore build outputs
+android/.gradle/
+android/captures/
+android/.idea/
+android/local.properties
+android/app/build/
+android/build/
+
+# Keep manually editable Android files
+!android/app/build.gradle
+!android/build.gradle
+!android/settings.gradle
+!android/gradle.properties
+!android/app/src/
+!android/app/src/main/AndroidManifest.xml
+!android/app/src/main/res/
+!android/app/src/main/kotlin/
+!android/app/google-services.json
+!android/app/src/main/AndroidManifest.xml
+
+# =======================================
+# EDITORS & MISC
+# =======================================
+*.log
+*.class
+*.pyc
+*.swp
+.DS_Store
+.idea/
+.vscode/
+.history/
+.svn/
+.atom/
+.build/
+.swiftpm/
+migrate_working_dir/
+
+# =======================================
+# SYMBOLICATION / OBFUSCATION FILES
+# =======================================
 app.*.symbols
-
-# Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-
-# FVM Version Cache
+# =======================================
+# FVM (Flutter Version Manager)
+# =======================================
 .fvm/
