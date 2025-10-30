@@ -457,7 +457,7 @@ class HomeScreenController extends GetxController {
                           child: Column(
                             children: products.map((product) {
                               return Card(
-                                  color: AppColors.blueDarker,
+                                  color: AppColors.blue,
                                   elevation: 2,
                                   margin: const EdgeInsets.symmetric(vertical: 6),
                                   shape: RoundedRectangleBorder(

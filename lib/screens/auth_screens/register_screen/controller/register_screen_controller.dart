@@ -62,7 +62,7 @@ class RegisterScreenController extends GetxController {
 
   Future<void> loadCities(String countryCode) async {
     try {
-      final fetchedCities = await getCountryCities(countryCode);
+      final fetchedCities = await LocationRepo.getCountryCities(countryCode);
 
       // Use a Set to ensure uniqueness
       final uniqueNames = <String>{};

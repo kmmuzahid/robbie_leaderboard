@@ -154,7 +154,7 @@ class ProfileHeaderWidget extends StatelessWidget {
         height: 45,
         padding: EdgeInsets.all(imagePath == AppImagePath.tweeterImage ? 2 : 0),
         decoration:
-            BoxDecoration(borderRadius: BorderRadius.circular(5), color: AppColors.blueLighter),
+            BoxDecoration(borderRadius: BorderRadius.circular(5), color: AppColors.white),
         child: ImageWidget(
           height: 35,
           width: 35,

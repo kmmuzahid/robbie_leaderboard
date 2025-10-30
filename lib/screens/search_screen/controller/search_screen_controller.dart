@@ -16,12 +16,12 @@ class SearchScreenController extends GetxController {
   // Observable variables
   final RxString selectedCountry = ''.obs;
   final RxString selectedCity = ''.obs;
+
   final RxString selectedGender = ''.obs;
   final RxInt minAge = 22.obs;
   final RxInt maxAge = 26.obs;
   RxList<Country> countryList = <Country>[].obs;
   RxList<City> cityList = <City>[].obs;
-  final finalSelectedCountry = "".obs;
 
   final List<LeaderBoardModel?> sLeaderBoardList = [];
   final List<LeaderBoardModel?> sLeaderBoardListDaily = [];
@@ -70,7 +70,7 @@ class SearchScreenController extends GetxController {
   }
 
   // Lists for dropdown options
-  List<String> cities = ["Sydney", "Melbourne", "Brisbane"];
+  // List<String> cities = ["Sydney", "Melbourne", "Brisbane"];
   final List<String> genders = ['Male', 'Female', 'Other'];
   // final List<String> cities = ;
 
@@ -85,53 +85,16 @@ class SearchScreenController extends GetxController {
     }
   }
 
-  Future<void> loadCities(String countryCode) async {
-    try {
-      final fetchedCities = await getCountryCities(countryCode);
-
-      // Use a Set to ensure uniqueness
-      final uniqueNames = <String>{};
-      final uniqueCities = fetchedCities.where((city) {
-        if (uniqueNames.contains(city.name)) {
-          return false; // skip duplicates
-        } else {
-          uniqueNames.add(city.name);
-          return true; // keep first occurrence
-        }
-      }).toList();
-
-      cityList.value = uniqueCities;
-
-      // if (cityList.isNotEmpty) {
-      //   selectedCity.value = cityList.first.name;
-      // }
-    } catch (e) {
-      appLog("Error loading cities: $e");
-    }
-  }
-
   Future<void> updateCountry(String isoCode) async {
-    try {
-      cityList.clear();
-      selectedCountry.value = isoCode;
-      countryList.value = await getAllCountries();
-      final country = countryList.firstWhereOrNull(
-        (c) => c.isoCode == isoCode,
-      );
-
-      appLog(
-          "Found country: ${country!.name} and country code: ${country.isoCode} and default isoCode: $isoCode");
-
-      finalSelectedCountry.value = country.name;
-      await loadCities(isoCode);
-      appLog("Country updated: $isoCode");
-      update();
-    } catch (e) {
-      appLog(e); // TODO
-    }
+    if (countryList.isEmpty) return;
+    cityList.clear();
+    update();
+    cityList.value = await LocationRepo.getCountryCities(isoCode);
+    update();
   }
 
   void updateCity(String value) {
+    if (cityList.isEmpty) return;
     selectedCity.value = value;
   }
 
@@ -156,7 +119,7 @@ class SearchScreenController extends GetxController {
   void search(BuildContext context) async {
     // Implement search logic or navigation
     if (nameController.text.isEmpty &&
-        finalSelectedCountry.isEmpty &&
+        selectedCountry.isEmpty &&
         selectedCity.isEmpty &&
         selectedGender.isEmpty) {
       AppCommonFunction.showSnackbar(context, "Please write or select something");
@@ -184,7 +147,7 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.leaderBoardData,
         name: name!,
-        country: finalSelectedCountry.value,
+        country: selectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
       ).then((value) {
@@ -203,7 +166,7 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.rankDaily,
         name: name,
-        country: finalSelectedCountry.value,
+        country: selectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
       ).then((value) {
@@ -222,7 +185,7 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.rankMonthly,
         name: name,
-        country: finalSelectedCountry.value,
+        country: selectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
       ).then((value) {
@@ -241,7 +204,7 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.countryLeaderboard,
         name: name,
-        country: finalSelectedCountry.value,
+        country: selectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
       ).then((value) {
@@ -260,7 +223,7 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.countryDaily,
         name: name,
-        country: finalSelectedCountry.value,
+        country: selectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
       ).then((value) {
@@ -274,7 +237,7 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.countryMonthly,
         name: name,
-        country: finalSelectedCountry.value,
+        country: selectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
       ).then((value) {
@@ -288,7 +251,7 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.creatorLeaderboard,
         name: name,
-        country: finalSelectedCountry.value,
+        country: selectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
       ).then((value) {
@@ -302,7 +265,7 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.raisedDaily,
         name: name,
-        country: finalSelectedCountry.value,
+        country: selectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
       ).then((value) {
@@ -316,7 +279,7 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.raisedMonthly,
         name: name,
-        country: finalSelectedCountry.value,
+        country: selectedCountry.value,
         city: selectedCity.value,
         gender: selectedGender.value,
       ).then((value) {
@@ -327,7 +290,7 @@ class SearchScreenController extends GetxController {
         update();
       });
 
-      Get.to(LeaderboardFilteredScreen());
+      Get.to(const LeaderboardFilteredScreen());
     } catch (e) {
       isLoadingLeaderBoardList.value = false;
       isLoadingLeaderBoardListDaily.value = false;
