@@ -1,4 +1,4 @@
-import 'package:country_state_city/country_state_city.dart';
+
 
 class CountryLeaderboardModel {
   final num totalInvest;

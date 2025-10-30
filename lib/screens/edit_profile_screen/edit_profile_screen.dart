@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/common/common_city_picker.dart';
+import 'package:the_leaderboard/common/common_country_picker.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
@@ -205,41 +207,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       controller: controller.ageController,
                       profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
-                  Obx(
-                    () => _buildDropdownField(
-                        label: "Country",
-                        value: controller.selectedCountry.value,
-                        items: controller.countryList
-                            .map((c) => DropdownMenuItem(
-                                  value: c.isoCode,
-                                  child: TextWidget(
-                                    text: c.name,
-                                    fontColor: AppColors.white,
-                                  ),
-                                ))
-                            .toList(),
-                        onChanged: (p0) => controller.updateCountry(p0!),
-                        profileController: controller),
-                  ),
+                  CommonCountryPicker(onSelectCountry: (p0) => controller.updateCountry(p0)),
 
                   const SpaceWidget(spaceHeight: 12),
 
-                  Obx(
-                    () => _buildDropdownField(
-                        label: "City (Optional)",
-                        value: controller.selectedCity.value,
-                        items: controller.cityList
-                            .map((c) => DropdownMenuItem(
-                                  value: c.name,
-                                  child: TextWidget(
-                                    text: c.name,
-                                    fontColor: AppColors.white,
-                                  ),
-                                ))
-                            .toList(),
-                        onChanged: (p0) => controller.updateCity(p0!),
-                        profileController: controller),
-                  ),
+                  CommonCityPicker(onSelectCity: (p0) => controller.updateCity(p0)),
 
                   const SpaceWidget(spaceHeight: 12),
                   _buildTextField(

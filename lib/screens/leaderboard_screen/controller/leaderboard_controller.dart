@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:country_state_city/country_state_city.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
@@ -399,21 +398,23 @@ class LeaderboardController extends GetxController {
     return;
   }
 
+///need to work here
   Future<void> getAllIsoCode() async {
     appLog("The size of country leaderboard: ${countryList.length}");
-    final temp = await getAllCountries();
-    isoCodes.value = List.generate(
-        countryList.length,
-        (index) =>
-            temp
-                .firstWhereOrNull(
-                  (element) =>
-                      element.name.toLowerCase() ==
-                      countryList[index].country.toLowerCase(),
-                )
-                ?.isoCode ??
-            "ZA");
-    appLog("The size of isocodes ${isoCodes.length}");
+    
+    // final temp = await getAllCountries();
+    // isoCodes.value = List.generate(
+    //     countryList.length,
+    //     (index) =>
+    //         temp
+    //             .firstWhereOrNull(
+    //               (element) =>
+    //                   element.name.toLowerCase() ==
+    //                   countryList[index].country.toLowerCase(),
+    //             )
+    //             ?.isoCode ??
+    //         "ZA");
+    // appLog("The size of isocodes ${isoCodes.length}");
     // for (int i = 0; i < countryList.length; i++) {
     //   isoCodes.add(temp
     //       .firstWhere(

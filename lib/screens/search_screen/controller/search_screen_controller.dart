@@ -1,6 +1,4 @@
-import 'package:country_state_city/country_state_city.dart';
-import 'package:country_state_city/models/city.dart';
-import 'package:country_state_city/models/country.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
@@ -20,8 +18,8 @@ class SearchScreenController extends GetxController {
   final RxString selectedGender = ''.obs;
   final RxInt minAge = 22.obs;
   final RxInt maxAge = 26.obs;
-  RxList<Country> countryList = <Country>[].obs;
-  RxList<City> cityList = <City>[].obs;
+  // RxList<Country> countryList = <Country>[].obs;
+  // RxList<City> cityList = <City>[].obs;
 
   final List<LeaderBoardModel?> sLeaderBoardList = [];
   final List<LeaderBoardModel?> sLeaderBoardListDaily = [];
@@ -78,7 +76,7 @@ class SearchScreenController extends GetxController {
 
   Future<void> onInitial() async {
     try {
-      countryList.value = await getAllCountries();
+      // countryList.value = await getAllCountries();
       update();
     } catch (e) {
       appLog("Error loading countries: $e");
@@ -86,15 +84,15 @@ class SearchScreenController extends GetxController {
   }
 
   Future<void> updateCountry(String isoCode) async {
-    if (countryList.isEmpty) return;
-    cityList.clear();
+    // if (countryList.isEmpty) return;
+    // cityList.clear();
     update();
-    cityList.value = await LocationRepo.getCountryCities(isoCode);
+    // cityList.value = await LocationRepo.getCountryCities(isoCode);
     update();
   }
 
   void updateCity(String value) {
-    if (cityList.isEmpty) return;
+    // if (cityList.isEmpty) return;
     selectedCity.value = value;
   }
 

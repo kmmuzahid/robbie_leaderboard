@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_country_state/flutter_country_state.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/common/common_city_picker.dart';
+import 'package:the_leaderboard/common/common_country_picker.dart';
+import 'package:the_leaderboard/common/common_state_picker.dart';
 import 'package:the_leaderboard/screens/search_screen/controller/search_screen_controller.dart';
 import 'package:the_leaderboard/screens/search_screen/widgets/common_drop_down.dart';
 import 'package:the_leaderboard/screens/search_screen/widgets/title_text_widget.dart';
@@ -60,44 +63,9 @@ class SearchScreen extends StatelessWidget {
                   // Country
                   const TitleTextWidget(text: AppStrings.country),
                   const SpaceWidget(spaceHeight: 8),
-                  TextField(
-                    readOnly: true,
-                    onTap: () {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        context: context,
-                        isDismissible: false,
-                        builder: (context) => SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.7,
-                          child: ShowCountryDialog(
-                            onSelectCountry: (country) {
-                              controller.selectedCountry.value = country.name;
-                            },
-                            onSelectCity: (city) {
-                              controller.selectedCity.value = city.name;
-                            },
-                          ),
-                        ),
-
-                      );
-                    },
-                    style: const TextStyle(color: AppColors.white),
-                    decoration: InputDecoration(
-                      suffixIcon: const Icon(Icons.arrow_drop_down, color: AppColors.white),
-                      hintText: 'Select Country',
-                      hintStyle: const TextStyle(
-                        color: AppColors.greyDarker,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      filled: true,
-                      fillColor: AppColors.blue,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                      
-                  ),
+                  CommonCountryPicker(onSelectCountry: (country) {
+                    controller.selectedCountry.value = country;
+                  }),
 
                   // CommonDropDown(
                   //     backgroundColor: AppColors.blue,
@@ -111,19 +79,17 @@ class SearchScreen extends StatelessWidget {
                   //     nameBuilder: (value) => value.name),
                   const SpaceWidget(spaceHeight: 8),
 
-                  const TitleTextWidget(text: AppStrings.city),
-                        
+                  const TitleTextWidget(text: 'State'),
                   const SpaceWidget(spaceHeight: 8),
-                  CommonDropDown(
-                      backgroundColor: AppColors.blue,
-                      textStyle: const TextStyle(color: AppColors.white),
-                      borderColor: AppColors.blue,
-                      borderRadius: 16,
-                      hint: 'Select City',
-                      items: controller.cityList,
-                      enableInitalSelection: false,
-                      onChanged: (value) => controller.updateCity(value!.name),
-                      nameBuilder: (value) => value.name),
+                  CommonStatePicker(onSelectState: (state) {
+                    // controller.selectedState.value = state;
+                  }),
+                  const SpaceWidget(spaceHeight: 8),
+                  const TitleTextWidget(text: AppStrings.city),
+                  const SpaceWidget(spaceHeight: 8),
+                  CommonCityPicker(onSelectCity: (city) {
+                    controller.selectedCity.value = city;
+                  }),
                         
                   const SpaceWidget(spaceHeight: 14),
 

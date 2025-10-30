@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:the_leaderboard/common/common_city_picker.dart';
+import 'package:the_leaderboard/common/common_country_picker.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/screens/auth_screens/register_screen/widgets/dropdown_button_widget.dart';
 
@@ -146,21 +148,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SpaceWidget(spaceHeight: 8),
 
-                Obx(
-                  () => DropdownButtonWidget(
-                    hintText: 'PLease select your country',
-                    items: controller.countryList
-                        .map((c) => DropdownMenuItem(
-                              value: c.isoCode,
-                              child: TextWidget(
-                                text: c.name,
-                                fontColor: AppColors.white,
-                              ),
-                            ))
-                        .toList(),
-                    onChanged: (value) => controller.updateCountry(value!),
-                  ),
-                ),
+                CommonCountryPicker(onSelectCountry: (country) {
+                  controller.selectedCountry.value = country;
+                }),
                 const SpaceWidget(spaceHeight: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
@@ -172,21 +162,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SpaceWidget(spaceHeight: 8),
-                Obx(
-                  () => DropdownButtonWidget(
-                    hintText: 'Please select your city',
-                    items: controller.cityList
-                        .map((c) => DropdownMenuItem(
-                              value: c.name,
-                              child: TextWidget(
-                                text: c.name,
-                                fontColor: AppColors.white,
-                              ),
-                            ))
-                        .toList(),
-                    onChanged: (value) => controller.updateCity(value!),
-                  ),
-                ),
+                CommonCityPicker(onSelectCity: (city) {
+                  controller.selectedCity.value = city;
+                }),
                 const SpaceWidget(spaceHeight: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),

@@ -14,7 +14,6 @@ import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 import '../../../../routes/app_routes.dart';
-import 'package:country_state_city/country_state_city.dart';
 
 class RegisterScreenController extends GetxController {
   // Observable for checkbox state
@@ -38,14 +37,14 @@ class RegisterScreenController extends GetxController {
 
   final RxString phoneNumber = "".obs;
   final RxBool isValidPhonenumber = true.obs;
-  RxList<Country> countryList = <Country>[].obs;
-  RxList<City> cityList = <City>[].obs;
+  // RxList<Country> countryList = <Country>[].obs;
+  // RxList<City> cityList = <City>[].obs;
   final finalSelectedCountry = "".obs;
 
   Future<void> onInitial() async {
     try {
       fetchTermsAndConditions();
-      countryList.value = await getAllCountries();
+      // countryList.value = await getAllCountries();
 
       // if (countryList.isNotEmpty) {
       //   // Select first country by default
@@ -61,48 +60,48 @@ class RegisterScreenController extends GetxController {
   }
 
   Future<void> loadCities(String countryCode) async {
-    try {
-      final fetchedCities = await LocationRepo.getCountryCities(countryCode);
+    // try {
+    // final fetchedCities = await LocationRepo.getCountryCities(countryCode);
 
       // Use a Set to ensure uniqueness
-      final uniqueNames = <String>{};
-      final uniqueCities = fetchedCities.where((city) {
-        if (uniqueNames.contains(city.name)) {
-          return false; // skip duplicates
-        } else {
-          uniqueNames.add(city.name);
-          return true; // keep first occurrence
-        }
-      }).toList();
+    // final uniqueNames = <String>{};
+    //   final uniqueCities = fetchedCities.where((city) {
+    //     if (uniqueNames.contains(city.name)) {
+    //       return false; // skip duplicates
+    //     } else {
+    //       uniqueNames.add(city.name);
+    //       return true; // keep first occurrence
+    //     }
+    //   }).toList();
 
-      cityList.value = uniqueCities;
+    //   cityList.value = uniqueCities;
 
-      if (cityList.isNotEmpty) {
-        selectedCity.value = cityList.first.name;
-      }
-    } catch (e) {
-      appLog("Error loading cities: $e");
-    }
+    //   if (cityList.isNotEmpty) {
+    //     selectedCity.value = cityList.first.name;
+    //   }
+    // } catch (e) {
+    //   appLog("Error loading cities: $e");
+    // }
   }
 
   Future<void> updateCountry(String isoCode) async {
-    try {
-      cityList.clear();
-      selectedCountry.value = isoCode;
-      countryList.value = await getAllCountries();
-      final country = countryList.firstWhereOrNull(
-        (c) => c.isoCode == isoCode,
-      );
+    // try {
+    //   cityList.clear();
+    //   selectedCountry.value = isoCode;
+    //   countryList.value = await getAllCountries();
+    //   final country = countryList.firstWhereOrNull(
+    //     (c) => c.isoCode == isoCode,
+    //   );
 
-      appLog(
-          "Found country: ${country!.name} and country code: ${country.isoCode} and default isoCode: $isoCode");
+    //   appLog(
+    //       "Found country: ${country!.name} and country code: ${country.isoCode} and default isoCode: $isoCode");
 
-      finalSelectedCountry.value = country.name;
-      await loadCities(isoCode);
-      appLog("Country updated: $isoCode");
-    } catch (e) {
-      appLog(e); // TODO
-    }
+    //   finalSelectedCountry.value = country.name;
+    //   await loadCities(isoCode);
+    //   appLog("Country updated: $isoCode");
+    // } catch (e) {
+    //   appLog(e); // TODO
+    // }
   }
 
   void updateCity(String value) {

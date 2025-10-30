@@ -1,10 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:country_state_city/models/city.dart';
-import 'package:country_state_city/models/country.dart';
-import 'package:country_state_city/utils/city_utils.dart';
-import 'package:country_state_city/utils/country_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,69 +50,69 @@ class EditProfileController extends GetxController {
 
   final RxString phoneNumber = "".obs;
   final RxBool isValidPhonenumber = true.obs;
-  RxList<Country> countryList = <Country>[].obs;
-  RxList<City> cityList = <City>[].obs;
+  // RxList<Country> countryList = <Country>[].obs;
+  // RxList<City> cityList = <City>[].obs;
   final finalSelectedCountry = "".obs;
   RxBool isSaving = false.obs;
 
   Future<void> onInitial() async {
-    try {
-      countryList.value = await getAllCountries();
-      if (countryList.isNotEmpty) {
-        // Select first country by default
-        selectedCountry.value = countryList.first.isoCode;
+    // try {
+    //   // countryList.value = await getAllCountries();
+    //   if (countryList.isNotEmpty) {
+    //     // Select first country by default
+    //     selectedCountry.value = countryList.first.isoCode;
 
-        // Load its cities
-        await loadCities(countryList.first.isoCode);
-      }
-    } catch (e) {
-      appLog("Error loading countries: $e");
-    }
+    //     // Load its cities
+    //     await loadCities(countryList.first.isoCode);
+    //   }
+    // } catch (e) {
+    //   appLog("Error loading countries: $e");
+    // }
   }
 
   Future<void> loadCities(String countryCode) async {
     try {
-      final fetchedCities = await LocationRepo.getCountryCities(countryCode);
+      // final fetchedCities = await LocationRepo.getCountryCities(countryCode);
 
       // Use a Set to ensure uniqueness
-      final uniqueNames = <String>{};
-      final uniqueCities = fetchedCities.where((city) {
-        if (uniqueNames.contains(city.name)) {
-          return false; // skip duplicates
-        } else {
-          uniqueNames.add(city.name);
-          return true; // keep first occurrence
-        }
-      }).toList();
+      // final uniqueNames = <String>{};
+      // final uniqueCities = fetchedCities.where((city) {
+      //   if (uniqueNames.contains(city.name)) {
+      //     return false; // skip duplicates
+      //   } else {
+      //     uniqueNames.add(city.name);
+      //     return true; // keep first occurrence
+      //   }
+      // }).toList();
 
-      cityList.value = uniqueCities;
+      // cityList.value = uniqueCities;
 
-      if (cityList.isNotEmpty) {
-        selectedCity.value = cityList.first.name;
-      }
+      // if (cityList.isNotEmpty) {
+      //   selectedCity.value = cityList.first.name;
+      // }
     } catch (e) {
       appLog("Error loading cities: $e");
     }
   }
 
   Future<void> updateCountry(String isoCode) async {
-    try {
-      cityList.clear();
-      selectedCountry.value = isoCode;
-      countryList.value = await getAllCountries();
-      final country = countryList.firstWhereOrNull(
-        (c) => c.isoCode == isoCode,
-      );
+    // try {
+    //   cityList.clear();
+    //   selectedCountry.value = isoCode;
+    //   countryList.value = await getAllCountries();
+    //   final country = countryList.firstWhereOrNull(
+    //     (c) => c.isoCode == isoCode,
+    //   );
 
-      appLog(
-          "Found country: ${country!.name} and country code: ${country.isoCode} and default isoCode: $isoCode");
+    //   appLog(
+    //       "Found country: ${country!.name} and country code: ${country.isoCode} and default isoCode: $isoCode");
 
-      finalSelectedCountry.value = country.name;
-      await loadCities(isoCode);
-      appLog("Country updated: $isoCode");
-    } catch (e) {
-      appLog(e); // TODO
-    }
+    //   finalSelectedCountry.value = country.name;
+    //   await loadCities(isoCode);
+    //   appLog("Country updated: $isoCode");
+    // } catch (e) {
+    //   appLog(e); // TODO
+    // }
   }
 
   void updateCity(String value) {
@@ -316,26 +311,26 @@ class EditProfileController extends GetxController {
           youtubeController.text = userData.youtube;
           bioController.text = userData.bio;
           phone.value = await PhoneNumber.getRegionInfoFromPhoneNumber(userData.contact);
-          countryList.value = await getAllCountries();
-          final country = countryList.firstWhereOrNull(
-            (c) => c.name.toLowerCase() == userData.country.toLowerCase(),
-          );
-          if (country != null) {
-            appLog("Found country: ${country.name} and country code: ${country.isoCode}");
-            await updateCountry(country.isoCode);
-            // After cities loaded, select user’s saved city
-            appLog("City list: $cityList");
-            final city = cityList.firstWhereOrNull(
-              (c) => c.name.toLowerCase() == userData.city.toLowerCase(),
-            );
-            appLog("Found city: ${city?.name} and default city: ${userData.city}");
-            if (city != null) {
-              updateCity(city.name);
-            }
-            // updateCountry(userData.country);
-            // updateCity(userData.city);
-            appLog(userData.city);
-          }
+          // countryList.value = await getAllCountries();
+          // final country = countryList.firstWhereOrNull(
+          //   (c) => c.name.toLowerCase() == userData.country.toLowerCase(),
+          // );
+          // if (country != null) {
+          //   appLog("Found country: ${country.name} and country code: ${country.isoCode}");
+          //   await updateCountry(country.isoCode);
+          //   // After cities loaded, select user’s saved city
+          //   appLog("City list: $cityList");
+          //   final city = cityList.firstWhereOrNull(
+          //     (c) => c.name.toLowerCase() == userData.city.toLowerCase(),
+          //   );
+          //   appLog("Found city: ${city?.name} and default city: ${userData.city}");
+          //   if (city != null) {
+          //     updateCity(city.name);
+          //   }
+          //   // updateCountry(userData.country);
+          //   // updateCity(userData.city);
+          //   appLog(userData.city);
+          // }
         }
       }
     }
