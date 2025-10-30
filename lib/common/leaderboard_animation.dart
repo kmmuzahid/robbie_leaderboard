@@ -11,9 +11,11 @@ class _EagleWingPainter extends CustomPainter {
   final double avatarSize;
   final double flapPhase; // For staggered animation of wing layers
 
-  // Get a smoothly transitioning color based on time
+  /// Generates a smoothly transitioning color based on the current time
+  /// to create a pulsing effect for the wings
   Color get _pulseColor {
-    // Choose from a set of elegant color palettes that work well on dark backgrounds
+    // Color palettes for the wing glow effect
+    // Each palette contains two colors that will transition between each other
     final palettes = [
       // Teal & Purple
       [const Color.fromARGB(255, 0, 40, 216), const Color(0xFF7209B7)],
@@ -27,20 +29,30 @@ class _EagleWingPainter extends CustomPainter {
       [const Color.fromARGB(255, 255, 12, 49), const Color(0xFF7209B7)]
     ];
 
-    // Select a consistent palette based on the base color's hash code
+    // Select a consistent color palette based on the base color's hash code
+    // This ensures the same wing always uses the same color palette
     final palette = palettes[color.value % palettes.length];
 
-    // Calculate a smooth transition between colors based on time
-    final time = DateTime.now().millisecondsSinceEpoch / 2000.0; // Slower transition
-    final progress = (time % 2.0) / 2.0; // 0.0 to 1.0 over 2 seconds
+    // Calculate time-based values for smooth transitions:
+    // 1. Get current time in seconds (divided by 2000 for slower animation)
+    final time = DateTime.now().millisecondsSinceEpoch / 2000.0;
+    
+    // 2. Create a progress value that loops every 2 seconds (0.0 to 1.0)
+    //    The % 2.0 creates the loop, and / 2.0 normalizes to 0.0-1.0 range
+    final progress = (time % 2.0) / 2.0;
 
-    // Use a smooth curve for the transition
+    // 3. Apply an easing function to make the transition smoother
+    //    easeInOutSine creates a natural acceleration/deceleration effect
     final curvedProgress = Curves.easeInOutSine.transform(progress);
 
-    // Only change colors after completing a full cycle
-    final colorIndex = (time / 4.0).floor() % 2; // Change color every 4 seconds
+    // Determine which colors to transition between:
+    // - Changes color every 4 seconds (time / 4.0).floor() % 2
+    // - Alternates between the two colors in the selected palette
+    final colorIndex = (time / 4.0).floor() % 2;
     final nextColorIndex = (colorIndex + 1) % 2;
 
+    // Linearly interpolate between the two selected colors using the curved progress
+    // This creates a smooth color transition effect
     return Color.lerp(
       palette[colorIndex],
       palette[nextColorIndex],
@@ -70,7 +82,7 @@ class _EagleWingPainter extends CustomPainter {
 
     // Calculate color interpolation based on pulse phase with smoother transitions
     final pulseValue =
-        (math.sin(flapPhase * math.pi * 1.5) + 1) / 2; // 0 to 1 with slower transition
+        (math.sin(flapPhase * math.pi * 1.5) + 1) / 1; // 0 to 1 with slower transition
     final currentPulseColor = _pulseColor;
 
     // Blend the pulse color with the base color for a more subtle effect
@@ -88,7 +100,7 @@ class _EagleWingPainter extends CustomPainter {
       final layerPhase = (flapPhase + (layer * 0.2)) % 1.0;
 
       // Staggered flapping effect
-      final flapAmount = math.sin(layerPhase * math.pi * 2) * 0.1;
+      final flapAmount = math.sin(layerPhase * math.pi * 2) * 0.01;
       final currentProgress = layerProgress * (0.9 + (flapAmount * 0.5));
 
       // Adjust opacity based on layer
@@ -329,10 +341,12 @@ class _AuraGlowWrapperState extends State<AuraGlowWrapper> with SingleTickerProv
                 animation: _controller,
                 builder: (context, child) {
                   // Flapping wing effect with multiple layers
-                  final progress = 0.5 + (0.3 * (1 + math.sin(_pulse.value * math.pi * 1.2)) / 2);
+                  // final progress = 0.5 + (0.3 * (1 + math.sin(_pulse.value * math.pi * 1.2)) / 2);
+                  final progress =
+                      0.8; //+ (0.1 * (1 + math.sin(_pulse.value * math.pi * 1.2)) / 3);
 
                   return Transform.translate(
-                    offset: const Offset(0, 20), // Slight vertical adjustment
+                    offset: const Offset(0, 30), // Slight vertical adjustment
                     child: CustomPaint(
                       painter: _EagleWingPainter(
                         color: widget.auraColor,

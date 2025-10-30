@@ -12,12 +12,14 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 
 class ApiGetService {
 
-  static Future<http.Response?> apiGetServiceWith(String url) async {
+  static Future<http.Response?> apiGetServiceQuery(String url,
+      {Map<String, String>? queryParameters}) async {
     try {
       appLog("hitting url: $url");
       final token = LocalStorage.token;
       appLog("Token: $token");
-      final response = await http.get(Uri.parse(url), headers: {
+      final response =
+          await http.get(Uri.parse(url).replace(queryParameters: queryParameters), headers: {
         'Content-Type': 'application/json',
         'authorization': token,
       }).timeout(const Duration(seconds: 40));

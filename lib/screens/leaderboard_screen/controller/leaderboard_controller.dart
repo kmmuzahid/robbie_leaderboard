@@ -344,7 +344,7 @@ class LeaderboardController extends GetxController {
                 data.map((e) => CountryLeaderboardModel.fromJson(e)).toList();
 
             countryDailyList.sort(
-              (a, b) => b!.totalInvest.compareTo(a!.totalInvest),
+              (a, b) => b.totalInvest.compareTo(a.totalInvest),
             );
           }
           await getAllIsoCode();

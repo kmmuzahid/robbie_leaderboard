@@ -24,14 +24,25 @@ class RecentActivityCardWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GradientText(
-            text: action,
-            fontWeight: FontWeight.w400,
-            fontSize: 16,
-            hasGradientUnderline: true,
-            colors: const [
-              AppColors.gradientColorStart,
-              AppColors.gradientColorEnd,
+          Row(
+            children: [
+              GradientText(
+                text: action,
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+                hasGradientUnderline: true,
+                colors: const [
+                  AppColors.gradientColorStart,
+                  AppColors.gradientColorEnd,
+                ],
+              ),
+              const Spacer(),
+              TextWidget(
+                text: time,
+                fontColor: AppColors.greyDark,
+                fontWeight: FontWeight.w500,
+                fontSize: 13,
+              ),
             ],
           ),
           const SpaceWidget(spaceWidth: 8),
@@ -42,12 +53,6 @@ class RecentActivityCardWidget extends StatelessWidget {
             fontSize: 16,
           ),
           const SpaceWidget(spaceHeight: 2),
-          TextWidget(
-            text: time,
-            fontColor: AppColors.greyDark,
-            fontWeight: FontWeight.w500,
-            fontSize: 13,
-          ),
         ],
       ),
     );

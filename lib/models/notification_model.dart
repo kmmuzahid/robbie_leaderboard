@@ -4,7 +4,6 @@ class NotificationModel {
   final String text;
   final String type;
   final DateTime createdAt;
-  final int v;
 
   NotificationModel({
     required this.id,
@@ -12,7 +11,6 @@ class NotificationModel {
     required this.text,
     required this.type,
     required this.createdAt,
-    required this.v,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -22,7 +20,6 @@ class NotificationModel {
       text: json['text'] ?? '',
       type: json['type'] ?? '',
       createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now()),
-      v: json['__v'] ?? '',
     );
   }
 
@@ -33,7 +30,6 @@ class NotificationModel {
       'text': text,
       'type': type,
       'createdAt': createdAt.toIso8601String(),
-      '__v': v,
     };
   }
 }

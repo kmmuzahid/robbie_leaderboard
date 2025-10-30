@@ -128,53 +128,39 @@ class ProfileHeaderWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              InkWell(
-                onTap: tweeterButtonOnPressed,
-                child: const ImageWidget(
-                  height: 45,
-                  width: 45,
-                  imagePath: AppImagePath.tweeterImage,
-                ),
-              ),
+              _iconButton(onPressed: tweeterButtonOnPressed, imagePath: AppImagePath.tweeterImage),
               SpaceWidget(spaceWidth: AppSize.width(value: 16)),
-              InkWell(
-                onTap: instagramButtonOnPressed,
-                child: const ImageWidget(
-                  height: 45,
-                  width: 45,
-                  imagePath: AppImagePath.instagramImage,
-                ),
-              ),
+              _iconButton(
+                  onPressed: instagramButtonOnPressed, imagePath: AppImagePath.instagramImage),
               const SpaceWidget(spaceWidth: 16),
-              InkWell(
-                onTap: youtubeButtonOnPressed,
-                child: const ImageWidget(
-                  height: 45,
-                  width: 45,
-                  imagePath: AppImagePath.youtubeImage,
-                ),
-              ),
+              _iconButton(onPressed: youtubeButtonOnPressed, imagePath: AppImagePath.youtubeImage),
+              SpaceWidget(spaceWidth: AppSize.width(value: 16)),
+              _iconButton(
+                  onPressed: facebookButtonOnPressed, imagePath: AppImagePath.facebookImage),
               const SpaceWidget(spaceWidth: 16),
-              InkWell(
-                onTap: facebookButtonOnPressed,
-                child: const ImageWidget(
-                  height: 45,
-                  width: 45,
-                  imagePath: AppImagePath.facebookImage,
-                ),
-              ),
-              const SpaceWidget(spaceWidth: 16),
-              InkWell(
-                onTap: linkedinButtonOnPressed,
-                child: const ImageWidget(
-                  height: 45,
-                  width: 45,
-                  imagePath: AppImagePath.linkedinImage,
-                ),
-              ),
+              _iconButton(
+                  onPressed: linkedinButtonOnPressed, imagePath: AppImagePath.linkedinImage),
             ],
           ),
-        ],
+          //
+        ]));
+  }
+
+  Widget _iconButton({required VoidCallback? onPressed, required String imagePath}) {
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        width: 45,
+        height: 45,
+        padding: EdgeInsets.all(imagePath == AppImagePath.tweeterImage ? 2 : 0),
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.circular(5), color: AppColors.blueLighter),
+        child: ImageWidget(
+          height: 35,
+          width: 35,
+          fit: BoxFit.fill,
+          imagePath: imagePath,
+        ),
       ),
     );
   }

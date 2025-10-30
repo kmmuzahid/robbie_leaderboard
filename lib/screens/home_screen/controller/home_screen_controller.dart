@@ -14,6 +14,7 @@ import 'package:the_leaderboard/models/hall_of_fame_single_payment_model.dart';
 import 'package:the_leaderboard/models/hall_of_frame_consisntantly_top_model.dart';
 import 'package:the_leaderboard/models/hall_of_frame_most_engaged_model.dart';
 import 'package:the_leaderboard/models/profile_model.dart';
+import 'package:the_leaderboard/models/recent_activity_model.dart';
 import 'package:the_leaderboard/routes/app_routes.dart';
 import 'package:the_leaderboard/screens/bottom_nav/controller/bottom_nav_controller.dart';
 import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
@@ -44,21 +45,52 @@ class HomeScreenController extends GetxController {
   final RxBool ishallofframeConsisntantTopLoading = true.obs;
   final RxBool ishallofframeMostEngagedLoading = true.obs;
 
-  final RxList<List<dynamic>> recentActivity = <List<dynamic>>[].obs;
+  final RxList<RecentActivityModel> recentActivity = <RecentActivityModel>[].obs;
   final notificationController = Get.find<NotificationController>();
   void sendData() {
     SocketService.instance.sendInvest("Aurnab 420", 200);
   }
 
+  fetchRecentActivity() async {
+    final response = await ApiGetService.apiGetServiceQuery(AppUrls.notification,
+        queryParameters: {'type': 'global', 'limit': '10'});
+    isLoading.value = false;
+    if (response != null) {
+      final jsonbody = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final List data = jsonbody["data"];
+        recentActivity.value = data.map((e) => RecentActivityModel.fromJson(e)).toList();
+      } else {
+        Get.snackbar(
+          "Error",
+          jsonbody["message"],
+          colorText: AppColors.white,
+        );
+      }
+    }
+  }
+
   void receiveData() {
     SocketService.instance.onNewInvestMessageReceived((p0) {
-      final time = DateFormat('mm').format(DateTime.parse(p0.createdAt));
-      recentActivity.insert(0, [p0.title, p0.subTitle, time]);
+      recentActivity.insert(
+          0,
+          RecentActivityModel(
+              id: '',
+              title: p0.title,
+              text: p0.subTitle,
+              type: p0.type,
+              createdAt: DateTime.parse(p0.createdAt)));
     });
     SocketService.instance.onCreatingTicketResponse(
       (p0) {
-        final time = DateFormat('mm').format(DateTime.parse(p0.createdAt));
-        recentActivity.insert(0, [p0.title, p0.text, time]);
+        recentActivity.insert(
+            0,
+            RecentActivityModel(
+                id: '',
+                title: p0.title,
+                text: p0.text,
+                type: p0.type,
+                createdAt: DateTime.parse(p0.createdAt)));
       },
     );
   }
@@ -68,8 +100,8 @@ class HomeScreenController extends GetxController {
     fetchHallofFrameSinglePayment(isUpdating);
     fetchHallofFrameConsistantlyTop(isUpdating);
     fetchHallofFrameMostEngaged(isUpdating);
-    await Get.find<ProfileScreenController>().fetchProfile(isUpdating: isUpdating);
-
+    Get.find<ProfileScreenController>().fetchProfile(isUpdating: isUpdating);
+    fetchRecentActivity();
     appLog("User email: ${LocalStorage.myEmail} and user id: ${LocalStorage.userId}");
     // await Purchases.configure(
     //   PurchasesConfiguration("goog_gsyjGglgxeOOHLKmCuTaOliiTFa")

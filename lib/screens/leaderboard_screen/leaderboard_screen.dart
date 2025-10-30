@@ -63,22 +63,12 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
       );
       bool showFloating = true;
       appLog("myIndex is: $myIndex");
-      if (leaderboard.isEmpty) {
-        return const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.access_time_outlined, color: AppColors.white, size: 100),
-              // SpaceWidget(spaceHeight: 20),
-              TextWidget(text: "Coming Soon", fontColor: AppColors.white),
-              // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
-            ],
-          ),
-        );
-      }
+  
       return Column(
         children: [
           // const SpaceWidget(spaceHeight: 20),
+        
+      
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Row(
@@ -165,6 +155,19 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
           Expanded(
             child: Stack(
               children: [
+                leaderboard.isEmpty
+                    ? const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.access_time_outlined, color: AppColors.white, size: 100),
+                            // SpaceWidget(spaceHeight: 20),
+                            TextWidget(text: "Coming Soon", fontColor: AppColors.white),
+                            // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
+                          ],
+                        ),
+                      )
+                    :
                 NotificationListener<ScrollNotification>(
                   key: ValueKey(myIndex.toString()),
                   onNotification: (scrollNotification) {
@@ -271,7 +274,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
             key: ValueKey(
               '${myData?.name ?? 'N/A'}${myData?.currentRank ?? 'N/A'}$myIndex',
             ),
-            rank: myData?.currentRank.toString().padLeft(2, '0') ?? 'N/A',
+            rank: myData?.currentRank == 0
+                ? 'N/A'
+                : myData?.currentRank.toString().padLeft(2, '0') ?? 'N/A',
             name: LocalStorage.myName,
             amount: "\$${AppCommonFunction.formatNumber(myData?.totalInvest ?? 0)}",
             isUp: showFloating && myData != null && myIndex != -1
@@ -542,17 +547,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
         backgroundColor: Colors.black,
         body: Obx(
           () => SafeArea(
-            child: _controller.isLoading.value ||
-                    _controller.isLoadingCountry.value ||
-                    _controller.isLoadingCreator.value ||
-                    _controller.isLoadingToday.value ||
-                    _controller.isLoadingMonthly.value ||
-                    _controller.isLoadingCreatorToday.value ||
-                    _controller.isLoadingCreatorMonthly.value ||
-                    _controller.isLoadingCountryToday.value ||
-                    _controller.isLoadingCountryMonthly.value
-                ? const Center(child: CircularProgressIndicator.adaptive())
-                : Stack(
+            child: Stack(
                     children: [
                       // const Positioned(
                       //     bottom: 90, right: 20, child: FloatingButtonWidget()),
@@ -610,7 +605,17 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
                             tabTexts: const ['All Time', 'Daily', 'Monthly'],
                             tabController: _tabController,
                           ),
-
+                    _controller.isLoading.value ||
+                            _controller.isLoadingCountry.value ||
+                            _controller.isLoadingCreator.value ||
+                            _controller.isLoadingToday.value ||
+                            _controller.isLoadingMonthly.value ||
+                            _controller.isLoadingCreatorToday.value ||
+                            _controller.isLoadingCreatorMonthly.value ||
+                            _controller.isLoadingCountryToday.value ||
+                            _controller.isLoadingCountryMonthly.value
+                        ? const CircularProgressIndicator()
+                        : const SizedBox.shrink(),
                           // TabBarView
                           Expanded(
                             child: TabBarView(
@@ -626,6 +631,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
                                   CountryLeaderboardWidget(
                                     controller: _controller,
                                     leaderboard: _controller.countryList,
+                              tabId: _tabController.index,
                                   )
                                 else
                                   buildLeaderboardRaisedTabView(_controller.creatorList),
@@ -638,6 +644,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
                                   CountryLeaderboardWidget(
                                     controller: _controller,
                                     leaderboard: _controller.countryDailyList,
+                              tabId: _tabController.index,
                                   )
                                 else
                                   buildLeaderboardRaisedTabView(_controller.creatorDailyList),
@@ -649,6 +656,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
                                 else if (selectedLeaderboard == 'Event Leaderboard')
                                   CountryLeaderboardWidget(
                                     controller: _controller,
+                              tabId: _tabController.index,
                                     leaderboard: _controller.countryMonthlyList,
                                   )
                                 else

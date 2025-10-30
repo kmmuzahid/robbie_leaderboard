@@ -8,6 +8,7 @@ class AppImagePath {
       'assets/images/THE LEADERBOARD Logo-Transparent.png';
   static const String crownImage =
       'assets/images/THE LEADERBOARD Logo crown.png';
+      
   static const String tweeterImage = 'assets/images/tweeter.png';
   static const String instagramImage = 'assets/images/instagram.png';
   static const String youtubeImage = "assets/images/youtube.png";

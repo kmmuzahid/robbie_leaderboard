@@ -109,17 +109,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               // Show package.product.title, description, and price in your UI
                             },
                             onSharePressed: () {
-                              // controller.sendData();
-                              // Get.snackbar(
-                              //     "This feature is not implemented yet",
-                              //     "Please wait for the future update",
-                              //     colorText: AppColors.white);
+                              const String androidPath =
+                                  "https://play.google.com/store/apps/details?id=com.regamestudio.the_leaderboard";
+                              const String iosPath =
+                                  "https://apps.apple.com/us/app/robbie-leaderboard/id6752761170";
+
                               SharePlus.instance.share(ShareParams(
-                                  subject: "User Code",
-                                  title:
-                                      "🎉 Get an Extra Spin in the Raffle Draw! 🎉",
-                                  text:
-                                      "Use my referral code ${controller.userCode.value} when you sign up to the Leaderboard and unlock an additional spin for more chances to win exciting rewards.👉 Don’t miss out—share the fun and boost your luck!"));
+                                subject: "User Code",
+                                title: "🎉 Get an Extra Spin in the Raffle Draw! 🎉",
+                                text:
+                                    "Use my referral code ${controller.userCode.value} when you sign up to the Leaderboard and unlock an additional spin for more chances to win exciting rewards!\n\n"
+                                    "📱 Download the app:\n"
+                                    "iOS: $iosPath\n"
+                                    "Android: $androidPath",
+                              ));
                             },
                           ),
                     const SpaceWidget(spaceHeight: 16),
@@ -166,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             .consistantlyTop.value?.name ??
                                         "N/A",
                                     status:
-                                        "Last ${controller.consistantlyTop.value!.timesRankedTop} Days",
+                                        "Last 30 Days",
                                     imageUrl: controller.consistantlyTop.value
                                             ?.profileImg ??
                                         '',
@@ -233,12 +236,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                       itemBuilder: (context, index) {
                                         return RecentActivityCardWidget(
                                             action: controller
-                                                .recentActivity[index][0],
+                                                .recentActivity[index].title,
                                             value: controller
-                                                .recentActivity[index][1],
+                                                .recentActivity[index].text,
                                             time:
-                                                "${controller.recentActivity[index][2]} min ago");
-                                      })
+                                                timeAgo(
+                                                controller.recentActivity[index].createdAt));
+                                      },
+                                    )  
                               // StreamBuilder(stream: _controller.streamSocket.getResponse, builder: (context, snapshot) {
                               //   if(snapshot.hasData){
                               //     return ListView.builder(itemBuilder: (context, index) => RecentActivityCardWidget(action: snapshot.data[index], value: value, time: time),)
@@ -258,4 +263,30 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  String timeAgo(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      final seconds = difference.inSeconds;
+      return '$seconds ${seconds == 1 ? 'second' : 'seconds'} ago';
+    } else if (difference.inMinutes < 60) {
+      final minutes = difference.inMinutes;
+      return '$minutes ${minutes == 1 ? 'minute' : 'minutes'} ago';
+    } else if (difference.inHours < 24) {
+      final hours = difference.inHours;
+      return '$hours ${hours == 1 ? 'hour' : 'hours'} ago';
+    } else if (difference.inDays < 30) {
+      final days = difference.inDays;
+      return '$days ${days == 1 ? 'day' : 'days'} ago';
+    } else if (difference.inDays < 365) {
+      final months = (difference.inDays / 30).floor();
+      return '$months ${months == 1 ? 'month' : 'months'} ago';
+    } else {
+      final years = (difference.inDays / 365).floor();
+      return '$years ${years == 1 ? 'year' : 'years'} ago';
+    }
+  }
+
 }

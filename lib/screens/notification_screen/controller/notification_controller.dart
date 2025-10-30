@@ -24,20 +24,20 @@ class NotificationController extends GetxController {
     notificationCounter.value = 0;
   }
 
+  
+
   void fetchNotification() async {
-    try {
       appLog("fetching notification");
       isLoading.value = true;
-      final response = await ApiGetService.apiGetService(AppUrls.notification);
+    final response = await ApiGetService.apiGetServiceQuery(AppUrls.notification,
+        queryParameters: {'type': 'single'});
       isLoading.value = false;
       if (response != null) {
-        final jsonbody = jsonDecode(response.body);
-        appLog(jsonbody);
+      final jsonbody = jsonDecode(response.body);
+      print(response.body);
         if (response.statusCode == 200) {
           final List data = jsonbody["data"];
-          notificationList.value =
-              data.map((e) => NotificationModel.fromJson(e)).toList();
-          appLog(notificationList);
+        notificationList.value = data.map((e) => NotificationModel.fromJson(e)).toList();
         } else {
           Get.snackbar(
             "Error",
@@ -47,9 +47,7 @@ class NotificationController extends GetxController {
         }
       }
       appLog("Succeed");
-    } catch (e) {
-      errorLog("Failed", e);
-    }
+   
     return;
   }
 }

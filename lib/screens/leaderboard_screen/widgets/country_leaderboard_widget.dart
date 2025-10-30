@@ -16,9 +16,10 @@ import 'package:the_leaderboard/widgets/text_widget/text_widgets.dart';
 
 class CountryLeaderboardWidget extends StatelessWidget {
   const CountryLeaderboardWidget(
-      {super.key, required this.leaderboard, required this.controller});
+      {super.key, required this.leaderboard, required this.controller, required this.tabId});
   final List<CountryLeaderboardModel?> leaderboard;
   final LeaderboardController controller;
+  final int tabId;
   @override
   Widget build(BuildContext context) {
     final filteredList = leaderboard.skip(3).where((e) => e != null).toList();
@@ -48,91 +49,92 @@ class CountryLeaderboardWidget extends StatelessWidget {
         ),
       );
     }
-    return Column(
-      children: [
-        const SpaceWidget(spaceHeight: 20),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            if (leaderboard.length > 1)
-              Transform.translate(
-                offset: Offset.zero,
-                child: TopRankItemCountry(
-                    fromOnline:
-                        false, //leaderboard[1]!.profileImg != "Unknown",
-                    rankLabel: "2",
-                    name: leaderboard[1]!.country.toUpperCase(),
-                    amount:
-                        "\$${AppCommonFunction.formatNumber(leaderboard[1]!.totalInvest)}",
+    return RefreshIndicator(
+      onRefresh: () async {
+        if (tabId == 0) {
+          controller.fetchCountryData();
+        } else if (tabId == 1) {
+          controller.fetchCountryDataDaily();
+        } else {
+          controller.fetchCountryDataMonth();
+        }
+      },
+      child: Column(
+        children: [
+          const SpaceWidget(spaceHeight: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              if (leaderboard.length > 1)
+                Transform.translate(
+                  offset: Offset.zero,
+                  child: TopRankItemCountry(
+                      fromOnline: false, //leaderboard[1]!.profileImg != "Unknown",
+                      rankLabel: "2",
+                      name: leaderboard[1]!.country.toUpperCase(),
+                      amount: "\$${AppCommonFunction.formatNumber(leaderboard[1]!.totalInvest)}",
+                      image: CountryFlag.fromCountryCode(
+                        controller.isoCodes[1],
+                        theme: const ImageTheme(shape: Circle(), width: 90, height: 90),
+                      ),
+                      rankColor: AppColors.greyDark,
+                      avatarSize: 40),
+                ),
+              if (leaderboard.isNotEmpty)
+                Transform.translate(
+                  offset: const Offset(0, -10),
+                  child: TopRankItemCountry(
+                      fromOnline: false,
+                      rankLabel: "1",
+                      name: leaderboard[0]!.country.toUpperCase(),
+                      amount: "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalInvest)}",
+                      image: CountryFlag.fromCountryCode(
+                        controller.isoCodes[0],
+                        theme: const ImageTheme(shape: Circle(), width: 100, height: 100),
+                      ),
+                      rankColor: AppColors.yellow,
+                      avatarSize: 55),
+                ),
+              if (leaderboard.length > 2)
+                Transform.translate(
+                  offset: Offset.zero,
+                  child: TopRankItemCountry(
+                      fromOnline: false,
+                      rankLabel: "3",
+                      name: leaderboard[2]!.country.toUpperCase(),
+                      amount: "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalInvest)}",
+                      image: CountryFlag.fromCountryCode(
+                        controller.isoCodes[2],
+                        theme: const ImageTheme(shape: Circle(), width: 90, height: 90),
+                      ),
+                      rankColor: AppColors.orange,
+                      avatarSize: 40),
+                ),
+            ]),
+          ),
+          Expanded(
+            child: Stack(children: [
+              ListView.builder(
+                itemCount: filteredList.length,
+                itemBuilder: (context, index) {
+                  final data = filteredList[index]!;
+                  return CountryLeaderboardItem(
+                    key: ValueKey('${data.country}${data.totalInvest}$index'),
+                    rank: index + 4,
+                    name: data.country,
+                    amount: "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
+                    fromNetwork: false,
                     image: CountryFlag.fromCountryCode(
-                      controller.isoCodes[1],
-                      theme: const ImageTheme(
-                          shape: Circle(), width: 90, height: 90),
+                      controller.isoCodes[index + 3],
+                      theme: const ImageTheme(shape: Circle(), width: 50, height: 50),
                     ),
-                    rankColor: AppColors.greyDark,
-                    avatarSize: 40),
+                  );
+                },
               ),
-            if (leaderboard.isNotEmpty)
-              Transform.translate(
-                offset: const Offset(0, -10),
-                child: TopRankItemCountry(
-                    fromOnline: false,
-                    rankLabel: "1",
-                    name: leaderboard[0]!.country.toUpperCase(),
-                    amount:
-                        "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalInvest)}",
-                    image: CountryFlag.fromCountryCode(
-                      controller.isoCodes[0],
-                      theme: const ImageTheme(
-                          shape: Circle(), width: 100, height: 100),
-                    ),
-                    rankColor: AppColors.yellow,
-                    avatarSize: 55),
-              ),
-            if (leaderboard.length > 2)
-              Transform.translate(
-                offset: Offset.zero,
-                child: TopRankItemCountry(
-                    fromOnline: false,
-                    rankLabel: "3",
-                    name: leaderboard[2]!.country.toUpperCase(),
-                    amount:
-                        "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalInvest)}",
-                    image: CountryFlag.fromCountryCode(
-                      controller.isoCodes[2],
-                      theme: const ImageTheme(
-                          shape: Circle(), width: 90, height: 90),
-                    ),
-                    rankColor: AppColors.orange,
-                    avatarSize: 40),
-              ),
-          ]),
-        ),
-        Expanded(
-          child: Stack(children: [
-            ListView.builder(
-              itemCount: filteredList.length,
-              itemBuilder: (context, index) {
-                final data = filteredList[index]!;
-                return CountryLeaderboardItem(
-                  key: ValueKey('${data.country}${data.totalInvest}$index'),
-                  rank: index + 4,
-                  name: data.country,
-                  amount:
-                      "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
-                  fromNetwork: false,
-                  image: CountryFlag.fromCountryCode(
-                    controller.isoCodes[index + 3],
-                    theme: const ImageTheme(
-                        shape: Circle(), width: 50, height: 50),
-                  ),
-                );
-              },
-            ),
-          ]),
-        ),
-      ],
+            ]),
+          ),
+        ],
+      ),
     );
   }
 }
