@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:the_leaderboard/common/location_picker_controller.dart';
 import 'package:the_leaderboard/common/permission_handler_helper.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
@@ -25,6 +26,8 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 import 'package:twitter_login/twitter_login.dart';
 
 class EditProfileController extends GetxController {
+  final LocationPickerController locationPickerController = Get.find();
+
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
@@ -40,85 +43,15 @@ class EditProfileController extends GetxController {
   final ImagePicker _picker = ImagePicker();
 
   final bioController = TextEditingController();
-
-  final RxString selectedCountry = ''.obs;
-  final RxString selectedCity = ''.obs;
   final RxString selectedGender = 'Male'.obs;
-  List<String> cities = ["Sydney", "Melbourne", "Brisbane"];
+
   final List<String> genders = ['Male', 'Female', 'Other'];
   final phone = PhoneNumber().obs;
 
   final RxString phoneNumber = "".obs;
   final RxBool isValidPhonenumber = true.obs;
-  // RxList<Country> countryList = <Country>[].obs;
-  // RxList<City> cityList = <City>[].obs;
-  final finalSelectedCountry = "".obs;
   RxBool isSaving = false.obs;
 
-  Future<void> onInitial() async {
-    // try {
-    //   // countryList.value = await getAllCountries();
-    //   if (countryList.isNotEmpty) {
-    //     // Select first country by default
-    //     selectedCountry.value = countryList.first.isoCode;
-
-    //     // Load its cities
-    //     await loadCities(countryList.first.isoCode);
-    //   }
-    // } catch (e) {
-    //   appLog("Error loading countries: $e");
-    // }
-  }
-
-  Future<void> loadCities(String countryCode) async {
-    try {
-      // final fetchedCities = await LocationRepo.getCountryCities(countryCode);
-
-      // Use a Set to ensure uniqueness
-      // final uniqueNames = <String>{};
-      // final uniqueCities = fetchedCities.where((city) {
-      //   if (uniqueNames.contains(city.name)) {
-      //     return false; // skip duplicates
-      //   } else {
-      //     uniqueNames.add(city.name);
-      //     return true; // keep first occurrence
-      //   }
-      // }).toList();
-
-      // cityList.value = uniqueCities;
-
-      // if (cityList.isNotEmpty) {
-      //   selectedCity.value = cityList.first.name;
-      // }
-    } catch (e) {
-      appLog("Error loading cities: $e");
-    }
-  }
-
-  Future<void> updateCountry(String isoCode) async {
-    // try {
-    //   cityList.clear();
-    //   selectedCountry.value = isoCode;
-    //   countryList.value = await getAllCountries();
-    //   final country = countryList.firstWhereOrNull(
-    //     (c) => c.isoCode == isoCode,
-    //   );
-
-    //   appLog(
-    //       "Found country: ${country!.name} and country code: ${country.isoCode} and default isoCode: $isoCode");
-
-    //   finalSelectedCountry.value = country.name;
-    //   await loadCities(isoCode);
-    //   appLog("Country updated: $isoCode");
-    // } catch (e) {
-    //   appLog(e); // TODO
-    // }
-  }
-
-  void updateCity(String value) {
-    selectedCity.value = value;
-    appLog("City updated $value");
-  }
 
   void updateGender(String value) {
     selectedGender.value = value;
@@ -249,8 +182,8 @@ class EditProfileController extends GetxController {
         "contact": phoneNumber.value,
         "gender": selectedGender.value,
         "age": ageController.text,
-        "country": finalSelectedCountry.value,
-        "city": selectedCity.value,
+        "country": locationPickerController.countryInitController.text.trim(),
+        "city": locationPickerController.cityInitController.text.trim(),
         "facebook": facebookController.text,
         "instagram": instagramController.text,
         "linkedin": linkedinController.text,

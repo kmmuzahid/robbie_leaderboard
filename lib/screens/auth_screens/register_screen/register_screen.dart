@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:the_leaderboard/common/common_city_picker.dart';
 import 'package:the_leaderboard/common/common_country_picker.dart';
+import 'package:the_leaderboard/common/common_state_picker.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/screens/auth_screens/register_screen/widgets/dropdown_button_widget.dart';
 
@@ -148,10 +149,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SpaceWidget(spaceHeight: 8),
 
-                CommonCountryPicker(onSelectCountry: (country) {
-                  controller.selectedCountry.value = country;
+                CommonCountryPicker(borderRadious: 24, onSelectCountry: (country) {
                 }),
-                const SpaceWidget(spaceHeight: 16),
+                const SpaceWidget(spaceHeight: 8),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextWidget(
+                    text: "State (Optional)",
+                    fontColor: AppColors.greyDark,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                CommonStatePicker(borderRadious: 24, onSelectState: (state) {}),
+                const SpaceWidget(spaceHeight: 8),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextWidget(
@@ -162,8 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SpaceWidget(spaceHeight: 8),
-                CommonCityPicker(onSelectCity: (city) {
-                  controller.selectedCity.value = city;
+                CommonCityPicker(borderRadious: 24, onSelectCity: (city) {
                 }),
                 const SpaceWidget(spaceHeight: 16),
                 const Padding(

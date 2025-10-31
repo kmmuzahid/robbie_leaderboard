@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:the_leaderboard/common/location_picker_controller.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
@@ -12,8 +13,7 @@ import 'package:the_leaderboard/utils/app_logs.dart';
 
 class SearchScreenController extends GetxController {
   // Observable variables
-  final RxString selectedCountry = ''.obs;
-  final RxString selectedCity = ''.obs;
+  final LocationPickerController locationPickerController = Get.find();
 
   final RxString selectedGender = ''.obs;
   final RxInt minAge = 22.obs;
@@ -83,18 +83,7 @@ class SearchScreenController extends GetxController {
     }
   }
 
-  Future<void> updateCountry(String isoCode) async {
-    // if (countryList.isEmpty) return;
-    // cityList.clear();
-    update();
-    // cityList.value = await LocationRepo.getCountryCities(isoCode);
-    update();
-  }
 
-  void updateCity(String value) {
-    // if (cityList.isEmpty) return;
-    selectedCity.value = value;
-  }
 
   void updateGender(String value) {
     selectedGender.value = value;
@@ -115,14 +104,7 @@ class SearchScreenController extends GetxController {
 
   // Method for search action
   void search(BuildContext context) async {
-    // Implement search logic or navigation
-    if (nameController.text.isEmpty &&
-        selectedCountry.isEmpty &&
-        selectedCity.isEmpty &&
-        selectedGender.isEmpty) {
-      AppCommonFunction.showSnackbar(context, "Please write or select something");
-      return;
-    }
+ 
     final name = nameController.text.capitalizeFirst;
 
     // final body = "
@@ -145,8 +127,8 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.leaderBoardData,
         name: name!,
-        country: selectedCountry.value,
-        city: selectedCity.value,
+        country: locationPickerController.countryInitController.text,
+        city: locationPickerController.cityInitController.text,
         gender: selectedGender.value,
       ).then((value) {
         if (value.isNotEmpty) {
@@ -164,8 +146,8 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.rankDaily,
         name: name,
-        country: selectedCountry.value,
-        city: selectedCity.value,
+        country: locationPickerController.countryInitController.text,
+        city: locationPickerController.cityInitController.text,
         gender: selectedGender.value,
       ).then((value) {
         if (value.isNotEmpty) {
@@ -183,8 +165,8 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.rankMonthly,
         name: name,
-        country: selectedCountry.value,
-        city: selectedCity.value,
+        country: locationPickerController.countryInitController.text,
+        city: locationPickerController.cityInitController.text,
         gender: selectedGender.value,
       ).then((value) {
         if (value.isNotEmpty) {
@@ -202,8 +184,8 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.countryLeaderboard,
         name: name,
-        country: selectedCountry.value,
-        city: selectedCity.value,
+        country: locationPickerController.countryInitController.text,
+        city: locationPickerController.cityInitController.text,
         gender: selectedGender.value,
       ).then((value) {
         if (value.isNotEmpty) {
@@ -221,8 +203,8 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.countryDaily,
         name: name,
-        country: selectedCountry.value,
-        city: selectedCity.value,
+        country: locationPickerController.countryInitController.text,
+        city: locationPickerController.cityInitController.text,
         gender: selectedGender.value,
       ).then((value) {
         if (value.isNotEmpty) {
@@ -235,8 +217,8 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.countryMonthly,
         name: name,
-        country: selectedCountry.value,
-        city: selectedCity.value,
+        country: locationPickerController.countryInitController.text,
+        city: locationPickerController.cityInitController.text,
         gender: selectedGender.value,
       ).then((value) {
         if (value.isNotEmpty) {
@@ -249,8 +231,8 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.creatorLeaderboard,
         name: name,
-        country: selectedCountry.value,
-        city: selectedCity.value,
+        country: locationPickerController.countryInitController.text,
+        city: locationPickerController.cityInitController.text,
         gender: selectedGender.value,
       ).then((value) {
         if (value.isNotEmpty) {
@@ -263,8 +245,8 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.raisedDaily,
         name: name,
-        country: selectedCountry.value,
-        city: selectedCity.value,
+        country: locationPickerController.countryInitController.text,
+        city: locationPickerController.cityInitController.text,
         gender: selectedGender.value,
       ).then((value) {
         if (value.isNotEmpty) {
@@ -277,8 +259,8 @@ class SearchScreenController extends GetxController {
       ApiGetService.fetchFilteredLeaderboardData(
         url: AppUrls.raisedMonthly,
         name: name,
-        country: selectedCountry.value,
-        city: selectedCity.value,
+        country: locationPickerController.countryInitController.text,
+        city: locationPickerController.cityInitController.text,
         gender: selectedGender.value,
       ).then((value) {
         if (value.isNotEmpty) {

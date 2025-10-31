@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:the_leaderboard/common/location_picker_controller.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/register_model.dart';
 import 'package:the_leaderboard/screens/auth_screens/register_screen/widgets/show_terms_conditon_dailogue.dart';
-import 'package:the_leaderboard/screens/terms_condition_screen/terms_conditions_screen.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/services/storage/storage_keys.dart';
@@ -17,6 +17,7 @@ import '../../../../routes/app_routes.dart';
 
 class RegisterScreenController extends GetxController {
   // Observable for checkbox state
+  final LocationPickerController locationPickerController = Get.find();
 
   // TextEditingControllers for form fields
   final TextEditingController emailController = TextEditingController();
@@ -25,21 +26,15 @@ class RegisterScreenController extends GetxController {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
-  final countryController = TextEditingController();
-  final stateController = TextEditingController();
-  final cityController = TextEditingController();
+
   final TextEditingController referralController = TextEditingController(text: "");
-  final RxString selectedCountry = ''.obs;
-  final RxString selectedCity = ''.obs;
+
+
   final RxString selectedGender = 'Male'.obs;
-  List<String> cities = ["Sydney DC", "Melbourne", "Brisbane"];
   final List<String> genders = ['Male', 'Female', 'Other'];
 
   final RxString phoneNumber = "".obs;
   final RxBool isValidPhonenumber = true.obs;
-  // RxList<Country> countryList = <Country>[].obs;
-  // RxList<City> cityList = <City>[].obs;
-  final finalSelectedCountry = "".obs;
 
   Future<void> onInitial() async {
     try {
@@ -59,175 +54,9 @@ class RegisterScreenController extends GetxController {
     }
   }
 
-  Future<void> loadCities(String countryCode) async {
-    // try {
-    // final fetchedCities = await LocationRepo.getCountryCities(countryCode);
-
-      // Use a Set to ensure uniqueness
-    // final uniqueNames = <String>{};
-    //   final uniqueCities = fetchedCities.where((city) {
-    //     if (uniqueNames.contains(city.name)) {
-    //       return false; // skip duplicates
-    //     } else {
-    //       uniqueNames.add(city.name);
-    //       return true; // keep first occurrence
-    //     }
-    //   }).toList();
-
-    //   cityList.value = uniqueCities;
-
-    //   if (cityList.isNotEmpty) {
-    //     selectedCity.value = cityList.first.name;
-    //   }
-    // } catch (e) {
-    //   appLog("Error loading cities: $e");
-    // }
-  }
-
-  Future<void> updateCountry(String isoCode) async {
-    // try {
-    //   cityList.clear();
-    //   selectedCountry.value = isoCode;
-    //   countryList.value = await getAllCountries();
-    //   final country = countryList.firstWhereOrNull(
-    //     (c) => c.isoCode == isoCode,
-    //   );
-
-    //   appLog(
-    //       "Found country: ${country!.name} and country code: ${country.isoCode} and default isoCode: $isoCode");
-
-    //   finalSelectedCountry.value = country.name;
-    //   await loadCities(isoCode);
-    //   appLog("Country updated: $isoCode");
-    // } catch (e) {
-    //   appLog(e); // TODO
-    // }
-  }
-
-  void updateCity(String value) {
-    selectedCity.value = value;
-  }
-
   void updateGender(String value) {
     selectedGender.value = value;
   }
-
-  // List<String> findCity(String country) {
-  //   return cityList
-  //       .where((city) => city.countryName == country)
-  //       .map((city) => city.name)
-  //       .toList();
-  // }
-
-  // Rxn<RegisterModel> profile = Rxn<RegisterModel>();
-  // Function to toggle checkbox
-
-  // Function to handle registration
-  // void register() async {
-  //   // Add your registration logic here
-  //   // Example: Validate form fields and proceed
-  //   String email = emailController.text.trim();
-  //   String password = passwordController.text.trim();
-  //   String confirmPassword = confirmPasswordController.text.trim();
-  //   String name = nameController.text;
-  //   String country = finalSelectedCountry.value;
-  //   String city = selectedCity.value;
-  //   String gender = selectedGender.value;
-  //   String age = ageController.text;
-  //   String contact = phoneNumber.value;
-  //   String referral = referralController.text;
-
-  //   if (email.isEmpty ||
-  //       password.isEmpty ||
-  //       confirmPassword.isEmpty ||
-  //       name.isEmpty ||
-  //       age.isEmpty ||
-  //       finalSelectedCountry.isEmpty ||
-  //       contact.isEmpty ||
-  //       selectedGender.isEmpty) {
-  //     Get.closeAllSnackbars();
-  //     Get.snackbar('Form Incomplete', 'Please fill in all fields.',
-  //         colorText: AppColors.white);
-  //     return;
-  //   }
-
-  //   if (password != confirmPassword) {
-  //     Get.closeAllSnackbars();
-  //     Get.snackbar(
-  //       'Password Mismatch',
-  //       'The passwords you entered don\'t match. Please try again.',
-
-  //     );
-
-  //     return;
-  //   }
-  //   if (password.length < 6) {
-  //     Get.closeAllSnackbars();
-  //     Get.snackbar(
-  //       "Password Too Short",
-  //       "Please enter a password with at least 6 characters.",
-  //       colorText: AppColors.white,
-  //     );
-
-  //     return;
-  //   }
-  //   if (!isValidPhonenumber.value) {
-  //     Get.closeAllSnackbars();
-  //     Get.snackbar(
-  //       "Invalid Phone Number",
-  //       "Please enter a valid phone number.",
-  //       colorText: AppColors.white,
-
-  //     );
-  //     return;
-  //   }
-
-  //   if (name.length > 16) {
-  //     Get.closeAllSnackbars();
-  //     Get.snackbar(
-  //       "Name is too long",
-  //       "Name should be maximum 16 characters",
-  //       colorText: AppColors.white,
-  //     );
-
-  //     return;
-  //   }
-  //   appLog(
-  //       "User is registering with $email, $password, $name, $country, $city, $gender, $age and $contact");
-  //   final profile = RegisterModel(
-  //       name: name,
-  //       email: email,
-  //       contact: contact,
-  //       password: password,
-  //       country: country,
-  //       city: city,
-  //       gender: gender,
-  //       age: age,
-  //       userCode: referral);
-  //   try {
-  //     final response = await ApiPostService.apiPostService(
-  //         AppUrls.registerUser, profile.toJson());
-  //     if (response != null) {
-  //       final data = jsonDecode(response.body);
-  //       if (response.statusCode == 200 || response.statusCode == 201) {
-  //         LocalStorage.token = data["data"]["token"];
-  //         LocalStorage.myEmail = email;
-  //         LocalStorage.setString(LocalStorageKeys.myEmail, email);
-  //         Get.closeAllSnackbars();
-  //         Get.snackbar("Success", data["message"], colorText: AppColors.white);
-  //         // Proceed with registration (e.g., API call, navigation, etc.)
-  //         Get.offNamed(AppRoutes.verifyOtpScreen);
-  //       } else {
-  //         Get.closeAllSnackbars();
-  //         Get.snackbar("Error", data["message"], colorText: AppColors.white);
-  //       }
-  //     }
-  //     appLog("Succeed");
-  //   } catch (e) {
-  //     errorLog("Failed", e);
-  //   }
-  //   return;
-  // }
 
   final RxString termAndCondition = ''.obs;
   final RxBool isTermsAndCondtiosnLoading = true.obs;
@@ -263,8 +92,8 @@ class RegisterScreenController extends GetxController {
     String password = passwordController.text.trim();
     String confirmPassword = confirmPasswordController.text.trim();
     String name = nameController.text.trim();
-    String country = finalSelectedCountry.value.trim();
-    String city = selectedCity.value.trim();
+    String country = locationPickerController.countryInitController.text.trim();
+    String city = locationPickerController.cityInitController.text.trim();
     String gender = selectedGender.value.trim();
     String age = ageController.text.trim();
     String contact = phoneNumber.value.trim();
@@ -391,9 +220,6 @@ class RegisterScreenController extends GetxController {
     ageController.dispose();
     contactController.dispose();
     referralController.dispose();
-    countryController.dispose();
-    stateController.dispose();
-    cityController.dispose();
     super.onClose();
   }
 }

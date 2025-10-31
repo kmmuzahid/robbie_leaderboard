@@ -64,7 +64,6 @@ class SearchScreen extends StatelessWidget {
                   const TitleTextWidget(text: AppStrings.country),
                   const SpaceWidget(spaceHeight: 8),
                   CommonCountryPicker(onSelectCountry: (country) {
-                    controller.selectedCountry.value = country;
                   }),
 
                   // CommonDropDown(
@@ -88,7 +87,7 @@ class SearchScreen extends StatelessWidget {
                   const TitleTextWidget(text: AppStrings.city),
                   const SpaceWidget(spaceHeight: 8),
                   CommonCityPicker(onSelectCity: (city) {
-                    controller.selectedCity.value = city;
+                    
                   }),
                         
                   const SpaceWidget(spaceHeight: 14),

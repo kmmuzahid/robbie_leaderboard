@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/common/common_city_picker.dart';
 import 'package:the_leaderboard/common/common_country_picker.dart';
+import 'package:the_leaderboard/common/common_state_picker.dart';
+import 'package:the_leaderboard/common/input_formatters/date_input_formatter.dart';
 import 'package:the_leaderboard/constants/app_icon_path.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
@@ -37,6 +39,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       required TextEditingController controller,
       required EditProfileController profileController,
       int maxLines = 1,
+      List<TextInputFormatter>? inputFormatters,
+      TextInputType? keyboardType,
       String? hintText}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,6 +57,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             : TextField(
                 controller: controller,
                 maxLines: maxLines,
+                inputFormatters: inputFormatters,
+                keyboardType: keyboardType,
                 style: const TextStyle(color: AppColors.white),
                 decoration: InputDecoration(
                   filled: true,
@@ -111,53 +117,53 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             () => SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Profile Picture
-                  Stack(
-                    children: [
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: controller.selectedImage.value != null
-                              ? Image.file(
-                                  controller.selectedImage.value!,
-                                  fit: BoxFit.cover,
-                                  width: 80,
-                                  height: 80,
-                                )
-                              : ImageWidget(
-                                  fromNetwork:
-                                      controller.userImage.value.isNotEmpty,
-                                  height: 80,
-                                  width: 80,
-                                  imagePath: controller
-                                          .userImage.value.isNotEmpty
-                                      ? "${AppUrls.mainUrl}${controller.userImage.value}"
-                                      : AppImagePath.profileImage,
-                                ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: -2,
-                        right: -2,
-                        child: GestureDetector(
-                          onTap: () => controller.onClickEditImage(
-                              context), // Call the image picker
-                          child: const IconWidget(
-                            height: 30,
-                            width: 30,
-                            icon: AppIconPath.editImageButtonIcon,
+                  Center(
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: controller.selectedImage.value != null
+                                ? Image.file(
+                                    controller.selectedImage.value!,
+                                    fit: BoxFit.cover,
+                                    width: 80,
+                                    height: 80,
+                                  )
+                                : ImageWidget(
+                                    fromNetwork: controller.userImage.value.isNotEmpty,
+                                    height: 80,
+                                    width: 80,
+                                    imagePath: controller.userImage.value.isNotEmpty
+                                        ? "${AppUrls.mainUrl}${controller.userImage.value}"
+                                        : AppImagePath.profileImage,
+                                  ),
                           ),
                         ),
-                      ),
-                    ],
+                        Positioned(
+                          bottom: -2,
+                          right: -2,
+                          child: GestureDetector(
+                            onTap: () =>
+                                controller.onClickEditImage(context), // Call the image picker
+                            child: const IconWidget(
+                              height: 30,
+                              width: 30,
+                              icon: AppIconPath.editImageButtonIcon,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SpaceWidget(spaceHeight: 24),
 
@@ -204,14 +210,42 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   const SpaceWidget(spaceHeight: 12),
                   _buildTextField(
                       label: "Date of Birth (Optional)",
+                      hintText: 'YYYY-MM-DD',
                       controller: controller.ageController,
+                      inputFormatters: [DateFormatter()],
+                      keyboardType: TextInputType.datetime,
                       profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
-                  CommonCountryPicker(onSelectCountry: (p0) => controller.updateCountry(p0)),
-
+                  const Text(
+                    "Country",
+                    style: TextStyle(
+                      color: AppColors.greyLight,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SpaceWidget(spaceHeight: 8),
+                  CommonCountryPicker(onSelectCountry: (p0) {}),
                   const SpaceWidget(spaceHeight: 12),
 
-                  CommonCityPicker(onSelectCity: (p0) => controller.updateCity(p0)),
+                  const TextWidget(
+                    text: "State",
+                    fontColor: AppColors.greyLight,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
+                  const SpaceWidget(spaceHeight: 8),
+
+                  CommonStatePicker(onSelectState: (p0) {}),
+                  const SpaceWidget(spaceHeight: 12),
+                  const TextWidget(
+                    text: "City",
+                    fontColor: AppColors.greyLight,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
+                  const SpaceWidget(spaceHeight: 8),
+                  CommonCityPicker(onSelectCity: (p0) {}),
 
                   const SpaceWidget(spaceHeight: 12),
                   _buildTextField(

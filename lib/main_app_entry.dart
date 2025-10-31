@@ -15,6 +15,7 @@ class MainApp extends StatelessWidget {
       AppSize.size = MediaQuery.of(context).size;
       ResponsiveUtils.initialize(context);
       return GetMaterialApp(
+        scrollBehavior: CustomScrollBehavior(),
         navigatorObservers: [MyRouteObserver()],
         debugShowCheckedModeBanner: false,
         title: AppStrings.appName,
@@ -41,5 +42,18 @@ class MyRouteObserver extends GetObserver {
   void didPop(Route route, Route? previousRoute) {
     print('Route popped: ${route.settings.name}');
     super.didPop(route, previousRoute);
+  }
+}
+
+
+class CustomScrollBehavior extends MaterialScrollBehavior {
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const BouncingScrollPhysics(); // or ClampingScrollPhysics, etc.
+  }
+
+  @override
+  ScrollViewKeyboardDismissBehavior getKeyboardDismissBehavior(BuildContext context) {
+    return ScrollViewKeyboardDismissBehavior.onDrag;
   }
 }
