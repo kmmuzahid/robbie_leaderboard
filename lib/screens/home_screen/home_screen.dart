@@ -203,55 +203,41 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     const SpaceWidget(spaceHeight: 8),
-                    LayoutBuilder(
-                      builder:
-                          (BuildContext context, BoxConstraints constraints) {
-                        // Get screen height safely
-                        final screenHeight = MediaQuery.of(context).size.height;
-                        // Calculate a safe height value (190 or 25% of screen height)
-                        final containerHeight = screenHeight * 0.25;
-
-                        return Obx(
-                          () => Container(
-                              width: double.infinity,
-                              height: containerHeight,
-                              // Use safe height value
-                              padding: const EdgeInsets.all(12),
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: AppColors.blue,
-                                borderRadius: BorderRadius.circular(8),
+                    Container(
+                      constraints: const BoxConstraints(minHeight: 200),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.blue,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: controller.recentActivity.isEmpty
+                            ? const Center(
+                                child: TextWidget(
+                                  text: "There is no recent activity",
+                                  fontColor: AppColors.white,
+                                ),
+                              )
+                            : ScrollConfiguration(
+                                behavior: ScrollConfiguration.of(context).copyWith(
+                                  scrollbars: true,
+                                  physics: const BouncingScrollPhysics(),
+                                ),
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const ClampingScrollPhysics(),
+                                  itemCount: controller.recentActivity.length,
+                                  itemBuilder: (context, index) {
+                                    return RecentActivityCardWidget(
+                                      action: controller.recentActivity[index].title,
+                                      value: controller.recentActivity[index].text,
+                                      time: timeAgo(controller.recentActivity[index].createdAt),
+                                    );
+                                  },
+                                ),
                               ),
-                              child: controller.recentActivity.isEmpty
-                                  ? const Center(
-                                      child: TextWidget(
-                                        text: "There is no recent activity",
-                                        fontColor: AppColors.white,
-                                      ),
-                                    )
-                                  : ListView.builder(
-                                      itemCount:
-                                          controller.recentActivity.length,
-                                      itemBuilder: (context, index) {
-                                        return RecentActivityCardWidget(
-                                            action: controller
-                                                .recentActivity[index].title,
-                                            value: controller
-                                                .recentActivity[index].text,
-                                            time:
-                                                timeAgo(
-                                                controller.recentActivity[index].createdAt));
-                                      },
-                                    )  
-                              // StreamBuilder(stream: _controller.streamSocket.getResponse, builder: (context, snapshot) {
-                              //   if(snapshot.hasData){
-                              //     return ListView.builder(itemBuilder: (context, index) => RecentActivityCardWidget(action: snapshot.data[index], value: value, time: time),)
-                              //   }
-                              // },)
-                              ),
-                        );
-                      },
+                      ),
                     ),
                     const SpaceWidget(spaceHeight: 16),
                   ],

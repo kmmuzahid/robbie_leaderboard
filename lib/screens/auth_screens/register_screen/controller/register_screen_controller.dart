@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:the_leaderboard/common/input_helper.dart';
 import 'package:the_leaderboard/common/location_picker_controller.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
@@ -88,6 +89,19 @@ class RegisterScreenController extends GetxController {
 
   void register() async {
     // Get trimmed and raw values
+    final dateOfBirth =
+        InputHelper.validate(ValidationType.validateDate, ageController.text) == null
+            ? ageController.text
+            : "";
+    if (ageController.text.isNotEmpty && dateOfBirth.isEmpty) {
+      Get.snackbar(
+        "Invalid Date",
+        "Please enter a valid date or keep empty.",
+        colorText: AppColors.white,
+      );
+      return;
+    }
+
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
     String confirmPassword = confirmPasswordController.text.trim();
@@ -95,7 +109,7 @@ class RegisterScreenController extends GetxController {
     String country = locationPickerController.countryInitController.text.trim();
     String city = locationPickerController.cityInitController.text.trim();
     String gender = selectedGender.value.trim();
-    String age = ageController.text.trim();
+    String age = dateOfBirth;
     String contact = phoneNumber.value.trim();
     String referral = referralController.text.trim();
 
@@ -150,9 +164,6 @@ class RegisterScreenController extends GetxController {
       );
       return;
     }
-
-    appLog(
-        "User is registering with $email, $password, $name, $country, $city, $gender, $age and $contact");
 
     // Allow empty strings or null for optional fields
     final profile = RegisterModel(

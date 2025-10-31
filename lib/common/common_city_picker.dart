@@ -2,7 +2,9 @@ import 'dart:math' as AppLogs;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_country_state/flutter_country_state.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:get/utils.dart';
 
 import '../constants/app_colors.dart';
 import 'all_alliance.dart';
@@ -39,6 +41,11 @@ class _CommonCityPickerState extends State<CommonCityPicker> {
         readOnly: true,
         controller: controller.cityInitController,
         onTap: () {
+          if (controller.stateInitController.text.isEmpty) {
+            Get.snackbar("Select State First", "To select a city, please select a state first.",
+                colorText: AppColors.white);
+            return;
+          }
           showModalBottomSheet(
             isScrollControlled: true,
             context: context,

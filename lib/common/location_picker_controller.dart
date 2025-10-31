@@ -7,6 +7,13 @@ class LocationPickerController extends GetxController {
   late TextEditingController countryInitController;
   late TextEditingController cityInitController;
 
+  init(String country, String city) {
+    countryInitController.text = country;
+    cityInitController.text = city;
+    Selected.country = country;
+    Selected.city = city;
+  }
+
   @override
   void onInit() {
     stateInitController = TextEditingController();

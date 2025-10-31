@@ -29,6 +29,7 @@ class LeaderboardTabBar extends StatelessWidget {
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
+        
         unselectedLabelStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,

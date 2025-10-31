@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:the_leaderboard/common/input_helper.dart';
 import 'package:the_leaderboard/common/location_picker_controller.dart';
 import 'package:the_leaderboard/common/permission_handler_helper.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
@@ -177,11 +178,24 @@ class EditProfileController extends GetxController {
     }
 
     try {
+      final dateOfBirth =
+          InputHelper.validate(ValidationType.validateDate, ageController.text) == null
+              ? ageController.text
+              : "";
+      if (ageController.text.isNotEmpty && dateOfBirth.isEmpty) {
+        Get.snackbar(
+          "Invalid Date",
+          "Please enter a valid date or keep empty.",
+          colorText: AppColors.white,
+        );
+        isSaving.value = false;
+        return;
+      }
       Map<String, dynamic> body = {
         "name": usernameController.text,
         "contact": phoneNumber.value,
         "gender": selectedGender.value,
-        "age": ageController.text,
+        "age": dateOfBirth,
         "country": locationPickerController.countryInitController.text.trim(),
         "city": locationPickerController.cityInitController.text.trim(),
         "facebook": facebookController.text,
@@ -232,9 +246,10 @@ class EditProfileController extends GetxController {
         appLog("response from profile: $data");
         final userData = ProfileResponseModel.fromJson(data["data"]).user;
         if (userData != null) {
+          locationPickerController.init(userData.country, userData.city);
+
           userImage.value = userData.profileImg;
           usernameController.text = userData.name;
-          // contactController.text = userData.contact;
           selectedGender.value = userData.gender;
           ageController.text = userData.age;
           facebookController.text = userData.facebook;
@@ -244,26 +259,7 @@ class EditProfileController extends GetxController {
           youtubeController.text = userData.youtube;
           bioController.text = userData.bio;
           phone.value = await PhoneNumber.getRegionInfoFromPhoneNumber(userData.contact);
-          // countryList.value = await getAllCountries();
-          // final country = countryList.firstWhereOrNull(
-          //   (c) => c.name.toLowerCase() == userData.country.toLowerCase(),
-          // );
-          // if (country != null) {
-          //   appLog("Found country: ${country.name} and country code: ${country.isoCode}");
-          //   await updateCountry(country.isoCode);
-          //   // After cities loaded, select user’s saved city
-          //   appLog("City list: $cityList");
-          //   final city = cityList.firstWhereOrNull(
-          //     (c) => c.name.toLowerCase() == userData.city.toLowerCase(),
-          //   );
-          //   appLog("Found city: ${city?.name} and default city: ${userData.city}");
-          //   if (city != null) {
-          //     updateCity(city.name);
-          //   }
-          //   // updateCountry(userData.country);
-          //   // updateCity(userData.city);
-          //   appLog(userData.city);
-          // }
+       
         }
       }
     }

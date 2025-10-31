@@ -1,23 +1,34 @@
-
-
 class CountryLeaderboardModel {
-  final num totalInvest;
+  final double totalInvest;
   final String country;
   final int totalUsers;
-  String? isoCode;
 
-  CountryLeaderboardModel(this.totalInvest, this.country, this.totalUsers);
+  CountryLeaderboardModel({
+    required this.totalInvest,
+    required this.country,
+    required this.totalUsers,
+  });
 
+  // Create an instance from JSON
   factory CountryLeaderboardModel.fromJson(Map<String, dynamic> json) {
-    return CountryLeaderboardModel(json["totalInvest"] as num,
-        json["country"] ?? "", json["totalUsers"] as int);
+    return CountryLeaderboardModel(
+      totalInvest: json['totalInvest'] ?? 0.0,
+      country: json['country'] ?? '',
+      totalUsers: json['totalUsers'] ?? 0,
+    );
   }
 
-  // void fetchFlag() async {
-  //   final countryList = await getAllCountries();
-  //   final countryName = countryList.firstWhere(
-  //     (c) => c.name == country,
-  //   );
-  //   isoCode  =
-  // }
+  // Convert instance to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'totalInvest': totalInvest,
+      'country': country,
+      'totalUsers': totalUsers,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'CountryLeaderboardModel(totalInvest: $totalInvest, country: $country, totalUsers: $totalUsers)';
+  }
 }

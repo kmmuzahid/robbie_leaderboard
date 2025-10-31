@@ -51,13 +51,7 @@ class CountryLeaderboardWidget extends StatelessWidget {
     }
     return RefreshIndicator(
       onRefresh: () async {
-        if (tabId == 0) {
-          controller.fetchCountryData();
-        } else if (tabId == 1) {
-          controller.fetchCountryDataDaily();
-        } else {
-          controller.fetchCountryDataMonth();
-        }
+        controller.fetchData();
       },
       child: Column(
         children: [

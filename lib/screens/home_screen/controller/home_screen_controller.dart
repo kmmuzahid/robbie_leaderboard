@@ -53,7 +53,7 @@ class HomeScreenController extends GetxController {
 
   fetchRecentActivity() async {
     final response = await ApiGetService.apiGetServiceQuery(AppUrls.notification,
-        queryParameters: {'type': 'global', 'limit': '10'});
+        queryParameters: {'type': 'global', 'limit': '8'});
     isLoading.value = false;
     if (response != null) {
       final jsonbody = jsonDecode(response.body);

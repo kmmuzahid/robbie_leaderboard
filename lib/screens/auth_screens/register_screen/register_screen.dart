@@ -6,6 +6,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:the_leaderboard/common/common_city_picker.dart';
 import 'package:the_leaderboard/common/common_country_picker.dart';
 import 'package:the_leaderboard/common/common_state_picker.dart';
+import 'package:the_leaderboard/common/input_helper.dart';
 import 'package:the_leaderboard/constants/app_country_city.dart';
 import 'package:the_leaderboard/screens/auth_screens/register_screen/widgets/dropdown_button_widget.dart';
 
@@ -212,7 +213,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFieldWidget(
                   controller: controller.ageController,
                   hintText: "Enter Date of Birth",
-                  keyboardType: TextInputType.datetime,
+                  inputFormat: InputHelper.getInputFormatters(ValidationType.validateDate),
+                  keyboardType: InputHelper.getKeyboardType(ValidationType.validateDate),
                   suffixIcon: AppIconPath.calenderIcon,
                   onTapSuffix: () => controller.onSelectDateBirth(context),
                 ),

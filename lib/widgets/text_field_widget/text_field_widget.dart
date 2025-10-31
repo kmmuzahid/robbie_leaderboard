@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:the_leaderboard/widgets/icon_button_widget/icon_button_widget.dart';
 
@@ -15,7 +16,7 @@ class TextFieldWidget extends StatefulWidget {
   final int maxLines; // Add maxLines as a parameter
   final VoidCallback? onTapSuffix;
   final bool? read;
-
+  final List<TextInputFormatter>? inputFormat;
   const TextFieldWidget({
     super.key,
     required this.controller,
@@ -26,6 +27,7 @@ class TextFieldWidget extends StatefulWidget {
     this.read = false,
     this.maxLines = 1, // Default value is 1
     this.onTapSuffix,
+    this.inputFormat,
   });
 
   @override
@@ -69,6 +71,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             fontWeight: FontWeight.w400,
             fontSize: ResponsiveUtils.width(16),
           ),
+          inputFormatters: widget.inputFormat,
           decoration: InputDecoration(
             fillColor: AppColors.blue,
             hintText: widget.hintText,
