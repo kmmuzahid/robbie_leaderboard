@@ -40,7 +40,7 @@ Future<void> main() async {
   // );
   Get.put(NotificationController());
   HttpOverrides.global = MyHttpOverrides();
-  await LocalStorage.getAllPrefData();
+  await StorageService.getAllPrefData();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

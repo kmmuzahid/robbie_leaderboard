@@ -61,7 +61,7 @@ class VerifyOtpController extends GetxController {
     // Here you would add your API call to request a new OTP code
     // For now we'll just show a snackbar and restart the timer
 
-    final url = "${AppUrls.resentOtp}/${LocalStorage.myEmail}";
+    final url = "${AppUrls.resentOtp}/${StorageService.myEmail}";
     final response = await ApiPostService.apiPostService(url, null);
     if (response != null) {
       final data = jsonDecode(response.body);
@@ -99,7 +99,7 @@ class VerifyOtpController extends GetxController {
           final data = jsonDecode(response.body);
           if (response.statusCode == 200 || response.statusCode == 201) {
             final token = data["data"]["accessToken"];
-            LocalStorage.token = token;
+            StorageService.token = token;
             Get.snackbar("Success", data["message"],
                 colorText: AppColors.white);
             Get.offAll(const BottomNav());

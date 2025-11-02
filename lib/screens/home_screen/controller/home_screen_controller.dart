@@ -102,7 +102,7 @@ class HomeScreenController extends GetxController {
     fetchHallofFrameMostEngaged(isUpdating);
     Get.find<ProfileScreenController>().fetchProfile(isUpdating: isUpdating);
     fetchRecentActivity();
-    appLog("User email: ${LocalStorage.myEmail} and user id: ${LocalStorage.userId}");
+    appLog("User email: ${StorageService.myEmail} and user id: ${StorageService.userId}");
     // await Purchases.configure(
     //   PurchasesConfiguration("goog_gsyjGglgxeOOHLKmCuTaOliiTFa")
     //     ..appUserID = LocalStorage.userId, // optional
@@ -131,8 +131,8 @@ class HomeScreenController extends GetxController {
           rank.value = userData?.rank ?? 0;
           image.value = userData?.profileImg ?? "";
           userCode.value = userData?.userCode ?? "";
-          LocalStorage.userId = userData?.id ?? "";
-          LocalStorage.setString(LocalStorageKeys.userId, LocalStorage.userId);
+          StorageService.userId = userData?.id ?? "";
+          StorageService.setString(LocalStorageKeys.userId, StorageService.userId);
           update();
           return;
         } else {

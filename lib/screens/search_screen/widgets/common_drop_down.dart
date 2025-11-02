@@ -4,6 +4,7 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 class CommonDropDown<T> extends StatefulWidget {
   const CommonDropDown({
     required this.hint,
+    this.selectedValue,
     required this.items,
     required this.onChanged,
     required this.nameBuilder,
@@ -19,6 +20,7 @@ class CommonDropDown<T> extends StatefulWidget {
   });
 
   final String hint;
+  final T? selectedValue;
   final List<T> items;
   final Color? borderColor;
   final Color? backgroundColor;
@@ -46,8 +48,8 @@ class _CommonDropDownState<T> extends State<CommonDropDown<T>> with SingleTicker
     _controller = AnimationController(vsync: this, duration: const Duration(seconds: 4))..repeat();
 
     // Set first item by default if items are available
-    if (widget.items.isNotEmpty) {
-      _selectedItem = widget.items.first;
+    if (widget.items.isNotEmpty && widget.enableInitalSelection) {
+      _selectedItem = widget.selectedValue ?? widget.items.first;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         widget.onChanged(_selectedItem);
       });
@@ -59,8 +61,8 @@ class _CommonDropDownState<T> extends State<CommonDropDown<T>> with SingleTicker
     super.didUpdateWidget(oldWidget);
 
     // Update selection when new items come in and none selected
-    if (_selectedItem == null && widget.items.isNotEmpty) {
-      _selectedItem = widget.items.first;
+    if (_selectedItem == null && widget.items.isNotEmpty && widget.enableInitalSelection) {
+      _selectedItem = widget.selectedValue ?? widget.items.first;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         widget.onChanged(_selectedItem);
         setState(() {});

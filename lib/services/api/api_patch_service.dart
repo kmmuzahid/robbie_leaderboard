@@ -111,14 +111,14 @@ class ApiPatchService {
         formDataMap['data'] = jsonEncode(updateData);
       }
       final formData = FormData.fromMap(formDataMap);
-      final url = "${AppUrls.updateUser}/${LocalStorage.userId}";
+      final url = "${AppUrls.updateUser}/${StorageService.userId}";
       appLog("formDataMap: $formDataMap");
       final response = await dio.patch(
         url,
         data: formData,
         options: Options(
           headers: {
-            'authorization': LocalStorage.token,
+            'authorization': StorageService.token,
             // 'Content-Type': 'multipart/form-data',
           },
         ),
@@ -159,7 +159,7 @@ class ApiPatchService {
             contentType: MediaType.parse(mimeType!));
         request.files.add(img);
       }
-      final token = LocalStorage.token;
+      final token = StorageService.token;
       request.headers["Authorization"] = token;
 
       final streamResponse = await request.send();
@@ -195,7 +195,7 @@ class ApiPatchService {
       // ),
       "data": jsonEncode(body),
     });
-    final token = LocalStorage.token;
+    final token = StorageService.token;
     try {
       final response = await dio.patch(url,
           data: formData,

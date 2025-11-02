@@ -26,14 +26,17 @@ enum LeaderboardTime {
 }
 
 class LeaderboardController extends GetxController {
+  //leaderboard
   final RxList<LeaderBoardModel?> leaderBoardList = <LeaderBoardModel>[].obs;
-  final RxList<LeaderBoardModelRaised?> creatorList = <LeaderBoardModelRaised>[].obs;
-  final RxList<CountryLeaderboardModel> countryList = <CountryLeaderboardModel>[].obs;
   final RxList<LeaderBoardModel?> leaderBoardDailyList = <LeaderBoardModel>[].obs;
-  final RxList<LeaderBoardModelRaised?> creatorDailyList = <LeaderBoardModelRaised>[].obs;
-  final RxList<CountryLeaderboardModel> countryDailyList = <CountryLeaderboardModel>[].obs;
   final RxList<LeaderBoardModel?> leaderBoardMonthlyList = <LeaderBoardModel>[].obs;
+  //creator
+  final RxList<LeaderBoardModelRaised?> creatorList = <LeaderBoardModelRaised>[].obs;
+  final RxList<LeaderBoardModelRaised?> creatorDailyList = <LeaderBoardModelRaised>[].obs;
   final RxList<LeaderBoardModelRaised?> creatorMonthlyList = <LeaderBoardModelRaised>[].obs;
+  //country
+  final RxList<CountryLeaderboardModel> countryList = <CountryLeaderboardModel>[].obs;
+  final RxList<CountryLeaderboardModel> countryDailyList = <CountryLeaderboardModel>[].obs;
   final RxList<CountryLeaderboardModel> countryMonthlyList = <CountryLeaderboardModel>[].obs;
 
   final RxBool isLoading = false.obs;
@@ -52,7 +55,6 @@ class LeaderboardController extends GetxController {
   final double eachItemHeight = 50.0;
   Timer? refreshTimer;
   final userId = "".obs;
-  final isoCodes = <String>[].obs;
 
   final leaderboardType = LeaderboardType.leaderboard.obs;
   final leaderboardTime = LeaderboardTime.allTime.obs;
@@ -150,7 +152,8 @@ class LeaderboardController extends GetxController {
     try {
       onLoading(true);
       final response = await ApiGetService.apiGetServiceQuery(url);
-
+      // print(url);
+      // print(response?.body);
       if (response != null) {
         final jsonBody = jsonDecode(response.body);
         if (response.statusCode == 200 && jsonBody['success'] == true) {
@@ -277,7 +280,7 @@ class LeaderboardController extends GetxController {
   Future<void> _fetchUserProfile() async {
     try {
       await Get.find<ProfileScreenController>().fetchProfile();
-      userId.value = LocalStorage.userId;
+      userId.value = StorageService.userId;
       appLog("User ID: ${userId.value}");
     } catch (e) {
       errorLog("Error fetching user profile", e);

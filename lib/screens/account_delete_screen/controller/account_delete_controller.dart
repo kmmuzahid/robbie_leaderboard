@@ -14,7 +14,7 @@ class AccountDeleteController extends GetxController {
 
   void deleteAccount() {}
   void deleteUser() async {
-    final url = "${AppUrls.deleteUser}/${LocalStorage.userId}";
+    final url = "${AppUrls.deleteUser}/${StorageService.userId}";
     final response = await ApiDeleteService.apiDeleteService(url);
     if (response != null) {
       final data = jsonDecode(response.body);
@@ -37,7 +37,7 @@ class AccountDeleteController extends GetxController {
 
       return;
     }
-    if (passwordController.text != LocalStorage.myPassword) {
+    if (passwordController.text != StorageService.myPassword) {
       Get.snackbar(
         AppStrings.incorrectPassword,
        AppStrings.passwordIsIncorrect,

@@ -16,7 +16,7 @@ class ApiPostService {
           .post(Uri.parse(url),
               headers: {
                 'Content-Type': 'application/json',
-                "authorization": LocalStorage.token
+                "authorization": StorageService.token
               },
               body: body == null ? body : jsonEncode(body))
           .timeout(const Duration(seconds: 10));

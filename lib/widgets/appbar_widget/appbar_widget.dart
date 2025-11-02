@@ -15,6 +15,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final bool showLeading;
   final Function? onPress;
+  
 
   const AppbarWidget({
     super.key,

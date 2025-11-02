@@ -9,8 +9,8 @@ class SplashController extends GetxController {
   Future<void> onInitialDataLoadFunction() async {
     try {
       await Future.delayed(const Duration(seconds: 2));
-      appLog(LocalStorage.token);
-      if (LocalStorage.token.isEmpty) {
+      appLog(StorageService.token);
+      if (StorageService.token.isEmpty) {
       Get.offAllNamed(AppRoutes.onboardingScreen);
       } else {
         Get.offAllNamed(AppRoutes.appNavigation);

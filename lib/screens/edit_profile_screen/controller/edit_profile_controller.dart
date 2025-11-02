@@ -205,7 +205,7 @@ class EditProfileController extends GetxController {
         "youtube": youtubeController.text,
         "bio": bioController.text
       };
-      final url = "${AppUrls.updateUser}/${LocalStorage.userId}";
+      final url = "${AppUrls.updateUser}/${StorageService.userId}";
       // await ApiPatchService.formDataRequest(
       //     body: body, image: selectedImage.value?.path ?? "", url: url);
       await ApiPatchService.MultipartRequest1(

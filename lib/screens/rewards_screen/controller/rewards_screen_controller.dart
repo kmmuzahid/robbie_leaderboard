@@ -103,8 +103,8 @@ class RewardsScreenController extends GetxController {
   Future fetchData({bool isUpdating = false}) async {
     fetchRuffle(isUpdating: isUpdating);
     fetchUserTicket(isUpdating: isUpdating);
-    totalTicket.value = LocalStorage.totalTicket;
-    dayIndex.value = LocalStorage.dayIndex;
+    totalTicket.value = StorageService.totalTicket;
+    dayIndex.value = StorageService.dayIndex;
     if (dayIndex.value > 7) {
       dayIndex.value = 0;
     }
@@ -154,7 +154,7 @@ class RewardsScreenController extends GetxController {
             luckyTicket.value = data['data']['ticket'] ?? 0;
             appLog("The lucky number is ${luckyTicket.value}");
             SocketService.instance
-                .createTicket(LocalStorage.myName, data["data"]);
+                .createTicket(StorageService.myName, data["data"]);
             responseStatus.value = "Success";
             responseMessage.value =
                 "${luckyTicket.value} Tickets created successfully";
@@ -190,7 +190,7 @@ class RewardsScreenController extends GetxController {
   void spinWheel(bool fromButton) async {
     final today = DateFormat("yyyy-MM-dd").format(DateTime.now());
     appLog(today);
-    final lastwheelday = LocalStorage.lastWheelday;
+    final lastwheelday = StorageService.lastWheelday;
     appLog(lastwheelday);
     if (getRemainingTime() == "Deadline has already passed") {
       Get.snackbar("Deadline Passed",
@@ -217,13 +217,13 @@ class RewardsScreenController extends GetxController {
       // wheelController.animateToItem(totalItem,
       //     duration: const Duration(seconds: 3), curve: Curves.fastOutSlowIn);
       dayIndex.value++;
-      LocalStorage.setString(LocalStorageKeys.lastWheelday, today);
-      LocalStorage.lastWheelday = today;
-      LocalStorage.dayIndex = dayIndex.value;
-      LocalStorage.setInt(LocalStorageKeys.dayIndex, dayIndex.value);
+      StorageService.setString(LocalStorageKeys.lastWheelday, today);
+      StorageService.lastWheelday = today;
+      StorageService.dayIndex = dayIndex.value;
+      StorageService.setInt(LocalStorageKeys.dayIndex, dayIndex.value);
       totalTicket.value += value;
-      LocalStorage.setInt(LocalStorageKeys.totalTicket, totalTicket.value);
-      LocalStorage.totalTicket = totalTicket.value;
+      StorageService.setInt(LocalStorageKeys.totalTicket, totalTicket.value);
+      StorageService.totalTicket = totalTicket.value;
       Future.delayed(
         const Duration(seconds: 3),
         () {

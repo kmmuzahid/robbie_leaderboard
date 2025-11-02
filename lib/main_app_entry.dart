@@ -15,7 +15,9 @@ class MainApp extends StatelessWidget {
       AppSize.size = MediaQuery.of(context).size;
       ResponsiveUtils.initialize(context);
       return GetMaterialApp(
+        
         scrollBehavior: CustomScrollBehavior(),
+        
         navigatorObservers: [MyRouteObserver()],
         debugShowCheckedModeBanner: false,
         title: AppStrings.appName,

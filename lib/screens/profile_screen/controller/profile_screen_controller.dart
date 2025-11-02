@@ -53,10 +53,10 @@ class ProfileScreenController extends GetxController {
           twitterUrl.value = profile.twitter;
           linkedinUrl.value = profile.linkedin;
           youtubeUrl.value = profile.youtube;
-          LocalStorage.myName = profile.name;
-          LocalStorage.userId = profile.id;
-          LocalStorage.setString(LocalStorageKeys.userId, profile.id);
-          appLog("user id: ${profile.id} and token: ${LocalStorage.token}");
+          StorageService.myName = profile.name;
+          StorageService.userId = profile.id;
+          StorageService.setString(LocalStorageKeys.userId, profile.id);
+          appLog("user id: ${profile.id} and token: ${StorageService.token}");
         } else {
           Get.closeAllSnackbars();
           Get.snackbar("Error", data["message"], colorText: AppColors.white);
@@ -71,16 +71,16 @@ class ProfileScreenController extends GetxController {
 
   void logout() {
     appLog("User is logged out");
-    LocalStorage.myEmail = "";
-    LocalStorage.myPassword = "";
-    LocalStorage.rememberMe = false;
-    LocalStorage.token = "";
-    LocalStorage.setString(LocalStorageKeys.myEmail, "");
-    LocalStorage.setString(LocalStorageKeys.myPassword, "");
-    LocalStorage.setBool(LocalStorageKeys.rememberMe, false);
-    LocalStorage.setString(LocalStorageKeys.token, "");
-    LocalStorage.userId = "";
-    LocalStorage.setString(LocalStorageKeys.userId, "");
+    StorageService.myEmail = "";
+    StorageService.myPassword = "";
+    StorageService.rememberMe = false;
+    StorageService.token = "";
+    StorageService.setString(LocalStorageKeys.myEmail, "");
+    StorageService.setString(LocalStorageKeys.myPassword, "");
+    StorageService.setBool(LocalStorageKeys.rememberMe, false);
+    StorageService.setString(LocalStorageKeys.token, "");
+    StorageService.userId = "";
+    StorageService.setString(LocalStorageKeys.userId, "");
     Get.offAllNamed(AppRoutes.loginScreen);
   }
 

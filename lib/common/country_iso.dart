@@ -1,3 +1,5 @@
+import 'package:get/utils.dart';
+
 class Countries {
   static Map<String, String> all = {
     "Afghanistan": "AF",
@@ -214,4 +216,16 @@ class Countries {
     "Zambia": "ZM",
     "Zimbabwe": "ZW",
   };
+
+  static String getIsoCode(String? countryName) {
+    if (countryName == null) return "";
+    if (countryName == "united states") {
+      return 'US';
+    } else if (countryName == "bahamas the") {
+      return 'BS';
+    } else if (countryName == "cook islands") {
+      return 'CK';
+    }
+    return all[countryName.capitalize] ?? "";
+  }
 }

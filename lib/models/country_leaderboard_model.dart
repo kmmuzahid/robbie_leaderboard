@@ -12,9 +12,9 @@ class CountryLeaderboardModel {
   // Create an instance from JSON
   factory CountryLeaderboardModel.fromJson(Map<String, dynamic> json) {
     return CountryLeaderboardModel(
-      totalInvest: json['totalInvest'] ?? 0.0,
+      totalInvest: json['totalInvest'].toDouble() ?? 0.0,
       country: json['country'] ?? '',
-      totalUsers: json['totalUsers'] ?? 0,
+      totalUsers: json['totalUsers'].toInt() ?? 0,
     );
   }
 

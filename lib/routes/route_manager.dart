@@ -33,6 +33,7 @@ class RouteManager {
   RouteManager._();
 
   static const initial = AppRoutes.splashScreen;
+  
 
   static List<GetPage> getPages() {
     return [

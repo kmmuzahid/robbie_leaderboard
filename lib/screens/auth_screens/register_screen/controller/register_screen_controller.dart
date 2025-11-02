@@ -190,9 +190,9 @@ class RegisterScreenController extends GetxController {
       if (response != null) {
         final data = jsonDecode(response.body);
         if (response.statusCode == 200 || response.statusCode == 201) {
-          LocalStorage.token = data["data"]["token"];
-          LocalStorage.myEmail = email;
-          LocalStorage.setString(LocalStorageKeys.myEmail, email);
+          StorageService.token = data["data"]["token"];
+          StorageService.myEmail = email;
+          StorageService.setString(LocalStorageKeys.myEmail, email);
           Get.closeAllSnackbars();
           Get.snackbar("Success", data["message"], colorText: AppColors.white);
           Get.offNamed(AppRoutes.verifyOtpScreen);

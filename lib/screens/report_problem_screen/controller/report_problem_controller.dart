@@ -28,7 +28,7 @@ class ReportProblemController extends GetxController {
         if (response.statusCode == 200 || response.statusCode == 201) {
           appLog(data);
           SocketService.instance.sendReportData(
-              LocalStorage.myName, LocalStorage.myEmail, data["data"]);
+              StorageService.myName, StorageService.myEmail, data["data"]);
           Get.snackbar("Success", data["message"], colorText: AppColors.white);
           Get.toNamed(AppRoutes.settingsScreen);
         } else {

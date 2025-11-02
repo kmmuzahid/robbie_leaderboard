@@ -34,7 +34,7 @@ class ForgotPasswordScreenController extends GetxController {
         final data = jsonDecode(response.body);
         if (response.statusCode == 200 || response.statusCode == 201) {
           Get.snackbar("Success", data["message"], colorText: AppColors.white);
-          LocalStorage.myEmail = email;
+          StorageService.myEmail = email;
           Get.toNamed(AppRoutes.forgotVerifyOtpScreen);
         } else {
           Get.snackbar("Error", data["message"], colorText: AppColors.white);

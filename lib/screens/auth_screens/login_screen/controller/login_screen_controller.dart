@@ -19,7 +19,7 @@ class LoginScreenController extends GetxController {
   late TextEditingController passwordController;
 
   // Observable for remember me checkbox
-  final RxBool rememberMe = LocalStorage.rememberMe.obs;
+  final RxBool rememberMe = StorageService.rememberMe.obs;
 
   final RxBool isLoading = false.obs;
 
@@ -51,20 +51,20 @@ class LoginScreenController extends GetxController {
         final data = jsonDecode(response.body);
         if (response.statusCode == 200 || response.statusCode == 201) {
           String token = data["data"]["accessToken"];
-          LocalStorage.token = token;
-          LocalStorage.myEmail = email;
+          StorageService.token = token;
+          StorageService.myEmail = email;
 
           if (rememberMe.value) {
-            LocalStorage.setBool(LocalStorageKeys.rememberMe, rememberMe.value);
-            LocalStorage.setString(LocalStorageKeys.myEmail, email);
-            LocalStorage.setString(LocalStorageKeys.myPassword, password);
-            LocalStorage.setString(LocalStorageKeys.token, token);
+            StorageService.setBool(LocalStorageKeys.rememberMe, rememberMe.value);
+            StorageService.setString(LocalStorageKeys.myEmail, email);
+            StorageService.setString(LocalStorageKeys.myPassword, password);
+            StorageService.setString(LocalStorageKeys.token, token);
           }
           if (!rememberMe.value) {
-            LocalStorage.setBool(LocalStorageKeys.rememberMe, rememberMe.value);
-            LocalStorage.setString(LocalStorageKeys.myEmail, "");
-            LocalStorage.setString(LocalStorageKeys.myPassword, "");
-            LocalStorage.setString(LocalStorageKeys.token, "");
+            StorageService.setBool(LocalStorageKeys.rememberMe, rememberMe.value);
+            StorageService.setString(LocalStorageKeys.myEmail, "");
+            StorageService.setString(LocalStorageKeys.myPassword, "");
+            StorageService.setString(LocalStorageKeys.token, "");
           }
           Get.closeAllSnackbars();
           Get.snackbar("Success", data["message"], colorText: AppColors.white);
@@ -88,8 +88,8 @@ class LoginScreenController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     appLog("login controller initialized");
-    emailController = TextEditingController(text: LocalStorage.myEmail);
-    passwordController = TextEditingController(text: LocalStorage.myPassword);
+    emailController = TextEditingController(text: StorageService.myEmail);
+    passwordController = TextEditingController(text: StorageService.myPassword);
     if (kDebugMode) {
       // emailController.text = "biwova9852@jxbav.com";
       // passwordController.text = "12345678";

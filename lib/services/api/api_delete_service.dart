@@ -8,7 +8,7 @@ class ApiDeleteService {
     try {
       final response = await http.delete(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
-        'authorization': LocalStorage.token
+        'authorization': StorageService.token
       });
       return response;
     } catch (e) {

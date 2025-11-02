@@ -61,7 +61,7 @@ class ForgotVerifyOtpController extends GetxController {
     // Here you would add your API call to request a new OTP code
     // For now we'll just show a snackbar and restart the timer
     appLog("otp request is sending");
-    final url = "${AppUrls.resentOtp}/${LocalStorage.myEmail}";
+    final url = "${AppUrls.resentOtp}/${StorageService.myEmail}";
     try {
       final response = await ApiPostService.apiPostService(url, null);
       if (response != null) {
@@ -95,14 +95,14 @@ class ForgotVerifyOtpController extends GetxController {
     appLog("Otp is varifying");
     if (otp.length == 4 && RegExp(r'^\d{4}$').hasMatch(otp)) {
       // TODO: Implement actual OTP verification logic (e.g., API call)
-      final otpCode = VerifyOtpModel(otp: otp, email: LocalStorage.myEmail);
+      final otpCode = VerifyOtpModel(otp: otp, email: StorageService.myEmail);
       try {
         final response = await ApiPostService.apiPostService(
             AppUrls.verifyOtp, otpCode.toJson());
         if (response != null) {
           final data = jsonDecode(response.body);
           if (response.statusCode == 200 || response.statusCode == 201) {
-            LocalStorage.token = data["data"];
+            StorageService.token = data["data"];
             Get.snackbar("Success", data["message"]);
             Get.toNamed(AppRoutes.createNewPasswordScreen);
           } else {

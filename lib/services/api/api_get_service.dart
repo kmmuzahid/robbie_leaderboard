@@ -16,7 +16,7 @@ class ApiGetService {
       {Map<String, String>? queryParameters}) async {
     try {
       appLog("hitting url: $url");
-      final token = LocalStorage.token;
+      final token = StorageService.token;
       appLog("Token: $token");
       final response =
           await http.get(Uri.parse(url).replace(queryParameters: queryParameters), headers: {
@@ -56,7 +56,7 @@ class ApiGetService {
   static Future<http.Response?> apiGetService(String url) async {
     try {
       appLog("hitting url: $url");
-      final token = LocalStorage.token;
+      final token = StorageService.token;
       appLog("Token: $token");
       final response = await http.get(Uri.parse(url), headers: {
         'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ class ApiGetService {
         link,
         headers: {
           'Content-Type': 'application/json',
-          'authorization': LocalStorage.token
+          'authorization': StorageService.token
         },
       );
       appLog(response.body);

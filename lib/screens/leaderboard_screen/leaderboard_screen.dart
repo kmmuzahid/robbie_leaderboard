@@ -10,9 +10,11 @@ import 'package:the_leaderboard/screens/home_screen/controller/home_screen_contr
 import 'package:the_leaderboard/screens/leaderboard_screen/controller/leaderboard_controller.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/country_leaderboard_widget.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/floating_button_widget.dart';
+import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_creator_widget.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_dropdown.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_item.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_tabbar.dart';
+import 'package:the_leaderboard/screens/leaderboard_screen/widgets/leaderboard_widget.dart';
 import 'package:the_leaderboard/screens/leaderboard_screen/widgets/top_rank_item.dart';
 import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
 import 'package:the_leaderboard/screens/profile_screen/controller/profile_screen_controller.dart';
@@ -59,491 +61,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
     super.dispose();
   }
 
-  Widget buildLeaderboardTabView(List<LeaderBoardModel?> leaderboard) {
-    try {
-      final filteredList = leaderboard.skip(3).where((e) => e != null).toList();
 
-      final myData = filteredList.firstWhere(
-        (element) => element!.userId == _controller.userId.value,
-        orElse: () => LeaderBoardModel.empty(),
-      );
-      final myIndex = filteredList.indexWhere(
-        (element) => element?.userId == _controller.userId.value,
-      );
-      bool showFloating = true;
-      appLog("myIndex is: $myIndex");
 
-      return Column(
-        children: [
-          // const SpaceWidget(spaceHeight: 20),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                //rank two
-                if (leaderboard.length > 1)
-                  InkWell(
-                    onTap: () {
-                      final userid = leaderboard[1]?.userId;
-                      Get.toNamed(
-                        AppRoutes.otherProfileScreen,
-                        arguments: userid,
-                      );
-                    },
-                    child: Transform.translate(
-                      offset: Offset.zero,
-                      child: TopRankedItem(
-                        fromOnline: leaderboard[1]!.profileImg != "Unknown",
-                        rankLabel: leaderboard[1]!.currentRank.toString(),
-                        name: leaderboard[1]!.name,
-                        amount: "\$${AppCommonFunction.formatNumber(leaderboard[1]!.totalInvest)}",
-                        image: leaderboard[1]!.profileImg != "Unknown"
-                            ? leaderboard[1]!.profileImg
-                            : AppImagePath.profileImage,
-                        rankColor: AppColors.greyDark,
-                        avatarSize: 40,
-                      ),
-                    ),
-                  ),
-                //rank one
-                if (leaderboard.isNotEmpty)
-                  InkWell(
-                    onTap: () {
-                      final userId = leaderboard[0]!.userId;
-                      Get.toNamed(
-                        AppRoutes.otherProfileScreen,
-                        arguments: userId,
-                      );
-                    },
-                    child: Transform.translate(
-                      offset: const Offset(0, -10),
-                      child: TopRankedItem(
-                        fromOnline: leaderboard[0]!.profileImg != "Unknown",
-                        rankLabel: leaderboard[0]!.currentRank.toString(),
-                        name: leaderboard[0]!.name,
-                        amount: "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalInvest)}",
-                        image: leaderboard[0]!.profileImg != "Unknown"
-                            ? leaderboard[0]!.profileImg
-                            : AppImagePath.profileImage,
-                        rankColor: AppColors.yellow,
-                        avatarSize: 55,
-                      ),
-                    ),
-                  ),
-                //rank 3
-                if (leaderboard.length > 2)
-                  InkWell(
-                    onTap: () {
-                      final userId = leaderboard[2]!.userId;
-                      Get.toNamed(
-                        AppRoutes.otherProfileScreen,
-                        arguments: userId,
-                      );
-                    },
-                    child: Transform.translate(
-                      offset: Offset.zero,
-                      child: TopRankedItem(
-                        fromOnline: leaderboard[2]!.profileImg != "Unknown",
-                        rankLabel: leaderboard[2]!.currentRank.toString(),
-                        name: leaderboard[2]!.name,
-                        amount: "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalInvest)}",
-                        image: leaderboard[2]!.profileImg != "Unknown"
-                            ? leaderboard[2]!.profileImg
-                            : AppImagePath.profileImage,
-                        rankColor: AppColors.orange,
-                        avatarSize: 40,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Stack(
-              children: [
-                leaderboard.isEmpty
-                    ? const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.access_time_outlined, color: AppColors.white, size: 100),
-                            // SpaceWidget(spaceHeight: 20),
-                            TextWidget(text: "Coming Soon", fontColor: AppColors.white),
-                            // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
-                          ],
-                        ),
-                      )
-                    : NotificationListener<ScrollNotification>(
-                        key: ValueKey(myIndex.toString()),
-                        onNotification: (scrollNotification) {
-                          final scrollOffset = scrollNotification.metrics.pixels;
-                          final screenHeight = scrollNotification.metrics.viewportDimension;
-
-                          final itemTop = myIndex * _controller.eachItemHeight;
-                          final itemBottom = itemTop + _controller.eachItemHeight;
-
-                          final visibleTop = scrollOffset;
-                          final visibleBottom = scrollOffset + screenHeight;
-
-                          final isInView = itemBottom >= visibleTop && itemTop <= visibleBottom;
-
-                          if (isInView && showFloating) {
-                            showFloating = false;
-                          } else if (!isInView && !showFloating) {
-                            showFloating = true;
-                          }
-                          return false;
-                        },
-                        child: RefreshIndicator(
-                          onRefresh: () async {
-                            _controller.fetchData();
-                          },
-                          child: ListView.builder(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            controller: _controller.scrollController,
-                            itemCount: filteredList.length,
-                            itemBuilder: (context, index) {
-                              final data = filteredList[index]!;
-                              final fromNetwork = data.profileImg != "Unknown";
-                              return LeaderboardItem(
-                                key: ValueKey('${data.name}${data.currentRank}$index'),
-                                rank: data.currentRank.toString().padLeft(2, '0'),
-                                name: data.name,
-                                amount: "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
-                                isUp: (data.previousRank - data.currentRank) > 0,
-                                fromNetwork: fromNetwork,
-                                image: fromNetwork
-                                    ? "${AppUrls.mainUrl}${data.profileImg}"
-                                    : AppImagePath.profileImage,
-                                backgrounColor:
-                                    data.userId == myData?.userId ? AppColors.midblue : null,
-                                onPressed: () {
-                                  Get.toNamed(
-                                    AppRoutes.otherProfileScreen,
-                                    arguments: data.userId,
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: _selfRank(myData, myIndex, showFloating),
-                )
-              ],
-            ),
-          ),
-          // ...List.generate(filteredList.length, (index) {
-          //   final data = filteredList[index]!;
-          //   final fromNetwork = data.profileImg != "Unknown";
-          //   return LeaderboardItem(
-          //     key: ValueKey('${data.name}${data.currentRank}$index'),
-          //     rank: data.currentRank,
-          //     name: data.name,
-          //     amount: "\$${data.totalInvest}",
-          //     isUp: (data.previousRank - data.currentRank) > 0,
-          //     fromNetwork: fromNetwork,
-          //     image: fromNetwork
-          //         ? "${AppUrls.mainUrl}${data.profileImg}"
-          //         : AppImagePath.profileImage,
-          //     onPressed: () {
-          //       Get.to(OtherProfileScreen(userId: data.userId));
-          //     },
-          //   );
-          // }),
-        ],
-      );
-    } catch (e) {
-      appLog(e);
-      return const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.access_time_outlined, color: AppColors.white, size: 100),
-            SpaceWidget(spaceHeight: 20),
-            TextWidget(text: "Coming Soon", fontColor: AppColors.white),
-            // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
-          ],
-        ),
-      );
-    }
-  }
-
-  Widget _selfRank(LeaderBoardModel? myData, int myIndex, bool showFloating) {
-    return Obx(() => Container(
-          color: AppColors.blue,
-          child: LeaderboardItem(
-            key: ValueKey(
-              '${myData?.name ?? 'N/A'}${myData?.currentRank ?? 'N/A'}$myIndex',
-            ),
-            rank: myData?.currentRank == 0
-                ? 'N/A'
-                : myData?.currentRank.toString().padLeft(2, '0') ?? 'N/A',
-            name: LocalStorage.myName,
-            amount: "\$${AppCommonFunction.formatNumber(myData?.totalInvest ?? 0)}",
-            isUp: showFloating && myData != null && myIndex != -1
-                ? (myData.previousRank - myData.currentRank) > 0
-                : false,
-            fromNetwork: myData?.profileImg != "Unknown",
-            image: '${AppUrls.mainUrl}${Get.find<ProfileScreenController>().image.value}',
-            onPressed: () {
-              Get.toNamed(
-                AppRoutes.otherProfileScreen,
-                arguments: myData?.userId ?? LocalStorage.userId,
-              );
-            },
-          ),
-        ));
-  }
-
-  Widget buildLeaderboardRaisedTabView(
-    List<LeaderBoardModelRaised?> leaderboard,
-  ) {
-    try {
-      appLog("The raised data: ${leaderboard.length}");
-      final filteredList = leaderboard.skip(3).where((e) => e != null).toList();
-
-      final myData = filteredList.firstWhere(
-        (element) => element!.userId == _controller.userId.value,
-        orElse: () => LeaderBoardModelRaised.empty(),
-      );
-      final myIndex = filteredList.indexWhere(
-        (element) => element?.userId == _controller.userId.value,
-      );
-      bool showFloating = true;
-      appLog("myIndex is: $myIndex, leaderboard length: ${leaderboard.length}");
-      if (leaderboard.isEmpty) {
-        return const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.access_time_outlined, color: AppColors.white, size: 100),
-              SpaceWidget(spaceHeight: 20),
-              TextWidget(text: "Coming Soon", fontColor: AppColors.white),
-              // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
-            ],
-          ),
-        );
-      }
-      return Column(
-        children: [
-          const SpaceWidget(spaceHeight: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                if (leaderboard.length > 1)
-                  InkWell(
-                    onTap: () {
-                      final userid = leaderboard[1]?.userId ?? "N/A";
-                      Get.toNamed(
-                        AppRoutes.otherProfileScreen,
-                        arguments: userid,
-                      );
-                    },
-                    child: Transform.translate(
-                      offset: Offset.zero,
-                      child: TopRankedItem(
-                        fromOnline: leaderboard[1]!.profileImg != "Unknown",
-                        rankLabel: "${leaderboard[1]?.currentRaisedRank}",
-                        name: leaderboard[1]!.name,
-                        amount:
-                            "\$${AppCommonFunction.formatNumber(leaderboard[1]?.totalRaised ?? 0)}",
-                        image: leaderboard[1]!.profileImg != "Unknown"
-                            ? leaderboard[1]!.profileImg
-                            : AppImagePath.profileImage,
-                        rankColor: AppColors.greyDark,
-                        avatarSize: 40,
-                      ),
-                    ),
-                  ),
-                if (leaderboard.isNotEmpty)
-                  InkWell(
-                    onTap: () {
-                      final userId = leaderboard[0]?.userId ?? "N/A";
-                      Get.toNamed(
-                        AppRoutes.otherProfileScreen,
-                        arguments: userId,
-                      );
-                    },
-                    child: Transform.translate(
-                      offset: const Offset(0, -10),
-                      child: TopRankedItem(
-                        fromOnline: leaderboard[0]!.profileImg != "Unknown",
-                        rankLabel: leaderboard[0]!.currentRaisedRank.toString(),
-                        name: leaderboard[0]!.name,
-                        amount: "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalRaised)}",
-                        image: leaderboard[0]!.profileImg != "Unknown"
-                            ? leaderboard[0]!.profileImg
-                            : AppImagePath.profileImage,
-                        rankColor: AppColors.yellow,
-                        avatarSize: 55,
-                      ),
-                    ),
-                  ),
-                if (leaderboard.length > 2)
-                  InkWell(
-                    onTap: () {
-                      final userId = leaderboard[2]!.userId;
-                      Get.toNamed(
-                        AppRoutes.otherProfileScreen,
-                        arguments: userId,
-                      );
-                    },
-                    child: Transform.translate(
-                      offset: Offset.zero,
-                      child: TopRankedItem(
-                        fromOnline: leaderboard[2]!.profileImg != "Unknown",
-                        rankLabel: leaderboard[2]!.currentRaisedRank.toString(),
-                        name: leaderboard[2]!.name,
-                        amount: "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalRaised)}",
-                        image: leaderboard[2]!.profileImg != "Unknown"
-                            ? leaderboard[2]!.profileImg
-                            : AppImagePath.profileImage,
-                        rankColor: AppColors.orange,
-                        avatarSize: 40,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          if (filteredList.isNotEmpty)
-            Expanded(
-              child: Stack(
-                children: [
-                  NotificationListener<ScrollNotification>(
-                    key: ValueKey(myIndex.toString()),
-                    onNotification: (scrollNotification) {
-                      final scrollOffset = scrollNotification.metrics.pixels;
-                      final screenHeight = scrollNotification.metrics.viewportDimension;
-
-                      final itemTop = myIndex * _controller.eachItemHeight;
-                      final itemBottom = itemTop + _controller.eachItemHeight;
-
-                      final visibleTop = scrollOffset;
-                      final visibleBottom = scrollOffset + screenHeight;
-
-                      final isInView = itemBottom >= visibleTop && itemTop <= visibleBottom;
-
-                      if (isInView && showFloating) {
-                        showFloating = false;
-                      } else if (!isInView && !showFloating) {
-                        showFloating = true;
-                      }
-                      return false;
-                    },
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        _controller.fetchData();
-                      },
-                      child: ListView.builder(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        controller: _controller.scrollController,
-                        itemCount: filteredList.length,
-                        itemBuilder: (context, index) {
-                          final data = filteredList[index]!;
-                          final fromNetwork = data.profileImg != "Unknown";
-                          return LeaderboardItem(
-                            key: ValueKey(
-                              '${data.name}${data.currentRaisedRank}$index',
-                            ),
-                            rank: data.currentRaisedRank.toString().padLeft(2, '0'),
-                            name: data.name,
-                            amount: "\$${AppCommonFunction.formatNumber(data.totalRaised)}",
-                            isUp: (data.previousRaisedRank - data.currentRaisedRank) > 0,
-                            fromNetwork: fromNetwork,
-                            image: fromNetwork
-                                ? "${AppUrls.mainUrl}${data.profileImg}"
-                                : AppImagePath.profileImage,
-                            backgrounColor:
-                                data.userId == myData?.userId ? AppColors.midblue : null,
-                            onPressed: () {
-                              Get.toNamed(
-                                AppRoutes.otherProfileScreen,
-                                arguments: data.userId,
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  showFloating && myData != null && myIndex != -1
-                      ? Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            color: AppColors.blue,
-                            child: LeaderboardItem(
-                              key: ValueKey(
-                                '${myData.name}${myData.currentRaisedRank}$myIndex',
-                              ),
-                              rank: myData.currentRaisedRank.toString().padLeft(2, '0'),
-                              name: myData.name,
-                              amount:
-                                  "\$${myData.totalRaised > 0 ? AppCommonFunction.formatNumber(myData.totalRaised) : 'N/A'}",
-                              isUp: (myData.previousRaisedRank - myData.currentRaisedRank) > 0,
-                              fromNetwork: myData.profileImg != "Unknown",
-                              image: myData.profileImg != "Unknown"
-                                  ? "${AppUrls.mainUrl}${myData.profileImg}"
-                                  : AppImagePath.profileImage,
-                              onPressed: () {
-                                Get.toNamed(
-                                  AppRoutes.otherProfileScreen,
-                                  arguments: myData.userId,
-                                );
-                              },
-                            ),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                ],
-              ),
-            ),
-          // ...List.generate(filteredList.length, (index) {
-          //   final data = filteredList[index]!;
-          //   final fromNetwork = data.profileImg != "Unknown";
-          //   return LeaderboardItem(
-          //     key: ValueKey('${data.name}${data.currentRank}$index'),
-          //     rank: data.currentRank,
-          //     name: data.name,
-          //     amount: "\$${data.totalInvest}",
-          //     isUp: (data.previousRank - data.currentRank) > 0,
-          //     fromNetwork: fromNetwork,
-          //     image: fromNetwork
-          //         ? "${AppUrls.mainUrl}${data.profileImg}"
-          //         : AppImagePath.profileImage,
-          //     onPressed: () {
-          //       Get.to(OtherProfileScreen(userId: data.userId));
-          //     },
-          //   );
-          // }),
-        ],
-      );
-    } catch (e) {
-      appLog("the error: $e");
-      return const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.access_time_outlined, color: AppColors.white, size: 100),
-            SpaceWidget(spaceHeight: 20),
-            TextWidget(text: "Coming Soon", fontColor: AppColors.white),
-            // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
-          ],
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -657,44 +176,59 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
                         children: [
                           // All Time Tab
                           if (selectedLeaderboard == 'Leaderboard')
-                            buildLeaderboardTabView(
-                              _controller.leaderBoardList,
+                            LeaderboardWidget(
+                              leaderboard: _controller.leaderBoardList,
+                              onRefresh: _controller.fetchData,
+                              scrollController: _controller.scrollController,
                             )
                           else if (selectedLeaderboard == 'Event Leaderboard')
                             CountryLeaderboardWidget(
-                              controller: _controller,
+                              onRefresh: _controller.fetchData,
                               leaderboard: _controller.countryList,
-                              tabId: _tabController.index,
                             )
                           else
-                            buildLeaderboardRaisedTabView(_controller.creatorList),
+                            LeaderboardCreatorWidget(
+                              leaderboard: _controller.creatorList,
+                              onRefresh: _controller.fetchData,
+                              scrollController: _controller.scrollController,
+                            ),
+
+
                           // Daily Tab
                           if (selectedLeaderboard == 'Leaderboard')
-                            buildLeaderboardTabView(
-                              _controller.leaderBoardDailyList,
+                            LeaderboardWidget(
+                              leaderboard: _controller.leaderBoardDailyList,
+                              onRefresh: _controller.fetchData,
+                              scrollController: _controller.scrollController,
                             )
                           else if (selectedLeaderboard == 'Event Leaderboard')
                             CountryLeaderboardWidget(
-                              controller: _controller,
+                              onRefresh: _controller.fetchData,
                               leaderboard: _controller.countryDailyList,
-                              tabId: _tabController.index,
                             )
                           else
-                            buildLeaderboardRaisedTabView(_controller.creatorDailyList),
+                            LeaderboardCreatorWidget(
+                              leaderboard: _controller.creatorDailyList,
+                              onRefresh: _controller.fetchData,
+                              scrollController: _controller.scrollController,
+                            ),
                           // Monthly Tab
                           if (selectedLeaderboard == 'Leaderboard')
-                            buildLeaderboardTabView(
-                              _controller.leaderBoardMonthlyList,
+                            LeaderboardWidget(
+                              leaderboard: _controller.leaderBoardMonthlyList,
+                              onRefresh: _controller.fetchData,
+                              scrollController: _controller.scrollController,
                             )
                           else if (selectedLeaderboard == 'Event Leaderboard')
                             CountryLeaderboardWidget(
-                              controller: _controller,
-                              tabId: _tabController.index,
+                              onRefresh: _controller.fetchData,
                               leaderboard: _controller.countryMonthlyList,
                             )
                           else
-                            buildLeaderboardRaisedTabView(
-                              _controller.creatorMonthlyList,
+                            LeaderboardCreatorWidget(
+                              leaderboard: _controller.creatorMonthlyList,
+                              onRefresh: _controller.fetchData,
+                              scrollController: _controller.scrollController,
                             ),
                         ],
                       ),

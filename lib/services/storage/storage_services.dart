@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 import 'storage_keys.dart';
 
-class LocalStorage {
+class StorageService {
   static String token = "";
   static String cookie = "";
   static String refreshToken = "";
