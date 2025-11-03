@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 import 'package:the_leaderboard/utils/app_size.dart';
+import 'package:the_leaderboard/widgets/image_widget/app_image.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../widgets/image_widget/image_widget.dart';
@@ -57,11 +58,11 @@ class ProfileHeaderWidget extends StatelessWidget {
         ),
         child: Column(children: [
           // Profile Picture
-          ImageWidget(
+          AppImage(
             height: 60,
             width: 60,
-            imagePath: image,
-            fromNetwork: fromNetwork,
+            url: image,
+            isFullScreen: true,
           ),
           const SpaceWidget(spaceHeight: 8),
           // Name

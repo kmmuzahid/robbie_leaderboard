@@ -59,7 +59,7 @@ class CountryLeaderboardWidget extends StatelessWidget {
                   offset: Offset.zero,
                   child: TopRankItemCountry(
                       fromOnline: false,
-                      rankLabel: "2",
+                      rankLabel: '2',
                       name: leaderboard[1]?.country.toUpperCase() ?? 'N/A',
                       amount:
                           "\$${AppCommonFunction.formatNumber(leaderboard[1]?.totalInvest ?? 0)}",
@@ -77,7 +77,7 @@ class CountryLeaderboardWidget extends StatelessWidget {
                   offset: const Offset(0, -10),
                   child: TopRankItemCountry(
                       fromOnline: false,
-                      rankLabel: "1",
+                      rankLabel: '1',
                       name: leaderboard[0]?.country.toUpperCase() ?? 'N/A',
                       amount:
                           "\$${AppCommonFunction.formatNumber(leaderboard[0]?.totalInvest ?? 0)}",
@@ -95,7 +95,7 @@ class CountryLeaderboardWidget extends StatelessWidget {
                   offset: Offset.zero,
                   child: TopRankItemCountry(
                       fromOnline: false,
-                      rankLabel: "3",
+                      rankLabel: '3',
                       name: leaderboard[2]?.country.toUpperCase() ?? 'N/A',
                       amount:
                           "\$${AppCommonFunction.formatNumber(leaderboard[2]?.totalInvest ?? 0)}",

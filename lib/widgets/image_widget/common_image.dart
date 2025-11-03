@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_image_path.dart';
 
 class CommonImage extends StatelessWidget {
@@ -78,6 +79,7 @@ class CommonImage extends StatelessWidget {
       ),
       progressIndicatorBuilder: (context, url, downloadProgress) {
         return Skeletonizer(
+          containersColor: AppColors.blueDarker,
           enabled: (downloadProgress.progress ?? 0) < 1,
           child: CommonImage(imageSrc: AppImagePath.appLogoCrown),
         );

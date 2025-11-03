@@ -11,19 +11,18 @@ import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
 class ApiGetService {
-
   static Future<http.Response?> apiGetServiceQuery(String url,
       {Map<String, String>? queryParameters}) async {
     try {
-      appLog("hitting url: $url");
       final token = StorageService.token;
-      appLog("Token: $token");
       final response =
           await http.get(Uri.parse(url).replace(queryParameters: queryParameters), headers: {
         'Content-Type': 'application/json',
         'authorization': token,
       }).timeout(const Duration(seconds: 40));
-      appLog("response from Get- $url: ${response.body}");
+      appLog(response.request?.url.toString());
+      appLog(response.request?.headers.toString());
+      appLog(response.body);
       return response;
     } on SocketException catch (e) {
       errorLog("apiGetService - No Internet", e);
@@ -32,7 +31,6 @@ class ApiGetService {
         AppStrings.noInternet,
         colorText: AppColors.white,
       );
-      Get.toNamed(AppRoutes.serverOff);
     } on TimeoutException catch (e) {
       errorLog("apiGetService - Timeout", e);
       Get.snackbar(
@@ -40,7 +38,6 @@ class ApiGetService {
         AppStrings.requestTimeOut,
         colorText: AppColors.white,
       );
-      Get.toNamed(AppRoutes.serverOff);
     } catch (e) {
       errorLog("apiGetService - Unknown Error", e);
       Get.snackbar(
@@ -71,7 +68,6 @@ class ApiGetService {
         AppStrings.noInternet,
         colorText: AppColors.white,
       );
-      Get.toNamed(AppRoutes.serverOff);
     } on TimeoutException catch (e) {
       errorLog("apiGetService - Timeout", e);
       Get.snackbar(
@@ -79,7 +75,6 @@ class ApiGetService {
         AppStrings.requestTimeOut,
         colorText: AppColors.white,
       );
-      Get.toNamed(AppRoutes.serverOff);
     } catch (e) {
       errorLog("apiGetService - Unknown Error", e);
       Get.snackbar(
@@ -108,10 +103,7 @@ class ApiGetService {
       appLog(link);
       final response = await http.get(
         link,
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': StorageService.token
-        },
+        headers: {'Content-Type': 'application/json', 'authorization': StorageService.token},
       );
       appLog(response.body);
       final jsonbody = jsonDecode(response.body);
@@ -131,7 +123,6 @@ class ApiGetService {
         AppStrings.noInternet,
         colorText: AppColors.white,
       );
-      Get.toNamed(AppRoutes.serverOff);
       return [];
     } on TimeoutException catch (e) {
       errorLog("apiGetService - Timeout", e);

@@ -22,7 +22,9 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: AppStrings.appName,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.blueLighter),
+          colorScheme:
+              ColorScheme.fromSeed(seedColor: AppColors.blueLighter, surface: AppColors.black),
+          scaffoldBackgroundColor: AppColors.black,
           useMaterial3: true,
           fontFamily: AppStrings.fontFamilyName,
         ),

@@ -47,7 +47,6 @@ class LeaderboardWidget extends StatelessWidget {
         (element) => element?.userId == StorageService.userId,
       );
       bool showFloating = true;
-      appLog("myIndex is: $myIndex");
 
       return Column(
         children: [
@@ -72,7 +71,7 @@ class LeaderboardWidget extends StatelessWidget {
                       offset: Offset.zero,
                       child: TopRankedItem(
                         fromOnline: leaderboard[1]!.profileImg != "Unknown",
-                        rankLabel: '2',
+                        rankLabel: leaderboard[1]!.currentRank.toString(),
                         name: leaderboard[1]!.name,
                         amount: "\$${AppCommonFunction.formatNumber(leaderboard[1]!.totalInvest)}",
                         image: leaderboard[1]!.profileImg != "Unknown"
@@ -97,7 +96,7 @@ class LeaderboardWidget extends StatelessWidget {
                       offset: const Offset(0, -10),
                       child: TopRankedItem(
                         fromOnline: leaderboard[0]!.profileImg != "Unknown",
-                        rankLabel: '1',
+                        rankLabel: leaderboard[0]!.currentRank.toString(),
                         name: leaderboard[0]!.name,
                         amount: "\$${AppCommonFunction.formatNumber(leaderboard[0]!.totalInvest)}",
                         image: leaderboard[0]!.profileImg != "Unknown"
@@ -122,7 +121,7 @@ class LeaderboardWidget extends StatelessWidget {
                       offset: Offset.zero,
                       child: TopRankedItem(
                         fromOnline: leaderboard[2]!.profileImg != "Unknown",
-                        rankLabel: '3',
+                        rankLabel: leaderboard[2]!.currentRank.toString(),
                         name: leaderboard[2]!.name,
                         amount: "\$${AppCommonFunction.formatNumber(leaderboard[2]!.totalInvest)}",
                         image: leaderboard[2]!.profileImg != "Unknown"
@@ -136,86 +135,61 @@ class LeaderboardWidget extends StatelessWidget {
               ],
             ),
           ),
+  
+              
           Expanded(
-            child: Stack(
-              children: [
-                leaderboard.isEmpty
-                    ? const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.access_time_outlined, color: AppColors.white, size: 100),
-                            // SpaceWidget(spaceHeight: 20),
-                            TextWidget(text: "Coming Soon", fontColor: AppColors.white),
-                            // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
-                          ],
-                        ),
-                      )
-                    : NotificationListener<ScrollNotification>(
-                        key: ValueKey(myIndex.toString()),
-                        onNotification: (scrollNotification) {
-                          final scrollOffset = scrollNotification.metrics.pixels;
-                          final screenHeight = scrollNotification.metrics.viewportDimension;
-
-                          final itemTop = myIndex * 50; //each item height
-                          final itemBottom = itemTop + 50;
-
-                          final visibleTop = scrollOffset;
-                          final visibleBottom = scrollOffset + screenHeight;
-
-                          final isInView = itemBottom >= visibleTop && itemTop <= visibleBottom;
-
-                          if (isInView && showFloating) {
-                            showFloating = false;
-                          } else if (!isInView && !showFloating) {
-                            showFloating = true;
-                          }
-                          return false;
-                        },
-                        child: RefreshIndicator(
-                          onRefresh: () async {
-                            onRefresh();
-                          },
-                          child: ListView.builder(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            controller: scrollController,
-                            itemCount: filteredList.length,
-                            itemBuilder: (context, index) {
-                              final data = filteredList[index]!;
-                              final fromNetwork = data.profileImg != "Unknown";
-                              return LeaderboardItem(
-                                key: ValueKey('${data.name}${data.currentRank}$index'),
-                                rank: (index + 4).toString(),
-                                name: data.name,
-                                amount: "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
-                                isUp: (data.previousRank - data.currentRank) > 0,
-                                fromNetwork: fromNetwork,
-                                image: fromNetwork
-                                    ? "${AppUrls.mainUrl}${data.profileImg}"
-                                    : AppImagePath.profileImage,
-                                backgrounColor:
-                                    data.userId == myData?.userId ? AppColors.midblue : null,
-                                onPressed: () {
-                                  Get.toNamed(
-                                    AppRoutes.otherProfileScreen,
-                                    arguments: data.userId,
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ),
+            child: leaderboard.isEmpty
+                ? Center(
+                    child: Container(
+                      color: AppColors.blueDark,
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.access_time_outlined, color: AppColors.white, size: 100),
+                          // SpaceWidget(spaceHeight: 20),
+                          TextWidget(text: "Coming Soon", fontColor: AppColors.white),
+                          // IconWidget(height: 100, width: 100, icon: AppIconPath.timeLeft)
+                        ],
                       ),
-                if (showSelf)
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: _selfRank(myIndex, showFloating, Get.find<LeaderboardController>()),
+                    ),
                   )
-              ],
-            ),
+                : RefreshIndicator(
+                    onRefresh: () async {
+                      onRefresh();
+                    },
+                    child: ListView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      controller: scrollController,
+                      itemCount: filteredList.length,
+                      itemBuilder: (context, index) {
+                        final data = filteredList[index]!;
+                        final fromNetwork = data.profileImg != "Unknown";
+                        return LeaderboardItem(
+                          key: ValueKey('${data.name}${data.currentRank}$index'),
+                          rank: data.currentRank.toString(),
+                          name: data.name,
+                          amount: "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
+                          isUp: (data.previousRank - data.currentRank) > 0,
+                          fromNetwork: fromNetwork,
+                          image: fromNetwork
+                              ? "${AppUrls.mainUrl}${data.profileImg}"
+                              : AppImagePath.profileImage,
+                          backgrounColor: data.userId == myData?.userId ? AppColors.midblue : null,
+                          onPressed: () {
+                            Get.toNamed(
+                              AppRoutes.otherProfileScreen,
+                              arguments: data.userId,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
           ),
+                      
+          if (showSelf) _selfRank(myIndex, showFloating, Get.find<LeaderboardController>()),
+                  
+            
           // ...List.generate(filteredList.length, (index) {
           //   final data = filteredList[index]!;
           //   final fromNetwork = data.profileImg != "Unknown";
@@ -285,9 +259,10 @@ class LeaderboardWidget extends StatelessWidget {
           key: ValueKey(
             '${myData?.name ?? 'N/A'}${myData?.currentRank ?? 'N/A'}$rank',
           ),
-          rank: myData?.currentRank == 0 || myData == null ? 'N/A' : '${rank + 1}',
+          rank: myData?.currentRank == 0 || myData == null ? 'N/A' : '${myData.currentRank}',
           name: StorageService.myName,
-          amount: "\$${AppCommonFunction.formatNumber(myData?.totalInvest ?? 'N/A')}",
+          amount:
+              "\$${myData?.totalInvest != null ? AppCommonFunction.formatNumber(myData?.totalInvest) : 'N/A'}",
           isUp: showFloating && myData != null && myIndex != -1
               ? (myData.previousRank - myData.currentRank) > 0
               : false,

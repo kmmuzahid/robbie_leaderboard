@@ -111,6 +111,7 @@ class SearchScreenController extends GetxController with GetTickerProviderStateM
   void clearFilter() {
     nameController.clear();
     selectedGenderKey = DateTime.now().toString();
+    selectedGender.value = '';
     locationPickerController.clear();
 
     leaderboardType.value = LeaderboardType.leaderboard;
@@ -184,7 +185,6 @@ class SearchScreenController extends GetxController with GetTickerProviderStateM
     final newSearchToken = nameController.text.trim();
     searchToken = newSearchToken;
 
-    clearSearchResult();
 
     try {
       isLoading.value = true;
@@ -201,7 +201,7 @@ class SearchScreenController extends GetxController with GetTickerProviderStateM
       final response = await ApiGetService.apiGetServiceQuery(
         '$endpoint$timeSuffix',
         queryParameters: {
-          if (name.isNotEmpty) 'name': name,
+          if (name.isNotEmpty) 'searchTerm': name,
           if (country.isNotEmpty) 'country': country,
           if (city.isNotEmpty) 'city': city,
           if (gender.isNotEmpty) 'gender': gender.toLowerCase(),

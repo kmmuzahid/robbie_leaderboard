@@ -72,9 +72,9 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
       ),
       child: Scaffold(
         backgroundColor: Colors.black,
-        body: Obx(
-          () => SafeArea(
-            child: Stack(
+        body: SafeArea(
+          child: Obx(
+            () => Stack(
               children: [
                 // const Positioned(
                 //     bottom: 90, right: 20, child: FloatingButtonWidget()),
@@ -100,7 +100,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
                             onChanged: (value) {
                               setState(() {
                                 selectedLeaderboard = value!;
-
+          
                                 if (value == 'Leaderboard') {
                                   _controller.onTypeChange(
                                     leaderboardType: LeaderboardType.leaderboard,
@@ -117,7 +117,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
                                     leaderboardTime: LeaderboardTime.allTime,
                                   );
                                 }
-
+          
                                 _tabController.index = 0;
                               });
                             },
@@ -144,7 +144,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
                         ],
                       ),
                     ),
-
+          
                     // Replaced TabBar with LeaderboardTabBar
                     LeaderboardTabBar(
                       tabTexts: const ['All Time', 'Daily', 'Monthly'],
@@ -192,8 +192,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
                               onRefresh: _controller.fetchData,
                               scrollController: _controller.scrollController,
                             ),
-
-
+          
                           // Daily Tab
                           if (selectedLeaderboard == 'Leaderboard')
                             LeaderboardWidget(
