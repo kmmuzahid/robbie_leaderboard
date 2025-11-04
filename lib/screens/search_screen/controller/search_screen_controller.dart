@@ -201,10 +201,11 @@ class SearchScreenController extends GetxController with GetTickerProviderStateM
       final response = await ApiGetService.apiGetServiceQuery(
         '$endpoint$timeSuffix',
         queryParameters: {
+          'limit': 'Infinity',
           if (name.isNotEmpty) 'searchTerm': name,
           if (country.isNotEmpty) 'country': country,
           if (city.isNotEmpty) 'city': city,
-          if (gender.isNotEmpty) 'gender': gender.toLowerCase(),
+          if (gender.isNotEmpty) 'gender': gender,
         },
       );
 

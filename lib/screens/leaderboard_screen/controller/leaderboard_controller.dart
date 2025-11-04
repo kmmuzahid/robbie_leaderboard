@@ -151,7 +151,8 @@ class LeaderboardController extends GetxController {
     this.url = url;
     try {
       onLoading(true);
-      final response = await ApiGetService.apiGetServiceQuery(url);
+      final response =
+          await ApiGetService.apiGetServiceQuery(url, queryParameters: {'limit': 'Infinity'});
       // print(url);
       // print(response?.body);
       if (response != null) {
