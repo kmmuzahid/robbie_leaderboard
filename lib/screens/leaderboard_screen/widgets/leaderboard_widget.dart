@@ -166,6 +166,7 @@ class LeaderboardWidget extends StatelessWidget {
                         final fromNetwork = data.profileImg != "Unknown";
                         return LeaderboardItem(
                           key: ValueKey('${data.name}${data.currentRank}$index'),
+                          shoutTitle: data.shoutTitle,
                           rank: data.currentRank.toString(),
                           name: data.name,
                           amount: "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
@@ -268,6 +269,7 @@ class LeaderboardWidget extends StatelessWidget {
               : false,
           fromNetwork: myData?.profileImg != "Unknown",
           image: '${AppUrls.mainUrl}${Get.find<ProfileScreenController>().image.value}',
+          shoutTitle: myData?.shoutTitle ?? '',
           onPressed: () {
             Get.toNamed(
               AppRoutes.otherProfileScreen,

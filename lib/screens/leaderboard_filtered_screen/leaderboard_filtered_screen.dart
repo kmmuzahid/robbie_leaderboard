@@ -216,6 +216,7 @@ class LeaderboardFilteredScreen extends StatelessWidget {
               key: ValueKey('${data.name}${data.currentRank}$index'),
               rank: (index + 4).toString().padLeft(2, '0'),
               name: data.name,
+              shoutTitle: data.shoutTitle,
               amount: "\$${AppCommonFunction.formatNumber(data.totalInvest)}",
               isUp: data.previousRank > data.currentRank,
               fromNetwork: fromNetwork,

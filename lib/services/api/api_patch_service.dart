@@ -137,6 +137,29 @@ class ApiPatchService {
     }
   }
 
+  static Future<http.Response> sendRequest({
+    required String url,
+    required Map<String, dynamic> body,
+  }) async {
+    try {
+      appLog("sending request for image: $url");
+      appLog(body);
+      final response = await http.patch(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': StorageService.token,
+        },
+        body: jsonEncode(body),
+      );
+      return response;
+    } catch (e) {
+      appLog("Error in sendRequest: $e");
+      return Future.error(e);
+    }
+  }
+
+
   static Future<void> MultipartRequest1({
     required String url,
     String? imagePath,

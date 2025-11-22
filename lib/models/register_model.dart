@@ -3,7 +3,7 @@ class RegisterModel {
   final String email;
   final String contact;
   final String password;
-  final String country;
+  final String? country;
   final String? city;
   final String? gender;
   final String? age;

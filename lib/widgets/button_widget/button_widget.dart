@@ -71,7 +71,7 @@ class ButtonWidget extends StatelessWidget {
               : null, // No gradient if backgroundColor is set
           borderRadius: buttonRadius,
           border: borderColor != null
-              ? Border.all(color: borderColor!, width: 1)
+              ? Border.all(color: borderColor!, width: 1.4)
               : null,
         ),
         child: ClipRRect(

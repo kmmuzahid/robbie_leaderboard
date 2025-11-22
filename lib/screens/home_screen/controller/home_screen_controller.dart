@@ -34,6 +34,7 @@ class HomeScreenController extends GetxController {
   final RxInt rank = 0.obs;
   final RxString image = "".obs;
   final RxString userCode = "".obs;
+  final RxString country = ''.obs;
   final Rxn<HallOfFameSinglePaymentModel> recoredSinglePayment =
       Rxn<HallOfFameSinglePaymentModel>();
   final Rxn<HallOfFrameConsisntantlyTopModel> consistantlyTop =
@@ -116,7 +117,6 @@ class HomeScreenController extends GetxController {
   }
 
   void fetchHomeData(bool isUpdating) async {
-    appLog("fetching home data");
     try {
       ismydataLoading.value = isUpdating ? false : true;
       final responseHomeData = await ApiGetService.apiGetService(AppUrls.profile);
@@ -131,6 +131,7 @@ class HomeScreenController extends GetxController {
           rank.value = userData?.rank ?? 0;
           image.value = userData?.profileImg ?? "";
           userCode.value = userData?.userCode ?? "";
+          country.value = userData?.country ?? '';
           StorageService.userId = userData?.id ?? "";
           StorageService.setString(LocalStorageKeys.userId, StorageService.userId);
           update();
@@ -326,6 +327,14 @@ class HomeScreenController extends GetxController {
   };
 
   void initialize() async {
+    if (country.value.isEmpty) {
+      Get.snackbar(
+        'Please update your country',
+        'To show your country ranking, we need your country name',
+      );
+      Get.toNamed('/editProfileScreen');
+      return;
+    }
     isLoading.value = true;
 
     final available = await _iap.isAvailable();

@@ -6,6 +6,7 @@ class LeaderBoardModel {
   final int currentRank;
   final int previousRank;
   final int totalView;
+  final String shoutTitle;
 
   LeaderBoardModel({
     required this.userId,
@@ -14,10 +15,12 @@ class LeaderBoardModel {
     required this.totalInvest,
     required this.currentRank,
     required this.previousRank,
+    required this.shoutTitle,
     required this.totalView,
   });
 
   factory LeaderBoardModel.fromJson(Map<String, dynamic> json) {
+ 
     return LeaderBoardModel(
       userId: json['userId'] ?? '',
       name: json['name'] ?? '',
@@ -26,6 +29,7 @@ class LeaderBoardModel {
       currentRank: json['currentRank'] ?? 0,
       previousRank: json['previousRank'] ?? 0,
       totalView: json['totalView'] ?? 0,
+        shoutTitle: json['shoutTitle'] ?? ''
     );
   }
 
@@ -49,5 +53,6 @@ class LeaderBoardModel {
         previousRank: 0,
         profileImg: 'Unknown',
         totalView: 0,
+      shoutTitle: ''
       );
 }

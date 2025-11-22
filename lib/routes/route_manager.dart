@@ -7,6 +7,7 @@ import 'package:the_leaderboard/screens/join_leaderboard_screen/join_leaderboard
 import 'package:the_leaderboard/screens/other_profile_screen/other_profile_screen.dart';
 import 'package:the_leaderboard/screens/privacy_policy_screen/privacy_policy_screen.dart';
 import 'package:the_leaderboard/screens/profile_screen/profile_screen.dart';
+import 'package:the_leaderboard/screens/profile_screen/widgets/shout_screen.dart';
 import 'package:the_leaderboard/screens/raffle_rules_screen/raffle_rules_screen.dart';
 import 'package:the_leaderboard/screens/refund_policy_screen/refund_policy_screen.dart';
 import 'package:the_leaderboard/screens/server_off_screen/server_off_screen.dart';
@@ -53,6 +54,12 @@ class RouteManager {
       GetPage(
         name: AppRoutes.registerScreen,
         page: () => const RegisterScreen(),
+        transition: Transition.fadeIn,
+        // binding: GeneralBindings(),
+      ),
+      GetPage(
+        name: AppRoutes.shout,
+        page: () => const ShoutScreen(),
         transition: Transition.fadeIn,
         // binding: GeneralBindings(),
       ),

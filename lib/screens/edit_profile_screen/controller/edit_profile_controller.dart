@@ -127,7 +127,7 @@ class EditProfileController extends GetxController {
     //   return;
     // }
 
-    if (!(isValidPhonenumber.value)) {
+    if (!(isValidPhonenumber.value) && contactController.text.isNotEmpty) {
       Get.snackbar(
         "Invalid Phone Number",
         "Please enter a valid phone number.",
@@ -182,7 +182,7 @@ class EditProfileController extends GetxController {
           InputHelper.validate(ValidationType.validateDate, ageController.text) == null
               ? ageController.text
               : "";
-      if (ageController.text.isNotEmpty && dateOfBirth.isEmpty) {
+      if (ageController.text.isNotEmpty && dateOfBirth.isNotEmpty) {
         Get.snackbar(
           "Invalid Date",
           "Please enter a valid date or keep empty.",
@@ -222,7 +222,7 @@ class EditProfileController extends GetxController {
       //     twitterController.text,
       //     linkedinController.text);
       Get.find<ProfileScreenController>().fetchProfile(isUpdating: true);
-      Get.until((route) => route.settings.name == '/BottomNav');
+      Get.until((route) => route.settings.name == '/app-naviagation');
 
       appLog("Succeed");
     } catch (e) {

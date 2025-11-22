@@ -148,6 +148,46 @@ class OtherProfileScreen extends StatelessWidget {
                                 ),
                               ),
                             const SpaceWidget(spaceHeight: 8),
+                            const Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 12),
+                                child: TextWidget(
+                                  text: "Shout",
+                                  fontColor: AppColors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+
+                            Container(
+                              padding: const EdgeInsets.all(15.0),
+                              margin: const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                  color: AppColors.blue, borderRadius: BorderRadius.circular(12)),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(controller.shoutTitle.value,
+                                        style: const TextStyle(
+                                            color: AppColors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold)),
+                                    const SpaceWidget(spaceHeight: 8),
+                                    Text(
+                                      controller.shoutContent.value,
+                                      style: const TextStyle(color: AppColors.white, fontSize: 14),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            )
                           ],
                         ),
                       ),

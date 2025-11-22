@@ -22,6 +22,8 @@ class OtherProfileController extends GetxController {
   final RxString linkedinUrl = "".obs;
   final RxString youtubeUrl = "".obs;
   final RxString bio = "".obs;
+  final RxString shoutTitle = ''.obs;
+  final RxString shoutContent = ''.obs;
 
   final userId = "".obs;
   @override
@@ -43,13 +45,17 @@ class OtherProfileController extends GetxController {
       isLoading.value = false;
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
-        appLog(jsonbody);
+
         if (response.statusCode == 200) {
+          final shout = jsonbody['data']['shout'];
+          if (shout != null) {
+            shoutTitle.value = shout['title'];
+            shoutContent.value = shout['description'];
+          }
           final profile = ProfileUserModel.fromJson(jsonbody["data"]["user"]);
           name.value = profile.name;
           email.value = profile.email;
-          totalSpent.value =
-              AppCommonFunction.formatNumber(profile.totalInvest);
+          totalSpent.value = AppCommonFunction.formatNumber(profile.totalInvest);
           totalViews.value = jsonbody["data"]["views"].toString();
           rank.value = profile.rank.toString();
           profileImage.value = profile.profileImg;

@@ -28,4 +28,5 @@ class AppRoutes {
   static const raffleRulesScreen = "/raffle_rules_screen";
   static const privacyPolicyScreen = "/privacy_policy_screen";
   static const otherProfileScreen = "/other_profile_screen";
+  static const shout = "/shout_screen";
 }

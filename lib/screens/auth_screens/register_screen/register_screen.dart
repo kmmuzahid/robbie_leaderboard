@@ -142,7 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextWidget(
-                    text: AppStrings.country,
+                    text: '${AppStrings.country} (Optional)',
                     fontColor: AppColors.greyDark,
                     fontWeight: FontWeight.w400,
                     fontSize: 16,

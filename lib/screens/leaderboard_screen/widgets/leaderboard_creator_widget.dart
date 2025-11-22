@@ -182,6 +182,7 @@ class LeaderboardCreatorWidget extends StatelessWidget {
                               '${data.name}${data.currentRaisedRank}$index',
                             ),
                             rank: data.currentRaisedRank.toString(),
+                            shoutTitle: myData?.shoutTitle ?? '',
                             name: data.name,
                             amount: "\$${AppCommonFunction.formatNumber(data.totalRaised)}",
                             isUp: (data.previousRaisedRank - data.currentRaisedRank) > 0,
@@ -215,6 +216,7 @@ class LeaderboardCreatorWidget extends StatelessWidget {
                               ),
                               rank: myData.currentRaisedRank.toString(),
                               name: myData.name,
+                              shoutTitle: myData.shoutTitle,
                               amount:
                                   "\$${myData.totalRaised > 0 ? AppCommonFunction.formatNumber(myData.totalRaised) : 'N/A'}",
                               isUp: (myData.previousRaisedRank - myData.currentRaisedRank) > 0,

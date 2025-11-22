@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
@@ -10,8 +11,6 @@ import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
-
-import '../../home_screen/controller/home_screen_controller.dart';
 
 class ProfileScreenController extends GetxController {
   final RxString name = ''.obs;
@@ -31,13 +30,12 @@ class ProfileScreenController extends GetxController {
   final notificationController = Get.find<NotificationController>();
   Future fetchProfile({bool isUpdating = false}) async {
     try {
-      appLog("Profile data is fetching");
       isLoading.value = isUpdating ? false : true;
       final response = await ApiGetService.apiGetService(AppUrls.profile);
       isLoading.value = false;
       if (response != null) {
         appLog(response.body);
-        final data = jsonDecode(response.body);
+        final data = jsonDecode(response.body); 
         if (response.statusCode == 200) {
           final profile = ProfileUserModel.fromJson(data["data"]["user"]);
           name.value = profile.name;
@@ -53,6 +51,7 @@ class ProfileScreenController extends GetxController {
           twitterUrl.value = profile.twitter;
           linkedinUrl.value = profile.linkedin;
           youtubeUrl.value = profile.youtube;
+
           StorageService.myName = profile.name;
           StorageService.userId = profile.id;
           StorageService.setString(LocalStorageKeys.userId, profile.id);
@@ -69,8 +68,9 @@ class ProfileScreenController extends GetxController {
     // final profile = await ApiGetService.fetchProfile();
   }
 
+  void shoutNow() {}
+
   void logout() {
-    appLog("User is logged out");
     StorageService.myEmail = "";
     StorageService.myPassword = "";
     StorageService.rememberMe = false;
@@ -89,8 +89,12 @@ class ProfileScreenController extends GetxController {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     fetchProfile(isUpdating: false);
   }

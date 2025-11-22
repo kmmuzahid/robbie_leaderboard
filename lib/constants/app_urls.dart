@@ -7,6 +7,7 @@ class AppUrls {
 
   static const profile = "$_baseUrl/users/me";
   static const login = "$_baseUrl/auth/login";
+  static const shout = "$_baseUrl/users/shouts";
   static const createUser = "$_baseUrl/users/create-user";
   static const registerUser = "$_baseUrl/auth/register";
   static const resentOtp = "$_baseUrl/auth/otp-resend";

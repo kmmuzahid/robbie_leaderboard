@@ -217,7 +217,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
                   const Text(
-                    "Country",
+                    "Country (Optional)",
                     style: TextStyle(
                       color: AppColors.greyLight,
                       fontWeight: FontWeight.w400,
@@ -229,7 +229,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   const SpaceWidget(spaceHeight: 12),
 
                   const TextWidget(
-                    text: "State",
+                    text: "State (Optional)",
                     fontColor: AppColors.greyLight,
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
@@ -239,7 +239,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   CommonStatePicker(onSelectState: (p0) {}),
                   const SpaceWidget(spaceHeight: 12),
                   const TextWidget(
-                    text: "City",
+                    text: "City (Optional)",
                     fontColor: AppColors.greyLight,
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
