@@ -46,7 +46,7 @@ class ProfileHeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
+        padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.blueDark,
         borderRadius: BorderRadius.circular(12),
@@ -80,7 +80,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
                 ),
-          const SpaceWidget(spaceHeight: 10),
+          const SpaceWidget(spaceHeight: 16),
           // Balance and Withdraw Button
           Container(
             width: double.infinity,
