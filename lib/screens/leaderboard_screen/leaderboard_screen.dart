@@ -84,7 +84,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16.0,
-                        vertical: 8.0,
+                        // vertical: 8.0,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,21 +123,25 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> with SingleTicker
                             },
                           ),
                           // Search Icon
-                          InkWell(
-                            onTap: () {
-                              Get.toNamed(AppRoutes.searchScreen);
-                            },
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundColor: AppColors.white.withOpacity(
-                                0.15,
-                              ),
-                              child: const IconWidget(
-                                height: 22,
-                                width: 22,
-                                icon: AppIconPath.searchIcon,
+                          SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: InkWell(
+                              onTap: () {
+                                Get.toNamed(AppRoutes.searchScreen);
+                              },
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              child: CircleAvatar(
+                                radius: 25,
+                                backgroundColor: AppColors.white.withOpacity(
+                                  0.15,
+                                ),
+                                child: const IconWidget(
+                                  height: 18,
+                                  width: 18,
+                                  icon: AppIconPath.searchIcon,
+                                ),
                               ),
                             ),
                           ),

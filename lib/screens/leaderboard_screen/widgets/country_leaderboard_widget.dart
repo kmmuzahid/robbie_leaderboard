@@ -50,9 +50,8 @@ class CountryLeaderboardWidget extends StatelessWidget {
       },
       child: Column(
         children: [
-          const SpaceWidget(spaceHeight: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.only(top: 10.0),
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               if (leaderboard.length > 1 && leaderboard[1] != null)
                 Transform.translate(

@@ -160,7 +160,7 @@ class ApiPatchService {
   }
 
 
-  static Future<void> MultipartRequest1({
+  static Future<http.Response?> MultipartRequest1({
     required String url,
     String? imagePath,
     Map<String, dynamic>? body,
@@ -193,17 +193,17 @@ class ApiPatchService {
       Get.snackbar("Success: ${resp['success']}", resp['message'],
           colorText: AppColors.white);
 
-      return;
+      return response;
     } on SocketException {
       // Get.toNamed(AppRoutes.noInternetConnection);
-      return;
+      return null;
     } on FormatException {
-      return;
+      return null;
     } on TimeoutException {
-      return;
+      return null;
     } catch (e) {
       appLog("request failed: $e");
-      return;
+      return null;
     }
   }
 

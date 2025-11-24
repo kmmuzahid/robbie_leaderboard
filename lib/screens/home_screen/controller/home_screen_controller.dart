@@ -35,6 +35,7 @@ class HomeScreenController extends GetxController {
   final RxString image = "".obs;
   final RxString userCode = "".obs;
   final RxString country = ''.obs;
+  final RxString phone = ''.obs;
   final Rxn<HallOfFameSinglePaymentModel> recoredSinglePayment =
       Rxn<HallOfFameSinglePaymentModel>();
   final Rxn<HallOfFrameConsisntantlyTopModel> consistantlyTop =
@@ -132,6 +133,7 @@ class HomeScreenController extends GetxController {
           image.value = userData?.profileImg ?? "";
           userCode.value = userData?.userCode ?? "";
           country.value = userData?.country ?? '';
+          phone.value = userData?.contact ?? '';
           StorageService.userId = userData?.id ?? "";
           StorageService.setString(LocalStorageKeys.userId, StorageService.userId);
           update();
@@ -314,7 +316,7 @@ class HomeScreenController extends GetxController {
   };
 
   final Set<String> _productIdsIos = {
-    "TheLeaderboard_030",
+    "TheLeaderboard_001",
     // "TheLeaderboard_3",
     // "TheLeaderboard_5",
     // "TheLeaderboard_10",

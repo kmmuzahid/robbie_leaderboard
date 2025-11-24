@@ -9,6 +9,7 @@ import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/current_ruffle_model.dart';
 import 'package:the_leaderboard/models/user_ticket_model.dart';
+import 'package:the_leaderboard/screens/home_screen/controller/home_screen_controller.dart';
 import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_post_service.dart';
@@ -23,15 +24,13 @@ class RewardsScreenController extends GetxController {
   final RxBool isRuffleLoading = true.obs;
   final RxBool isTicketLoading = true.obs;
   final RxInt currentWheelIndex = 0.obs;
-  final FixedExtentScrollController wheelController =
-      FixedExtentScrollController();
+  final FixedExtentScrollController wheelController = FixedExtentScrollController();
   final RxInt dayIndex = 0.obs;
   final RxBool isSpinButtonActivate = true.obs;
   final RxString today = ''.obs;
   final RxInt totalTicket = 0.obs;
   final notificationController = Get.find<NotificationController>();
-  final RxList<int> allSpin =
-      [1, 2, 3, 4, 5, 10, 25, 50, 100, 250, 500, 1000].obs;
+  final RxList<int> allSpin = [1, 2, 3, 4, 5, 10, 25, 50, 100, 250, 500, 1000].obs;
   final RxList<int> spinList = <int>[].obs;
   final luckyTicket = 0.obs;
   final isRotated = true.obs;
@@ -95,8 +94,8 @@ class RewardsScreenController extends GetxController {
     } catch (e) {
       errorLog("fetchUserTicket", e);
     }
-    userTicket.value = UserTicketsModel(
-        totalTickets: 0, userId: "Unknown", name: "Unknown", tickets: []);
+    userTicket.value =
+        UserTicketsModel(totalTickets: 0, userId: "Unknown", name: "Unknown", tickets: []);
     return;
   }
 
@@ -142,8 +141,7 @@ class RewardsScreenController extends GetxController {
   Future<void> createTicket() async {
     try {
       appLog("Now in create ticket");
-      final response =
-          await ApiPostService.apiPostService(AppUrls.createTicket, {});
+      final response = await ApiPostService.apiPostService(AppUrls.createTicket, {});
 
       if (response != null) {
         appLog(response.body);
@@ -153,11 +151,9 @@ class RewardsScreenController extends GetxController {
           if (data['data'] != null) {
             luckyTicket.value = data['data']['ticket'] ?? 0;
             appLog("The lucky number is ${luckyTicket.value}");
-            SocketService.instance
-                .createTicket(StorageService.myName, data["data"]);
+            SocketService.instance.createTicket(StorageService.myName, data["data"]);
             responseStatus.value = "Success";
-            responseMessage.value =
-                "${luckyTicket.value} Tickets created successfully";
+            responseMessage.value = "${luckyTicket.value} Tickets created successfully";
           }
           // Get.snackbar(
           //     "Success", "${luckyTicket.value} Tickets created successfully",
@@ -188,13 +184,21 @@ class RewardsScreenController extends GetxController {
   }
 
   void spinWheel(bool fromButton) async {
+    final homeController = Get.find<HomeScreenController>();
+    if (homeController.country.value.isEmpty || homeController.phone.value.isEmpty) {
+      Get.snackbar("Action Required",
+          "To facilitate the spinning feature, we kindly request that you provide your phone number and country information. Please update your profile accordingly.",
+          colorText: AppColors.white);
+      Get.toNamed('/editProfileScreen');
+      return;
+    }
+ 
     final today = DateFormat("yyyy-MM-dd").format(DateTime.now());
     appLog(today);
     final lastwheelday = StorageService.lastWheelday;
     appLog(lastwheelday);
     if (getRemainingTime() == "Deadline has already passed") {
-      Get.snackbar("Deadline Passed",
-          "The deadline has already passed. Please check the date.",
+      Get.snackbar("Deadline Passed", "The deadline has already passed. Please check the date.",
           colorText: AppColors.white);
       return;
     }
@@ -227,8 +231,7 @@ class RewardsScreenController extends GetxController {
       Future.delayed(
         const Duration(seconds: 3),
         () {
-          Get.snackbar(responseStatus.value, responseMessage.value,
-              colorText: AppColors.white);
+          Get.snackbar(responseStatus.value, responseMessage.value, colorText: AppColors.white);
         },
       );
       isLocked.value = true;
@@ -296,8 +299,7 @@ class RewardsScreenController extends GetxController {
 
     int targetIndex = (rotations * allSpin.length) + valueIndex;
 
-    appLog(
-        "Spinning to ${luckyTicket.value} with $rotations rotations in ${duration.inSeconds}s");
+    appLog("Spinning to ${luckyTicket.value} with $rotations rotations in ${duration.inSeconds}s");
 
     wheelController.animateToItem(
       targetIndex,

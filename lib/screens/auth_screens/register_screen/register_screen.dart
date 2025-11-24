@@ -222,7 +222,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: TextWidget(
-                    text: AppStrings.contact,
+                    text: '${AppStrings.contact} (Optional)',
                     fontColor: AppColors.greyDark,
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
@@ -233,9 +233,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   initialValue: PhoneNumber(isoCode: "ZA"),
                   controller: controller.contactController,
                   onInputChanged: (p0) {
+                   
                     controller.phoneNumber.value = p0.phoneNumber!;
                   },
-                  onInputValidated: (p0) {
+                  onInputValidated: (p0) { 
                     controller.isValidPhonenumber.value = p0;
                   },
                 ),

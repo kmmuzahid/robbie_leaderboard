@@ -13,8 +13,10 @@ import 'package:the_leaderboard/screens/edit_profile_screen/controller/edit_prof
 import 'package:the_leaderboard/screens/edit_profile_screen/widgets/dropdown_button_widget.dart';
 
 import 'package:the_leaderboard/screens/edit_profile_screen/widgets/phone_number_widget.dart';
+import 'package:the_leaderboard/screens/profile_screen/widgets/shout_widget.dart';
 import 'package:the_leaderboard/widgets/icon_widget/icon_widget.dart';
 import 'package:the_leaderboard/widgets/image_widget/image_widget.dart';
+import 'package:the_leaderboard/widgets/phone_number_field_widget/phone_number_field_widget.dart';
 
 import 'package:the_leaderboard/widgets/shimmer_loading_widget/shimmer_loading.dart';
 
@@ -173,17 +175,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       controller: controller.usernameController,
                       profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
+                  const TextWidget(
+                    text: 'Contact',
+                    fontColor: AppColors.greyLight,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
                   Obx(
-                    () => PhoneNumberFieldWidget(
-                      label: "Contact",
-                      initialValue: controller.phone.value,
-                      isLoading: controller.isLoading.value,
-                      onChanged: (p0) {
-                        controller.phoneNumber.value = p0;
+                    () => PhoneNumberFieldWidget( 
+                      radius: 8,
+                      initialValue: controller.phone.value, 
+                      onInputChanged: (p0) {
+                        controller.phoneNumber.value = p0.phoneNumber!;
                       },
-                      onValidated: (p0) {
+                      onInputValidated: (p0) {
                         controller.isValidPhonenumber.value = p0;
                       },
+                      controller: controller.contactController,
                     ),
                   ),
                   // _buildTextField(
@@ -281,7 +289,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       controller: controller.bioController,
                       profileController: controller),
                   const SpaceWidget(spaceHeight: 12),
-                  // const ButtonWidget(label: 'Add Twitter Account'),
+                  const TextWidget(
+                    text: 'Shout',
+                    fontColor: AppColors.greyLight,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
+                  const ShoutWidget(showShout: false)
 
                   // Save Changes Button
                 ],

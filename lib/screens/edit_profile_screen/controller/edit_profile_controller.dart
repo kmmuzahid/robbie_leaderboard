@@ -19,6 +19,7 @@ import 'package:the_leaderboard/screens/edit_profile_screen/widgets/show_modal_b
 import 'package:the_leaderboard/screens/home_screen/controller/home_screen_controller.dart';
 import 'package:the_leaderboard/screens/home_screen/home_screen.dart';
 import 'package:the_leaderboard/screens/profile_screen/controller/profile_screen_controller.dart';
+import 'package:the_leaderboard/screens/profile_screen/controller/shout_controller.dart';
 import 'package:the_leaderboard/screens/profile_screen/profile_screen.dart';
 import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_patch_service.dart';
@@ -52,7 +53,6 @@ class EditProfileController extends GetxController {
   final RxString phoneNumber = "".obs;
   final RxBool isValidPhonenumber = true.obs;
   RxBool isSaving = false.obs;
-
 
   void updateGender(String value) {
     selectedGender.value = value;
@@ -117,9 +117,9 @@ class EditProfileController extends GetxController {
 
   void saveChange() async {
     if (isSaving.value) return;
-    isSaving.value = true;
-    appLog("Changes are saving");
-    // if (contactController.text.isNotEmpty &&
+    Get.find<ShoutController>().updateShout();
+
+    // if (contactController.t dddext.isNotEmpty &&
     //     contactController.text.length != 11) {
     //   Get.snackbar(
     //       "Invalid phone number", "Phone number should be 11 characters",
@@ -193,7 +193,7 @@ class EditProfileController extends GetxController {
       }
       Map<String, dynamic> body = {
         "name": usernameController.text,
-        "contact": phoneNumber.value,
+        if (isValidPhonenumber.value) "contact": phoneNumber.value,
         "gender": selectedGender.value,
         "age": dateOfBirth,
         "country": locationPickerController.countryInitController.text.trim(),
@@ -206,23 +206,14 @@ class EditProfileController extends GetxController {
         "bio": bioController.text
       };
       final url = "${AppUrls.updateUser}/${StorageService.userId}";
-      // await ApiPatchService.formDataRequest(
-      //     body: body, image: selectedImage.value?.path ?? "", url: url);
-      await ApiPatchService.MultipartRequest1(
+      isSaving.value = true;
+      final result = await ApiPatchService.MultipartRequest1(
           url: url, imagePath: selectedImage.value?.path ?? "", body: body);
-      // await ApiPatchService.updateProfile(selectedImage.value,
-      //     usernameController.text,
-      //     phoneNumber.value,
-      //     selectedCountry.value,
-      //     selectedCity.value,
-      //     selectedGender.value,
-      //     ageController.text,
-      //     facebookController.text,
-      //     instagramController.text,
-      //     twitterController.text,
-      //     linkedinController.text);
-      Get.find<ProfileScreenController>().fetchProfile(isUpdating: true);
-      Get.until((route) => route.settings.name == '/app-naviagation');
+      isSaving.value = false;
+      if (result?.statusCode == 200) {
+        Get.find<ProfileScreenController>().fetchProfile(isUpdating: true);
+        Get.until((route) => route.settings.name == '/app-naviagation');
+      } else {}
 
       appLog("Succeed");
     } catch (e) {
@@ -232,8 +223,9 @@ class EditProfileController extends GetxController {
         colorText: AppColors.white,
       );
       errorLog("Failed", e);
-    }
-    isSaving.value = false;
+    } finally {
+      isSaving.value = false;
+    } 
   }
 
   void fetchProfile() async {
@@ -259,7 +251,6 @@ class EditProfileController extends GetxController {
           youtubeController.text = userData.youtube;
           bioController.text = userData.bio;
           phone.value = await PhoneNumber.getRegionInfoFromPhoneNumber(userData.contact);
-       
         }
       }
     }

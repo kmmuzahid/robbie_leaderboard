@@ -247,6 +247,7 @@ class LeaderboardFilteredScreen extends StatelessWidget {
       child: Transform.translate(
         offset: Offset(dx, dy),
         child: TopRankedItem(
+          shoutTitle: data.shoutTitle,
           fromOnline: data.profileImg != "Unknown",
           rankLabel: (rank + 1).toString(),
           name: data.name,

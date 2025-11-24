@@ -58,10 +58,9 @@ class LeaderboardCreatorWidget extends StatelessWidget {
         );
       }
       return Column(
-        children: [
-          const SpaceWidget(spaceHeight: 20),
+        children: [ 
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.only(top: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -77,6 +76,7 @@ class LeaderboardCreatorWidget extends StatelessWidget {
                     child: Transform.translate(
                       offset: Offset.zero,
                       child: TopRankedItem(
+                        shoutTitle: leaderboard[1]!.shoutTitle,
                         fromOnline: leaderboard[1]!.profileImg != "Unknown",
                         rankLabel: leaderboard[1]!.currentRaisedRank.toString(),
                         name: leaderboard[1]!.name,
@@ -102,6 +102,7 @@ class LeaderboardCreatorWidget extends StatelessWidget {
                     child: Transform.translate(
                       offset: const Offset(0, -10),
                       child: TopRankedItem(
+                        shoutTitle: leaderboard[0]!.shoutTitle,
                         fromOnline: leaderboard[0]!.profileImg != "Unknown",
                         rankLabel: leaderboard[0]!.currentRaisedRank.toString(),
                         name: leaderboard[0]!.name,
@@ -126,6 +127,7 @@ class LeaderboardCreatorWidget extends StatelessWidget {
                     child: Transform.translate(
                       offset: Offset.zero,
                       child: TopRankedItem(
+                        shoutTitle: leaderboard[2]!.shoutTitle,
                         fromOnline: leaderboard[2]!.profileImg != "Unknown",
                         rankLabel: leaderboard[2]!.currentRaisedRank.toString(),
                         name: leaderboard[2]!.name,

@@ -117,8 +117,7 @@ class RegisterScreenController extends GetxController {
     if (email.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty ||
-        name.isEmpty ||
-        contact.isEmpty) {
+        name.isEmpty) {
       Get.closeAllSnackbars();
       Get.snackbar('Form Incomplete', 'Please fill in all required fields.',
           colorText: AppColors.white);
@@ -144,7 +143,7 @@ class RegisterScreenController extends GetxController {
       return;
     }
 
-    if (!isValidPhonenumber.value) {
+    if (!isValidPhonenumber.value && contactController.text.trim().isNotEmpty) {
       Get.closeAllSnackbars();
       Get.snackbar(
         "Invalid Phone Number",

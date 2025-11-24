@@ -14,6 +14,7 @@ class TopRankedItem extends StatelessWidget {
   final String name;
   final String amount;
   final String image;
+  final String shoutTitle;
   final Color rankColor;
   final double avatarSize;
   final bool fromOnline;
@@ -24,6 +25,7 @@ class TopRankedItem extends StatelessWidget {
       required this.name,
       required this.amount,
       required this.image,
+      required this.shoutTitle,
       required this.rankColor,
       required this.avatarSize,
       required this.fromOnline});
@@ -67,7 +69,14 @@ class TopRankedItem extends StatelessWidget {
             fontWeight: FontWeight.w600,
             fontSize: 14,
           ),
-          const SpaceWidget(spaceHeight: 4),
+          if (shoutTitle.isNotEmpty)
+            TextWidget(
+              text: shoutTitle,
+              fontColor: AppColors.white.withOpacity(0.8),
+              fontSize: 12,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           GradientText(
             text: amount,
             fontWeight: FontWeight.w600,
