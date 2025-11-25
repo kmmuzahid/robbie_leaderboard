@@ -117,7 +117,7 @@ class HomeScreenController extends GetxController {
     profileTab.changeIndex(3);
   }
 
-  void fetchHomeData(bool isUpdating) async {
+  Future<void> fetchHomeData(bool isUpdating) async {
     try {
       ismydataLoading.value = isUpdating ? false : true;
       final responseHomeData = await ApiGetService.apiGetService(AppUrls.profile);
@@ -333,6 +333,7 @@ class HomeScreenController extends GetxController {
       Get.snackbar(
         'Please update your country',
         'To show your country ranking, we need your country name',
+        colorText: AppColors.white,
       );
       Get.toNamed('/editProfileScreen');
       return;

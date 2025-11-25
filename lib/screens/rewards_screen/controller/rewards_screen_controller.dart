@@ -47,6 +47,7 @@ class RewardsScreenController extends GetxController {
         final jsonbody = jsonDecode(response.body);
         if (response.statusCode == 200) {
           currentRuffle.value = CurrentRuffleModel.fromJson(jsonbody["data"]);
+
           return;
         } else {
           Get.snackbar(
@@ -71,16 +72,19 @@ class RewardsScreenController extends GetxController {
     return;
   }
 
-  void fetchUserTicket({bool isUpdating = false}) async {
+  Future<void> fetchUserTicket({bool isUpdating = false}) async {
     try {
-      appLog("fetching userticket");
+      print("fetching userticket");
       isTicketLoading.value = isUpdating ? false : true;
       final response = await ApiGetService.apiGetService(AppUrls.myTicket);
       isTicketLoading.value = false;
       if (response != null) {
         final jsonbody = jsonDecode(response.body);
+        totalTicket.value = 0;
         if (response.statusCode == 200) {
           userTicket.value = UserTicketsModel.fromJson(jsonbody["data"]);
+          totalTicket.value = userTicket.value?.totalTickets ?? 0;
+          // dayIndex.value = userTicket.value?.;
           appLog(userTicket);
           return;
         } else {
@@ -101,8 +105,8 @@ class RewardsScreenController extends GetxController {
 
   Future fetchData({bool isUpdating = false}) async {
     fetchRuffle(isUpdating: isUpdating);
-    fetchUserTicket(isUpdating: isUpdating);
-    totalTicket.value = StorageService.totalTicket;
+    await fetchUserTicket(isUpdating: isUpdating);
+    // totalTicket.value = StorageService.totalTicket;
     dayIndex.value = StorageService.dayIndex;
     if (dayIndex.value > 7) {
       dayIndex.value = 0;
@@ -183,16 +187,28 @@ class RewardsScreenController extends GetxController {
     );
   }
 
+  bool Nan = true;
+
   void spinWheel(bool fromButton) async {
     final homeController = Get.find<HomeScreenController>();
-    if (homeController.country.value.isEmpty || homeController.phone.value.isEmpty) {
-      Get.snackbar("Action Required",
-          "To facilitate the spinning feature, we kindly request that you provide your phone number and country information. Please update your profile accordingly.",
+    // if (homeController.country.value.isEmpty || homeController.phone.value.isEmpty) {
+    if (Nan) {
+      isLocked.value = true;
+      Get.snackbar("Action Required", "Please update your Country and Phone Number to proceed.",
           colorText: AppColors.white);
-      Get.toNamed('/editProfileScreen');
+      Get.toNamed('/editProfileScreen', arguments: {
+        'onSuccess': () {
+          if (!(homeController.country.value.isEmpty || homeController.phone.value.isEmpty)) {
+            isLocked.value = false;
+            Nan = false;
+
+            print("dddddddddddddddddddone");
+          }
+        }
+      });
       return;
     }
- 
+
     final today = DateFormat("yyyy-MM-dd").format(DateTime.now());
     appLog(today);
     final lastwheelday = StorageService.lastWheelday;
@@ -225,13 +241,13 @@ class RewardsScreenController extends GetxController {
       StorageService.lastWheelday = today;
       StorageService.dayIndex = dayIndex.value;
       StorageService.setInt(LocalStorageKeys.dayIndex, dayIndex.value);
-      totalTicket.value += value;
       StorageService.setInt(LocalStorageKeys.totalTicket, totalTicket.value);
-      StorageService.totalTicket = totalTicket.value;
+      // StorageService.totalTicket = totalTicket.value;
       Future.delayed(
         const Duration(seconds: 3),
         () {
-          Get.snackbar(responseStatus.value, responseMessage.value, colorText: AppColors.white);
+          totalTicket.value += value;
+          // Get.snackbar(responseStatus.value, responseMessage.value, colorText: AppColors.white);
         },
       );
       isLocked.value = true;

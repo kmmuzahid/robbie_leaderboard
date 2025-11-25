@@ -61,12 +61,9 @@ class _RewardsScreenState extends State<RewardsScreen> {
                   // Get.toNamed(AppRoutes.serverOff);
                 },
                 icon: Badge(
-                  isLabelVisible: controller
-                          .notificationController.notificationCounter.value !=
-                      0,
-                  label: Text(controller
-                      .notificationController.notificationCounter.value
-                      .toString()),
+                  isLabelVisible: controller.notificationController.notificationCounter.value != 0,
+                  label:
+                      Text(controller.notificationController.notificationCounter.value.toString()),
                   backgroundColor: AppColors.red,
                   child: const IconWidget(
                     icon: AppIconPath.notificationIcon,
@@ -83,8 +80,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
               onRefresh: controller.fetchData,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -143,8 +139,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                 ),
                                 const SpaceWidget(spaceHeight: 4),
                                 controller.isRuffleLoading.value
-                                    ? const ShimmerLoading(
-                                        width: 100, height: 20)
+                                    ? const ShimmerLoading(width: 100, height: 20)
                                     : TextWidget(
                                         text:
                                             "\$${controller.currentRuffle.value!.prizeMoney} to be won!",
@@ -204,8 +199,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                   // Reduced size of custom paint
                                   painter: TicketGaugePainter(
                                     dayIndex: controller.dayIndex.value,
-                                    currentTickets:
-                                        controller.totalTicket.value,
+                                    currentTickets: controller.totalTicket.value,
                                   ),
                                 ),
                                 Column(
@@ -214,8 +208,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     TextWidget(
-                                      text:
-                                          "${controller.userTicket.value?.totalTickets}",
+                                      text: "${controller.totalTicket.value}",
                                       fontColor: AppColors.white,
                                       fontWeight: FontWeight.w600,
                                       fontSize: 15,
@@ -260,8 +253,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                     color: Colors.black,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 0),
                                 )
                               : Container(
                                   height: 100,
@@ -270,8 +262,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                     color: Colors.black,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 0),
                                   child:
                                       //   NotificationListener<ScrollNotification>(
                                       // key: const ValueKey("spin-wheel"),
@@ -303,9 +294,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                                     child: WheelChooser(
                                       controller: controller.wheelController,
                                       startPosition: null,
-                                      listWidth:
-                                          MediaQuery.of(context).size.width *
-                                              1.5,
+                                      listWidth: MediaQuery.of(context).size.width * 1.5,
                                       itemSize: 70,
                                       squeeze: 1.0,
                                       perspective: 0.01,
@@ -350,8 +339,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                           const SpaceWidget(spaceHeight: 10),
                           Center(
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 4),
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                               decoration: BoxDecoration(
                                 color: AppColors.white.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(100),

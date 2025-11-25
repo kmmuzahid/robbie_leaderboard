@@ -25,6 +25,7 @@ import 'package:the_leaderboard/services/api/api_get_service.dart';
 import 'package:the_leaderboard/services/api/api_patch_service.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
+import 'package:the_leaderboard/widgets/phone_number_field_widget/phone_number_field_widget.dart';
 import 'package:twitter_login/twitter_login.dart';
 
 class EditProfileController extends GetxController {
@@ -50,13 +51,16 @@ class EditProfileController extends GetxController {
   final List<String> genders = ['Male', 'Female', 'Other'];
   final phone = PhoneNumber().obs;
 
-  final RxString phoneNumber = "".obs;
   final RxBool isValidPhonenumber = true.obs;
   RxBool isSaving = false.obs;
 
+  PhoneNumber? phoneNumber;
+  void updatePhoneNumber(PhoneNumber value) {
+    phoneNumber = value;
+  }
+
   void updateGender(String value) {
     selectedGender.value = value;
-    appLog("Gender updated $value");
   }
 
   List<String> findCity(String country) {
@@ -116,8 +120,8 @@ class EditProfileController extends GetxController {
   }
 
   void saveChange() async {
+    Get.find<ShoutController>().updateShout(showMessge: false);
     if (isSaving.value) return;
-    Get.find<ShoutController>().updateShout();
 
     // if (contactController.t dddext.isNotEmpty &&
     //     contactController.text.length != 11) {
@@ -126,14 +130,19 @@ class EditProfileController extends GetxController {
     //       colorText: AppColors.white);
     //   return;
     // }
-
-    if (!(isValidPhonenumber.value) && contactController.text.isNotEmpty) {
-      Get.snackbar(
-        "Invalid Phone Number",
-        "Please enter a valid phone number.",
-        colorText: AppColors.white,
-      );
-      return;
+    String contactNo = '';
+    if (phoneNumber?.isoCode != null && contactController.text.isNotEmpty) {
+      int phoneLenght = getMaxPhoneLength(phoneNumber!.isoCode!);
+      if (phoneNumber!.phoneNumber!.length != ((phoneLenght + phoneNumber!.dialCode!.length) - 1)) {
+        Get.snackbar(
+          "Invalid Phone Number",
+          "Please enter a valid phone number.",
+          colorText: AppColors.white,
+        );
+        return;
+      } else {
+        contactNo = phoneNumber!.phoneNumber!;
+      }
     }
     if (facebookController.text.isNotEmpty && !isValidFacebookProfileUrl(facebookController.text)) {
       Get.snackbar(
@@ -193,7 +202,7 @@ class EditProfileController extends GetxController {
       }
       Map<String, dynamic> body = {
         "name": usernameController.text,
-        if (isValidPhonenumber.value) "contact": phoneNumber.value,
+        if (contactNo.isNotEmpty) "contact": contactNo,
         "gender": selectedGender.value,
         "age": dateOfBirth,
         "country": locationPickerController.countryInitController.text.trim(),
@@ -205,15 +214,19 @@ class EditProfileController extends GetxController {
         "youtube": youtubeController.text,
         "bio": bioController.text
       };
-      final url = "${AppUrls.updateUser}/${StorageService.userId}";
       isSaving.value = true;
-      final result = await ApiPatchService.MultipartRequest1(
-          url: url, imagePath: selectedImage.value?.path ?? "", body: body);
-      isSaving.value = false;
+      final result = await ApiPatchService.multipartRequestWithDio(
+          url: AppUrls.updateUser, image: selectedImage.value, body: body);
       if (result?.statusCode == 200) {
-        Get.find<ProfileScreenController>().fetchProfile(isUpdating: true);
-        Get.until((route) => route.settings.name == '/app-naviagation');
+        await Get.find<ProfileScreenController>().fetchProfile(isUpdating: true);
+        await Get.find<HomeScreenController>().fetchHomeData(true);
+        isSaving.value = false;
+        if (Get.arguments != null && Get.arguments['onSuccess'] != null) {
+          Get.arguments['onSuccess']();
+        }
+        Get.back(closeOverlays: true);
       } else {}
+      isSaving.value = false;
 
       appLog("Succeed");
     } catch (e) {
@@ -225,7 +238,7 @@ class EditProfileController extends GetxController {
       errorLog("Failed", e);
     } finally {
       isSaving.value = false;
-    } 
+    }
   }
 
   void fetchProfile() async {
@@ -238,8 +251,10 @@ class EditProfileController extends GetxController {
         appLog("response from profile: $data");
         final userData = ProfileResponseModel.fromJson(data["data"]).user;
         if (userData != null) {
+          final pH = userData.contact.isNotEmpty
+              ? await PhoneNumber.getRegionInfoFromPhoneNumber(userData.contact)
+              : null;
           locationPickerController.init(userData.country, userData.city);
-
           userImage.value = userData.profileImg;
           usernameController.text = userData.name;
           selectedGender.value = userData.gender;
@@ -250,7 +265,7 @@ class EditProfileController extends GetxController {
           linkedinController.text = userData.linkedin;
           youtubeController.text = userData.youtube;
           bioController.text = userData.bio;
-          phone.value = await PhoneNumber.getRegionInfoFromPhoneNumber(userData.contact);
+          phone.value = pH ?? PhoneNumber();
         }
       }
     }

@@ -2,17 +2,62 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart' hide MultipartFile, FormData;
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
+// Initialize Dio with interceptors
+final _dioService = Dio()
+  ..interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (options, handler) {
+        // Add headers or modify request here
+        // options.headers['Accept'] = 'application/json';
+        // options.headers['Content-Type'] = 'application/json';
+
+        // Add auth token if exists
+        final token = StorageService.token;
+        if (token.isNotEmpty) {
+          options.headers['authorization'] = '$token';
+        }
+
+        print('Sending ${options.method} request to ${options.uri}');
+        return handler.next(options);
+      },
+      onResponse: (response, handler) {
+        print('Response from ${response.requestOptions.uri}: ${response.statusCode}');
+        return handler.next(response);
+      },
+      onError: (DioException e, handler) async {
+        print('Error from ${e.requestOptions.uri}: ${e.response?.statusCode} - ${e.message}');
+
+        // Return the error response if it exists
+        if (e.response != null) {
+          return handler.resolve(e.response!);
+        }
+
+        // If no response from server, return a custom error response
+        return handler.resolve(dio.Response(
+          requestOptions: e.requestOptions,
+          statusCode: e.type == DioExceptionType.connectionTimeout ? 408 : 500,
+          statusMessage: e.message,
+        ));
+      },
+    ),
+  )
+  ..options.connectTimeout = const Duration(seconds: 30)
+  ..options.receiveTimeout = const Duration(seconds: 30);
 
 class ApiPatchService {
+  
+
   // static Future<void> updateProfile(
   //     String? name,
   //     String? contact,
@@ -113,6 +158,7 @@ class ApiPatchService {
       final formData = FormData.fromMap(formDataMap);
       final url = "${AppUrls.updateUser}/${StorageService.userId}";
       appLog("formDataMap: $formDataMap");
+      
       final response = await dio.patch(
         url,
         data: formData,
@@ -126,8 +172,7 @@ class ApiPatchService {
 
       final jsonbody = response.data;
       if (response.statusCode == 200 || response.statusCode == 204) {
-        Get.snackbar("Success", jsonbody["message"],
-            colorText: AppColors.white);
+        Get.snackbar("Success", jsonbody["message"], colorText: AppColors.white);
       } else {
         Get.snackbar("Error", jsonbody["message"], colorText: AppColors.white);
       }
@@ -159,58 +204,50 @@ class ApiPatchService {
     }
   }
 
-
-  static Future<http.Response?> MultipartRequest1({
+  static Future<dio.Response?> multipartRequestWithDio({
     required String url,
-    String? imagePath,
+    File? image,
     Map<String, dynamic>? body,
   }) async {
     try {
-      appLog("sending request for image: $imagePath");
-      appLog(body);
-      var request = http.MultipartRequest('PATCH', Uri.parse(url));
-      if (body != null) {
-        request.fields['data'] = jsonEncode(body);
-        body.forEach((key, value) {
-          request.fields[key] = value;
-        });
-      }
+     
+      final file = image != null
+          ? await dio.MultipartFile.fromFile(image.path,
+              filename: image.path.split('/').last,
+              contentType: MediaType.parse(getMimeTypeFromXFile(image) ?? ''))
+          : null;
 
-      if (imagePath != null && imagePath.isNotEmpty) {
-        var mimeType = lookupMimeType(imagePath);
-        var img = await http.MultipartFile.fromPath('file', imagePath,
-            contentType: MediaType.parse(mimeType!));
-        request.files.add(img);
-      }
+      final finalBody = <String, dynamic>{
+        'data': jsonEncode(body),
+        // 'data': {},
+        if (file != null) 'file': file,
+      };
+
+      // Set authorization token exactly as in Postman (without "Bearer" prefix if not used)
       final token = StorageService.token;
-      request.headers["Authorization"] = token;
+      _dioService.options.headers['authorization'] = token;
+      final formData = dio.FormData.fromMap(finalBody);
+      print(url);
+      print(finalBody);
 
-      final streamResponse = await request.send();
-      final response = await http.Response.fromStream(streamResponse);
-      appLog("sending request successful: ${response.body}");
-      appLog(response.statusCode);
-      final resp = jsonDecode(response.body);
-      Get.snackbar("Success: ${resp['success']}", resp['message'],
+      // Send PATCH request with multipart/form-data
+      final response = await _dioService.patch(url, data: formData);
+
+      print("sending request successful: ${response.data}");
+      print(response.statusCode);
+
+      Get.snackbar("Success: ${response.data['success']}", response.data['message'],
           colorText: AppColors.white);
 
       return response;
-    } on SocketException {
-      // Get.toNamed(AppRoutes.noInternetConnection);
-      return null;
-    } on FormatException {
-      return null;
-    } on TimeoutException {
-      return null;
     } catch (e) {
-      appLog("request failed: $e");
+      print("request failed: $e");
       return null;
     }
   }
 
   static Future<void> formDataRequest(
-      {required Map<String, dynamic>? body,
-      required String image,
-      required String url}) async {
+      {required Map<String, dynamic>? body, required String image, required String url}) async {
     final dio = Dio();
     final formData = FormData.fromMap({
       // "file": await MultipartFile.fromFile(
@@ -222,13 +259,45 @@ class ApiPatchService {
     try {
       final response = await dio.patch(url,
           data: formData,
-          options: Options(headers: {
-            "authorization": token,
-            "Content-Type": "multipart/form-data"
-          }));
+          options:
+              Options(headers: {"authorization": token, "Content-Type": "multipart/form-data"}));
       appLog("response from patch formData: $response");
     } catch (e) {
       appLog("Error from patch formData: $e");
+    }
+  }
+
+  static String? getMimeTypeFromXFile(File path) {
+    // Get the file extension from the file path
+    String extension = path.path.split('.').last.toLowerCase();
+
+    // Map the extension to MIME type
+    switch (extension) {
+      case 'jpg':
+      case 'jpeg':
+        return 'image/jpeg';
+      case 'png':
+        return 'image/png';
+      case 'gif':
+        return 'image/gif';
+      case 'bmp':
+        return 'image/bmp';
+      case 'webp':
+        return 'image/webp';
+      case 'pdf':
+        return 'application/pdf';
+      case 'txt':
+        return 'text/plain';
+      case 'csv':
+        return 'text/csv';
+      case 'doc':
+      case 'docx':
+        return 'application/msword';
+      case 'xls':
+      case 'xlsx':
+        return 'application/vnd.ms-excel';
+      default:
+        return 'application/octet-stream'; // Default MIME type for unknown extensions
     }
   }
 }

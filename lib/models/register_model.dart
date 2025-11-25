@@ -34,10 +34,11 @@ class RegisterModel {
   }
 
   Map<String, dynamic> toJson() {
+    print(contact);
     return {
       'name': name,
       'email': email,
-      'contact': contact,
+      if (contact.trim().isNotEmpty) 'contact': contact,
       'password': password,
       'country': country,
       'city': city,

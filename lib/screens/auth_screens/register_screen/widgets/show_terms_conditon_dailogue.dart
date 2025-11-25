@@ -4,60 +4,80 @@ import 'package:get/get.dart';
 import 'package:the_leaderboard/screens/auth_screens/register_screen/controller/register_screen_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:flutter_html/flutter_html.dart';
 Future<bool?> showTermsDialog(BuildContext context, RegisterScreenController _controller) {
   return showDialog<bool>(
     context: context,
-    barrierDismissible: false, // Force user to accept or decline
+    barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
-        backgroundColor: Colors.black87, // Or your preferred color
+        backgroundColor: Colors.white,
         title: const Text(
           'Terms and Conditions',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black),
         ),
         content: SizedBox(
           width: double.maxFinite,
-          height: 400, // adjust height as needed
-          child: Obx(() {
-            if (_controller.isTermsAndCondtiosnLoading.value) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            final data = _controller.termAndCondition.value;
-            if (data.isEmpty) {
-              return const Center(
-                child: Text(
-                  "There is no term and condition",
-                  style: TextStyle(color: Colors.white),
+          child: GetBuilder<RegisterScreenController>(
+            init: _controller,
+            builder: (controller) {
+              if (controller.isTermsAndCondtiosnLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              final data = controller.termAndCondition.value;
+              if (data.isEmpty) {
+                return const Center(
+                  child: Text(
+                    "There are no terms and conditions",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                );
+              }
+              return SingleChildScrollView(
+                child: Html(
+                  data: data,
+                  style: {
+                    "a": Style(
+                      color: Colors.blue,
+                      textDecoration: TextDecoration.underline,
+                    ),
+                    "*": Style(
+                      color: Colors.black,
+                    ),
+                  },
+                  onLinkTap: (url, attributes, element) {
+                    if (url != null) {
+                      launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                    }
+                  },
+                  // onLinkTap: (url, _, __, ___) {
+                  //   if (url != null) {
+                  //     launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                  //   }
+                  // },
                 ),
               );
-            }
-            return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: HtmlWidget(
-                data,
-                textStyle: const TextStyle(color: Colors.white),
-                onTapUrl: (url) => launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
-              ),
-            );
-          }),
+            },
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(false); // User declines
+              Navigator.of(context).pop(false);
             },
             child: const Text(
               'Decline',
               style: TextStyle(color: Colors.redAccent),
             ),
           ),
-          ElevatedButton(
+          TextButton(
             onPressed: () {
-              Navigator.of(context).pop(true); // User accepts
+              Navigator.of(context).pop(true);
             },
-            child: const Text('Accept'),
+            child: const Text(
+              'Accept',
+              style: TextStyle(color: Colors.green),
+            ),
           ),
         ],
       );

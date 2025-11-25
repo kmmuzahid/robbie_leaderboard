@@ -36,8 +36,10 @@ class ShoutController extends GetxController {
     } catch (_) {}
   }
 
-  updateShout() async {
-    if (isShouting) return;
+  updateShout({bool showMessge = true}) async {
+    if (isShouting || shoutContentController.text.isEmpty || shoutTitleController.text.isEmpty) {
+      return;
+    }
     isShouting = true;
     update();
     final result = await ApiPatchService.sendRequest(
@@ -46,11 +48,13 @@ class ShoutController extends GetxController {
     isShouting = false;
     if (result.body.isEmpty) return;
     final data = jsonDecode(result.body);
-    if (result.statusCode == 200) {
-      Get.back();
-      Get.snackbar('Success', data['message'] ?? '');
-    } else {
-      Get.snackbar('Faild!', data['message'] ?? '');
+    if (showMessge) {
+      if (result.statusCode == 200) {
+        Get.back();
+        Get.snackbar('Success', data['message'] ?? '');
+      } else {
+        Get.snackbar('Faild!', data['message'] ?? '');
+      }
     }
     update();
   }

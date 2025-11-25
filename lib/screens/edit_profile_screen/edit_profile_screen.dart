@@ -182,16 +182,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     fontSize: 14,
                   ),
                   Obx(
-                    () => PhoneNumberFieldWidget( 
-                      radius: 8,
-                      initialValue: controller.phone.value, 
-                      onInputChanged: (p0) {
-                        controller.phoneNumber.value = p0.phoneNumber!;
-                      },
-                      onInputValidated: (p0) {
-                        controller.isValidPhonenumber.value = p0;
-                      },
-                      controller: controller.contactController,
+                    () => SizedBox(
+                      child: controller.isLoading.value
+                          ? const ShimmerLoading(width: double.infinity, height: 55)
+                          : PhoneNumberFieldWidget(
+                              radius: 8,
+                              key: Key(controller.phone.value.hashCode.toString()),
+                              initialValue: controller.phone.value,
+                              onInputChanged: (p0) {
+                                controller.updatePhoneNumber(p0);
+                              },
+                              onInputValidated: (p0) {
+                                controller.isValidPhonenumber.value = p0;
+                              },
+                              controller: controller.contactController,
+                            ),
                     ),
                   ),
                   // _buildTextField(
@@ -288,14 +293,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       hintText: "Please write a short bio",
                       controller: controller.bioController,
                       profileController: controller),
-                  const SpaceWidget(spaceHeight: 12),
-                  const TextWidget(
-                    text: 'Shout',
-                    fontColor: AppColors.greyLight,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                  ),
-                  const ShoutWidget(showShout: false)
+                  const SpaceWidget(spaceHeight: 12), 
+                  Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1.4, color: AppColors.blueDarker),
+                          borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.all(10),
+                      child: const Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          TextWidget(
+                            text: 'Shout',
+                            fontColor: AppColors.white,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18,
+                          ),
+                          ShoutWidget(showShout: false),
+                        ],
+                      ))
 
                   // Save Changes Button
                 ],

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:the_leaderboard/common/input_helper.dart';
 import 'package:the_leaderboard/common/location_picker_controller.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
@@ -14,6 +15,7 @@ import 'package:the_leaderboard/services/api/api_post_service.dart';
 import 'package:the_leaderboard/services/storage/storage_keys.dart';
 import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
+import 'package:the_leaderboard/widgets/phone_number_field_widget/phone_number_field_widget.dart';
 import '../../../../routes/app_routes.dart';
 
 class RegisterScreenController extends GetxController {
@@ -30,12 +32,15 @@ class RegisterScreenController extends GetxController {
 
   final TextEditingController referralController = TextEditingController(text: "");
 
-
   final RxString selectedGender = 'Male'.obs;
   final List<String> genders = ['Male', 'Female', 'Other'];
 
-  final RxString phoneNumber = "".obs;
+  final RxString initalPhoneNumber = "".obs;
   final RxBool isValidPhonenumber = true.obs;
+  PhoneNumber? phoneNumber;
+  void updatePhoneNumber(PhoneNumber value) {
+    phoneNumber = value;
+  }
 
   Future<void> onInitial() async {
     try {
@@ -110,14 +115,10 @@ class RegisterScreenController extends GetxController {
     String city = locationPickerController.cityInitController.text.trim();
     String gender = selectedGender.value.trim();
     String age = dateOfBirth;
-    String contact = phoneNumber.value.trim();
     String referral = referralController.text.trim();
 
     // Required fields validation (city, gender, age, referral removed)
-    if (email.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty ||
-        name.isEmpty) {
+    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty || name.isEmpty) {
       Get.closeAllSnackbars();
       Get.snackbar('Form Incomplete', 'Please fill in all required fields.',
           colorText: AppColors.white);
@@ -143,14 +144,19 @@ class RegisterScreenController extends GetxController {
       return;
     }
 
-    if (!isValidPhonenumber.value && contactController.text.trim().isNotEmpty) {
-      Get.closeAllSnackbars();
-      Get.snackbar(
-        "Invalid Phone Number",
-        "Please enter a valid phone number.",
-        colorText: AppColors.white,
-      );
-      return;
+    String contactNo = '';
+    if (phoneNumber?.isoCode != null && contactController.text.isNotEmpty) {
+      int phoneLenght = getMaxPhoneLength(phoneNumber!.isoCode!);
+      if (phoneNumber!.phoneNumber!.length != ((phoneLenght + phoneNumber!.dialCode!.length) - 1)) {
+        Get.snackbar(
+          "Invalid Phone Number",
+          "Please enter a valid phone number.",
+          colorText: AppColors.white,
+        );
+        return;
+      } else {
+        contactNo = phoneNumber!.phoneNumber!;
+      }
     }
 
     if (name.length > 16) {
@@ -167,7 +173,7 @@ class RegisterScreenController extends GetxController {
     final profile = RegisterModel(
       name: name,
       email: email,
-      contact: contact,
+      contact: contactNo,
       password: password,
       country: country.isNotEmpty ? country : null,
       city: city.isNotEmpty ? city : null,
@@ -184,7 +190,18 @@ class RegisterScreenController extends GetxController {
     }
 
     try {
-      final response = await ApiPostService.apiPostService(AppUrls.registerUser, profile.toJson());
+      print(contactNo);
+      final response = await ApiPostService.apiPostService(AppUrls.registerUser, {
+        'name': name,
+        'email': email,
+        if (contactNo.isNotEmpty) 'contact': contactNo,
+        'password': password,
+        'country': country,
+        'city': city,
+        'gender': gender,
+        'age': age,
+        'inviterCode': referral
+      });
       if (response != null) {
         final data = jsonDecode(response.body);
         if (response.statusCode == 200 || response.statusCode == 201) {

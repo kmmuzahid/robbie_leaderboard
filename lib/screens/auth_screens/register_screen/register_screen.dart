@@ -231,11 +231,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SpaceWidget(spaceHeight: 8),
                 PhoneNumberFieldWidget(
                   initialValue: PhoneNumber(isoCode: "ZA"),
+                  radius: 24,
                   controller: controller.contactController,
-                  onInputChanged: (p0) {
-                   
-                    controller.phoneNumber.value = p0.phoneNumber!;
-                  },
+                  onInputChanged: controller.updatePhoneNumber,
                   onInputValidated: (p0) { 
                     controller.isValidPhonenumber.value = p0;
                   },

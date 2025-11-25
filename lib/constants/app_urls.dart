@@ -17,7 +17,7 @@ class AppUrls {
   static const faq = "$_baseUrl/about/faq";
   static const termAndCondition = "$_baseUrl/about/tac";
   static const reportProblem = "$_baseUrl/about/report";
-  static const updateUser = "$_baseUrl/users";
+  static const updateUser = "$_baseUrl/users/update-profile";
   static const changePassword = "$_baseUrl/auth/change-password";
   static const deleteUser = "$_baseUrl/users";
   static const notification = "$_baseUrl/notifications";
