@@ -190,7 +190,6 @@ class RegisterScreenController extends GetxController {
     }
 
     try {
-      print(contactNo);
       final response = await ApiPostService.apiPostService(AppUrls.registerUser, {
         'name': name,
         'email': email,
