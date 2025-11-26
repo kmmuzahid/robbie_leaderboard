@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:the_leaderboard/main.dart';
 import 'package:the_leaderboard/widgets/icon_button_widget/icon_button_widget.dart';
 
 import '../../constants/app_colors.dart';
@@ -60,6 +61,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           borderRadius: BorderRadius.circular(24),
         ),
         child: TextFormField(
+          contextMenuBuilder: (context, editableTextState) {
+            return CustomContextMenu(editableTextState: editableTextState);
+          },
           readOnly: widget.read!,
           controller: widget.controller,
           validator: widget.validator,

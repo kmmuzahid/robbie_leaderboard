@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:the_leaderboard/constants/app_urls.dart';
 import 'package:the_leaderboard/models/recent_activity_receive_model.dart';
 import 'package:the_leaderboard/models/ticket_won_socket_model.dart';
 import 'package:the_leaderboard/screens/notification_screen/controller/notification_controller.dart';
+import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
 class SocketService {
@@ -16,6 +18,38 @@ class SocketService {
 
   late IO.Socket _socket;
 
+  Timer? _heartbeatTimer;
+
+  void startHeartbeat() {
+    // Avoid duplicate timers
+    _heartbeatTimer?.cancel();
+
+    _heartbeatTimer = Timer.periodic(
+      const Duration(seconds: 60), // send every 20 sec
+      (_) {
+        if (_socket.connected) {
+          _socket.emit('setup', {
+            'userId': StorageService.userId,
+            'email': StorageService.myEmail,
+            'role': StorageService.role,
+          });
+          print("Heartbeat sent");
+        } else {
+          print("Socket not connected. Attempting reconnect...");
+          connect();
+        }
+      },
+    );
+
+    appLog("Heartbeat started");
+  }
+
+  void stopHeartbeat() {
+    _heartbeatTimer?.cancel();
+    _heartbeatTimer = null;
+    appLog("Heartbeat stopped");
+  }
+
   void connect() {
     _socket = IO.io(
       AppUrls.socketUrl,
@@ -24,6 +58,7 @@ class SocketService {
 
     _socket.onConnect((_) {
       print('Socket connected');
+      startHeartbeat();
     });
 
     _socket.onDisconnect((_) {
@@ -62,8 +97,7 @@ class SocketService {
     appLog('Sent invest data: $data');
   }
 
-  void sendReportData(
-      String userName, String email, Map<String, dynamic> result) {
+  void sendReportData(String userName, String email, Map<String, dynamic> result) {
     if (!_socket.connected) {
       appLog("Socket is not connected. Connecting...");
       connect();
@@ -102,8 +136,7 @@ class SocketService {
 // }
 
   // Method to listen for 'new invest message received' event
-  void onNewInvestMessageReceived(
-      void Function(RecentActivityReceiveModel) callback) {
+  void onNewInvestMessageReceived(void Function(RecentActivityReceiveModel) callback) {
     _socket.on('new invest message received', (data) {
       appLog('Received invest message: $data');
       Get.find<NotificationController>().increment();
@@ -120,6 +153,7 @@ class SocketService {
   }
 
   void dispose() {
+    stopHeartbeat();
     _socket.dispose();
   }
 }

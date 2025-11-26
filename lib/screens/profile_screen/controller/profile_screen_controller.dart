@@ -50,11 +50,15 @@ class ProfileScreenController extends GetxController {
           instagramUrl.value = profile.instagram;
           twitterUrl.value = profile.twitter;
           linkedinUrl.value = profile.linkedin;
+          
           youtubeUrl.value = profile.youtube;
 
           StorageService.myName = profile.name;
+          StorageService.role = profile.role;
           StorageService.userId = profile.id;
           StorageService.setString(LocalStorageKeys.userId, profile.id);
+          StorageService.setString(LocalStorageKeys.role, profile.role);
+          StorageService.setString(LocalStorageKeys.myEmail, profile.email);
           appLog("user id: ${profile.id} and token: ${StorageService.token}");
         } else {
           Get.closeAllSnackbars();

@@ -8,6 +8,7 @@ class LocalStorageKeys {
   static const String myName = "myName";
   static const String myEmail = "myEmail";
   static const String myPassword = "myPassword";
+  static const String role = "role";
   static const String rememberMe = "rememberMe";
   static const String today = "today";
   static const String dayIndex = "dayIndex";

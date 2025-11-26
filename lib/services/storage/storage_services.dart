@@ -10,6 +10,7 @@ class StorageService {
   static String userId = "";
   static String myImage = "";
   static String myName = "";
+  static String role = '';
   static String myEmail = "";
   static String myPassword = "";
   static bool rememberMe = false;
@@ -48,8 +49,8 @@ class StorageService {
     totalTicket = localStorage.getInt(LocalStorageKeys.totalTicket) ?? 0;
     otherUserId = localStorage.getString(LocalStorageKeys.otherUserId) ?? "";
     lastWheelday = localStorage.getString(LocalStorageKeys.lastWheelday) ?? "";
-    numberOfNotification =
-        localStorage.getInt(LocalStorageKeys.numberOfNotification) ?? 0;
+    numberOfNotification = localStorage.getInt(LocalStorageKeys.numberOfNotification) ?? 0;
+    role = localStorage.getString(LocalStorageKeys.role) ?? "";
     //appLog(userId, source: "Local Storage");
   }
 
@@ -75,6 +76,7 @@ class StorageService {
         localStorage.setString(LocalStorageKeys.myName, ""),
         localStorage.setBool(LocalStorageKeys.isLogIn, false),
         localStorage.setString(LocalStorageKeys.otherUserId, ""),
+        localStorage.setString(LocalStorageKeys.role, ""),
       ]);
     } catch (e) {
       errorLog("_resetLocalStorageData", e);

@@ -115,6 +115,7 @@ class _PhoneNumberFieldWidgetState extends State<PhoneNumberFieldWidget> {
             autoValidateMode: AutovalidateMode.disabled,
             ignoreBlank: true,
             isEnabled: !widget.readOnly,
+            
 
             // Hide country code visually
             hintText: 'Enter phone number',

@@ -34,8 +34,8 @@ class RewardsScreenController extends GetxController {
   final RxList<int> spinList = <int>[].obs;
   final luckyTicket = 0.obs;
   final isRotated = true.obs;
-  final responseMessage = "".obs;
-  final responseStatus = "".obs;
+  // final responseMessage = "".obs;
+  // final responseStatus = "".obs;
   final isLocked = false.obs;
   void fetchRuffle({bool isUpdating = false}) async {
     try {
@@ -84,7 +84,7 @@ class RewardsScreenController extends GetxController {
         if (response.statusCode == 200) {
           userTicket.value = UserTicketsModel.fromJson(jsonbody["data"]);
           totalTicket.value = userTicket.value?.totalTickets ?? 0;
-          // dayIndex.value = userTicket.value?.;
+          // dayIndex.value = userTicket.value?.dayIndex ?? 0; 
           appLog(userTicket);
           return;
         } else {
@@ -106,22 +106,11 @@ class RewardsScreenController extends GetxController {
   Future fetchData({bool isUpdating = false}) async {
     fetchRuffle(isUpdating: isUpdating);
     await fetchUserTicket(isUpdating: isUpdating);
-    // totalTicket.value = StorageService.totalTicket;
-    dayIndex.value = StorageService.dayIndex;
     if (dayIndex.value > 7) {
       dayIndex.value = 0;
     }
     allSpin.shuffle();
-    //temp
-    // LocalStorage.totalTicket = 0;
-    // LocalStorage.dayIndex = 0;
-    // LocalStorage.lastWheelday =
-    //     DateFormat("yyyy-MM-dd").format(DateTime(2025, 7, 11));
-    // LocalStorage.setInt(LocalStorageKeys.totalTicket, 0);
-    // LocalStorage.setInt(LocalStorageKeys.dayIndex, 0);
-    // LocalStorage.setString(LocalStorageKeys.lastWheelday,
-    //     DateFormat("yyyy-MM-dd").format(DateTime(2025, 7, 11)));
-    //---end
+
   }
 
   String getRemainingTime() {
@@ -142,36 +131,31 @@ class RewardsScreenController extends GetxController {
     }
   }
 
-  Future<void> createTicket() async {
-    try {
-      appLog("Now in create ticket");
-      final response = await ApiPostService.apiPostService(AppUrls.createTicket, {});
+  // Future<void> createTicket() async {
+  //   try {
+  //     final response = await ApiPostService.apiPostService(AppUrls.createTicket, {});
 
-      if (response != null) {
-        appLog(response.body);
-        final data = jsonDecode(response.body);
+  //     if (response != null) {
+  //       appLog(response.body);
+  //       final data = jsonDecode(response.body);
 
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          if (data['data'] != null) {
-            luckyTicket.value = data['data']['ticket'] ?? 0;
-            appLog("The lucky number is ${luckyTicket.value}");
-            SocketService.instance.createTicket(StorageService.myName, data["data"]);
-            responseStatus.value = "Success";
-            responseMessage.value = "${luckyTicket.value} Tickets created successfully";
-          }
-          // Get.snackbar(
-          //     "Success", "${luckyTicket.value} Tickets created successfully",
-          //     colorText: AppColors.white);
-        } else {
-          responseStatus.value = "Failed";
-          responseMessage.value = data["message"];
-          // Get.snackbar("Success", data["message"], colorText: AppColors.white);
-        }
-      }
-    } catch (e) {
-      appLog("Error in creating ticket: $e");
-    }
-  }
+  //       if (response.statusCode == 200 || response.statusCode == 201) {
+  //         if (data['data'] != null) {
+  //           luckyTicket.value = data['data']['ticket'] ?? 0;
+  //           appLog("The lucky number is ${luckyTicket.value}");
+  //           SocketService.instance.createTicket(StorageService.myName, data["data"]);
+  //           responseStatus.value = "Success";
+  //           responseMessage.value = "${luckyTicket.value} Tickets created successfully";
+  //         }
+  //       } else {
+  //         responseStatus.value = "Failed";
+  //         responseMessage.value = data["message"];
+  //       }
+  //     }
+  //   } catch (e) {
+  //     appLog("Error in creating ticket: $e");
+  //   }
+  // }
 
   void rotateWithButton(int rotations) {
     int value = luckyTicket.value;
@@ -186,80 +170,68 @@ class RewardsScreenController extends GetxController {
       curve: Curves.fastOutSlowIn,
     );
   }
-
-  bool Nan = true;
+ 
 
   void spinWheel(bool fromButton) async {
     final homeController = Get.find<HomeScreenController>();
-    // if (homeController.country.value.isEmpty || homeController.phone.value.isEmpty) {
-    if (Nan) {
+    if (homeController.country.value.isEmpty || homeController.phone.value.isEmpty) {
+    
       isLocked.value = true;
       Get.snackbar("Action Required", "Please update your Country and Phone Number to proceed.",
           colorText: AppColors.white);
       Get.toNamed('/editProfileScreen', arguments: {
         'onSuccess': () {
           if (!(homeController.country.value.isEmpty || homeController.phone.value.isEmpty)) {
-            isLocked.value = false;
-            Nan = false;
-
-            print("dddddddddddddddddddone");
+            isLocked.value = false; 
           }
         }
       });
       return;
     }
 
-    final today = DateFormat("yyyy-MM-dd").format(DateTime.now());
-    appLog(today);
-    final lastwheelday = StorageService.lastWheelday;
-    appLog(lastwheelday);
-    if (getRemainingTime() == "Deadline has already passed") {
-      Get.snackbar("Deadline Passed", "The deadline has already passed. Please check the date.",
-          colorText: AppColors.white);
-      return;
-    }
+    try {
+      final response = await ApiPostService.apiPostService(AppUrls.createTicket, {});
 
-    if (lastwheelday.isEmpty || today != lastwheelday) {
-      await createTicket();
+      if (response != null) {
+        appLog(response.body);
+        final data = jsonDecode(response.body);
 
-      int rotations = 100;
-      int value = luckyTicket.value;
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          dayIndex.value += 1;
+          if (data['data'] != null) {
+            luckyTicket.value = data['data']['ticket'] ?? 0;
+            appLog("The lucky number is ${luckyTicket.value}");
+            SocketService.instance.createTicket(StorageService.myName, data["data"]);
+            int rotations = 100; 
+            isLocked.value = true;
       if (fromButton) {
         rotateWithButton(rotations);
       } else {
         spinToLuckyNumber();
+            }
+            Future.delayed(
+              const Duration(seconds: 3),
+              () {
+                totalTicket.value += luckyTicket.value;
+                isLocked.value = false;
+              },
+            );
+          
+          }
+        } else {
+          isLocked.value = true;
+          Get.snackbar(
+            "Sorry!!",
+            data["message"],
+            colorText: AppColors.white,
+          );
+         
+        }
       }
-      // allSpin.shuffle();
-      // final random =
-      //     math.Random().nextInt(currentRuffle.value!.ticketButtons.length);
-      // currentWheelIndex.value = random;
-      // final totalItem = random + currentRuffle.value!.ticketButtons.length * 4;
-      // wheelController.animateToItem(totalItem,
-      //     duration: const Duration(seconds: 3), curve: Curves.fastOutSlowIn);
-      dayIndex.value++;
-      StorageService.setString(LocalStorageKeys.lastWheelday, today);
-      StorageService.lastWheelday = today;
-      StorageService.dayIndex = dayIndex.value;
-      StorageService.setInt(LocalStorageKeys.dayIndex, dayIndex.value);
-      StorageService.setInt(LocalStorageKeys.totalTicket, totalTicket.value);
-      // StorageService.totalTicket = totalTicket.value;
-      Future.delayed(
-        const Duration(seconds: 3),
-        () {
-          totalTicket.value += value;
-          // Get.snackbar(responseStatus.value, responseMessage.value, colorText: AppColors.white);
-        },
-      );
-      isLocked.value = true;
-      // createTicket();
-    } else {
-      isLocked.value = true;
-      Get.snackbar(
-        "Limit Reached",
-        "You've reached today's limit. Please come back tomorrow!",
-        colorText: AppColors.white,
-      );
+    } catch (e) {
+      appLog("Error in creating ticket: $e");
     }
+    
   }
 
   // fast spin or slow spin
