@@ -187,11 +187,13 @@ class EditProfileController extends GetxController {
     }
 
     try {
+      
       final dateOfBirth =
-          InputHelper.validate(ValidationType.validateDate, ageController.text) == null
+          InputHelper.validate(ValidationType.validateDate, ageController.text.trim()) == null
               ? ageController.text
               : "";
-      if (ageController.text.isNotEmpty && dateOfBirth.isNotEmpty) {
+      if (InputHelper.validate(ValidationType.validateDate, ageController.text.trim()) != null &&
+          ageController.text.trim().isNotEmpty) {
         Get.snackbar(
           "Invalid Date",
           "Please enter a valid date or keep empty.",

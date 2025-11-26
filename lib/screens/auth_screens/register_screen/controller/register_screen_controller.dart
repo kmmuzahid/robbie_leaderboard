@@ -95,10 +95,11 @@ class RegisterScreenController extends GetxController {
   void register() async {
     // Get trimmed and raw values
     final dateOfBirth =
-        InputHelper.validate(ValidationType.validateDate, ageController.text) == null
+        InputHelper.validate(ValidationType.validateDate, ageController.text.trim()) == null
             ? ageController.text
             : "";
-    if (ageController.text.isNotEmpty && dateOfBirth.isEmpty) {
+    if (InputHelper.validate(ValidationType.validateDate, ageController.text.trim()) != null &&
+        ageController.text.trim().isNotEmpty) {
       Get.snackbar(
         "Invalid Date",
         "Please enter a valid date or keep empty.",
@@ -169,18 +170,18 @@ class RegisterScreenController extends GetxController {
       return;
     }
 
-    // Allow empty strings or null for optional fields
-    final profile = RegisterModel(
-      name: name,
-      email: email,
-      contact: contactNo,
-      password: password,
-      country: country.isNotEmpty ? country : null,
-      city: city.isNotEmpty ? city : null,
-      gender: gender.isNotEmpty ? gender : null,
-      age: age.isNotEmpty ? age : null,
-      userCode: referral.isNotEmpty ? referral : null,
-    );
+    // // Allow empty strings or null for optional fields
+    // final profile = RegisterModel(
+    //   name: name,
+    //   email: email,
+    //   contact: contactNo,
+    //   password: password,
+    //   country: country.isNotEmpty ? country : null,
+    //   city: city.isNotEmpty ? city : null,
+    //   gender: gender.isNotEmpty ? gender : null,
+    //   age: age.isNotEmpty ? age : null,
+    //   userCode: referral.isNotEmpty ? referral : null,
+    // );
 
     await fetchTermsAndConditions();
 

@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:intl/intl.dart';
 import 'package:the_leaderboard/constants/app_colors.dart';
 import 'package:the_leaderboard/constants/app_urls.dart';
@@ -19,6 +21,10 @@ import 'package:the_leaderboard/services/storage/storage_services.dart';
 import 'package:the_leaderboard/utils/app_logs.dart';
 
 class RewardsScreenController extends GetxController {
+  // Timer to detect when wheel stops
+  Timer? wheelStopTimer;
+  DateTime lastWheelUpdate = DateTime.now();
+  // Removed debouncer as it's no longer needed
   final Rxn<CurrentRuffleModel> currentRuffle = Rxn<CurrentRuffleModel>();
   final Rxn<UserTicketsModel> userTicket = Rxn<UserTicketsModel>();
   final RxBool isRuffleLoading = true.obs;
@@ -74,7 +80,6 @@ class RewardsScreenController extends GetxController {
 
   Future<void> fetchUserTicket({bool isUpdating = false}) async {
     try {
-      print("fetching userticket");
       isTicketLoading.value = isUpdating ? false : true;
       final response = await ApiGetService.apiGetService(AppUrls.myTicket);
       isTicketLoading.value = false;
@@ -84,7 +89,7 @@ class RewardsScreenController extends GetxController {
         if (response.statusCode == 200) {
           userTicket.value = UserTicketsModel.fromJson(jsonbody["data"]);
           totalTicket.value = userTicket.value?.totalTickets ?? 0;
-          // dayIndex.value = userTicket.value?.dayIndex ?? 0; 
+          dayIndex.value = userTicket.value?.spinCount ?? 0;
           appLog(userTicket);
           return;
         } else {
@@ -98,8 +103,8 @@ class RewardsScreenController extends GetxController {
     } catch (e) {
       errorLog("fetchUserTicket", e);
     }
-    userTicket.value =
-        UserTicketsModel(totalTickets: 0, userId: "Unknown", name: "Unknown", tickets: []);
+    userTicket.value = UserTicketsModel(
+        totalTickets: 0, userId: "Unknown", name: "Unknown", tickets: [], spinCount: 0);
     return;
   }
 
@@ -110,7 +115,6 @@ class RewardsScreenController extends GetxController {
       dayIndex.value = 0;
     }
     allSpin.shuffle();
-
   }
 
   String getRemainingTime() {
@@ -170,26 +174,43 @@ class RewardsScreenController extends GetxController {
       curve: Curves.fastOutSlowIn,
     );
   }
- 
+
+  bool isSpining = false;
+  DateTime? _lastSpinTime;
+  bool _isProcessingSpin = false;
 
   void spinWheel(bool fromButton) async {
-    final homeController = Get.find<HomeScreenController>();
-    if (homeController.country.value.isEmpty || homeController.phone.value.isEmpty) {
-    
-      isLocked.value = true;
-      Get.snackbar("Action Required", "Please update your Country and Phone Number to proceed.",
-          colorText: AppColors.white);
-      Get.toNamed('/editProfileScreen', arguments: {
-        'onSuccess': () {
-          if (!(homeController.country.value.isEmpty || homeController.phone.value.isEmpty)) {
-            isLocked.value = false; 
-          }
-        }
-      });
+    // Prevent multiple simultaneous spins
+
+    if (isSpining || _isProcessingSpin) return;
+
+    // Check cooldown (1 second)
+    final now = DateTime.now();
+    if (_lastSpinTime != null && now.difference(_lastSpinTime!) < const Duration(seconds: 1)) {
       return;
     }
 
+    _isProcessingSpin = true;
+    isSpining = true;
+    _lastSpinTime = now;
+
     try {
+      final homeController = Get.find<HomeScreenController>();
+      if (homeController.country.value.isEmpty || homeController.phone.value.isEmpty) {
+        isLocked.value = true;
+        Get.snackbar("Action Required", "Please update your Country and Phone Number to proceed.",
+            colorText: AppColors.white);
+        Get.toNamed('/editProfileScreen', arguments: {
+          'onSuccess': () {
+            if (!(homeController.country.value.isEmpty || homeController.phone.value.isEmpty)) {
+              isLocked.value = false;
+            }
+          }
+        });
+        return;
+      }
+
+      // Make the API call
       final response = await ApiPostService.apiPostService(AppUrls.createTicket, {});
 
       if (response != null) {
@@ -201,22 +222,27 @@ class RewardsScreenController extends GetxController {
           if (data['data'] != null) {
             luckyTicket.value = data['data']['ticket'] ?? 0;
             appLog("The lucky number is ${luckyTicket.value}");
+
+            // Notify socket service
             SocketService.instance.createTicket(StorageService.myName, data["data"]);
-            int rotations = 100; 
+
+            // Start the spinning animation
             isLocked.value = true;
-      if (fromButton) {
-        rotateWithButton(rotations);
-      } else {
-        spinToLuckyNumber();
+            int rotations = 100;
+
+            if (fromButton) {
+              rotateWithButton(rotations);
+            } else {
+              spinToLuckyNumber();
             }
+
+            // Update ticket count after spin completes
             Future.delayed(
               const Duration(seconds: 3),
               () {
                 totalTicket.value += luckyTicket.value;
-                isLocked.value = false;
               },
             );
-          
           }
         } else {
           isLocked.value = true;
@@ -225,17 +251,22 @@ class RewardsScreenController extends GetxController {
             data["message"],
             colorText: AppColors.white,
           );
-         
         }
       }
     } catch (e) {
       appLog("Error in creating ticket: $e");
+      Get.snackbar(
+        "Error",
+        "Failed to process spin. Please try again.",
+        colorText: AppColors.white,
+      );
+    } finally {
+      _isProcessingSpin = false;
+      isSpining = false;
+      // Don't set isSpining to false here as it's used by the wheel animation
+      // It will be set to false when the wheel animation completes
     }
-    
   }
-
-  // fast spin or slow spin
-  DateTime? _lastSpinTime;
 
   /// Detect speed and return type
   String detectSpinSpeed() {
@@ -301,12 +332,13 @@ class RewardsScreenController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     fetchData();
+    super.onInit();
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
-    super.onClose();
+    wheelStopTimer?.cancel();
     wheelController.dispose();
+    super.onClose();
   }
 }

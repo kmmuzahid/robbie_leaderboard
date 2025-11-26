@@ -58,7 +58,11 @@ class SocketService {
 
     _socket.onConnect((_) {
       print('Socket connected');
-      startHeartbeat();
+      _socket.emit('setup', {
+        'userId': StorageService.userId,
+        'email': StorageService.myEmail,
+        'role': StorageService.role,
+      });
     });
 
     _socket.onDisconnect((_) {

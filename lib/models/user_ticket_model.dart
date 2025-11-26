@@ -3,12 +3,14 @@ class UserTicketsModel {
   final String userId;
   final String name;
   final List<Ticket> tickets;
+  final int spinCount;
 
   UserTicketsModel({
     required this.totalTickets,
     required this.userId,
     required this.name,
     required this.tickets,
+    required this.spinCount,
   });
 
   factory UserTicketsModel.fromJson(Map<String, dynamic> json) {
@@ -16,15 +18,15 @@ class UserTicketsModel {
       totalTickets: json['totalTickets'] ?? 0,
       userId: json['userId'] ?? '',
       name: json['name'] ?? '',
-      tickets: (json['tickets'] as List<dynamic>)
-          .map((e) => Ticket.fromJson(e))
-          .toList(),
+      spinCount: json['spinCount'] ?? 0,
+      tickets: (json['tickets'] as List<dynamic>).map((e) => Ticket.fromJson(e)).toList(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'totalTickets': totalTickets,
+      'spinCount': spinCount,
       'userId': userId,
       'name': name,
       'tickets': tickets.map((e) => e.toJson()).toList(),
